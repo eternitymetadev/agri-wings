@@ -5,7 +5,7 @@
             <tr>
                 <th> </th>
                 <th>Order Details</th>
-                <th>RouteServing Branch/Farmer)</th>
+                <th>Route(Serving Branch/Farmer)</th>
                 <th>Dates</th>
                 <?php if($authuser->role_id !=6){ ?>
                 <th>Print Order</th>
