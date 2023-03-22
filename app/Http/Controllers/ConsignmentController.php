@@ -752,8 +752,9 @@ class ConsignmentController extends Controller
         $locations = Location::with('GstAddress')->whereIn('id', $cc)->first();
         $cn_id = $request->id;
 
-        $getdata = ConsignmentNote::where('id', $cn_id)->with('ConsignmentItems', 'ConsignerDetail.GetZone', 'ConsigneeDetail.GetZone', 'ShiptoDetail.GetZone', 'VehicleDetail', 'DriverDetail')->first();
+        $getdata = ConsignmentNote::where('id', $cn_id)->with('ConsignmentItems', 'ConsignerDetail.GetZone', 'ConsigneeDetail.GetZone', 'ShiptoDetail.GetZone', 'VehicleDetail', 'DriverDetail','RegClient','Farm','Crop')->first();
         $data = json_decode(json_encode($getdata), true);
+        // echo '<pre>'; print_r($data); die;
 
         if (isset($data['consigner_detail']['legal_name'])) {
             $legal_name = '<b>' . $data['consigner_detail']['legal_name'] . '</b><br>';
@@ -1019,9 +1020,9 @@ class ConsignmentController extends Controller
         }
 
         $pay = public_path('assets/img/LOGO_Frowarders.jpg');
-        $codStamp = public_path('assets/img/cod.png');
-        $paidStamp = public_path('assets/img/paid.png');
-        
+        $payment = public_path('assets/123.png');
+        $agri = public_path('assets/img/agri.png');
+         
         for ($i = 1; $i < 5; $i++) {
             if ($i == 1) {$type = 'ORIGINAL';} elseif ($i == 2) {$type = 'DUPLICATE';} elseif ($i == 3) {$type = 'TRIPLICATE';} elseif ($i == 4) {$type = 'QUADRUPLE';}
             if (!empty($data['consigner_detail']['get_zone']['state'])) {
@@ -1031,433 +1032,216 @@ class ConsignmentController extends Controller
             }
 
             $html = '<!DOCTYPE html>
-            <html lang="en">
+            <html>
                 <head>
-                    <!-- Required meta tags -->
-                    <meta charset="utf-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-                    <!-- Bootstdap CSS -->
-
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            
                     <style>
-                        * {
-                            box-sizing: border-box;
+                        body {
+                            text-align: center;
                         }
-                        label {
-                            padding: 12px 12px 12px 0;
-                            display: inline-block;
+                        table {
+                            /* border-collapse: collapse; */
+                            border-radius: 12px;
+                            overflow: hidden;
                         }
-
-                        /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
-                        @media screen and (max-width: 600px) {
+                        .headingName {
+                            text-align: center;
+                            font-size: 1.5rem;
+                            line-height: 1.5rem;
+                            margin-bottom: 4px;
                         }
-                        img {
-                            width: 120px;
-                            height: 60px;
+            
+                        .otherTable {
+                            border-collapse: collapse;
+                            outline: 2px solid #02381d;
+                            outline-offset: -1px;
+                            width: 100%;
+                            border-radius: 8px;
+                            overflow: hidden;
                         }
-                        .a {
-                            width: 290px;
-                            font-size: 11px;
+            
+                        .otherTable th,
+                        .otherTable td {
+                            padding: 8px;
+                            border: 1px solid;
                         }
-                        td.b {
-                            width: 238px;
-                            margin: auto;
+                        .otherTable th {
+                            background-color: #02381d10;
+                            color: #02381d;
+                            padding-left: 2rem;
                         }
-                        .width_set{
-                            width:200px;
+            
+                        .styled td {
+                            padding: 6px;
                         }
-                        img.imgu {
-                            margin-left: 58px;
-                            height:100px;
+            
+                        .roundDiv {
+                            outline: 2px solid #025b78;
+                            padding: 1rem;
+                            background-color: #025b7810;
+                            border-radius: 12px;
                         }
-                        .loc {
-                                margin-bottom: -8px;
-                                margin-top: 27px;
-                            }
-                            .table3 {
-                border-collapse: collapse;
-                width: 378px;
-                height: 84px;
-                margin-left: 71px;
-            }
-                  .footer {
-               position: fixed;
-               left: 0;
-               bottom: 0;
-
-
-            }
-            .vl {
-                border-left: solid;
-                height: 18px;
-                margin-left: 3px;
-            }
-            .ff{
-              margin-top: 26px;
-            }
-            .relative {
-              position: relative;
-              left: 30px;
-            }
-            .mini-table1{
-
-                border: 1px solid;
-                border-radius: 13px;
-                width: 429px;
-                height: 72px;
-
-            }
-            .mini-th{
-              width:90px;
-              font-size: 12px;
-            }
-            .ee{
-                margin:auto;
-                margin-top:12px;
-            }
-            .nn{
-              border-bottom:1px solid;
-            }
-            .mm{
-            border-right:1px solid;
-            padding:4px;
-            }
-            html { -webkit-print-color-adjust: exact; }
-            .td_style{
-                text-align: left;
-                padding: 8px;
-                color: #627429;
-            }
+                        .roundTable {
+                            text-align: center;
+                            border-collapse: collapse;
+                        }
+                        .roundTable td {
+                            border: none;
+                        }
+            
+                        .borderRight {
+                            border-right: 2px solid #838383 !important;
+                        }
+            
+                        .borderTop {
+                            border-top: 2px solid #838383 !important;
+                        }
+            
+                        .terms {
+                            text-align: left;
+                            font-size: 1.2rem;
+                            font-weight: 600;
+                        }
                     </style>
-                <!-- style="border-collapse: collapse; width: 369px; height: 72px; background:#d2c5c5;"class="table2" -->
                 </head>
+            
                 <body style="font-family:Arial Helvetica,sans-serif;">
-                    <div class="container-flex" style="margin-bottom: 5px; margin-top: -30px;">
-                        <table style="height: 70px;">
+                    <table style="margin: auto; max-width: 600px; width: 100%">
+                        <tbody>
                             <tr>
-                            <td class="a" style="font-size: 10px;">
-                            ' . $branch_address . '
-                            </td>
-
-                                <td class="a">
-                                <b>	Email & Phone</b><br />
-                                <b>	' . @$locations->email . '</b><br />
-                                ' . @$locations->phone . '<br />
-
-                                </td>
-                            </tr>
-
-                        </table>
-                        <hr />
-                        <table>
-                            <tr>
-                                <td class="b">
-                        <div class="ff" >
-                                      <img src="' . $fullpath . '" alt="" class="imgu" />
-                        </div>
-                                </td>
-                                <td>
-                                    <div style="margin-top: -15px; text-align: center">
-                                        <h2 style="margin-bottom: -16px">CONSIGNMENT NOTE</h2>
-                                        <P>' . $type . '</P>
-                                    </div>
-                       <div class="mini-table1" style="background:#C0C0C0;">
-                                    <table style=" border-collapse: collapse;" class="ee">
+                                <td style="text-align: center">
+                                    <table style="width: 100%; margin-bottom: 1.3rem">
                                         <tr>
-                                            <th class="mini-th mm nn">LR Number</th>
-                                            <th class="mini-th mm nn">LR Date</th>
-                                            <th class="mini-th mm nn">Dispatch</th>
-                                            <th class="mini-th nn">Delivery</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="mini-th mm" >' . $data['id'] . '</th>
-                                            <th class="mini-th mm">' . date('d-m-Y', strtotime($data['consignment_date'])) . '</th>
-                                            <th class="mini-th mm"> ' . @$data['consigner_detail']['city'] . '</th>
-                                            <th class="mini-th">' . @$data['consignee_detail']['city'] . '</th>
-
-                                        </tr>
-                                    </table>
-                        </div>
-                                </td>
-                            </tr>
-                        </table>';
-                        if($data['payment_type'] == 'To be Billed' || $data['payment_type'] == NULL){ 
-                            if(!empty($data['cod'])){
-                                $html .=  ' <div class="loc">
-                                <table>
-                                    <tr>
-                                        <td valign="middle" style="position:relative; width: 200px">
-                                        <img src="' . $codStamp . '" style="position:absolute;left: -2rem; top: -2rem; height: 100px; width: 140px; z-index: -1; opacity: 0.8" />
-                                            <h2 style="margin-top:1.8rem; margin-left: 0.5rem; font-size: 1.7rem; text-align: center">
-                                            <span style="font-size: 24px; line-height: 18px">Cash to Collect</span><br/>'.@$data['cod'].'
-                                            </h2>
-                                        </td>
-                                        <td class="width_set">
-                                            <table border="1px solid" class="table3">
-                                                <tr>
-                                                    <td width="40%" ><b style="margin-left: 7px;">Vehicle No</b></td>
-                                                    <td>' . @$data['vehicle_detail']['regn_no'] . '</td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="40%"><b style="margin-left: 7px;"> Driver Name</b></td>
-                                                    <td>' . ucwords(@$data['driver_detail']['name']) . '</td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="40%"><b style="margin-left: 7px;">Driver Number</b></td>
-                                                    <td>' . ucwords(@$data['driver_detail']['phone']) . '</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>';
-                            }else{
-                                $html .= '   <div class="loc">
-                                <table>
-                                    <tr>
-                                        <td class="width_set">
-                                            <div style="margin-left: 20px">
-                                        <i class="fa-solid fa-location-dot" style="font-size: 10px; ">&nbsp;&nbsp;<b>' . @$data['consigner_detail']['postal_code'] . ',' . @$data['consigner_detail']['city'] . ',' . @$cnr_state . '</b></i><div class="vl" ></div>
-                                            <i class="fa-solid fa-location-dot" style="font-size: 10px; ">&nbsp;&nbsp;<b>' . @$data['consignee_detail']['postal_code'] . ',' . @$data['consignee_detail']['city'] . ',' . @$data['consignee_detail']['get_zone']['state'] . '</b></i><div style="font-size: 10px; margin-left: 3px;">&nbsp; &nbsp;</div>
-                                            </div>
-                                        </td>
-                                        <td class="width_set">
-                                            <table border="1px solid" class="table3">
-                                                <tr>
-                                                    <td width="40%" ><b style="margin-left: 7px;">Vehicle No</b></td>
-                                                    <td>' . @$data['vehicle_detail']['regn_no'] . '</td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="40%"><b style="margin-left: 7px;"> Driver Name</b></td>
-                                                    <td>' . ucwords(@$data['driver_detail']['name']) . '</td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="40%"><b style="margin-left: 7px;">Driver Number</b></td>
-                                                    <td>' . ucwords(@$data['driver_detail']['phone']) . '</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>';
-                            }
-                        }
-
-                            if($data['payment_type'] == 'To Pay'){
-                                if(!empty($data['freight_on_delivery']) || !empty($data['cod'])){
-                                    $total_cod_sum = @$data['freight_on_delivery'] + @$data['cod'];
-
-                                    $html .=  ' <div class="loc">
-                                    <table>
-                                        <tr>
-                                            <td valign="middle" style="position:relative; width: 200px">
-                                            <img src="' . $codStamp . '" style="position:absolute;left: -2rem; top: -2rem; height: 100px; width: 140px; z-index: -1; opacity: 0.8" />
-                                                <h2 style="margin-top:1.8rem; margin-left: 0.5rem; font-size: 1.7rem; text-align: center">
-                                                <span style="font-size: 24px; line-height: 18px">Cash to Collect</span><br/>'.$total_cod_sum.'
-                                                </h2>
-                                            </td>
-                                            <td class="width_set">
-                                                <table border="1px solid" class="table3">
-                                                    <tr>
-                                                        <td width="40%" ><b style="margin-left: 7px;">Vehicle No</b></td>
-                                                        <td>' . @$data['vehicle_detail']['regn_no'] . '</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td width="40%"><b style="margin-left: 7px;"> Driver Name</b></td>
-                                                        <td>' . ucwords(@$data['driver_detail']['name']) . '</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td width="40%"><b style="margin-left: 7px;">Driver Number</b></td>
-                                                        <td>' . ucwords(@$data['driver_detail']['phone']) . '</td>
-                                                    </tr>
-                                                </table>
+                                            <td valign="middle" style="text-align: center">
+                                                <img src="'.$agri.'" style="max-height: 80px" />
                                             </td>
                                         </tr>
-                                    </table>
-                                </div>';
-                                }else{
-                                    $html .= '   <div class="loc">
-                                    <table>
                                         <tr>
-                                            <td class="width_set">
-                                                <div style="margin-left: 20px">
-                                            <i class="fa-solid fa-location-dot" style="font-size: 10px; ">&nbsp;&nbsp;<b>' . @$data['consigner_detail']['postal_code'] . ',' . @$data['consigner_detail']['city'] . ',' . @$cnr_state . '</b></i><div class="vl" ></div>
-                                                <i class="fa-solid fa-location-dot" style="font-size: 10px; ">&nbsp;&nbsp;<b>' . @$data['consignee_detail']['postal_code'] . ',' . @$data['consignee_detail']['city'] . ',' . @$data['consignee_detail']['get_zone']['state'] . '</b></i><div style="font-size: 10px; margin-left: 3px;">&nbsp; &nbsp;</div>
+                                            <td valign="middle">
+                                                <h3
+                                                    style="
+                                                        text-align: center;
+                                                        font-size: 2rem;
+                                                        line-height: 1.5rem;
+                                                    "
+                                                >
+                                                    Order Sheet <br /><span style="font-size: 1.3rem"
+                                                        >Original</span
+                                                    >
+                                                </h3>
+                                            </td>
+                                        </tr>
+            
+                                        <tr>
+                                            <td>
+                                                <div class="roundDiv">
+                                                    <table class="roundTable" style="width: 100%">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="borderRight">Order No</td>
+                                                                <td class="borderRight">Order Dt</td>
+                                                                <td class="borderRight">Drone</td>
+                                                                <td class="borderBottom">Rider</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="borderRight borderTop">'.$data['id'].'</td>
+                                                                <td class="borderRight borderTop">' . date('d-m-Y', strtotime($data['consignment_date'])) . '</td>
+                                                                <td class="borderRight borderTop">' . @$data['vehicle_detail']['regn_no'] . '</td>
+                                                                <td class="borderTop">' . ucwords(@$data['driver_detail']['name']) . '</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </td>
-                                            <td class="width_set">
-                                                <table border="1px solid" class="table3">
-                                                    <tr>
-                                                        <td width="40%" ><b style="margin-left: 7px;">Vehicle No</b></td>
-                                                        <td>' . @$data['vehicle_detail']['regn_no'] . '</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td width="40%"><b style="margin-left: 7px;"> Driver Name</b></td>
-                                                        <td>' . ucwords(@$data['driver_detail']['name']) . '</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td width="40%"><b style="margin-left: 7px;">Driver Number</b></td>
-                                                        <td>' . ucwords(@$data['driver_detail']['phone']) . '</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
                                         </tr>
                                     </table>
-                                </div>';
-                                }
-
-                            }
-
-                            if($data['payment_type'] == 'Paid'){
-
-                                    $html .=  ' <div class="loc">
-                                    <table>
+            
+                                    <h3 class="headingName">Payment Information</h3>
+                                    <table class="otherTable">
                                         <tr>
-                                            <td valign="middle" style="position:relative; width: 200px">
-                                            <img src="' . $paidStamp . '" style="position:absolute;left: 50%; transform: translateX(-40%); top: -2.5rem; height: 150px; width: 150px;" />
+                                            <th
+                                                valign="middle"
+                                                style="text-align: left; width: 30%; max-width: 120px"
+                                            >
+                                                Billing Client
+                                            </th>
+                                            <td style="text-align: center" valign="middle">
+                                                '.$data['reg_client']['name'].'
                                             </td>
-                                            <td class="width_set">
-                                                <table border="1px solid" class="table3">
-                                                    <tr>
-                                                        <td width="40%" ><b style="margin-left: 7px;">Vehicle No</b></td>
-                                                        <td>' . @$data['vehicle_detail']['regn_no'] . '</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td width="40%"><b style="margin-left: 7px;"> Driver Name</b></td>
-                                                        <td>' . ucwords(@$data['driver_detail']['name']) . '</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td width="40%"><b style="margin-left: 7px;">Driver Number</b></td>
-                                                        <td>' . ucwords(@$data['driver_detail']['phone']) . '</td>
-                                                    </tr>
-                                                </table>
+                                        </tr>
+                                        <tr>
+                                            <th valign="middle" style="text-align: left">Payment Type</th>
+                                            <td style="text-align: center" valign="middle">
+                                                '.$data['payment_type'].'
                                             </td>
                                         </tr>
                                     </table>
-                                </div>';
-                               
-                            }
-
-
-                       $html .= '<div class="container">
-                                <div class="row">
-                                    <div class="col-sm-12 ">
-                                        <h4 style="margin-left:19px;"><b>Pickup and Drop Information</b></h4>
-                                    </div>
-                                </div>
-                            <table border="1" style=" border-collapse:collapse; width: 690px; ">
-                                <tr>
-                                    <td width="30%" style="vertical-align:top; >
-                                    ' . $cnradd_heading . '
-                                    </td>
-                                    <td width="30%" style="vertical-align:top;>
-                                    ' . $cneadd_heading . '
-                                    </td>
-                                    ' . $shipto_address . '
-                                </tr>
-                            </table>
-                      </div>
-                                <div>
-                                      <div class="row">
-                                                           <div class="col-sm-12 ">
-                                                <h4 style="margin-left:19px;"><b>Order Information</b></h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <table border="1" style=" border-collapse:collapse; width: 690px;height: 48px; font-size: 10px; background-color:#e0dddc40;">
-
-                                                    <tr>
-                                                        <th>Number of invoice</th>
-                                                        <th>Item Description</th>
-                                                        <th>Mode of packing</th>
-                                                        <th>Total Quantity</th>
-                                                        <th>Total Net Weight</th>
-                                                        <th>Total Gross Weight</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>' . $no_invoive . '</th>
-                                                        <th>' . $data['description'] . '</th>
-                                                        <th>' . $data['packing_type'] . '</th>
-                                                        <th>' . $data['total_quantity'] . '</th>
-                                                        <th>' . $data['total_weight'] . ' Kgs.</th>
-                                                        <th>' . $data['total_gross_weight'] . ' Kgs.</th>
-
-
-                                                    </tr>
-                                                </table>
-                                </div>
-
-                                <div class="inputfiled">
-                                <table style="width: 690px;
-                                font-size: 10px; background-color:#e0dddc40;">
-                              <tr>
-                                  <th style="width:70px ">Order ID</th>
-                                  <th style="width: 70px">Inv No</th>
-                                  <th style="width: 70px">Inv Date</th>
-                                  <th style="width:70px " >Inv Amount</th>
-                                  <th style="width:70px ">E-way No</th>
-                                  <th style="width: 70px">E-Way Date</th>
-                                  <th style="width: 60px">Quantity</th>
-                                  <th style="width:70px ">Net Weight</th>
-                                  <th style="width:70px ">Gross Weight</th>
-
-                              </tr>
-                            </table>
-                            <table style=" border-collapse:collapse; width: 690px;height: 45px; font-size: 10px; background-color:#e0dddc40; text-align: center;" border="1" >';
-            $counter = 0;
-            foreach ($data['consignment_items'] as $k => $dataitem) {
-                $counter = $counter + 1;
-
-                $html .= ' <tr>
-                                <td style="width:70px ">' . $dataitem['order_id'] . '</td>
-                                <td style="width: 70px">' . $dataitem['invoice_no'] . '</td>
-                                <td style="width:70px ">' . Helper::ShowDayMonthYear($dataitem['invoice_date']) . '</td>
-                                <td style="width:70px ">' . $dataitem['invoice_amount'] . '</td>
-                                <td style="width: 70px">' . $dataitem['e_way_bill'] . '</td>
-                                <td style="width:70px ">' . Helper::ShowDayMonthYear($dataitem['e_way_bill_date']) . '</td>
-                                <td style="width:60px "> ' . $dataitem['quantity'] . '</td>
-                                <td style="width:70px ">' . $dataitem['weight'] . ' Kgs. </td>
-                                <td style="width:70px "> ' . $dataitem['gross_weight'] . ' Kgs.</td>
-
-                                </tr>';
-            }
-            $html .= '      </table>
-                                <div>
-                                    <table style="margin-top:0px;">
-                                    <tr>
-                                    <td width="50%" style="font-size: 13px;"><p style="margin-top:60px;"><b>Received the goods mentioned above in good conditions.</b><br><br>Receivers Name & Number:<br><br>Receiving Date & Time	:<br><br>Receiver Signature:<br><br></p></td>
-                                    <td  width="50%"><p style="margin-left: 99px; margin-bottom:150px;"><b>For Eternity Forwarders Pvt.Ltd</b></p></td>
-                                </tr>
+            
+                                    <h3 class="headingName">Farmer Home Address</h3>
+                                    <table class="otherTable">
+                                        <tr>
+                                            <td valign="middle" colspan="4" style="text-align: left">' . $data['consignee_detail']['address_line1'] . '
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="middle" style="text-align: left; width: 60px">
+                                                Pin
+                                            </th>
+                                            <td style="text-align: center" valign="middle">' . $data['consignee_detail']['postal_code'] . '</td>
+                                            <th valign="middle" style="text-align: left; width: 90px">
+                                                City
+                                            </th>
+                                            <td style="text-align: center" valign="middle">' . @$data['consignee_detail']['city'] . '</td>
+                                        </tr>
                                     </table>
+            
+                                    <h3 class="headingName">Farmer Farm Address</h3>
+                                    <table class="otherTable">
+                                        <tr>
+                                            <td valign="middle" colspan="4" style="text-align: left">' . @$data['farm']['crop_name'] . ','.@$data['farm']['address'] .'
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th valign="middle" style="text-align: left; width: 60px">
+                                                Pin
+                                            </th>
+                                            <td style="text-align: center" valign="middle">140603</td>
+                                            <th valign="middle" style="text-align: left; width: 90px">
+                                                City
+                                            </th>
+                                            <td style="text-align: center" valign="middle">Zirakpur</td>
+                                        </tr>
+                                    </table>
+            
+                                    <h3 class="headingName">Other Information</h3>
+                                    <table class="otherTable">
+                                        <tr>
+                                            <th valign="middle" style="padding-left: 8px">Crop</th>
+                                            <th valign="middle" style="padding-left: 8px">Acreage</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center" valign="middle">'.$data['crop']['crop_name'].'</td>
+                                            <td style="text-align: center" valign="middle">'.$data['acreage'].'</td>
+                                        </tr>
+                                    </table>
+            
+                                    <h3 class="headingName">Payment Link</h3>
+                                    <img src="'.$payment.'" style="height: 180px; width:180px; object-fit: contain; margin: auto" />
 
-                                </div>
-                          </div>
-
-                  <!-- <div class="footer">
-                                  <p style="text-align:center; font-size: 10px;">Terms & Conditions</p>
-                                <p style="font-size: 8px; margin-top: -5px">1. Eternity Solutons does not take any responsibility for damage,leakage,shortage,breakages,soliage by sun ran ,fire and any other damage caused.</p>
-                                <p style="font-size: 8px; margin-top: -5px">2. The goods will be delivered to Consignee only against,payment of freight or on confirmation of payment by the consignor. </p>
-                                <p style="font-size: 8px; margin-top: -5px">3. The delivery of the goods will have to be taken immediately on arrival at the destination failing which the  consignee will be liable to detention charges @Rs.200/hour or Rs.300/day whichever is lower.</p>
-                                <p style="font-size: 8px; margin-top: -5px">4. Eternity Solutons takes absolutely no responsibility for delay or loss in transits due to accident strike or any other cause beyond its control and due to breakdown of vehicle and for the consequence thereof. </p>
-                                <p style="font-size: 8px; margin-top: -5px">5. Any complaint pertaining the consignment note will be entertained only within 15 days of receipt of the meterial.</p>
-                                <p style="font-size: 8px; margin-top: -5px">6. In case of mismatch in e-waybill & Invoice of the consignor, Eternity Solutons will impose a penalty of Rs.15000/Consignment  Note in addition to the detention charges stated above. </p>
-                                <p style="font-size: 8px; margin-top: -5px">7. Any dispute pertaining to the consigment Note will be settled at chandigarh jurisdiction only.</p>
-                  </div> -->
-                    </div>
-                    <!-- Optional JavaScript; choose one of the two! -->
-
-                    <!-- Option 1: Bootstdap Bundle with Popper -->
-                    <script
-                        src="https://cdn.jsdelivr.net/npm/bootstdap@5.0.2/dist/js/bootstdap.bundle.min.js"
-                        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-                        crossorigin="anonymous"
-                    ></script>
-
-                    <!-- Option 2: Separate Popper and Bootstdap JS -->
-                    <!--
-                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstdap@5.0.2/dist/js/bootstdap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKtdIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-                -->
+            
+                                    <p class="terms">Terms & Conditions</p>
+                                    <ul style="text-align: left">
+                                        <li>List One</li>
+                                        <li>List One</li>
+                                        <li>List One</li>
+                                        <li>List One</li>
+                                        <li>List One</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </body>
             </html>
             ';
