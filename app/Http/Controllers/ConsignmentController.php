@@ -2523,7 +2523,7 @@ class ConsignmentController extends Controller
             $total_weight += $dataitem['total_weight'];
             //echo'<pre>'; print_r($dataitem['consignment_no']); die;
             $html .= '
-                <div class="row" style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; margin-bottom: -10px;">
+                <div class="row" style="border-left: 1px solid black; border: 1px solid black; margin-bottom: -10px;">
 
                     <div class="column" style="width:125px;">
                        <p style="margin-top:0px;">' . @$dataitem['consignment_detail']['reg_client']['name'] . '</p>
@@ -2548,16 +2548,6 @@ class ConsignmentController extends Controller
                         <p></p>
                       </div>
                   </div>';
-            $html .= '<div class="row" style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; margin-top: 0px;">';
-            //echo'<pre>'; print_r($chunk); die;
-            $html .= ' <div class="column" style="width:230px; margin-top: -10px;">';
-            $html .= '<table class="neworder" style="margin-top: -10px;"><tr style="border:0px;"><td style="width: 190px; padding:6px;"><span style="font-weight: bold;">Order ID</span></td><td style="width: 190px;"><span style="font-weight: bold;">Invoice No</span></td></tr></table>';
-            $itm_no = 0;
-            $html .= '</div> ';
-
-            $html .= '</div>
-
-                <br>';
 
         }
 

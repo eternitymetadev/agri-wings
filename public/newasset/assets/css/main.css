@@ -706,12 +706,12 @@ select.form-control.form-custom {
 /*      Default Buttons       */
 .btn-primary {
     font-weight: 600;
-  color: #000 !important;
+  color: #fff !important;
   background-color: #208120 !important;
   border-color: #208120;
   box-shadow: 0 10px 20px -10px #208120; }
   .btn-primary:hover, .btn-primary:focus {
-    color: #000 !important;
+    color: #fff !important;
     background-color: #208120;
     box-shadow: none;
     border-color: #208120; }
@@ -743,12 +743,12 @@ select.form-control.form-custom {
   border-color: #2aebcb; }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active {
-  color: #000 !important;
+  color: #fff !important;
   background-color: #208120;
   border-color: #208120; }
 
 .show > .btn-primary.dropdown-toggle {
-  color: #000 !important;
+  color: #fff !important;
   background-color: #208120;
   border-color: #208120; }
 
