@@ -116,7 +116,7 @@ div.relative {
                                 <td>{{ $consignment->acreage}}</td>
                                 <td><a class="btn btn-primary"
                                         href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Complete
-                                            Lr</span></a></td>
+                                            Order</span></a></td>
                             </tr>
                             <?php } ?>
                         </tbody>
