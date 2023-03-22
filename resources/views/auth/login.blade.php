@@ -40,7 +40,7 @@
 
     .droneImageBlock img {
         max-height: min(60vh, 350px);
-        transform: scaleX(-1);
+        /* transform: scaleX(-1); */
     }
 
     .loginBlock {

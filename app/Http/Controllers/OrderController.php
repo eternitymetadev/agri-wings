@@ -1296,6 +1296,7 @@ class OrderController extends Controller
                  $regionalclient['baseclient_id'] = $baseclient_id;
                  $regionalclient['name'] = $get_consignee->nick_name.'-(Self Pay)';
                  $regionalclient['regional_client_nick_name'] = $get_consignee->nick_name;
+                 $regionalclient['status'] = 1;
 
                  $saveregional_client = RegionalClient::create($regionalclient);
                  $saveregional_client_id = $saveregional_client->id;
