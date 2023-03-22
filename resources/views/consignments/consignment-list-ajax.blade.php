@@ -4,16 +4,16 @@
         <thead>
             <tr>
                 <th> </th>
-                <th>LR Details</th>
-                <th>Route</th>
+                <th>Order Details</th>
+                <th>RouteServing Branch/Farmer)</th>
                 <th>Dates</th>
                 <?php if($authuser->role_id !=6){ ?>
-                <th>Printing options</th>
+                <th>Print Order</th>
                 <?php }else {?>
                 <th></th>
                 <?php }?>
-                <th>Dlvry Status</th>
-                <th>LR Status</th>
+                <th>Spray Status</th>
+                <th>Order Status</th> 
             </tr>
         </thead>
         <tbody id="accordion" class="accordion">
@@ -25,35 +25,14 @@
                 </td>
                 <td>
                     <div class="">
-                        <div class=""><span style="color:#4361ee;">LR No: </span>{{$consignment->id}}<span class="badge bg-cust">{{ $consignment->VehicleDetail->regn_no ?? " " }}</span>
+                        <div class=""><span style="color:#4361ee;">Order No: </span>{{$consignment->id}}<span class="badge bg-cust">{{ $consignment->VehicleDetail->regn_no ?? " " }}</span>
                         </div>
 
-                        <?php
-                            if(empty($consignment->order_id)){ 
-                                if(!empty($consignment->ConsignmentItems)){
-                                    $order = array();
-                                    $invoices = array();
-                                    foreach($consignment->ConsignmentItems as $orders){ 
-                                        $order[] = $orders->order_id;
-                                        $invoices[] = $orders->invoice_no;
-                                    }
-                                    $order_item['orders'] = implode(',', $order);
-                                    $order_item['invoices'] = implode(',', $invoices);
-                                ?>
-
-                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Order No:
-                            </span>{{ $order_item['orders'] ?? "-" }}</div>
-                        <?php }}else{ ?>
-                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Order No:
-                            </span>{{ $consignment->order_id ?? "-" }}</div>
-                        <?php } ?>
-                        <?php if(empty($consignment->invoice_no)){ ?>
-                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Invoice No:
-                            </span>{{ $order_item['invoices'] ?? "-" }}</div>
-                        <?php }else{ ?>
-                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Invoice No:
-                            </span>{{ $consignment->invoice_no ?? "-" }}</div>
-                        <?php } ?>
+                        
+                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Crop Name:
+                            </span>{{ $consignment->Crop->crop_name ?? "-" }}</div>
+                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Acreage:
+                            </span>{{ $consignment->acreage ?? "-" }}</div>
 
                     </div>
                 </td>
@@ -74,7 +53,7 @@
                             <div class="ant-timeline-item-head ant-timeline-item-head-green"></div>
                             <div class="ant-timeline-item-content">
                                 <div class="css-16pld72 ellipse">
-                                    {{ $cnr_nickname ?? "-" }}
+                                    {{ $consignment->fallIn->name ?? "-" }}
                                 </div>
                             </div>
                         </li>
@@ -110,19 +89,9 @@
                             </span>{{ Helper::ShowDayMonthYear($consignment->delivery_date) ?? '-' }}</div>
                     </div>
                 </td>
-                <td>
-                    <?php if($authuser->role_id !=6 ){
-                    if($consignment->invoice_no != null || $consignment->invoice_no != ''){ ?>
-                    <a href="{{url($prefix.'/print-sticker/'.$consignment->id)}}" target="_blank"
-                        class="badge alert bg-cust shadow-sm">Print Sticker</a>  <?php if($authuser->role_id !=7){?> |<a
-                        href="{{url($prefix.'/consignments/'.$consignment->id.'/print-viewold/2')}}" target="_blank"
-                        class="badge alert bg-cust shadow-sm">Print Order Sheet </a> <?php } ?>
-                    <?php }else{ ?>
-                    <a href="{{url($prefix.'/print-sticker/'.$consignment->id)}}" target="_blank"
-                        class="badge alert bg-cust shadow-sm">Print Sticker</a> <?php if($authuser->role_id !=7){?>|  <a
+                <td><a
                         href="{{url($prefix.'/consignments/'.$consignment->id.'/print-view/2')}}" target="_blank"
-                        class="badge alert bg-cust shadow-sm">Print Order Sheet </a> <?php } ?>
-                    <?php }} ?>
+                        class="badge alert bg-cust shadow-sm">Print Order Sheet </a> 
                 </td>
 
                 <?php if($authuser->role_id == 7 || $authuser->role_id == 6 ) { 

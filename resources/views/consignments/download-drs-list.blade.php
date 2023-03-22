@@ -202,9 +202,7 @@ $(document).on('click', '.draft-sheet', function() {
                 totalweights += parseInt(value.consignment_detail.total_weight);
 
                 $('#save-DraftSheet tbody').append("<tr class='outer-tr' id=" + value.id +
-                    "><td><a href='#' data-toggle='modal' class='btn btn-danger ewayupdate' data-dismiss='modal' data-id=" +
-                    value.consignment_no +
-                    ">Edit</a></td><td><input type='date' name='edd[]' data-id=" + value
+                    "><td><input type='date' name='edd[]' data-id=" + value
                     .consignment_no + " class='new_edd' value='" + value
                     .consignment_detail.edd + "'></td><td>" + value.consignment_no +
                     "</td><td>" + value.consignment_date + "</td><td>" + value

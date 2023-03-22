@@ -57,7 +57,8 @@ div.relative {
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0);">Crop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Crop List</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Crop
+                                List</a></li>
                     </ol>
                 </nav>
             </div>
@@ -68,22 +69,23 @@ div.relative {
                     <table id="unverified-table" class="table table-hover" style="width:100%">
                         <div class="btn-group relative">
                             <button type="button" class="btn btn-warning disableDrs" data-toggle="modal"
-                                data-target="#exampleModalCenter"
-                                style="font-size: 11px;">
+                                data-target="#exampleModalCenter" style="font-size: 11px;">
                                 Add Crop
                             </button>
                         </div>
                         <thead>
                             <tr>
+                                <th>Sr. No.</th>
                                 <th>Crop Name</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($crops as $crop)
                             <tr>
+                                <td>{{$crop->id}}</td>
                                 <td>{{$crop->crop_name}}</td>
                             </tr>
-                           @endforeach
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

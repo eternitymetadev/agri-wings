@@ -70,10 +70,9 @@ div.relat {
                         <?php } ?>
                         <thead>
                             <tr>
-                                <!-- <th>S No.</th> -->
-                                <th>Driver Name</th>
-                                <th>Driver Phone</th>
-                                <th>Driver License Number</th>
+                                <th>Rider Name</th>
+                                <th>Rider Phone</th>
+                                <th>Rider License Number</th>
                                 <th>Image</th>
                                 <th>Action</th>
                             </tr>

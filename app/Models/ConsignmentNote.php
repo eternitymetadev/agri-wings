@@ -135,5 +135,12 @@ class ConsignmentNote extends Model
     public function fallIn(){
         return $this->belongsTo('App\Models\Location','fall_in');
     }
+    public function Crop(){
+        return $this->belongsTo('App\Models\Crop','crop');
+    }
+    public function Farm()
+    {
+        return $this->hasOne('App\Models\Farm','id','ship_to_id');
+    }
 
 }

@@ -13,6 +13,7 @@ use App\Models\Driver;
 use App\Models\Farm;
 use App\Models\ItemMaster;
 use App\Models\Location;
+use App\Models\BaseClient;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\Vehicle;
@@ -50,7 +51,7 @@ class OrderController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'PrsDetail', 'RegClient');
+        $query = $query->where('status', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'PrsDetail', 'RegClient','Crop');
 
         if ($authuser->role_id == 1) {
             $query;
@@ -401,8 +402,9 @@ class OrderController extends Controller
         // }
 
         $farms = Farm::where('farmer_id', $getconsignments->consignee_id)->get();
+        $crops = Crop::get();
 
-        return view('orders.update-order', ['prefix' => $this->prefix, 'getconsignments' => $getconsignments, 'consigners' => $consigners, 'consignees' => $consignees, 'vehicles' => $vehicles, 'vehicletypes' => $vehicletypes, 'drivers' => $drivers, 'regionalclient' => $regionalclient, 'itemlists' => $itemlists, 'branchs' => $branchs, 'farms' => $farms]);
+        return view('orders.update-order', ['prefix' => $this->prefix, 'getconsignments' => $getconsignments, 'consigners' => $consigners, 'consignees' => $consignees, 'vehicles' => $vehicles, 'vehicletypes' => $vehicletypes, 'drivers' => $drivers, 'regionalclient' => $regionalclient, 'itemlists' => $itemlists, 'branchs' => $branchs, 'farms' => $farms,'crops'=>$crops]);
     }
 
     /**
@@ -1283,7 +1285,23 @@ class OrderController extends Controller
 
             $authuser = Auth::user();
             $cc = explode(',', $authuser->branch_id);
-            
+
+            if($request->regclient_id == 0){
+                 $get_consignee = Consignee::where('id', $request->farmer_id)->first();
+
+                 $client['client_name'] = $get_consignee->nick_name;
+                 $baseclient = BaseClient::create($client);
+
+                 $baseclient_id = $baseclient->id;
+                 $regionalclient['baseclient_id'] = $baseclient_id;
+                 $regionalclient['name'] = $get_consignee->nick_name.'-(Self Pay)';
+                 $regionalclient['regional_client_nick_name'] = $get_consignee->nick_name;
+
+                 $saveregional_client = RegionalClient::create($regionalclient);
+                 $saveregional_client_id = $saveregional_client->id;
+            }else{
+                $saveregional_client_id = $request->regclient_id;
+            }
 
             // ==================latestcmt ================== //
             // $prs_regclientcheck = Regionalclient::where('id', $request->regclient_id)->first();
@@ -1342,7 +1360,7 @@ class OrderController extends Controller
             }
             // ================= latest cmt end ================= //
 
-            $consignmentsave['regclient_id'] = $request->regclient_id;
+            $consignmentsave['regclient_id'] = $saveregional_client_id;
             $consignmentsave['consignee_id'] = $request->farmer_id;
             $consignmentsave['ship_to_id'] = $request->farm_id;
             $consignmentsave['consignment_date'] = $request->consignment_date;

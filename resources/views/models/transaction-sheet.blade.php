@@ -188,7 +188,7 @@
                             <label for="location_name">Drone No.</label>
 
                             <select class="form-control my-select2" id="vehicle_no" name="vehicle_id" tabindex="-1">
-                                <option value="">Select vehicle no</option>
+                                <option value="">Select Drone</option>
                                 @foreach($vehicles as $vehicle)
                                 <option value="{{$vehicle->id}}">{{$vehicle->regn_no}}
                                 </option>
@@ -198,7 +198,7 @@
                         <div class="form-group col-md-6">
                             <label for="exampleFormControlInput2">Rider Name</label>
                             <select class="form-control my-select2" id="driver_id" name="driver_id" tabindex="-1">
-                                <option value="">Select driver</option>
+                                <option value="">Select Rider</option>
                                 @foreach($drivers as $driver)
                                 <option value="{{$driver->id}}">{{ucfirst($driver->name) ?? '-'}}-{{$driver->phone ??
                                     '-'}}
@@ -215,11 +215,11 @@
                             style="width:100%; text-align:left; border: 1px solid #c7c7c7;">
                             <thead>
                                 <tr>
-                                    <th>E-Way</th>
+                                    <!-- <th>E-Way</th> -->
                                     <th>EDD</th>
                                     <th>Order No</th>
-                                    <th>Consignment Date</th>
-                                    <th>Consignee Name</th>
+                                    <th>Order Date</th>
+                                    <th>Farmer Name</th>
                                     <th>city</th>
                                     <th>Pin Code</th>
                                   
@@ -231,7 +231,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td>Total</td>
+                                    <!-- <td>Total</td> -->
                                     <td id="totallr"></td>
                                     <td></td>
                                     <td></td>

@@ -367,7 +367,7 @@ span.select2.select2-container.mb-4 {
 
         {{--Farmer Address Details Section: --}}
         <div class="form-row">
-            <h6 class="col-12">Farmer Address Details Section: </h6>
+            <h6 class="col-12">Farmer Address Details </h6>
 
             <div class="form-group col-md-4">
                 <label>

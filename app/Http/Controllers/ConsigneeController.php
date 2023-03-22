@@ -43,30 +43,31 @@ class ConsigneeController extends Controller
             $cc = explode(',',$authuser->branch_id);
             $query = Consignee::with('Consigner.RegClient','Zone');
 
-            if($authuser->role_id == 2 || $authuser->role_id == 3){
-                if($authuser->role_id == $role_id->id){
-                    $query = $query->whereHas('Consigner.RegClient', function ($regclientquery) use($cc) {
-                    $regclientquery->whereIn('location_id', $cc);
-                    });
-                }else{
-                    $query = $query;
-                }
-            }else if($authuser->role_id != 2 || $authuser->role_id != 3){
-                if($authuser->role_id == $role_id->id){
-                    if($authuser->role_id !=1){
-                        $query = $query->whereHas('Consigner', function($query) use($regclient){
-                            $query->whereIn('regionalclient_id', $regclient);
-                        });
-                    }else{
-                        $query = $query;
-                    }
-                }else{
-                    $query = $query;
-                }
-            }
-            else{
-                $query = $query;
-            }
+            // if($authuser->role_id == 2 || $authuser->role_id == 3){
+            //     if($authuser->role_id == $role_id->id){
+            //         $query = $query->whereHas('Consigner.RegClient', function ($regclientquery) use($cc) {
+            //         $regclientquery->whereIn('location_id', $cc);
+            //         });
+            //     }else{
+            //         $query = $query;
+            //     }
+            // }else if($authuser->role_id != 2 || $authuser->role_id != 3){
+            //     if($authuser->role_id == $role_id->id){
+            //         if($authuser->role_id !=1){
+            //             $query = $query->whereHas('Consigner', function($query) use($regclient){
+            //                 $query->whereIn('regionalclient_id', $regclient);
+            //             });
+            //         }else{
+            //             $query = $query;
+            //         }
+            //     }else{
+            //         $query = $query;
+            //     }
+            // }
+            // else{
+            //     $query = $query;
+            // }
+
             $consignees = $query->get();
             return datatables()->of($consignees)
                 ->addIndexColumn()
@@ -95,9 +96,9 @@ class ConsigneeController extends Controller
                     return $state;
                 })
                 ->addColumn('action', function($row){
-                    $btn = '<a href="'.URL::to($this->prefix.'/'.$this->segment.'/'.Crypt::encrypt($row->id).'/edit').'" class="edit btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+                    $btn = '<a href="#" class="edit btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
                     $btn .= '&nbsp;&nbsp;';
-                    $btn .= '<a href="'.URL::to($this->prefix.'/'.$this->segment.'/'.Crypt::encrypt($row->id)).'" class="view btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>';
+                    $btn .= '<a href="#" class="view btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>';
                     $btn .= '&nbsp;&nbsp;';
                     // $btn .= '<a class="delete btn btn-sm btn-danger delete_consignee" data-id="'.$row->id.'" data-action="'.URL::to($this->prefix.'/'.$this->segment.'/delete-consignee').'"><i class="fa fa-trash"></i></a>';
 
@@ -172,6 +173,7 @@ class ConsigneeController extends Controller
         $consigneesave['postal_code']         = $request->postal_code;
         $consigneesave['state_id']            = $request->state_id;
         $consigneesave['user_id']             = $authuser->id;
+        $consigneesave['branch_id']           = $authuser->branch_id;
 
         $saveconsignee = Consignee::create($consigneesave); 
         if($saveconsignee)

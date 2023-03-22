@@ -30,8 +30,8 @@ div.relat {
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Vehicles</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Vehicle List</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Drones</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Drone List</a></li>
                     </ol>
                 </nav>
             </div>
@@ -51,14 +51,9 @@ div.relat {
                         <?php } ?>
                         <thead>
                             <tr>
-                                <th>Vehicle Number</th>
-                                <th>Registration Date</th>
-                                <th>State(Regd)</th>
-                                <th>Body Type</th>
+                                <th>Drone Name</th>
                                 <th>Make</th>
-                                <th>Vehicle Capacity</th>
-                                <th>Manufacture</th>
-                                <th>RC Image</th>
+                                <th>Drone Capacity</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -84,13 +79,10 @@ div.relat {
 
             columns: [
                 {data: 'regn_no', name: 'regn_no'},
-                {data: 'regndate', name: 'regndate'},
-                {data: 'state_id', name: 'state_id'},
-                {data: 'body_type', name: 'body_type'},
                 {data: 'make', name: 'make'},
                 {data: 'tonnage_capacity', name: 'tonnage_capacity'},
-                {data: 'mfg', name: 'mfg'},
-                {data: 'rc_image', name: 'rc_image'},
+                // {data: 'mfg', name: 'mfg'},
+                // {data: 'rc_image', name: 'rc_image'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
                 
             ]

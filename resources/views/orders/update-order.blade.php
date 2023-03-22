@@ -325,9 +325,9 @@ if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
                 <select class="form-control" style="width: 160px;" name="payment_type" id="payment_type"
                     onchange="togglePaymentAction()" {{$disable}}>
                     <option value="To be Billed" {{$getconsignments->payment_type == 'To be Billed' ? 'selected' : ''}}>
-                        TBB</option>
+                        Bill To Client</option>
                     <option value="UPI/Wallet" {{$getconsignments->payment_type == 'UPI/Wallet' ? 'selected' : ''}}>
-                        TUPI/Wallet
+                        UPI/Wallet
                     </option>
                     <option value="Cash" {{$getconsignments->payment_type == 'Cash' ? 'selected' : ''}}>
                         Cash
@@ -402,8 +402,10 @@ if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
                 </label>
                 <select class="form-control form-small my-select2" id="crop" name="crop" tabindex="-1">
                     <option value="">Select Crop</option>
-                    @foreach($vehicles as $vehicle)
-                    <option value="{{$vehicle->id}}">{{$vehicle->regn_no}}
+                    @foreach($crops as $crop)
+                    <option value="{{$crop->id}}"
+                        {{ $crop->id == $getconsignments->crop ? 'selected' : ''}}>
+                        {{ucwords($crop->crop_name)}}
                     </option>
                     @endforeach
                 </select>
@@ -417,7 +419,7 @@ if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
 
             </div>
             {{--vehicle info--}}
-            <div class="form-row" style="width: 100%">
+            <!-- <div class="form-row" style="width: 100%">
                 <h6 class="col-12">Drone Information</h6>
 
                 <div class="form-group col-md-4">
@@ -452,7 +454,7 @@ if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
                     <Input type="date" class="form-control form-small" name="edd" />
                 </div>
 
-            </div>
+            </div> -->
             <div class=" col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 3rem;">
                 {{-- <a class="mt-2 btn btn-outline-primary" href="{{url($prefix.'/consignments') }}"> Back</a>--}}
                 <button type="submit" class="mt-2 btn btn-primary disableme"

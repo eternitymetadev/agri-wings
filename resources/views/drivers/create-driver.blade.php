@@ -14,8 +14,8 @@
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Drivers</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Create Driver</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Riders</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Create Rider</a></li>
                     </ol>
                 </nav>
             </div>
@@ -28,17 +28,17 @@
                         <form class="general_form" method="POST" action="{{url($prefix.'/drivers')}}" id="createdriver">    
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Driver Name<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Rider Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Name">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Driver Phone<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Rider Phone<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control mbCheckNm" name="phone" placeholder="Phone" maxlength="10">
                                 </div>
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Driver License Number<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Rider License Number<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="license_number" placeholder="">
                                 </div>
                                 
@@ -46,50 +46,11 @@
                             
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Driver License File(Optional)</label>
+                                    <label for="exampleFormControlInput2">Rider License File(Optional)</label>
                                     <input type="file" class="form-control license_image" name="license_image" accept="image/*">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <div class="image_upload"><img src="{{url("/assets/img/upload-img.png")}}" class="licenseshow image-fluid" id="img-tag" width="320" height="240"></div>
-                                </div> 
-                            </div>
-                            <h5 class="form-row mb-2">Bank Details</h5>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Bank Name</label>
-                                    <input type="text" class="form-control" name="bank_name" placeholder=""> 
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Branch Name</label>
-                                    <input type="text" class="form-control" name="branch_name" placeholder="">
-                                </div>
-                            </div>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">IFSC</label>
-                                    <input type="text" class="form-control" name="ifsc" placeholder="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Account No</label>
-                                    <input type="text" class="form-control" name="account_number" placeholder="">
-                                </div>                                
-                            </div>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Account Holder Name</label>
-                                    <input type="text" class="form-control" name="account_holdername" placeholder="">
-                                </div>
-                                 
-                            </div>
-                            <h5 class="form-row mb-2">Shadow Details</h5>
-                            <div class="form-row mb-0">
-                            <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Team Id</label>
-                                    <input type="text" class="form-control" name="team_id" placeholder="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Fleet ID</label>
-                                    <input type="text" class="form-control" name="fleet_id" placeholder="">
                                 </div> 
                             </div>
                             <h5 class="form-row mb-2">Login Details</h5>

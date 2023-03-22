@@ -87,7 +87,7 @@ class ConsignmentController extends Controller
             $regclient = explode(',', $authuser->regionalclient_id);
             $cc = explode(',', $authuser->branch_id);
 
-            $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail');
+            $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'Crop','fallIn');
 
             if ($authuser->role_id == 1) {  
                 $query;
@@ -161,7 +161,7 @@ class ConsignmentController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail');
+        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail','Crop','fallIn');
 
         if ($authuser->role_id == 1) {
             $query;
@@ -1958,8 +1958,9 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
 
-        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*','consignees.nick_name as consignee_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'consignees.district as consignee_district', 'zones.primary_zone as zone')
+        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*','consignees.nick_name as consignee_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'consignees.district as consignee_district', 'zones.primary_zone as zone','crops.crop_name as crop')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
+            ->join('crops', 'crops.id', '=', 'consignment_notes.crop')
             ->leftjoin('zones', 'zones.id', '=', 'consignees.zone_id')
             ->whereIn('consignment_notes.status', ['2', '5', '6'])
             ->where('consignment_notes.booked_drs', '!=', '1');
@@ -2374,7 +2375,7 @@ class ConsignmentController extends Controller
     {
         $id = $request->id;
         $transcationview = TransactionSheet::select('*')
-            ->with('ConsignmentDetail.ConsignerDetail.GetRegClient', 'consigneeDetail', 'ConsignmentItem')
+            ->with('ConsignmentDetail.ConsignerDetail.GetRegClient', 'consigneeDetail', 'ConsignmentItem','ConsignmentDetail.RegClient','ConsignmentDetail.Farm','ConsignmentDetail.Crop')
             ->whereHas('ConsignmentDetail', function ($q) {
                 $q->where('status', '!=', 0);
             })
@@ -2385,7 +2386,7 @@ class ConsignmentController extends Controller
 
         $no_of_deliveries = count($simplyfy);
         $details = $simplyfy[0];
-        $pay = public_path('assets/img/LOGO_Frowarders.jpg');
+        $pay = public_path('assets/img/agri.png');
 
         $date = new DateTime($details['created_at'], new \DateTimeZone('GMT-7'));
         $date->setTimezone(new \DateTimeZone('IST'));
@@ -2447,25 +2448,25 @@ class ConsignmentController extends Controller
         <body style="font-size:13px; font-family:Arial Helvetica,sans-serif;">
                     <header><div class="row" style="display:flex;">
                     <div class="column"  style="width: 493px;">
-                        <h1 class="dd">Delivery Run Sheet</h1>
+                        <h1 class="dd">Order Run Sheet</h1>
                         <div  class="dd">
                         <table class="drs_t" style="width:100%">
                             <tr class="drs_r">
-                                <th class="drs_h">DRS No.</th>
-                                <th class="drs_h">DRS-' . $details['drs_no'] . '</th>
-                                <th class="drs_h">Vehicle No.</th>
+                                <th class="drs_h">ORS No.</th>
+                                <th class="drs_h">ORS-' . $details['drs_no'] . '</th>
+                                <th class="drs_h">Drone No.</th>
                                 <th class="drs_h">' . $details['vehicle_no'] . '</th>
                             </tr>
                             <tr class="drs_r">
-                                <td class="drs_d">DRS Date</td>
+                                <td class="drs_d">ORS Date</td>
                                 <td class="drs_d">' . $drsDate . '</td>
-                                <td class="drs_d">Driver Name</td>
+                                <td class="drs_d">Rider Name</td>
                                 <td class="drs_d">' . @$details['driver_name'] . '</td>
                             </tr>
                             <tr class="drs_r">
                                 <td class="drs_d">No. of Deliveries</td>
                                 <td class="drs_d">' . $no_of_deliveries . '</td>
-                                <td class="drs_d">Driver No.</td>
+                                <td class="drs_d">Rider No.</td>
                                 <td class="drs_d">' . @$details['driver_no'] . '</td>
                             </tr>
                         </table>
@@ -2480,18 +2481,17 @@ class ConsignmentController extends Controller
                 <div id="content"><div class="row" style="border: 1px solid black;">
                 <div class="column" style="width:125px;">
                     <h4 style="margin: 0px;"> Bill to Client</h4>
-                    <h4 style="margin: 0px;">LR Details:</h4>
+                    <h4 style="margin: 0px;">Order Details:</h4>
                 </div>
                 <div class="column" style="width:200px;">
-                    <h4 style="margin: 0px;">Consignee Name & Mobile Number</h4>
+                    <h4 style="margin: 0px;">Farmer Name &  Number</h4>
                 </div>
                 <div class="column" style="width:125px;">
-                    <h4 style="margin: 0px;">Delivery City, </h4>
-                    <h4 style="margin: 0px;"> Dstt & PIN</h4>
+                    <h4 style="margin: 0px;">Farm Address</h4>
 
                     </div>
                     <div class="column">
-                    <h4 style="margin: 0px;">Shipment Details</h4>
+                    <h4 style="margin: 0px;">Crop And Acreage</h4>
                     </div>
                     <div class="column" style="width:170px;">
                     <h4 style="margin: 0px; ">Stamp & Signature of Receiver</h4>
@@ -2526,7 +2526,7 @@ class ConsignmentController extends Controller
                 <div class="row" style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; margin-bottom: -10px;">
 
                     <div class="column" style="width:125px;">
-                       <p style="margin-top:0px;">' . $dataitem['consignment_detail']['consigner_detail']['get_reg_client']['name'] . '</p>
+                       <p style="margin-top:0px;">' . @$dataitem['consignment_detail']['reg_client']['name'] . '</p>
                         <p style="margin-top:-8px;">' . $dataitem['consignment_no'] . '</p>
                         <p style="margin-top:-13px;">' . Helper::ShowDayMonthYear($dataitem['consignment_date']) . '</p>
                     </div>
@@ -2536,15 +2536,13 @@ class ConsignmentController extends Controller
 
                     </div>
                     <div class="column" style="width:125px;">
-                        <p style="margin-top:0px;">' . $dataitem['city'] . '</p>
-                        <p style="margin-top:-13px;">' . @$dataitem['consignee_detail']['district'] . '</p>
-                        <p style="margin-top:-13px;">' . @$dataitem['pincode'] . '</p>
+                        <p style="margin-top:0px;">' . $dataitem['consignment_detail']['farm']['field_area'] . '</p>
+                        <p style="margin-top:-13px;">' . @$dataitem['consignment_detail']['farm']['address'] . '</p>
 
                       </div>
                       <div class="column" >
-                        <p style="margin-top:0px;">Boxes:' . $dataitem['total_quantity'] . '</p>
-                        <p style="margin-top:-13px;">Wt:' . $dataitem['consignment_detail']['total_gross_weight'] . '</p>
-                        <p style="margin-top:-13px;">EDD:' . Helper::ShowDayMonthYear($dataitem['consignment_detail']['edd']) . '</p>
+                        <p style="margin-top:0px;">' . $dataitem['consignment_detail']['crop']['crop_name'] . '</p>
+                        <p style="margin-top:-13px;">' . $dataitem['consignment_detail']['acreage'] . '</p>
                       </div>
                       <div class="column" style="width:170px;">
                         <p></p>
@@ -2555,12 +2553,6 @@ class ConsignmentController extends Controller
             $html .= ' <div class="column" style="width:230px; margin-top: -10px;">';
             $html .= '<table class="neworder" style="margin-top: -10px;"><tr style="border:0px;"><td style="width: 190px; padding:6px;"><span style="font-weight: bold;">Order ID</span></td><td style="width: 190px;"><span style="font-weight: bold;">Invoice No</span></td></tr></table>';
             $itm_no = 0;
-            foreach ($dataitem['consignment_item'] as $cc) {
-                $itm_no++;
-
-                $html .= '  <table style="border:0; margin-top: -7px;"><tr><td style="width: 190px; padding:3px;">' . $itm_no . '.  ' . $cc['order_id'] . '</td><td style="width: 190px; padding:3px;">' . $itm_no . '.  ' . $cc['invoice_no'] . '</td></tr></table>';
-
-            }
             $html .= '</div> ';
 
             $html .= '</div>

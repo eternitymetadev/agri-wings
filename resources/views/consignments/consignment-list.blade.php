@@ -392,8 +392,8 @@ a.badge.alert.bg-secondary.shadow-sm {
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Consignments</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Consignment
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Order</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Order
                                 List</a></li>
                     </ol>
                 </nav>
@@ -583,7 +583,7 @@ function initMap(response, row_id)
     var travel_mode = 'DRIVING';
     var origin = response.cnr_pincode;
     var destination = response.cne_pincode;
-    directionsService.route({
+    directionsService.route({ 
         "origin": origin,
         "destination": destination,
         "travelMode": travel_mode,
