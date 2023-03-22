@@ -25,23 +25,23 @@
 
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Driver Name<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Rider Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" value="{{old('name',isset($getdriver->name)?$getdriver->name:'')}}" placeholder="Name">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Driver Phone<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Rider Phone<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control mbCheckNm" name="phone" value="{{old('phone',isset($getdriver->phone)?$getdriver->phone:'')}}" placeholder="Phone" maxlength="10">
                                 </div>
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Driver License Number<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Rider License Number<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="license_number" value="{{old('license_number',isset($getdriver->license_number)?$getdriver->license_number:'')}}" placeholder="">
                                 </div>
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6 license-load">
-                                    <label for="exampleFormControlInput2">Driver License File(Optional)</label>
+                                    <label for="exampleFormControlInput2">Rider License File(Optional)</label>
                                     
                                     <?php if(!empty($getdriver->license_image))
                                     { 
@@ -65,43 +65,7 @@
                                     <?php } ?>
                                 </div>
                             </div>
-                            <h4>Bank Details</h4>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Bank Name</label>
-                                    <input type="text" class="form-control" name="bank_name" value="{{old('bank_name',isset($getdriver->BankDetail->bank_name)?$getdriver->BankDetail->bank_name:'')}}" placeholder="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Branch Name</label>
-                                    <input type="text" class="form-control" name="branch_name" value="{{old('branch_name',isset($getdriver->BankDetail->branch_name)?$getdriver->BankDetail->branch_name:'')}}" placeholder="">
-                                </div>
-                            </div>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">IFSC</label>
-                                    <input type="text" class="form-control" name="ifsc" value="{{old('ifsc',isset($getdriver->BankDetail->ifsc)?$getdriver->BankDetail->ifsc:'')}}" placeholder="">
-                                </div> 
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Account No</label>
-                                    <input type="text" class="form-control" name="account_number" value="{{old('account_number',isset($getdriver->BankDetail->account_number)?$getdriver->BankDetail->account_number:'')}}" placeholder="">
-                                </div>
-                            </div>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Account Holder Name</label>
-                                    <input type="text" class="form-control" name="account_holdername" value="{{old('account_holdername',isset($getdriver->BankDetail->account_holdername)?$getdriver->BankDetail->account_holdername:'')}}" placeholder="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Team Id</label>
-                                    <input type="text" class="form-control" name="team_id" value="{{old('team_id',isset($getdriver->team_id)?$getdriver->team_id:'')}}" placeholder="">
-                                </div>  
-                            </div>
-                            <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Fleet ID</label>
-                                    <input type="text" class="form-control" name="fleet_id" value="{{old('fleet_id',isset($getdriver->fleet_id)?$getdriver->fleet_id:'')}}" placeholder="">
-                                </div> 
-                            </div>
+                          
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Login ID</label>
