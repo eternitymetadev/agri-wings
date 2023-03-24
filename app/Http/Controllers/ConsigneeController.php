@@ -96,7 +96,7 @@ class ConsigneeController extends Controller
                     return $state;
                 })
                 ->addColumn('action', function($row){
-                    $btn = '<a href="#" class="edit btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+                    $btn = '<a href="'.URL::to($this->prefix.'/'.$this->segment.'/'.Crypt::encrypt($row->id).'/edit').'" class="edit btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
                     $btn .= '&nbsp;&nbsp;';
                     $btn .= '<a href="#" class="view btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>';
                     $btn .= '&nbsp;&nbsp;';
@@ -149,7 +149,7 @@ class ConsigneeController extends Controller
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
         $rules = array(
-            // 'nick_name' => 'required|unique:consignees',
+            //  'nick_name' => 'required|unique:consignees',
         );
         $validator = Validator::make($request->all(),$rules);
         
@@ -240,7 +240,7 @@ class ConsigneeController extends Controller
         }else{
             $consigners = Consigner::where('status',1)->orderby('nick_name','ASC')->pluck('nick_name','id');
         }      
-        $getconsignee = Consignee::with('GetZone')->where('id',$id)->first();
+        $getconsignee = Consignee::with('GetZone','Farm')->where('id',$id)->first();
         return view('consignees.update-consignee')->with(['prefix'=>$this->prefix, 'getconsignee'=>$getconsignee,'branches'=>$branches,'consigners'=>$consigners,'title'=>$this->title,'pagetitle'=>'Update']);
     }
 
@@ -256,8 +256,8 @@ class ConsigneeController extends Controller
         try { 
             $this->prefix = request()->route()->getPrefix();
             $rules = array(
-                'nick_name' => 'required',
-                'legal_name' => 'required'
+                // 'nick_name' => 'required',
+                // 'legal_name' => 'required'
             );
 
             $validator = Validator::make($request->all(),$rules);
@@ -270,39 +270,43 @@ class ConsigneeController extends Controller
                 $response['errors']      = $errors;
                 return response()->json($response);
             }
-            $check_nickname_exist = Consignee::where(['nick_name'=>$request['nick_name']])->where('consigner_id',$request->consigner_id)->where('id','!=',$request->consignee_id)->get();
+            // $check_nickname_exist = Consignee::where(['nick_name'=>$request['nick_name']])->where('consigner_id',$request->consigner_id)->where('id','!=',$request->consignee_id)->get();
 
-            if(!$check_nickname_exist->isEmpty()){
-                $response['success'] = false;
-                $response['error_message'] = "Nick name already exists.";
-                $response['cnee_nickname_duplicate_error'] = true;
-                return response()->json($response);
-            }
+            // if(!$check_nickname_exist->isEmpty()){
+            //     $response['success'] = false;
+            //     $response['error_message'] = "Nick name already exists.";
+            //     $response['cnee_nickname_duplicate_error'] = true;
+            //     return response()->json($response);
+            // }
 
-            $consigneesave['nick_name']           = $request->nick_name;
-            $consigneesave['legal_name']          = $request->legal_name;
-            $consigneesave['gst_number']          = $request->gst_number;
-            $consigneesave['contact_name']        = $request->contact_name;
+            $consigneesave['nick_name']           = $request->farmer_name;
             $consigneesave['phone']               = $request->phone;
-            $consigneesave['consigner_id']        = $request->consigner_id;
-            $consigneesave['zone_id']             = $request->zone_id;
-            $consigneesave['branch_id']           = $request->branch_id;
-            $consigneesave['dealer_type']         = $request->dealer_type;
-            $consigneesave['email']               = $request->email;
-            $consigneesave['sales_officer_name']  = $request->sales_officer_name;
-            $consigneesave['sales_officer_email'] = $request->sales_officer_email;
-            $consigneesave['sales_officer_phone'] = $request->sales_officer_phone;
+            // $consigneesave['branch_id']           = $request->branch_id;
             $consigneesave['address_line1']       = $request->address_line1;
-            $consigneesave['address_line2']       = $request->address_line2;
-            $consigneesave['address_line3']       = $request->address_line3;
-            $consigneesave['address_line4']       = $request->address_line4;
+            // $consigneesave['address_line2']       = $request->address_line2;
+            // $consigneesave['address_line3']       = $request->address_line3;
+            // $consigneesave['address_line4']       = $request->address_line4;
             $consigneesave['city']                = $request->city;
             $consigneesave['district']            = $request->district;
             $consigneesave['postal_code']         = $request->postal_code;
             $consigneesave['state_id']            = $request->state_id;
             // $consigneesave['status']              = $request->status;
-            
+
             Consignee::where('id',$request->consignee_id)->update($consigneesave);
+
+            if(!empty($request->data)){ 
+                $get_data = $request->data;
+               
+                foreach ($get_data as $key => $save_data ) { 
+                    $update['field_area'] = $save_data['field_area'];
+                    $update['address'] = $save_data['address'];
+                    $hidden_id = $save_data['hidden_id'];                      
+                    $updatefarmer = Farm::where('id',$hidden_id)->update($update);
+                    // $saveregclients = Farm::create($save_data);
+                }
+            }
+            
+           
             $url    =   URL::to($this->prefix.'/consignees');
 
             $response['page'] = 'consignee-update';
