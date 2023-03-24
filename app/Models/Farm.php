@@ -12,3 +12,4 @@ class Farm extends Model
         'farmer_id', 'field_area', 'address','created_at','updated_at'        
     ];
 }
+ 

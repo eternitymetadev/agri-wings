@@ -43,5 +43,8 @@ class Consignee extends Model
     public function Zone(){
         return $this->belongsTo('App\Models\Zone','postal_code','postal_code');
     }
+    public function Farm(){
+        return $this->hasMany('App\Models\Farm','farmer_id','id');
+    }
 
 }
