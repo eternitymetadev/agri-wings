@@ -105,7 +105,7 @@ div.relative {
                             <tr>
                                 <!-- <td class="dt-control">+</td> -->
                                 <td>{{ $consignment->id ?? "-" }}</td>
-                                <td>{{ $consignment->date ?? "NA" }}</td>
+                                <td>{{ $consignment->consignment_date ?? "NA" }}</td>
                                 <td>{{ $consignment->Branch->name ?? "-" }}</td>
                                 <td>{{ $consignment->fallIn->name ?? "-" }}</td>
                                 <td>{{ $consignment->RegClient->name ?? "-" }}</td>

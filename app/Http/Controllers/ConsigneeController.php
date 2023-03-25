@@ -145,7 +145,6 @@ class ConsigneeController extends Controller
      */
     public function store(Request $request)
     {
-        // echo'<pre>'; print_r($request->all()); die;
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
         $rules = array(
@@ -184,6 +183,8 @@ class ConsigneeController extends Controller
                     $save_data['farmer_id'] = $saveconsignee->id;
                     $save_data['field_area'] = $save_data['field_area'];
                     $save_data['address'] = $save_data['address'];
+                    $save_data['pin_code'] = $save_data['pin_code'];
+                    $save_data['city'] = $save_data['city'];
                     $saveregclients = Farm::create($save_data);
                 }
             }
@@ -300,6 +301,8 @@ class ConsigneeController extends Controller
                 foreach ($get_data as $key => $save_data ) { 
                     $update['field_area'] = $save_data['field_area'];
                     $update['address'] = $save_data['address'];
+                    $update['pin_code'] = $save_data['pin_code'];
+                    $update['city'] = $save_data['city'];
                     $hidden_id = $save_data['hidden_id'];                      
                     $updatefarmer = Farm::where('id',$hidden_id)->update($update);
                     // $saveregclients = Farm::create($save_data);
