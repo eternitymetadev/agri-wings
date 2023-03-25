@@ -1022,6 +1022,11 @@ class ConsignmentController extends Controller
         $pay = public_path('assets/img/LOGO_Frowarders.jpg');
         $payment = public_path('assets/123.png');
         $agri = public_path('assets/img/agri.png');
+        $qr = public_path('assets/qr.png');
+        $corteva = public_path('assets/corteva.png');
+        $bg1 = public_path('assets/b-1.jpg');
+        $bg2 = public_path('assets/b-2.jpg');
+        $file_link = public_path('assets/Roboto/Roboto-Regular.ttf');
          
         for ($i = 1; $i < 5; $i++) {
             if ($i == 1) {$type = 'ORIGINAL';} elseif ($i == 2) {$type = 'DUPLICATE';} elseif ($i == 3) {$type = 'TRIPLICATE';} elseif ($i == 4) {$type = 'QUADRUPLE';}
@@ -1033,218 +1038,322 @@ class ConsignmentController extends Controller
 
             $html = '<!DOCTYPE html>
             <html>
-                <head>
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            
-                    <style>
-                        body {
-                            text-align: center;
-                        }
-                        table {
-                            /* border-collapse: collapse; */
-                            border-radius: 12px;
-                            overflow: hidden;
-                        }
-                        .headingName {
-                            text-align: center;
-                            font-size: 1.5rem;
-                            line-height: 1.5rem;
-                            margin-bottom: 4px;
-                        }
-            
-                        .otherTable {
-                            border-collapse: collapse;
-                            outline: 2px solid #02381d;
-                            outline-offset: -1px;
-                            width: 100%;
-                            border-radius: 8px;
-                            overflow: hidden;
-                        }
-            
-                        .otherTable th,
-                        .otherTable td {
-                            padding: 8px;
-                            border: 1px solid;
-                        }
-                        .otherTable th {
-                            background-color: #02381d10;
-                            color: #02381d;
-                            padding-left: 2rem;
-                        }
-            
-                        .styled td {
-                            padding: 6px;
-                        }
-            
-                        .roundDiv {
-                            outline: 2px solid #025b78;
-                            padding: 1rem;
-                            background-color: #025b7810;
-                            border-radius: 12px;
-                        }
-                        .roundTable {
-                            text-align: center;
-                            border-collapse: collapse;
-                        }
-                        .roundTable td {
-                            border: none;
-                        }
-            
-                        .borderRight {
-                            border-right: 2px solid #838383 !important;
-                        }
-            
-                        .borderTop {
-                            border-top: 2px solid #838383 !important;
-                        }
-            
-                        .terms {
-                            text-align: left;
-                            font-size: 1.2rem;
-                            font-weight: 600;
-                        }
-                    </style>
-                </head>
-            
-                <body style="font-family:Arial Helvetica,sans-serif;">
-                    <table style="margin: auto; max-width: 600px; width: 100%">
-                        <tbody>
-                            <tr>
-                                <td style="text-align: center">
-                                    <table style="width: 100%; margin-bottom: 1.3rem">
-                                        <tr>
-                                            <td valign="middle" style="text-align: center">
-                                                <img src="'.$agri.'" style="max-height: 80px" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="middle">
-                                                <h3
-                                                    style="
-                                                        text-align: center;
-                                                        font-size: 2rem;
-                                                        line-height: 1.5rem;
-                                                    "
-                                                >
-                                                    Order Sheet <br /><span style="font-size: 1.3rem"
-                                                        >Original</span
-                                                    >
-                                                </h3>
-                                            </td>
-                                        </tr>
-            
-                                        <tr>
-                                            <td>
-                                                <div class="roundDiv">
-                                                    <table class="roundTable" style="width: 100%">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="borderRight">Order No</td>
-                                                                <td class="borderRight">Order Dt</td>
-                                                                <td class="borderRight">Drone</td>
-                                                                <td class="borderBottom">Rider</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="borderRight borderTop">'.$data['id'].'</td>
-                                                                <td class="borderRight borderTop">' . date('d-m-Y', strtotime($data['consignment_date'])) . '</td>
-                                                                <td class="borderRight borderTop">' . @$data['vehicle_detail']['regn_no'] . '</td>
-                                                                <td class="borderTop">' . ucwords(@$data['driver_detail']['name']) . '</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-            
-                                    <h3 class="headingName">Payment Information</h3>
-                                    <table class="otherTable">
-                                        <tr>
-                                            <th
-                                                valign="middle"
-                                                style="text-align: left; width: 30%; max-width: 120px"
-                                            >
-                                                Billing Client
-                                            </th>
-                                            <td style="text-align: center" valign="middle">
-                                                '.$data['reg_client']['name'].'
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="middle" style="text-align: left">Payment Type</th>
-                                            <td style="text-align: center" valign="middle">
-                                                '.$data['payment_type'].'
-                                            </td>
-                                        </tr>
-                                    </table>
-            
-                                    <h3 class="headingName">Farmer Home Address</h3>
-                                    <table class="otherTable">
-                                        <tr>
-                                            <td valign="middle" colspan="4" style="text-align: left">' . $data['consignee_detail']['address_line1'] . '
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="middle" style="text-align: left; width: 60px">
-                                                Pin
-                                            </th>
-                                            <td style="text-align: center" valign="middle">' . $data['consignee_detail']['postal_code'] . '</td>
-                                            <th valign="middle" style="text-align: left; width: 90px">
-                                                City
-                                            </th>
-                                            <td style="text-align: center" valign="middle">' . @$data['consignee_detail']['city'] . '</td>
-                                        </tr>
-                                    </table>
-            
-                                    <h3 class="headingName">Farmer Farm Address</h3>
-                                    <table class="otherTable">
-                                        <tr>
-                                            <td valign="middle" colspan="4" style="text-align: left">' . @$data['farm']['crop_name'] . ','.@$data['farm']['address'] .'
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th valign="middle" style="text-align: left; width: 60px">
-                                                Pin
-                                            </th>
-                                            <td style="text-align: center" valign="middle">140603</td>
-                                            <th valign="middle" style="text-align: left; width: 90px">
-                                                City
-                                            </th>
-                                            <td style="text-align: center" valign="middle">Zirakpur</td>
-                                        </tr>
-                                    </table>
-            
-                                    <h3 class="headingName">Other Information</h3>
-                                    <table class="otherTable">
-                                        <tr>
-                                            <th valign="middle" style="padding-left: 8px">Crop</th>
-                                            <th valign="middle" style="padding-left: 8px">Acreage</th>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center" valign="middle">'.$data['crop']['crop_name'].'</td>
-                                            <td style="text-align: center" valign="middle">'.$data['acreage'].'</td>
-                                        </tr>
-                                    </table>
-            
-                                    <h3 class="headingName">Payment Link</h3>
-                                    <img src="'.$payment.'" style="height: 180px; width:180px; object-fit: contain; margin: auto" />
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <style>
 
+                    * {
+                       font-family: system-ui, sans-serif !important;
+                        padding: 0;
+                        margin: 0;
+                        -webkit-print-color-adjust: exact !important; /* Chrome, Safari 6 – 15.3, Edge */
+                        color-adjust: exact !important; /* Firefox 48 – 96 */
+                        print-color-adjust: exact !important; /* Firefox 97+, Safari 15.4+ */
             
-                                    <p class="terms">Terms & Conditions</p>
-                                    <ul style="text-align: left">
-                                        <li>List One</li>
-                                        <li>List One</li>
-                                        <li>List One</li>
-                                        <li>List One</li>
-                                        <li>List One</li>
-                                    </ul>
+                    }
+                    h1, h2 , h3, h4, h5, h6, p{
+                       font-family: system-ui, sans-serif !important;
+                    }
+            
+                    .headingTd {
+                       font-family: system-ui, sans-serif !important;
+
+                        color: #fff;
+                        font-size: 32px;
+                        line-height: 32px;
+                        font-weight: 500;
+                        padding: 14px 20px;
+                        margin-top: 24px;
+                        background: #fff url("'.$bg2.'") no-repeat 96%;
+                    }
+            
+                    .headingTd span {
+                        font-size: 18px;
+                        line-height: 18px;
+                    }
+            
+                    .headerTd {
+                        color: #fff;
+                        width: 70%;
+                        padding-left: 70px;
+                        text-align: right;
+                        padding-right: 20px;
+                        height: 125px;
+                        background: #fff url("'.$bg1.'") no-repeat;
+                    }
+            
+                    .headerTd h4 {
+                        font-size: 30px;
+                        margin: 0;
+                        font-weight: 700;
+                    }
+            
+                    .headerTd p {
+                        margin: 0;
+                        font-size: 18px;
+                        font-weight: 600;
+                    }
+            
+                    .headerTd .companyName {
+                        font-family: system-ui, sans-serif !important;
+                        font-size: 20px;
+                        font-weight: 600;
+                        margin-bottom: 1px;
+                    }
+            
+                    .headerTd .companyAddress {
+                        font-size: 12px;
+                        width: 300px;
+                        margin: 0 0 0 auto;
+                        font-weight: 400;
+                    }
+            
+                    .headerTd .companyContact {
+                        font-size: 12px;
+                        margin-top: 6px;
+                        font-weight: 500;
+                    }
+            
+            
+                    .subHeading {
+                        font-weight: 500;
+                        font-size: 17px;
+                        background: #02381d;
+                        width: 220px;
+                        border-radius: 18px 18px 0 0;
+                        text-align: center;
+                        color: #fff;
+                        line-height: 28px;
+                    }
+            
+                    .addressBlock {
+                        border: 2px solid #02381d;
+                        width: 90%;
+                        border-radius: 0 12px 12px;
+                        overflow: hidden;
+                    }
+            
+                    .addressBlock p {
+                        padding: 1rem;
+                        min-height: 70px;
+                    }
+            
+            
+                    .pin, .city, .pinValue, .cityValue {
+                        border-top: 2px solid #02381d;
+                        font-weight: 700;
+                    }
+            
+                    .pinValue {
+                        width: 76px
+                    }
+            
+                    .pin, .city {
+                        text-align: center;
+                        width: 60px;
+                        color: #248f27;
+                    }
+            
+                    .roundTable td {
+                        padding: 8px;
+                        border: none;
+                    }
+            
+                    .terms {
+                        font-size: 15px;
+                        font-weight: 600;
+                        border-bottom: 1px solid #02381d80;
+                        padding: 0 1rem;
+                    }
+            
+            
+                    .orderDetailsBlock {
+                        padding: 1rem;
+                        border-radius: 15px;
+                        margin-right: 60px;
+                    }
+            
+                    .billingClientBlock {
+                        margin-top: 14px;
+                        border-radius: 12px;
+                        padding: 16px;
+                    }
+            
+                    .billingClientBlock .heading {
+                        font-size: 20px;
+                        font-weight: 500;
+                        color: #02381d;
+                        border-bottom: 2px solid #02381d;
+                    }
+            
+                    .billingClientBlock .des {
+                        padding-left: 1rem;
+                    }
+            
+                    .paymentBlock {
+                        width: 200px;
+                        vertical-align: baseline;
+                        text-align: center;
+                    }
+            
+                    .imgText {
+                        margin-bottom: 6px;
+                        font-weight: 600;
+                        color: #02381d;
+                    }
+            
+                    .footer {
+                        border-radius: 12px;
+                        position: fixed;
+                        bottom: 0;
+                        width: 100%;
+                        font-size: 11px;
+                    }
+                </style>
+            </head>
+            
+            <body>
+            <!--header-->
+            <table width="100%">
+                <tbody>
+                <tr>
+                    <td style="width: 30%">
+                        <img src="'.$agri.'" style="width: 28vw"/>
+                    </td>
+                    <td class="headerTd">
+                        <p class="companyName">' . $branch_add[0]->name . '</p>
+                        <p class="companyAddress">' . $locations->GstAddress->address_line_1 . ',' . $locations->GstAddress->address_line_2 . '</p>
+                        <p class="companyAddress">GST No.:  ' . $locations->GstAddress->gst_no . '</p>
+                        <p class="companyContact">Phone: ' . @$locations->phone . ' &nbsp;&nbsp;&nbsp; Email:
+                        ' . @$locations->email . '</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%" class="headingTd"><p >Order Sheet<br/><span>Original</span></p></td>
+                </tr>
+                </tbody>
+            </table>
+            
+            <table width="90%" style="margin: auto">
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="orderDetailsBlock">
+                            <p>Order No.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                                <strong>'.$data['id'].'</strong></p>
+                            <p>Order Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; <strong>' . date('d-m-Y', strtotime($data['consignment_date'])) . '</strong></p>
+                            <p>Drone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                                <strong>' . @$data['vehicle_detail']['regn_no'] . '</strong></p>
+                            <p>Rider&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                :&nbsp; <strong>' . ucwords(@$data['driver_detail']['name']) . '</strong>
+                            <p>Payment Term&nbsp;&nbsp;: <strong>' . @$data['payment_type'] . '</strong>
+                            </p>
+                        </div>
+            
+                        <div class="billingClientBlock" style="margin-right: 70px;">
+                            <p class="heading">Billing Client</p>
+                            <p class="des">'.$data['reg_client']['name'].'</p>
+                        </div>
+                    </td>
+                    <td class="paymentBlock">
+                        <p class="imgText">Payment Link</p>
+                        <img src="'.$qr.'" alt="qr code" style="width: 160px;"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            
+            <table style="width: 96%; margin: auto">
+                <tbody>
+                <!--    address-->
+                <tr>
+                    <td style="padding: 1rem 0">
+                        <!--address-->
+                        <table width="94%" style="border-collapse: collapse; margin: auto">
+                            <tbody>
+                            <tr>
+                                <td><p class="subHeading">Farmer Home Address</p></td>
+                                <td><p class="subHeading">Farmer Farm Address</p></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">
+                                    <div class="addressBlock">
+                                        <p>' . $data['consignee_detail']['nick_name'] . '<br>' . $data['consignee_detail']['address_line1'] . '
+                                        </p>
+                                        <table style="width: 100%; border-collapse: collapse">
+                                            <tbody>
+                                            <tr>
+                                                <td class="pin"><strong>PIN :</strong></td>
+                                                <td class="pinValue">' . $data['consignee_detail']['postal_code'] . '</td>
+                                                <td class="city"><strong>CITY :</strong></td>
+                                                <td class="cityValue">' . @$data['consignee_detail']['city'] . '</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td style="width: 50%">
+                                    <div class="addressBlock">
+                                        <p>
+                                        ' . @$data['farm']['field_area'] . ','.@$data['farm']['address'] .'
+                                        </p>
+                                        <table style="width: 100%; border-collapse: collapse">
+                                            <tbody>
+                                            <tr>
+                                                <td class="pin"><strong>PIN :</strong></td>
+                                                <td class="pinValue">125001</td>
+                                                <td class="city"><strong>CITY :</strong></td>
+                                                <td class="cityValue">Hisar</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </body>
-            </html>
-            ';
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            
+                <!--    other info-->
+                <tr>
+                    <td>
+                        <div class="billingClientBlock">
+                            <p class="heading">Other Information</p>
+                            <table width="100%">
+                                <tbody>
+                                <tr>
+                                    <td width="50%"><p class="des">Crop : <strong>'.@$data['crop']['crop_name'].'</strong></p></td>
+                                    <td width="50%"><p class="des">Acreage : <strong>'.@$data['acreage'].'</strong></p></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td style="text-align: center">
+                        <img src="'.$corteva.'" height="160px"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            
+            <!--    terms-->
+            <div class="footer">
+                <p class="terms">Terms & Conditions</p>
+                <ul style="text-align: left;padding-left: 2rem;margin: 10px;">
+                    <li>List One</li>
+                    <li>List One</li>
+                    <li>List One</li>
+                    <li>List One</li>
+                    <li>List One</li>
+                </ul>
+            </div>
+            
+            </body>
+            </html>';
 
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($html);
