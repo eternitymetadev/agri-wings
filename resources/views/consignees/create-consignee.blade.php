@@ -13,7 +13,7 @@
                     </ol>
                 </nav>
             </div>
-            <div class="widget-content widget-content-area br-6"> 
+            <div class="widget-content widget-content-area br-6">
                 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
                     <!-- <div class="breadcrumb-title pe-3"><h5>Create Consignee</h5></div> -->
                 </div>
@@ -85,33 +85,45 @@
                                 </div>
                             </div> -->
                             <h4>Add Farm Address</h3>
-                            <table id="myTable">
-                                <tbody>
-                                    <tr>
-                                        <th><label for="exampleFormControlInput2">Field Area<span
-                                                    class="text-danger">*</span></label></th>
-                                        <th><label for="exampleFormControlInput2">Address<span
-                                                    class="text-danger">*</span></label></th>
-                                    </tr>
-                                    <tr class="rowcls"> 
-                                        <td>
-                                            <input type="text" class="form-control name" name="data[1][field_area]"
-                                                placeholder="">
-                                        </td>
-                                        <td>
-                                            <textarea type="text" class="form-control name" name="data[1][address]"
-                                                placeholder=""></textarea>
-                                        </td>
-                                      
-                                        <td>
-                                            <button type="button" class="btn btn-primary" id="addRow"
-                                                onclick="addrow()"><i class="fa fa-plus-circle"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button type="submit" class="mt-4 mb-4 btn btn-primary">Submit</button>
-                            <a class="btn btn-primary" href="{{url($prefix.'/consignees') }}"> Back</a>
+                                <table id="myTable">
+                                    <tbody>
+                                        <tr>
+                                            <th><label for="exampleFormControlInput2">Field Area<span
+                                                        class="text-danger">*</span></label></th>
+                                            <th><label for="exampleFormControlInput2">Pin Code<span
+                                                        class="text-danger">*</span></label></th>
+                                            <th><label for="exampleFormControlInput2">City<span
+                                                        class="text-danger">*</span></label></th>
+                                            <th><label for="exampleFormControlInput2">Address<span
+                                                        class="text-danger">*</span></label></th>
+                                        </tr>
+                                        <tr class="rowcls">
+                                            <td>
+                                                <input type="text" class="form-control name" name="data[1][field_area]"
+                                                    placeholder="">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control name" name="data[1][pin_code]"
+                                                    placeholder="">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control name" name="data[1][city]"
+                                                    placeholder="">
+                                            </td>
+                                            <td>
+                                                <textarea type="text" class="form-control name" name="data[1][address]"
+                                                    placeholder=""></textarea>
+                                            </td>
+
+                                            <td>
+                                                <button type="button" class="btn btn-primary" id="addRow"
+                                                    onclick="addrow()"><i class="fa fa-plus-circle"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button type="submit" class="mt-4 mb-4 btn btn-primary">Submit</button>
+                                <a class="btn btn-primary" href="{{url($prefix.'/consignees') }}"> Back</a>
                         </form>
                     </div>
                 </div>
@@ -132,7 +144,16 @@ function addrow() {
     rows += '<input type="text" class="form-control name" name="data[' + i + '][field_area]" placeholder="">';
     rows += '</td>';
     rows += '<td>';
-    rows += '<textarea type="text" class="form-control name" name="data[' + i + '][address]" placeholder=""></textarea>';
+    rows += '<input type="text" class="form-control name" name="data[' + i +
+        '][pin_code]" placeholder="">';
+    rows += '</td>';
+    rows += '<td>';
+    rows += '<input type="text" class="form-control name" name="data[' + i +
+        '][city]" placeholder="">';
+    rows += '</td>';
+    rows += '<td>';
+    rows += '<textarea type="text" class="form-control name" name="data[' + i +
+        '][address]" placeholder=""></textarea>';
     rows += '</td>';
     rows += '<td>';
     rows += '<button type="button" class="btn btn-danger removeRow"><i class="fa fa-minus-circle"></i></button>';
