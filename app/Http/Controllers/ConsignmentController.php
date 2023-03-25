@@ -1301,9 +1301,9 @@ class ConsignmentController extends Controller
                                             <tbody>
                                             <tr>
                                                 <td class="pin"><strong>PIN :</strong></td>
-                                                <td class="pinValue">125001</td>
+                                                <td class="pinValue">'.@$data['farm']['pin_code'] .'</td>
                                                 <td class="city"><strong>CITY :</strong></td>
-                                                <td class="cityValue">Hisar</td>
+                                                <td class="cityValue">'.@$data['farm']['city'] .'</td>
                                             </tr>
                                             </tbody>
                                         </table>
