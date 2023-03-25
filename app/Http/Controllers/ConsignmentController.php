@@ -1323,8 +1323,8 @@ class ConsignmentController extends Controller
                             <table width="100%">
                                 <tbody>
                                 <tr>
-                                    <td width="50%"><p class="des">Crop : <strong>'.$data['crop']['crop_name'].'</strong></p></td>
-                                    <td width="50%"><p class="des">Acreage : <strong>'.$data['acreage'].'</strong></p></td>
+                                    <td width="50%"><p class="des">Crop : <strong>'.@$data['crop']['crop_name'].'</strong></p></td>
+                                    <td width="50%"><p class="des">Acreage : <strong>'.@$data['acreage'].'</strong></p></td>
                                 </tr>
                                 </tbody>
                             </table>
