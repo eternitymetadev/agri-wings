@@ -319,5 +319,10 @@ class UserController extends Controller
         }
         return response()->json($response);
     }
+
+    public function clientRegister(Request $request)
+    {
+        return view('client-register');
+    }
     
 }
