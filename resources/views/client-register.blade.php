@@ -57,12 +57,14 @@
 
     .loginBlock img {
         max-height: min(60px, 350px);
+        margin-bottom: 1rem;
     }
 
     .form-control:focus {
         border-color: #208120;
         box-shadow: 0 0 0 0.25rem #20812025;
     }
+
 
     @media (max-width: 600px) {
         .loginPageContainer {
@@ -72,6 +74,59 @@
         .droneImageBlock {
             display: none;
         }
+    }
+
+    .formRow {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 1rem;
+    }
+
+    .formElement {
+        flex: 1 0 250px;
+        text-align: left;
+        min-height: 62px;
+    }
+
+    input[type="file"],
+    input[type="file"]:hover {
+        border: none;
+    }
+
+    input[type="file"]::file-selector-button {
+        color: #248f27;
+        border: 2px solid #248f27;
+        padding: 1px 6px;
+        border-radius: 6px;
+        font-size: 12px;
+        background-color: #2c932f29;
+        transition: 1s;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+        background-color: #81ecec;
+        border: 2px solid #00cec9;
+    }
+
+    .captcha img {
+        width: 200px;
+    }
+
+    a {
+        color: #248f27
+    }
+
+    .captcha_error {
+        color: red;
+    }
+
+    label.error {
+        font-size: 12px;
+        line-height: 12px;
+    }
+
+    .form-control.error {
+        margin-bottom: -6px;
     }
     </style>
 </head>
@@ -83,64 +138,59 @@
             <img src="{{asset('assets/drone.png')}}" alt="drone" />
         </div>
         <div class="loginBlock" style="flex: 1">
-            <form id="client_register">
+            <img src="{{asset('assets/agri-wing-logo.svg')}}" />
+
+            <form class="general_form" method="POST" action="{{url('/client-register')}}" id="client_register">
                 @csrf
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail4">Company Name</label>
-                        <input type="text" class="form-control" id="" name="company_name" placeholder="">
+                <div class="formRow">
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" id="" name="company_name" placeholder="Company Name">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword4">Contact Person</label>
-                        <input type="text" class="form-control" id="" name="contact_name" placeholder="">
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" id="" name="contact_name" placeholder="Contact Person">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail4">Contact Number</label>
-                        <input type="text" class="form-control" id="" name="contact_number" placeholder="">
+                <div class="formRow">
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control"  name="contact_number"
+                            placeholder="Contact Number">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword4">Email ID</label>
-                        <input type="text" class="form-control" id="" name="email" placeholder="">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail4">GST No</label>
-                        <input type="text" class="form-control" id="" name="gst_no" placeholder="">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword4">PAN</label>
-                        <input type="text" class="form-control" id="" name="pan" placeholder="">
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" id="email" name="email"
+                            placeholder="yourEmail@address.com" value="">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail4">GST Upload</label>
-                        <input type="file" class="form-control" id="" name="gst_upload" placeholder="">
+                <div class="formRow">
+                    <div class="form-group formElement" style="margin-bottom: 16px">
+                        <input type="text" class="form-control" id="" name="gst_no" placeholder="GST No">
+                        <input type="file" class="form-control" id="" name="gst_upload">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword4">PAN Upload</label>
-                        <input type="file" class="form-control" id="" name="pan_upload"placeholder="">
+                    <div class="form-group formElement" style="margin-bottom: 16px">
+                        <input type="text" class="form-control" id="" name="pan" placeholder="PAN">
+                        <input type="file" class="form-control" id="" name="pan_upload">
                     </div>
                 </div>
+
                 <div class="form-group row">
-                            <label for="captcha" class="col-md-4 col-form-label text-md-right">Captcha</label>
-                            <div class="col-md-6 captcha">
-                                <span>{!! captcha_img() !!}</span>
-                                <button type="button" class="btn btn-danger" class="reload" id="reload">
-                                &#x21bb;
-                                </button>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="captcha" class="col-md-4 col-form-label text-md-right">Enter Captcha</label>
-                            <div class="col-md-6">
-                                <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
-                            </div>
-                        </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                    <div class="formElement">
+                        <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
+                        <!-- <span class="captcha_error"></span> -->
+                    </div>
+
+
+                    <div class="formElement captcha">
+                        <span>{!! captcha_img() !!}</span>
+                        <button type="button" class="btn btn-danger" class="reload" id="reload">
+                            &#x21bb;
+                        </button>
+                    </div>
+                </div>
+                <!-- <button class="btn btn-primary" style="width: 100%; background: #208120; border-color: #208120"
+                    type="submit">Register</button> -->
+                    <button type="submit" class="btn btn-primary" style="width: 100%; background: #208120; border-color: #208120"><span class="indicator-label">Register</span>
+                 <span class="indicator-progress" style="display: none;">Please wait...
+            	    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button> 
+                <p>Already registered? <a href="{{url('/login')}}">Login</a> </p>
             </form>
         </div>
     </div>
@@ -165,7 +215,9 @@
     <script src="{{asset('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
 
     <script>
-    var APP_URL = {!!json_encode(url('/')) !!};
+    var APP_URL = {
+        !!json_encode(url('/')) !!
+    };
 
 
 
@@ -197,41 +249,48 @@
     <script src="{{asset('assets/js/custom.js')}}"></script>
     <script src="{{asset('assets/js/jquery.toast.js')}}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-<script>
-    $("#client_register").submit(function (e) {
-    e.preventDefault();
-    var formData = new FormData(this);
+    <script>
+    // $("#client_register").submit(function(e) {
+    //     e.preventDefault();
+    //     var formData = new FormData(this);
+    //     var email = $('#email').val();
+    //     if(!email){
+    //         swal("error", 'Please Enter Email', "error");
+    //         return false;
+    //     }
 
-    $.ajax({
-        url: "client-register",
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        type: "POST",
-        data: new FormData(this),
-        processData: false,
-        contentType: false,
-        beforeSend: function () {
-            $(".indicator-progress").show();
-            $(".indicator-label").hide();
-        },
-        success: (data) => {
-            $(".indicator-progress").hide();
-            $(".indicator-label").show();
-            if (data.success == true) {
-                swal("success!", data.success_message, "success");
-            } else {
-                swal("error", data.error_message, "error");
-            }
-        },
-    });
-});
+    //     $.ajax({
+    //         url: "client-register",
+    //         headers: {
+    //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+    //         },
+    //         type: "POST",
+    //         data: new FormData(this),
+    //         processData: false,
+    //         contentType: false,
+    //         beforeSend: function() {
+    //             $(".indicator-progress").show();
+    //             $(".indicator-label").hide();
+    //         },
+    //         success: (data) => {
+    //             $(".indicator-progress").hide();
+    //             $(".indicator-label").show();
+    //             if (data.success == true) {
+    //                 swal("success!", data.success_message, "success");
+    //             } else if(data.validation == false){
+    //                 $('.captcha_error').html(data.errors.captcha[0]);
+    //             } else{
+    //                 swal("error", data.error_message, "error");
+    //             }
+    //         },
+    //     });
+    // });
 
-$('#reload').click(function () {
+    $('#reload').click(function() {
         $.ajax({
             type: 'GET',
             url: 'reload-captcha',
-            success: function (data) {
+            success: function(data) {
                 $(".captcha span").html(data.captcha);
             }
         });

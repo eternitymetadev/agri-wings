@@ -324,9 +324,9 @@ class UserController extends Controller
         $this->prefix = request()->route()->getPrefix();
         $rules = array(
             // 'name' => 'required',
-            'email' => 'required|unique:users,email',
+             'email' => 'required|unique:users,email',
             // 'email'  => 'required',
-            'captcha' => ['required', 'captcha'],
+             'captcha' => ['required', 'captcha'],
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -373,7 +373,7 @@ class UserController extends Controller
             ClientUserDetails::create($saveclientdetails);
 
             $data = ['user_id' => $userid, 'login_id' => $request->email, 'password' => $randPassword];
-            $user['to'] = 'sahil.thakur@eternitysolutions.net';
+            $user['to'] = $request->email;
             Mail::send('client-verified-email', $data, function ($messges) use ($user) {
                 $messges->to($user['to']);
                 $messges->subject('Please Verified To Login');
@@ -382,10 +382,10 @@ class UserController extends Controller
 
             $url = URL::to($this->prefix . '/login');
             $response['success'] = true;
-            $response['success_message'] = "Users Added successfully";
+            $response['success_message'] = "Users Added successfully, Please Check Your Mail To verify";
             $response['error'] = false;
             // $response['resetform'] = true;
-            $response['page'] = 'user-create';
+            $response['page'] = 'client-register';
             $response['redirect_url'] = $url;
         } else {
             $response['success'] = false;
@@ -400,10 +400,17 @@ class UserController extends Controller
         return response()->json(['captcha' => captcha_img()]);
     }
 
-    public function clientVerification(Request $request)
+    public function clientVerification($id)
     {
-        echo'<pre>'; print_r('pass'); die;
-      
+        $id = decrypt($id); 
+        $verified = User::where('id',$id)->first();
+        if($verified->status == 0){
+            User::where('id', $id)->update(['status' => 1]);
+            return 'User verified successfully';
+        }else{
+            return 'Already verified';
+        }
+
     }
 
 }

@@ -68,7 +68,7 @@ class LoginController extends Controller
             $getauthuser = Auth::user();
             if($getauthuser->status == 0){
                 $response['success'] = false;
-                $response['error_message'] = "Please contact the system owner if you need access.";
+                $response['error_message'] = "Please Verified Your Account First";
                 $response['error'] = true;
                 $response['email_error'] = true;
                 Auth::logout();

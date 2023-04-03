@@ -28,10 +28,10 @@
 
 <body>
     <p>
-        Login ID:{{$login_id}} </br>
-        Password : {{$password}} </br>
+        Login ID:{{$login_id}} <br />
+        Password : {{$password}} <br />
     </p>
-    <a href="{{ url('/client-verification/'.$user_id) }}" target="_blank" class="btn btn-primary verify">verify
+    <a href="{{ url('/client-verification/'.Crypt::encrypt($user_id))}}" target="_blank" class="btn btn-primary verify">verify
         Email</a>
 </body>
 

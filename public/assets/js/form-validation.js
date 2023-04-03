@@ -74,6 +74,34 @@ jQuery(document).ready(function(){
         }
     });
 
+     // user login
+     jQuery('#client_register').validate({
+        rules:
+        {
+            email: {
+                required: true,
+                regex: "",
+                email: true,
+            },
+            captcha: {
+                required: true,
+            },
+        },
+        messages:
+        {
+            email: {
+              required: "Email address is required",
+             },
+             captcha: {
+                required: "Captcha address is required",
+               },
+        },
+        submitHandler : function(form)
+        {
+            formSubmitRedirect(form);
+        }
+    });
+
   /*===== create role =====*/
     jQuery('#createrole').validate({
         rules:
@@ -161,7 +189,7 @@ jQuery(document).ready(function(){
             },
             email: {
                 required: "Enter email",
-                email: "Enter correct email address",
+                email: "Enter correct email address ww",
             },
             password : {
                 required: "Enter password",
@@ -1798,6 +1826,9 @@ function formSubmitRedirect(form)
                 $('.gstno_error').hide();
             }
            $('.disableme').prop('disabled', true);
+
+           $(".indicator-progress").show();
+           $(".indicator-label").hide();
         },
         complete: function (response) {
             $('.disableme').prop('disabled', true);
@@ -1808,6 +1839,8 @@ function formSubmitRedirect(form)
         },
         success: function (response)
         {
+            $(".indicator-progress").hide();
+            $(".indicator-label").show();
             // alert('kk');
           	$.toast().reset('all');
       		var delayTime = 3000;
@@ -1842,6 +1875,8 @@ function formSubmitRedirect(form)
             }else if(response.page == 'login'){
                 setTimeout(() => {window.location.href = response.redirect_url},1000);
             }else if(response.page == 'user-create' || response.page == 'user-update'){
+                setTimeout(() => {window.location.href = response.redirect_url},2000);
+            }else if(response.page == 'client-register'){
                 setTimeout(() => {window.location.href = response.redirect_url},2000);
             }else if(response.page == 'role'){
                 setTimeout(() => {window.location.href = response.redirect_url},1000);
