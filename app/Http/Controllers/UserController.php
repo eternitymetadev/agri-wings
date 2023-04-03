@@ -11,6 +11,7 @@ use App\Models\Permission;
 use App\Models\Location;
 use App\Models\RegionalClient;
 use App\Models\BaseClient;
+use App\Models\ClientUserDetails;
 use DB;
 use URL;
 use Helper;
@@ -323,6 +324,81 @@ class UserController extends Controller
     public function clientRegister(Request $request)
     {
         return view('client-register');
+    }
+    public function addClientUser(Request $request)
+    {
+       
+        $this->prefix = request()->route()->getPrefix();
+        $rules = array(
+            // 'name' => 'required',
+            // 'login_id' => 'required|unique:users,login_id',
+            // 'email'  => 'required',
+            'captcha' => ['required','captcha'],
+        );
+
+        $validator = Validator::make($request->all(),$rules);
+    
+        if($validator->fails())
+        {
+            $errors                  = $validator->errors();
+            $response['success']     = false;
+            $response['validation']  = false;
+            $response['formErrors']  = true;
+            $response['errors']      = $errors;
+            return response()->json($response);
+        }
+        $randString = str_random(10);
+        echo'<pre>'; print_r($randString); die;
+        if(!empty($request->name)){
+            $usersave['company_name']   = $request->name;
+        }
+        if(!empty($request->login_id)){
+            $usersave['contact_name']   = $request->login_id;
+        }
+        if(!empty($request->email)){
+            $usersave['contact_number']  = $request->email;
+        }
+        if(!empty($request->email)){
+            $usersave['email']  = $request->email;
+        }
+        if(!empty($request->email)){
+            $usersave['gst_no']  = $request->email;
+        }
+        if(!empty($request->email)){
+            $usersave['pan']  = $request->email;
+        }
+        
+        $saveuser = ClientUserDetails::create($usersave);
+        if($saveuser)
+        {
+            $userid = $saveuser->id;
+            if(!empty($request->permisssion_id)){         
+                foreach ($request->permisssion_id as $key => $permissionvalue){
+                    $savepermissions[] = [
+                        'user_id'=>$userid,
+                        'permisssion_id'=>$permissionvalue,
+                    ];
+                }
+                UserPermission::insert($savepermissions); 
+            }
+            $url    =   URL::to($this->prefix.'/users');
+            $response['success'] = true;
+            $response['success_message'] = "Users Added successfully";
+            $response['error'] = false;
+            // $response['resetform'] = true;
+            $response['page'] = 'user-create';
+            $response['redirect_url'] = $url;
+        }else{
+            $response['success'] = false;
+            $response['error_message'] = "Can not created user please try again";
+            $response['error'] = true;
+        }
+        return response()->json($response);
+    }
+
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha'=> captcha_img()]);
     }
     
 }

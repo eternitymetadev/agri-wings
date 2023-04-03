@@ -84,6 +84,7 @@
         </div>
         <div class="loginBlock" style="flex: 1">
             <form id="client_register">
+                @csrf
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Company Name</label>
@@ -124,6 +125,21 @@
                         <input type="file" class="form-control" id="" name="pan_upload"placeholder="">
                     </div>
                 </div>
+                <div class="form-group row">
+                            <label for="captcha" class="col-md-4 col-form-label text-md-right">Captcha</label>
+                            <div class="col-md-6 captcha">
+                                <span>{!! captcha_img() !!}</span>
+                                <button type="button" class="btn btn-danger" class="reload" id="reload">
+                                &#x21bb;
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="captcha" class="col-md-4 col-form-label text-md-right">Enter Captcha</label>
+                            <div class="col-md-6">
+                                <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
+                            </div>
+                        </div>
                 <button type="submit" class="btn btn-primary">Register</button>
             </form>
         </div>
@@ -181,7 +197,46 @@
     <script src="{{asset('assets/js/custom.js')}}"></script>
     <script src="{{asset('assets/js/jquery.toast.js')}}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+<script>
+    $("#client_register").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this);
 
+    $.ajax({
+        url: "client-register",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        type: "POST",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            $(".indicator-progress").show();
+            $(".indicator-label").hide();
+        },
+        success: (data) => {
+            $(".indicator-progress").hide();
+            $(".indicator-label").show();
+            if (data.success == true) {
+                swal("success!", data.success_message, "success");
+            } else {
+                swal("error", data.error_message, "error");
+            }
+        },
+    });
+});
+
+$('#reload').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: 'reload-captcha',
+            success: function (data) {
+                $(".captcha span").html(data.captcha);
+            }
+        });
+    });
+    </script>
 
 
 </body>
