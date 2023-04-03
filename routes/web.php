@@ -1016,6 +1016,7 @@ Route::any('check-paid-status', [VendorController::class, 'check_paid_status']);
 Route::any('register', [UserController::class, 'clientRegister']);
 Route::any('client-register', [UserController::class, 'addClientUser']);
 Route::get('/reload-captcha', [UserController::class, 'reloadCaptcha']);
+Route::any('/client-verification/{id}', [UserController::class, 'clientVerification']);
 
 
 

@@ -15,6 +15,7 @@ class CreateClientUserDetailsTable extends Migration
     {
         Schema::create('client_user_details', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id')->nullable();
             $table->string('company_name')->nullable();
             $table->string('contact_name')->nullable();
             $table->string('contact_number')->nullable();
@@ -23,7 +24,7 @@ class CreateClientUserDetailsTable extends Migration
             $table->string('pan')->nullable();
             $table->string('gst_upload')->nullable();
             $table->string('pan_upload')->nullable();
-            $table->tinyinteger('status')->default(1)->comment('0=>unverified 1=>verified');
+            $table->tinyinteger('status')->default(1)->comment('0=>in active 1=>active');
             $table->timestamps();
         });
     }
