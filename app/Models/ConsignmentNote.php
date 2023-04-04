@@ -11,6 +11,7 @@ class ConsignmentNote extends Model
     protected $fillable = [
         'crop',
         'acreage',
+        'noc',
         'lr_type',
         'h2h_check',
         'hrs_status',

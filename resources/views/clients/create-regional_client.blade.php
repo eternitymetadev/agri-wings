@@ -81,6 +81,23 @@
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
+                                    <label for="exampleFormControlSelect1">Pin Code</label>
+                                    <input type="email" class="form-control" id="" name="pin" placeholder="">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="exampleFormControlInput2">City<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="city" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-row mb-0">
+                                <div class="form-group col-md-6">
+                                    <label for="exampleFormControlSelect1">Address</label>
+                                    <input type="email" class="form-control" id="" name="address" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-row mb-0">
+                                <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">GST Number<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="gst_no" placeholder="">
@@ -102,7 +119,7 @@
                                     <input type="file" class="form-control" name="upload_pan" placeholder="">
                                 </div>
                             </div>
-                            <div class="form-row mb-0">
+                            <!-- <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Multiple Invoice<span
                                             class="text-danger">*</span></label>
@@ -132,8 +149,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-row mb-0">
+                            </div> -->
+                            <!-- <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Email Sent<span
                                             class="text-danger">*</span></label>
@@ -151,7 +168,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Select Payment Terms<span
@@ -180,6 +197,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="formRow">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="notification" id="inlineCheckbox1" value="1">
+                        <label class="form-check-label" for="inlineCheckbox1">Notification required, if yes then disclaimer</label>
+                    </div>
+                </div>
                             </div>
 
                             <button type="submit" class="mt-4 mb-4 btn btn-primary">Submit</button>

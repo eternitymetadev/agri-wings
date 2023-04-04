@@ -92,7 +92,7 @@
                             <input type="file" class="form-control" name="upload_pan" placeholder="">
                         </div>
                     </div> -->
-                    <div class="form-row mb-0">
+                    <!-- <div class="form-row mb-0">
                         <div class="form-group col-md-6">
                             <label for="exampleFormControlInput2">Multiple Invoice<span
                                     class="text-danger">*</span></label>
@@ -128,9 +128,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-row mb-0">
-                        <div class="form-group col-md-6">
+                        <!-- <div class="form-group col-md-6">
                             <label for="exampleFormControlInput2">Email Sent<span class="text-danger">*</span></label>
                             <div class="check-box d-flex">
                                 <div class="checkbox radio">
@@ -148,7 +148,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <?php 
                           $payment_term = explode(',',$regclient_name->payment_term);
                          ?>
@@ -159,9 +159,9 @@
                                 <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" value='To be Billed' name="payment_term[]"
-                                            {{in_array("To be Billed", $payment_term) ? 'checked' : '' }} />
-                                        TBB
+                                        <input type="checkbox" value='Bill To Client' name="payment_term[]"
+                                            {{in_array("Bill To Client", $payment_term) ? 'checked' : '' }} />
+                                            Bill To Client
                                     </label>
                                 </div>
                                 <div class="checkbox radio">

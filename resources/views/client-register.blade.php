@@ -152,8 +152,7 @@
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <input type="text" class="form-control"  name="contact_number"
-                            placeholder="Contact Number">
+                        <input type="text" class="form-control" name="contact_number" placeholder="Contact Number">
                     </div>
                     <div class="form-group formElement">
                         <input type="text" class="form-control" id="email" name="email"
@@ -161,13 +160,32 @@
                     </div>
                 </div>
                 <div class="formRow">
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" name="pin" placeholder="Pin">
+                    </div>
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" id="city" name="city" placeholder="City" value="">
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" name="address" placeholder="Address">
+                    </div>
+                </div>
+                <div class="formRow">
                     <div class="form-group formElement" style="margin-bottom: 16px">
                         <input type="text" class="form-control" id="" name="gst_no" placeholder="GST No">
-                        <input type="file" class="form-control" id="" name="gst_upload">
+                        <input type="file" class="form-control" id="" name="upload_gst">
                     </div>
                     <div class="form-group formElement" style="margin-bottom: 16px">
                         <input type="text" class="form-control" id="" name="pan" placeholder="PAN">
-                        <input type="file" class="form-control" id="" name="pan_upload">
+                        <input type="file" class="form-control" id="" name="upload_pan">
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="notification" id="inlineCheckbox1" value="1">
+                        <label class="form-check-label" for="inlineCheckbox1">Notification required, if yes then disclaimer</label>
                     </div>
                 </div>
 
@@ -187,9 +205,11 @@
                 </div>
                 <!-- <button class="btn btn-primary" style="width: 100%; background: #208120; border-color: #208120"
                     type="submit">Register</button> -->
-                    <button type="submit" class="btn btn-primary" style="width: 100%; background: #208120; border-color: #208120"><span class="indicator-label">Register</span>
-                 <span class="indicator-progress" style="display: none;">Please wait...
-            	    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button> 
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; background: #208120; border-color: #208120"><span
+                        class="indicator-label">Register</span>
+                    <span class="indicator-progress" style="display: none;">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
                 <p>Already registered? <a href="{{url('/login')}}">Login</a> </p>
             </form>
         </div>

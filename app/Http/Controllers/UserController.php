@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Mail;
 use URL;
 use Validator;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -320,6 +321,8 @@ class UserController extends Controller
     }
     public function addClientUser(Request $request)
     {
+        try {
+            DB::beginTransaction();
 
         $this->prefix = request()->route()->getPrefix();
         $rules = array(
@@ -334,7 +337,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors();
             $response['success'] = false;
-            $response['validation'] = false;
+            $response['validation'] = false; 
             $response['formErrors'] = true;
             $response['errors'] = $errors;
             return response()->json($response);
@@ -360,17 +363,48 @@ class UserController extends Controller
 
         $saveuser = User::create($usersave);
         if ($saveuser) {
+
+
+            // ======= gst upload
+            $gstupload = $request->file('upload_gst');
+            $path = Storage::disk('s3')->put('clients', $gstupload);
+            $gst_img_path_save = Storage::disk('s3')->url($path);
+
+            //  ======= pan upload
+            $panupload = $request->file('upload_pan');
+            $pan_path = Storage::disk('s3')->put('clients', $panupload);
+            $pan_img_path_save = Storage::disk('s3')->url($pan_path);
+
             $userid = $saveuser->id;
             $saveclientdetails['user_id'] = $userid;
-            $saveclientdetails['company_name'] = $request->company_name;
-            $saveclientdetails['contact_name'] = $request->contact_name;
-            $saveclientdetails['contact_number'] = $request->contact_number;
+            // $saveclientdetails['company_name'] = $request->company_name;
+            // $saveclientdetails['contact_name'] = $request->contact_name;
+            // $saveclientdetails['contact_number'] = $request->contact_number;
+            // $saveclientdetails['email'] = $request->email;
+            // $saveclientdetails['gst_no'] = $request->gst_no;
+            // $saveclientdetails['pan'] = $request->pan;
+            // $saveclientdetails['status'] = 1;
+
+            $saveclientdetails['name'] = $request->company_name;
+            $saveclientdetails['regional_client_nick_name'] = $request->contact_name;
             $saveclientdetails['email'] = $request->email;
+            $saveclientdetails['phone'] = $request->contact_number;
             $saveclientdetails['gst_no'] = $request->gst_no;
             $saveclientdetails['pan'] = $request->pan;
+            $saveclientdetails['pin'] = $request->pin;
+            $saveclientdetails['city'] = $request->city;
+            $saveclientdetails['address'] = $request->address;
+            if(!empty($request->notification)){
+                $saveclientdetails['notification'] = $request->notification;
+            }
+            $saveclientdetails['upload_gst'] = $gst_img_path_save;
+            $saveclientdetails['upload_pan'] = $pan_img_path_save;
             $saveclientdetails['status'] = 1;
 
-            ClientUserDetails::create($saveclientdetails);
+            $saveclientdetails['payment_term'] = 'Bill to Client';
+
+             
+            RegionalClient::create($saveclientdetails);
 
             $data = ['user_id' => $userid, 'login_id' => $request->email, 'password' => $randPassword];
             $user['to'] = $request->email;
@@ -392,6 +426,13 @@ class UserController extends Controller
             $response['error_message'] = "Can not created user please try again";
             $response['error'] = true;
         }
+        DB::commit();
+    } catch (Exception $e) {
+        $response['error'] = false;
+        $response['error_message'] = $e;
+        $response['success'] = false;
+    }
+
         return response()->json($response);
     }
 

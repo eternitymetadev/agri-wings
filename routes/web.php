@@ -982,6 +982,8 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
 
     Route::any('get-delivery-dateLR', [ConsignmentController::class, 'getDeleveryDateLr']);
     Route::get('pod-view', [ConsignmentController::class, 'podView']);
+    Route::any('/service-booking', [OrderController::class, 'serviceBookingPage']);
+    Route::any('/store-service-booking', [OrderController::class, 'storeServiceBooking']);
 
 });
 
@@ -1017,6 +1019,7 @@ Route::any('register', [UserController::class, 'clientRegister']);
 Route::any('client-register', [UserController::class, 'addClientUser']);
 Route::get('/reload-captcha', [UserController::class, 'reloadCaptcha']);
 Route::any('/client-verification/{id}', [UserController::class, 'clientVerification']);
+
 
 
 

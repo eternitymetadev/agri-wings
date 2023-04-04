@@ -121,6 +121,26 @@ jQuery(document).ready(function(){
             formSubmitRedirect(form);
         }
     });
+
+    // ===== serveice bookng === /
+    jQuery('#service_booking').validate({
+        rules:
+        {
+            farmer_name: {
+              required: true,
+            },
+        },
+        messages:
+        {
+            farmer_name: {
+              required: "Please Enter Farmer Name"
+            },
+        },
+        submitHandler : function(form)
+        {
+            formSubmitRedirect(form);
+        }
+    });
   /*===== End create role =====*/
 
     jQuery('#add_role').click(function(){

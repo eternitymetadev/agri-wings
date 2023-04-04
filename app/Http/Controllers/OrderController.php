@@ -1875,4 +1875,102 @@ class OrderController extends Controller
         return response()->json($response);
     }
 
+    public function serviceBookingPage()
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+
+        $Crops = Crop::get();
+
+        return view('service-booking', ['prefix' => $this->prefix,'Crops' => $Crops]);
+    }
+    public function storeServiceBooking(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+            $rules = array(
+                // 'consigner_id' => 'required',
+                // 'consignee_id' => 'required',
+                // 'ship_to_id' => 'required',
+            );
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $response['success'] = false;
+                $response['validation'] = false;
+                $response['formErrors'] = true;
+                $response['errors'] = $errors;
+                return response()->json($response);
+            }
+
+            $authuser = Auth::user();
+            $cc = explode(',', $authuser->branch_id);
+
+                 $client['client_name'] = $request->farmer_name;
+                 $baseclient = BaseClient::create($client);
+
+                 $baseclient_id = $baseclient->id;
+                 $regionalclient['baseclient_id'] = $baseclient_id;
+                 $regionalclient['name'] = $request->farmer_name.'-(Web)';
+                 $regionalclient['regional_client_nick_name'] = $request->farmer_name;
+                 $regionalclient['status'] = 1;
+
+                 $saveregional_client = RegionalClient::create($regionalclient);
+                 $saveregional_client_id = $saveregional_client->id;
+           
+            $consigneesave['nick_name']           = $request->farmer_name;
+            $consigneesave['phone']               = $request->phone;
+    
+            $saveconsignee = Consignee::create($consigneesave); 
+            $farmer_id =  $saveconsignee->id;
+
+            if(!empty($request->farm)){ 
+                $loop = $request->farm;
+                for ($i= 1; $i <= $loop; $i++) { 
+                    $save_data['farmer_id'] = $saveconsignee->id;
+                    $save_data['field_area'] = 'Farm 1';
+                    $saveregclients = Farm::create($save_data);
+                }
+            }
+
+
+
+            // $consignmentsave['regclient_id'] = $saveregional_client_id;
+            $consignmentsave['consignee_id'] = $farmer_id;
+            // $consignmentsave['ship_to_id'] = $request->farm_id;
+            $consignmentsave['consignment_date'] = $request->consignment_date;
+            $consignmentsave['payment_type'] = $request->payment_type;
+            // $consignmentsave['crop'] = $request->crop;
+            $consignmentsave['acreage'] = $request->acreage;
+            $consignmentsave['noc'] = $request->noc;
+            $consignmentsave['status'] = 5;
+
+            $saveconsignment = ConsignmentNote::create($consignmentsave);
+
+        
+
+            $url = $this->prefix . '/orders';
+            $response['success'] = true;
+            $response['success_message'] = "Order Added successfully";
+            $response['error'] = false;
+            // $response['resetform'] = true;
+            $response['page'] = 'create-consignment';
+            $response['redirect_url'] = $url;
+
+            DB::commit();
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+    }
+
 }
