@@ -280,27 +280,22 @@ span.select2.select2-container.mb-4 {
         <div class="form-row">
             <h6 class="col-12">Bill To Information</h6>
 
-            <!-- <div class="form-group col-md-4">
+             <div class="form-group col-md-4">
                 <label for="exampleFormControlSelect1">
-                    Select Bill to Client<span class="text-danger">*</span>
+                    Bill to Client<span class="text-danger">*</span>
                 </label>
-                <select class="form-control form-control-sm my-select2" id="" name="regclient_id">
-                    <option selected="selected" disabled>select client..</option>
-                  
-                </select>
+                <Input type="text" class="form-control" id="" name="regional_client" value="{{$regonal_client->name}}">
+                <Input type="hidden" class="form-control" id="" name="regclient_id" value="{{$regonal_client->id}}">
 
-            </div> -->
+            </div> 
             <div class="form-group col-md-2">
                 <label for="exampleFormControlSelect1">
                     Payment Term<span class="text-danger">*</span>
                 </label>
                 <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
                     id="paymentType_">
-                    <option value="To be Billed" selected="selected">Bill to client </option>
-                    <option value="UPI/Wallet">UPI/Wallet </option>
-                    <option value="Cash">Cash </option>
-                    <option value="Card">Card </option>
-                    <option value="Net Banking">Net Banking</option>
+                    <option value="Bill To client" selected="selected">Bill to client </option>
+                   
                 </select>
             </div>
             <!-- <div class="form-group col-md-2">

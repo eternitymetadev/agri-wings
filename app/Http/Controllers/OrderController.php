@@ -1882,10 +1882,14 @@ class OrderController extends Controller
         $role_id = Role::where('id', '=', $authuser->role_id)->first();
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
-
         $Crops = Crop::get();
+        $query = RegionalClient::query();
 
-        return view('service-booking', ['prefix' => $this->prefix,'Crops' => $Crops]);
+        $regonal_client = $query->with('UserId')->whereHas('UserId', function ($query) use ($authuser){
+             $query->where('id', '=', $authuser->id);
+        })->first();
+
+        return view('service-booking', ['prefix' => $this->prefix,'Crops' => $Crops,'regonal_client' => $regonal_client]);
     }
     public function storeServiceBooking(Request $request)
     {
@@ -1941,12 +1945,12 @@ class OrderController extends Controller
 
 
 
-            // $consignmentsave['regclient_id'] = $saveregional_client_id;
+            $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $farmer_id;
             // $consignmentsave['ship_to_id'] = $request->farm_id;
             $consignmentsave['consignment_date'] = $request->consignment_date;
             $consignmentsave['payment_type'] = $request->payment_type;
-            // $consignmentsave['crop'] = $request->crop;
+            $consignmentsave['crop'] = $request->crop;
             $consignmentsave['acreage'] = $request->acreage;
             $consignmentsave['noc'] = $request->noc;
             $consignmentsave['status'] = 5;

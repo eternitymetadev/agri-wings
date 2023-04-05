@@ -82,12 +82,23 @@
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlSelect1">Pin Code</label>
-                                    <input type="email" class="form-control" id="" name="pin" placeholder="">
+                                    <input type="text" class="form-control" id="postal_code" name="pin" placeholder="">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">City<span
                                             class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="city" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-row mb-0">
+                                <div class="form-group col-md-6">
+                                    <label for="exampleFormControlSelect1">District</label>
+                                    <input type="email" class="form-control" id="district" name="district" placeholder="" readonly>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="exampleFormControlInput2">State<span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="state" name="state" placeholder="" readonly>
                                 </div>
                             </div>
                             <div class="form-row mb-0">

@@ -733,8 +733,12 @@ class ClientController extends Controller
             $client['pan'] = $request->pan;
             $client['pin'] = $request->pin;
             $client['city'] = $request->city;
+            $client['district'] = $request->district;
+            $client['state'] = $request->state;
             $client['address'] = $request->address;
-            $client['notification'] = $request->notification;
+            if(!empty($request->notification)){
+                $client['notification'] = $request->notification;
+            }
             // $client['is_multiple_invoice'] = $request->is_multiple_invoice;
             // $client['is_prs_pickup'] = $request->is_prs_pickup;
             // $client['is_email_sent'] = $request->is_email_sent;
@@ -842,6 +846,92 @@ class ClientController extends Controller
             $response['error_message'] = $e;
             $response['success'] = false;
         }
+        return response()->json($response);
+    }
+
+    public function unverifiedClient(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $baseclient = explode(',', $authuser->baseclient_id);
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+
+        $regional_clients = RegionalClient::where('verified_by', 0)->get();
+        
+        return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title,'regional_clients' => $regional_clients]);
+    }
+    // ===================
+    public function editverificationRegional($id)
+    {
+        
+        $this->prefix = request()->route()->getPrefix();
+        $id = decrypt($id);
+        $regclient_name = RegionalClient::where('id', $id)->first();
+        $zonestates = Zone::all()->unique('state')->pluck('state', 'id');
+        $locations = Location::all();
+        $base_clients = BaseClient::all();
+
+
+
+        return view('edit-verification-client', ['prefix' => $this->prefix, 'zonestates' => $zonestates, 'regclient_name' => $regclient_name, 'locations' => $locations, 'base_clients' => $base_clients]);
+    }
+
+    public function updateVerificationClient(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+            $rules = array(
+                //   'client_name' => 'required',
+            );
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $response['success'] = false;
+                $response['formErrors'] = true;
+                $response['errors'] = $errors;
+                return response()->json($response);
+            }
+            
+            $payment_term = implode(',', $request->payment_term);
+
+            $regionalupdate['baseclient_id'] = $request->base_client_id;
+            $regionalupdate['name'] = $request->name;
+            $regionalupdate['regional_client_nick_name'] = $request->regional_client_nick_name;
+            $regionalupdate['email'] = $request->email;
+            $regionalupdate['phone'] = $request->phone;
+            $regionalupdate['gst_no'] = $request->gst_no;
+            $regionalupdate['pan'] = $request->pan;
+            $regionalupdate['is_multiple_invoice'] = $request->is_multiple_invoice;
+            $regionalupdate['is_prs_pickup'] = $request->is_prs_pickup;
+            $regionalupdate['is_email_sent'] = $request->is_email_sent;
+            $regionalupdate['location_id'] = $request->branch_id;
+            // $regionalupdate['upload_gst'] = $gst_img_path_save;
+            // $regionalupdate['upload_pan'] = $pan_img_path_save;
+            $regionalupdate['payment_term'] = $payment_term;
+            $regionalupdate['verified_by']  = 1;
+
+            RegionalClient::where('id', $request->regclientdetail_id)->update($regionalupdate);
+            $url = URL::to($this->prefix . '/unverified-client-list');
+
+            $response['success'] = true;
+            $response['success_message'] = "Regional Client Updated Successfully";
+            $response['error'] = false;
+            $response['redirect_url'] = $url;
+
+
+            DB::commit();
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+
         return response()->json($response);
     }
 

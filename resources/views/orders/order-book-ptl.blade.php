@@ -317,7 +317,7 @@ span.select2.select2-container.mb-4 {
                 <label for="exampleFormControlSelect1">
                     Select Bill to Client<span class="text-danger">*</span>
                 </label>
-                <select class="form-control form-control-sm my-select2" id="" name="regclient_id">
+                <select class="form-control form-control-sm my-select2" id="select_regclient" name="regclient_id">
                     <option selected="selected" disabled>select client..</option>
                     @foreach($regionalclient as $client)
                     <option value="{{$client->id}}">{{$client->name}}</option>
@@ -333,12 +333,12 @@ span.select2.select2-container.mb-4 {
                     Payment Term<span class="text-danger">*</span>
                 </label>
                 <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                    id="paymentType_">
-                    <option value="To be Billed" selected="selected">Bill to client </option>
-                    <option value="UPI/Wallet">UPI/Wallet </option>
+                    id="paymentType">
+                    <option value="Bill to client" selected="selected">Bill to client </option>
+                    <!-- <option value="UPI/Wallet">UPI/Wallet </option>
                     <option value="Cash">Cash </option>
                     <option value="Card">Card </option>
-                    <option value="Net Banking">Net Banking</option>
+                    <option value="Net Banking">Net Banking</option> -->
                 </select>
             </div>
             <!-- <div class="form-group col-md-2">

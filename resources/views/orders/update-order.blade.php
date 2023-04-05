@@ -324,7 +324,7 @@ if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
                 </label>
                 <select class="form-control" style="width: 160px;" name="payment_type" id="payment_type"
                     onchange="togglePaymentAction()" {{$disable}}>
-                    <option value="To be Billed" {{$getconsignments->payment_type == 'To be Billed' ? 'selected' : ''}}>
+                    <option value="Bill to client" {{$getconsignments->payment_type == 'To be Billed' ? 'selected' : ''}}>
                         Bill To Client</option>
                     <option value="UPI/Wallet" {{$getconsignments->payment_type == 'UPI/Wallet' ? 'selected' : ''}}>
                         UPI/Wallet

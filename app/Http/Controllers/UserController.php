@@ -18,6 +18,7 @@ use Mail;
 use URL;
 use Validator;
 use Illuminate\Support\Facades\Storage;
+use DB;
 
 class UserController extends Controller
 {
@@ -329,7 +330,7 @@ class UserController extends Controller
             // 'name' => 'required',
              'email' => 'required|unique:users,email',
             // 'email'  => 'required',
-             'captcha' => ['required', 'captcha'],
+            //  'captcha' => ['required', 'captcha'],
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -393,6 +394,8 @@ class UserController extends Controller
             $saveclientdetails['pan'] = $request->pan;
             $saveclientdetails['pin'] = $request->pin;
             $saveclientdetails['city'] = $request->city;
+            $saveclientdetails['district'] = $request->district;
+            $saveclientdetails['state'] = $request->state;
             $saveclientdetails['address'] = $request->address;
             if(!empty($request->notification)){
                 $saveclientdetails['notification'] = $request->notification;

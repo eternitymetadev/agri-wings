@@ -152,7 +152,7 @@
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <input type="text" class="form-control" name="contact_number" placeholder="Contact Number">
+                        <input type="text" class="form-control" name="contact_number" maxlength="10" placeholder="Contact Number">
                     </div>
                     <div class="form-group formElement">
                         <input type="text" class="form-control" id="email" name="email"
@@ -161,10 +161,18 @@
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <input type="text" class="form-control" name="pin" placeholder="Pin">
+                        <input type="text" class="form-control" id="postal_code" name="pin" placeholder="Pin" maxlength="6">
                     </div>
                     <div class="form-group formElement">
                         <input type="text" class="form-control" id="city" name="city" placeholder="City" value="">
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" id="district" name="district" placeholder="district" readonly>
+                    </div>
+                    <div class="form-group formElement">
+                        <input type="text" class="form-control" id="state" name="state" placeholder="state" value="" readonly>
                     </div>
                 </div>
                 <div class="formRow">
@@ -314,6 +322,54 @@
                 $(".captcha span").html(data.captcha);
             }
         });
+    });
+
+    //
+    $(document).on("keyup", "#postal_code", function () {
+        var postcode = $(this).val();
+        var postcode_len = postcode.length;
+        if (postcode_len > 0) {
+            $.ajax({
+                url: "/get-address-by-postcode",
+                type: "get",
+                cache: false,
+                data: { postcode: postcode },
+                dataType: "json",
+                headers: {
+                    "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                        "content"
+                    ),
+                },
+                success: function (data) {
+                    if (data.success) {
+                        console.log(data.zone);
+                        
+                        // $("#city").val(data.data.city);
+                        $("#district").val(data.zone.district);
+                        $("#state").val(data.zone.state);
+
+                        if (data.zone == null || data.zone == "") {
+                            $("#zone_name").val("No Zone Assigned");
+                            $("#zone_id").val("0");
+                        } else {
+                            $("#zone_name").val(data.zone.primary_zone);
+                            $("#zone_id").val(data.zone.id);
+                        }
+                    } else {
+                        // $("#city").val("");
+                        $("#district").val("");
+                        $("#state").val("");
+                        $("#zone_name").val("");
+                        $("#zone_id").val("");
+                    }
+                },
+            });
+        } else {
+            // $("#city").val("");
+            $("#state").val("");
+            $("#district").val("");
+            $("#zone").val("");
+        }
     });
     </script>
 

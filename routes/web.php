@@ -336,6 +336,9 @@ Route::group(['prefix'=>'branch-manager', 'middleware'=>['auth','PermissionCheck
     Route::any('reserve-lr', [OrderController::class, 'reserveLr']);
     Route::get('reserve-lr/{id}/edit', [OrderController::class, 'editReserveLr']);
     Route::any('reserve-lr/update-reserve-lr', [OrderController::class, 'updateReserveLr']);
+    Route::any('unverified-client-list', [ClientController::class, 'unverifiedClient']);
+    Route::get('/unverified-client-list/{id}/edit', [ClientController::class, 'editverificationRegional']);
+    Route::post('/unverified-client-list/update-verification', [ClientController::class, 'updateVerificationClient']);
 
     Route::resource('consignments', ConsignmentController::class);
     Route::post('consignments/createlritem', [ConsignmentController::class, 'storeLRItem']);
@@ -1019,6 +1022,7 @@ Route::any('register', [UserController::class, 'clientRegister']);
 Route::any('client-register', [UserController::class, 'addClientUser']);
 Route::get('/reload-captcha', [UserController::class, 'reloadCaptcha']);
 Route::any('/client-verification/{id}', [UserController::class, 'clientVerification']);
+Route::any('/get-address-by-postcode', [ConsignerController::class, 'getPostalAddress']);
 
 
 
