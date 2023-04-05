@@ -109,11 +109,11 @@ div.relative {
                                 <td>{{ $consignment->Branch->name ?? "-" }}</td>
                                 <td>{{ $consignment->fallIn->name ?? "-" }}</td>
                                 <td>{{ $consignment->RegClient->name ?? "-" }}</td>
-                                <td>{{ $consignment->ConsigneeDetail->nick_name}}</td>
+                                <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->city ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->address_line1 ?? "-"}}</td>
-                                <td>{{ $consignment->Crop->crop_name}}</td>
-                                <td>{{ $consignment->acreage}}</td>
+                                <td>{{ $consignment->Crop->crop_name ?? "-"}}</td>
+                                <td>{{ $consignment->acreage ?? "-"}}</td>
                                 <td><a class="btn btn-primary"
                                         href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Complete
                                             Order</span></a></td>

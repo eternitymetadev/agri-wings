@@ -404,7 +404,7 @@ class UserController extends Controller
             $saveclientdetails['upload_pan'] = $pan_img_path_save;
             $saveclientdetails['status'] = 1;
 
-            $saveclientdetails['payment_term'] = 'Bill to Client';
+            $saveclientdetails['payment_term'] = 'Bill To Client';
 
              
             RegionalClient::create($saveclientdetails);

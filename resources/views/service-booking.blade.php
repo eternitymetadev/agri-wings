@@ -284,7 +284,7 @@ span.select2.select2-container.mb-4 {
                 <label for="exampleFormControlSelect1">
                     Bill to Client<span class="text-danger">*</span>
                 </label>
-                <Input type="text" class="form-control" id="" name="regional_client" value="{{$regonal_client->name}}">
+                <Input type="text" class="form-control" id="" name="regional_client" value="{{$regonal_client->name}}" readonly>
                 <Input type="hidden" class="form-control" id="" name="regclient_id" value="{{$regonal_client->id}}">
 
             </div> 
