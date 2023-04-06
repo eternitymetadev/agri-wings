@@ -188,22 +188,22 @@
                                         <div class="checkbox radio">
                                             <label class="check-label d-flex align-items-center" style="gap: 6px">
                                                 <span class="checkmark"></span>
-                                                <input type="checkbox" value='To be Billed' name="payment_term[]" />
-                                                TBB
+                                                <input type="checkbox" value='Bill To Client' name="payment_term[]" />
+                                                Bill To Client
                                             </label>
                                         </div>
                                         <div class="checkbox radio">
                                             <label class="check-label d-flex align-items-center" style="gap: 6px">
                                                 <span class="checkmark"></span>
-                                                <input type="checkbox" name="payment_term[]" value='To Pay' checked />
-                                                To Pay
+                                                <input type="checkbox" name="payment_term[]" value='Bill to Farmer – Cash/UPI' checked />
+                                                Bill to Farmer – Cash/UPI
                                             </label>
                                         </div>
                                         <div class="checkbox radio">
                                             <label class="check-label d-flex align-items-center" style="gap: 6px">
                                                 <span class="checkmark"></span>
-                                                <input type="checkbox" name="payment_term[]" value='Paid' checked />
-                                                Paid
+                                                <input type="checkbox" name="payment_term[]" value='Bill to Client 0 days' checked />
+                                                Bill to Client 0 days
                                             </label>
                                         </div>
                                     </div>

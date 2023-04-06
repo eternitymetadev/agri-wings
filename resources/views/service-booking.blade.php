@@ -294,8 +294,13 @@ span.select2.select2-container.mb-4 {
                 </label>
                 <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
                     id="paymentType_">
-                    <option value="Bill To client" selected="selected">Bill to client </option>
-                   
+                    <?php
+                    $payment_term = explode(',',$regonal_client->payment_term);
+                    // echo'<pre>'; print_r($regonal_client->name); die;
+                    ?>
+                    @foreach($payment_term as $payment)
+                    <option value="{{$payment}}">{{$payment}}</option>
+                   @endforeach
                 </select>
             </div>
             <!-- <div class="form-group col-md-2">

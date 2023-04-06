@@ -1938,12 +1938,10 @@ class OrderController extends Controller
                 $loop = $request->farm;
                 for ($i= 1; $i <= $loop; $i++) { 
                     $save_data['farmer_id'] = $saveconsignee->id;
-                    $save_data['field_area'] = 'Farm 1';
+                    $save_data['field_area'] = 'Farm '.$i;
                     $saveregclients = Farm::create($save_data);
                 }
             }
-
-
 
             $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $farmer_id;
@@ -1952,18 +1950,17 @@ class OrderController extends Controller
             $consignmentsave['payment_type'] = $request->payment_type;
             $consignmentsave['crop'] = $request->crop;
             $consignmentsave['acreage'] = $request->acreage;
+            if(!empty($request->noc)){
             $consignmentsave['noc'] = $request->noc;
+            }
             $consignmentsave['status'] = 5;
 
             $saveconsignment = ConsignmentNote::create($consignmentsave);
-
-        
 
             $url = $this->prefix . '/orders';
             $response['success'] = true;
             $response['success_message'] = "Order Added successfully";
             $response['error'] = false;
-            // $response['resetform'] = true;
             $response['page'] = 'create-consignment';
             $response['redirect_url'] = $url;
 

@@ -386,7 +386,7 @@ class UserController extends Controller
             // $saveclientdetails['pan'] = $request->pan;
             // $saveclientdetails['status'] = 1;
 
-            $saveclientdetails['name'] = $request->company_name;
+            $saveclientdetails['name'] = $request->company_name.'-(Web)';
             $saveclientdetails['regional_client_nick_name'] = $request->contact_name;
             $saveclientdetails['email'] = $request->email;
             $saveclientdetails['phone'] = $request->contact_number;

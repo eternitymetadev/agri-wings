@@ -167,17 +167,17 @@
                                 <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='To Pay'
-                                            {{in_array("To Pay", $payment_term) ? 'checked' : '' }} />
-                                        To Pay
+                                        <input type="checkbox" name="payment_term[]" value='Bill to Farmer – Cash/UPI'
+                                            {{in_array("Bill to Farmer – Cash/UPI", $payment_term) ? 'checked' : '' }} />
+                                            Bill to Farmer – Cash/UPI
                                     </label>
                                 </div>
                                 <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='Paid'
-                                            {{in_array("Paid", $payment_term) ? 'checked' : '' }} />
-                                        Paid
+                                        <input type="checkbox" name="payment_term[]" value='Bill to Client 0 days'
+                                            {{in_array("Bill to Client 0 days", $payment_term) ? 'checked' : '' }} />
+                                            Bill to Client 0 days
                                     </label>
                                 </div>
                             </div>

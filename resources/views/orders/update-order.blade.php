@@ -375,7 +375,7 @@ if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
                 Select Farm Location<span class="text-danger">*</span>
                 </label>
                 <select class="form-control form-small my-select2" style="width: 328px;" type="text" name="ship_to_id"
-                    id="select_farmer_add" disabled>
+                    id="select_farmer_add">
                     <option value="">Select Farm</option>
                     @if(count($farms) > 0)
                     @foreach($farms as $k => $consignee)
