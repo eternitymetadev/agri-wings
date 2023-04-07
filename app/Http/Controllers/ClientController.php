@@ -407,15 +407,13 @@ class ClientController extends Controller
 
     public function editRegClientDetail($id)
     {
-        
+
         $this->prefix = request()->route()->getPrefix();
         $id = decrypt($id);
         $regclient_name = RegionalClient::where('id', $id)->first();
         $zonestates = Zone::all()->unique('state')->pluck('state', 'id');
         $locations = Location::all();
         $base_clients = BaseClient::all();
-
-
 
         return view('clients.update-regclientdetails', ['prefix' => $this->prefix, 'zonestates' => $zonestates, 'regclient_name' => $regclient_name, 'locations' => $locations, 'base_clients' => $base_clients]);
     }
@@ -438,7 +436,7 @@ class ClientController extends Controller
                 $response['errors'] = $errors;
                 return response()->json($response);
             }
-            
+
             $payment_term = implode(',', $request->payment_term);
 
             $regionalupdate['baseclient_id'] = $request->base_client_id;
@@ -464,7 +462,6 @@ class ClientController extends Controller
             $response['success_message'] = "Regional Client Updated Successfully";
             $response['error'] = false;
             $response['redirect_url'] = $url;
-
 
             DB::commit();
         } catch (Exception $e) {
@@ -585,7 +582,7 @@ class ClientController extends Controller
 
             if ($request->peritem) {
                 Session::put('peritem', $request->peritem);
-            } 
+            }
 
             $peritem = Session::get('peritem');
             if (!empty($peritem)) {
@@ -690,7 +687,6 @@ class ClientController extends Controller
 
     public function storeRegionalClient(Request $request)
     {
-        
 
         try {
             DB::beginTransaction();
@@ -736,7 +732,7 @@ class ClientController extends Controller
             $client['district'] = $request->district;
             $client['state'] = $request->state;
             $client['address'] = $request->address;
-            if(!empty($request->notification)){
+            if (!empty($request->notification)) {
                 $client['notification'] = $request->notification;
             }
             // $client['is_multiple_invoice'] = $request->is_multiple_invoice;
@@ -831,7 +827,7 @@ class ClientController extends Controller
             // $client['upload_moa'] = $moa_img_path_save;
             $client['status'] = "1";
 
-            $saveclient = BaseClient::where('id',$request->base_client)->update($client);
+            $saveclient = BaseClient::where('id', $request->base_client)->update($client);
 
             $url = URL::to($this->prefix . '/clients');
             $response['success'] = true;
@@ -839,7 +835,7 @@ class ClientController extends Controller
             $response['error'] = false;
             $response['page'] = 'client-create';
             $response['redirect_url'] = $url;
-       
+
             DB::commit();
         } catch (Exception $e) {
             $response['error'] = false;
@@ -858,22 +854,24 @@ class ClientController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $regional_clients = RegionalClient::where('verified_by', 0)->get();
-        
-        return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title,'regional_clients' => $regional_clients]);
+        if ($authuser->role_id == 2) {
+            $regional_clients = RegionalClient::where('verified_by', 0)->get();
+        } else {
+            $regional_clients = RegionalClient::where('verified_by', 1)->get();
+        }
+
+        return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients]);
     }
     // ===================
     public function editverificationRegional($id)
     {
-        
+
         $this->prefix = request()->route()->getPrefix();
         $id = decrypt($id);
         $regclient_name = RegionalClient::where('id', $id)->first();
         $zonestates = Zone::all()->unique('state')->pluck('state', 'id');
         $locations = Location::all();
         $base_clients = BaseClient::all();
-
-
 
         return view('edit-verification-client', ['prefix' => $this->prefix, 'zonestates' => $zonestates, 'regclient_name' => $regclient_name, 'locations' => $locations, 'base_clients' => $base_clients]);
     }
@@ -882,6 +880,7 @@ class ClientController extends Controller
     {
         try {
             DB::beginTransaction();
+            $authuser = Auth::user();
 
             $this->prefix = request()->route()->getPrefix();
             $rules = array(
@@ -896,7 +895,7 @@ class ClientController extends Controller
                 $response['errors'] = $errors;
                 return response()->json($response);
             }
-            
+
             $payment_term = implode(',', $request->payment_term);
 
             $regionalupdate['baseclient_id'] = $request->base_client_id;
@@ -913,7 +912,11 @@ class ClientController extends Controller
             // $regionalupdate['upload_gst'] = $gst_img_path_save;
             // $regionalupdate['upload_pan'] = $pan_img_path_save;
             $regionalupdate['payment_term'] = $payment_term;
-            $regionalupdate['verified_by']  = 1;
+            if ($authuser->role_id == 2) {
+                $regionalupdate['verified_by'] = 1;
+            } else {
+                $regionalupdate['verified_by'] = 2;
+            }
 
             RegionalClient::where('id', $request->regclientdetail_id)->update($regionalupdate);
             $url = URL::to($this->prefix . '/unverified-client-list');
@@ -922,7 +925,6 @@ class ClientController extends Controller
             $response['success_message'] = "Regional Client Updated Successfully";
             $response['error'] = false;
             $response['redirect_url'] = $url;
-
 
             DB::commit();
         } catch (Exception $e) {

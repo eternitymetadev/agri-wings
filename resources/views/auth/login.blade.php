@@ -17,6 +17,13 @@
 
 
     <style>
+    :root {
+        --primaryColor: #02381d;
+        --primaryContrast: #fff;
+        --secondaryColor: #248f27;
+        --secondaryContrast: #fff;
+    }
+
     body {
         height: 100vh;
         background-size: cover;
@@ -73,31 +80,89 @@
             display: none;
         }
     }
+
+
+    .authSection {
+        min-height: 100vh;
+        background-image: linear-gradient(180deg, var(--secondaryContrast), #02381d50), url("assets/bg-1.png");
+        background-size: cover;
+        /*background-attachment: fixed;*/
+        background-repeat: no-repeat;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        padding-bottom: 4rem;
+    }
+
+    label.form-label.formLabelTheme {
+        margin-bottom: 0;
+        font-size: 13px;
+        margin-left: 8px;
+        color: var(--primaryColor);
+        font-weight: 400;
+    }
+
+    /*.formBlock .form-control{*/
+    /*    border: none;*/
+    /*    background-color: transparent;*/
+    /*}*/
+    .formBlock {
+        background: #ffffff20;
+        backdrop-filter: blur(2px);
+        border-radius: 20px;
+        padding: 2rem 1rem;
+    }
+
+    .authSection .registerLogo {
+        max-width: 200px;
+        align-self: flex-start;
+        margin: 1rem;
+
+    }
+    a {
+        color: var(--primaryColor);
+        text-decoration: none;
+    }
     </style>
 </head>
 
 <body>
+    <section class="authSection">
+        <img src="{{asset('assets/agri-wing-logo.svg')}}" alt="logo" class="registerLogo" />
+        <div class="loginPageContainer container">
+            <div class="droneImageBlock" style="flex: 1">
+                <img src="{{asset('assets/drone.png')}}" alt="drone" />
+            </div>
+            <div class="formBlock" style="flex: 1; max-width: 350px">
+                <form method="POST" action="{{ route('login') }}" id="loginform" autocomplete="off"
+                    class="text-left mt-3 mx-auto" style="max-width: 80%; ">
+                    @csrf
+                    <p style="text-align: left" class="mb-4">Welcome to <strong>AgriWings!</strong><br />Enter your
+                        credentials to continue.</p>
 
-    <div class="loginPageContainer container">
-        <div class="droneImageBlock" style="flex: 1">
-            <img src="{{asset('assets/drone.png')}}" alt="drone" />
-        </div>
-        <div class="loginBlock" style="flex: 1">
-            <img src="{{asset('assets/agri-wing-logo.svg')}}" />
 
-            <form method="POST" action="{{ route('login') }}" id="loginform" autocomplete="off"
-                class="text-left mt-5 mx-auto" style="max-width: 80%; ">
-                @csrf
-                <p style="text-align: left" class="mb-4">Welcome to <strong>AgriWings!</strong><br />Enter your
-                    credentials to continue.</p>
-                <input type="text" class="form-control mb-3" name="login_id" id="login_id" placeholder="@username">
-                <input class="form-control mb-3" type="password" name="password" id="pwd" value="{{ old('password') }}"
-                    autocomplete="password" autofocus placeholder="********">
-                <button class="btn btn-primary jj" style="width: 100%; background: #208120; border-color: #208120"
-                    type="submit">Login</button>
-            </form>
+                    <div class="form-group formElement">
+                        <label for="login_id" class="form-label  formLabelTheme">Username</label>
+                        <input type="text" class="form-control" name="login_id" id="login_id" placeholder="@username">
+                    </div>
+                    <div class="form-group formElement">
+                        <label for="pwd" class="form-label  formLabelTheme">Password</label>
+                        <input class="form-control" type="password" name="password" id="pwd"
+                        value="{{ old('password') }}" autocomplete="password" autofocus placeholder="********">                    </div>
+
+                   
+                    <button class="btn btn-primary jj"
+                        style="margin-top: 2rem;width: 100%; background: #208120; border-color: #208120"
+                        type="submit">Login</button>
+                </form>
+                <p class="text-center">Not registered? <a href="{{url('/register')}}">Register</a> </p>
+            </div>
         </div>
-    </div>
+    </section>
+
+
 
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
@@ -119,9 +184,11 @@
     <script src="{{asset('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
 
     <script>
-    var APP_URL = {!!json_encode(url('/')) !!};
-        
-    
+    var APP_URL = {
+        !!json_encode(url('/')) !!
+    };
+
+
 
     $(document).ready(function() {
         App.init();

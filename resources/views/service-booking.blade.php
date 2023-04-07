@@ -1,4 +1,6 @@
 @extends('layouts.main')
+@section('page-heading')Order Book @endsection
+
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
@@ -263,31 +265,123 @@ span.select2.select2-container.mb-4 {
     background: #f9b60024;
     color: #000;
 }
+
+.cropSelection .form-group {
+    position: relative;
+    max-width: 180px;
+    width: 100%;
+}
+
+
+.cropSelection input[type="radio"]:checked+label {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    outline: 4px solid #28a745db;
+    outline-offset: 2px;
+    border: 1px solid var(--secondaryColor);
+    padding: 1rem 0.5rem 0.3rem;
+    font-size: 14px;
+    color: var(--secondaryColor) !important;
+}
+
+.cropSelection input[type="radio"]+label {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    outline: 4px solid #28a74515;
+    outline-offset: 2px;
+    border: 1px solid #28a74500;
+    padding: 1rem 0.5rem 0.3rem;
+    font-size: 14px;
+    color: #838383;
+    transition: all 350ms ease-in-out;
+}
+
+.cropSelection label img {
+    width: 100%;
+    max-width: 120px;
+}
+
+.cropSelection input[type="radio"] {
+    position: absolute;
+    top: 6px;
+    right: 20px;
+    height: 24px;
+    width: 24px;
+    accent-color: var(--secondaryColor);
+}
 </style>
 
 
-<div class="layout-px-spacing">
-    {{--page title--}}
-    <div class="page-header layout-spacing">
-        <h2 class="pageHeading">Order Book </h2>
-    </div>
-
-
+<div class="layout-px-spacing mt-5">
     <form class="general_form" method="POST" action="{{url($prefix.'/store-service-booking')}}" id="service_booking"
         style="margin: auto;">
+
+        {{--bill to info--}}
+        <div class="form-row cropSelection" style="column-gap: 1.5rem; box-shadow: none;">
+            <h6 class="col-12" style="margin-bottom: 1rem; font-weight: 700;">Choose Crop</h6>
+
+            <div class="form-group">
+                <Input type="radio" class="form-control" id="sugarcane" name="crop" value="sugarcane" checked />
+                <label for="sugarcane">Sugarcane
+                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                </label>
+            </div>
+            <div class="form-group">
+                <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
+                <label for="wheat">Wheat
+                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                </label>
+            </div>
+            <div class="form-group">
+                <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
+                <label for="paddy">Paddy
+                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                </label>
+            </div>
+            <div class="form-group">
+                <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
+                <label for="potato">Potato
+                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                </label>
+            </div>
+            <div class="form-group">
+                <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
+                <label for="apple">Apple
+                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                </label>
+            </div>
+            <div class="form-group">
+                <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
+                <label for="cotton">Cotton
+                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                </label>
+            </div>
+
+            <div class="form-group" style="max-width: 100%">
+                <label for="acreage">Acreage<span class="text-danger">*</span></label>
+                <Input type="number" class="form-control" id="acreage" name="acreage" style="max-width: 300px">
+            </div>
+        </div>
 
         {{--bill to info--}}
         <div class="form-row">
             <h6 class="col-12">Bill To Information</h6>
 
-             <div class="form-group col-md-4">
+            <div class="form-group col-md-4">
                 <label for="exampleFormControlSelect1">
                     Bill to Client<span class="text-danger">*</span>
                 </label>
-                <Input type="text" class="form-control" id="" name="regional_client" value="{{$regonal_client->name}}" readonly>
+                <Input type="text" class="form-control" id="" name="regional_client" value="{{$regonal_client->name}}"
+                    readonly>
                 <Input type="hidden" class="form-control" id="" name="regclient_id" value="{{$regonal_client->id}}">
 
-            </div> 
+            </div>
             <div class="form-group col-md-2">
                 <label for="exampleFormControlSelect1">
                     Payment Term<span class="text-danger">*</span>
@@ -300,26 +394,25 @@ span.select2.select2-container.mb-4 {
                     ?>
                     @foreach($payment_term as $payment)
                     <option value="{{$payment}}">{{$payment}}</option>
-                   @endforeach
+                    @endforeach
                 </select>
             </div>
-            <!-- <div class="form-group col-md-2">
+
+            <div class="form-group col-md-2">
                 <label for="exampleFormControlSelect1">
-                    Purchase Freight<span class="text-danger">*</span>
+                    Payment Term<span class="text-danger">*</span>
                 </label>
-                <Input type="number" class="form-control" name="freight">
-            </div> -->
-            <!-- <div class="form-group col-md-2">
-                <label for="exampleFormControlSelect1">
-                    Freight on Delivery
-                </label>
-                <Input type="number" class="form-control" id="freight_on_delivery" name="freight_on_delivery" readonly>
+                <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
+                    id="paymentType_">
+                    <?php
+                    $payment_term = explode(',',$regonal_client->payment_term);
+                    // echo'<pre>'; print_r($regonal_client->name); die;
+                    ?>
+                    @foreach($payment_term as $payment)
+                    <option value="{{$payment}}">{{$payment}}</option>
+                    @endforeach
+                </select>
             </div>
-            <div class="form-group col-md-2" id="codFreightBlock">
-                <label for="exampleFormControlSelect1">Cash to Collect<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" name="cod" id="cod" readonly >
-            </div> -->
 
         </div>
 
@@ -337,22 +430,14 @@ span.select2.select2-container.mb-4 {
                 </label>
                 <Input type="text" class="form-control" id="" name="farmer_name">
             </div>
-            <!-- <div class="form-group col-md-4">
-                <label>
-                    Select Drop location (Bill To Consignee)<span class="text-danger">*</span>
-                </label>
-                <select class="form-control my-select2" name="consignee_id" id="select_consignee">
-                    <option value="">Select Consignee</option>
-                </select>
-                <div class="appendedAddress" id="consignee_address"></div>
-            </div>-->
+
             <div class="form-group col-md-4">
                 <label>
                     Farmer Mobile<span class="text-danger">*</span>
                 </label>
                 <Input type="number" class="form-control" id="" maxlength="10" name="phone">
             </div>
-            <div class="form-group col-md-4"> 
+            <div class="form-group col-md-4">
                 <label>
                     Number of Farm<span class="text-danger">*</span>
                 </label>

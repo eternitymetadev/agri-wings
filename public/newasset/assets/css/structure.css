@@ -8,6 +8,13 @@
 			@Import	Mixins
 	===============================
 */
+
+:root {
+    --primaryColor: #02381d;
+    --primaryContrast: #fff;
+    --secondaryColor: #248f27;
+    --secondaryContrast: #fff;
+}
 html {
     min-height: 100%;
 }

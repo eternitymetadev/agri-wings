@@ -1954,6 +1954,9 @@ class OrderController extends Controller
             $consignmentsave['noc'] = $request->noc;
             }
             $consignmentsave['status'] = 5;
+            $consignmentsave['branch_id'] = 29;
+            $consignmentsave['to_branch_id'] = 29;
+            $consignmentsave['fall_in'] = 29;
 
             $saveconsignment = ConsignmentNote::create($consignmentsave);
 

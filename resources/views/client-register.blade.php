@@ -17,6 +17,13 @@
 
 
     <style>
+    :root {
+        --primaryColor: #02381d;
+        --primaryContrast: #fff;
+        --secondaryColor: #248f27;
+        --secondaryContrast: #fff;
+    }
+
     body {
         height: 100vh;
         background-size: cover;
@@ -89,8 +96,11 @@
     }
 
     input[type="file"],
-    input[type="file"]:hover {
+    input[type="file"]:hover,
+    input[type="file"]:focus {
         border: none;
+        background: none;
+        box-shadow: none;
     }
 
     input[type="file"]::file-selector-button {
@@ -113,7 +123,7 @@
     }
 
     a {
-        color: #248f27
+        color: var(--primaryColor);
     }
 
     .captcha_error {
@@ -128,80 +138,121 @@
     .form-control.error {
         margin-bottom: -6px;
     }
+
+
+    .authSection {
+        min-height: 100vh;
+        background-image: linear-gradient(180deg, var(--secondaryContrast), #02381d50), url("assets/bg-1.png");
+        background-size: cover;
+        /*background-attachment: fixed;*/
+        background-repeat: no-repeat;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        padding-bottom: 4rem;
+    }
+
+    label.form-label.formLabelTheme {
+        margin-bottom: 0;
+        font-size: 13px;
+        margin-left: 8px;
+        color: var(--primaryColor);
+        font-weight: 400;
+    }
+
+    /*.formBlock .form-control{*/
+    /*    border: none;*/
+    /*    background-color: transparent;*/
+    /*}*/
+    .formBlock {
+        background: #ffffff20;
+        backdrop-filter: blur(2px);
+        border-radius: 20px;
+        padding: 2rem 1rem;
+    }
+
+    .authSection .registerLogo {
+        max-width: 200px;
+        align-self: flex-start;
+        margin: 1rem;
+
+    }
     </style>
 </head>
 
 <body>
 
-    <div class="loginPageContainer container">
-        <div class="droneImageBlock" style="flex: 1">
-            <img src="{{asset('assets/drone.png')}}" alt="drone" />
-        </div>
-        <div class="loginBlock" style="flex: 1">
-            <img src="{{asset('assets/agri-wing-logo.svg')}}" />
-
+    <section class="authSection">
+        <img src="{{asset('assets/agri-wing-logo.svg')}}" alt="logo" class="registerLogo" />
+        <div class="container formBlock" style="max-width: 1100px">
             <form class="general_form" method="POST" action="{{url('/client-register')}}" id="client_register">
                 @csrf
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <input type="text" class="form-control" id="" name="company_name" placeholder="Company Name">
+                        <label for="company_name" class="form-label  formLabelTheme">Company Name</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" />
                     </div>
                     <div class="form-group formElement">
-                        <input type="text" class="form-control" id="" name="contact_name" placeholder="Contact Person">
-                    </div>
-                </div>
-                <div class="formRow">
-                    <div class="form-group formElement">
-                        <input type="text" class="form-control" name="contact_number" maxlength="10" placeholder="Contact Number">
-                    </div>
-                    <div class="form-group formElement">
-                        <input type="text" class="form-control" id="email" name="email"
-                            placeholder="yourEmail@address.com" value="">
+                        <label for="contact_name" class="form-label  formLabelTheme">Contact Person</label>
+                        <input type="text" class="form-control" id="contact_name" name="contact_name" />
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <input type="text" class="form-control" id="postal_code" name="pin" placeholder="Pin" maxlength="6">
+                        <label for="contact_number" class="form-label  formLabelTheme">Contact Number</label>
+                        <input type="text" class="form-control" id="contact_number" name="contact_number"
+                            maxlength="10" />
                     </div>
                     <div class="form-group formElement">
-                        <input type="text" class="form-control" id="city" name="city" placeholder="City" value="">
-                    </div>
-                </div>
-                <div class="formRow">
-                    <div class="form-group formElement">
-                        <input type="text" class="form-control" id="district" name="district" placeholder="district" readonly>
-                    </div>
-                    <div class="form-group formElement">
-                        <input type="text" class="form-control" id="state" name="state" placeholder="state" value="" readonly>
+                        <label for="email" class="form-label  formLabelTheme">Email</label>
+                        <input type="text" class="form-control" id="email" name="email" value="">
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <input type="text" class="form-control" name="address" placeholder="Address">
+                        <label for="postal_code" class="form-label  formLabelTheme">Pincode</label>
+                        <input type="text" class="form-control" id="postal_code" name="pin" maxlength="6">
+                    </div>
+                    <div class="form-group formElement">
+                        <label for="city" class="form-label  formLabelTheme">City</label>
+                        <input type="text" class="form-control" id="city" name="city" value="">
+                    </div>
+                    <div class="form-group formElement">
+                        <label for="district" class="form-label  formLabelTheme">District</label>
+                        <input type="text" class="form-control" id="district" name="district" readonly>
+                    </div>
+                    <div class="form-group formElement">
+                        <label for="state" class="form-label  formLabelTheme">State</label>
+                        <input type="text" class="form-control" id="state" name="state" value="" readonly>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="form-group formElement">
+                        <label for="address" class="form-label  formLabelTheme">Address</label>
+                        <textarea class="form-control" id="address" name="address"></textarea>
+                        <!-- <input type="text" class="form-control" id="address" name="address"> -->
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement" style="margin-bottom: 16px">
-                        <input type="text" class="form-control" id="" name="gst_no" placeholder="GST No">
+                        <label for="gst" class="form-label  formLabelTheme">Gst No</label>
+                        <input type="text" class="form-control" id="gst" name="gst_no">
                         <input type="file" class="form-control" id="" name="upload_gst">
                     </div>
                     <div class="form-group formElement" style="margin-bottom: 16px">
-                        <input type="text" class="form-control" id="" name="pan" placeholder="PAN">
+                        <label for="pan" class="form-label  formLabelTheme">Pan No</label>
+                        <input type="text" class="form-control" id="pan" name="pan">
                         <input type="file" class="form-control" id="" name="upload_pan">
                     </div>
                 </div>
-                <div class="formRow">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="notification" id="inlineCheckbox1" value="1">
-                        <label class="form-check-label" for="inlineCheckbox1">Notification required, if yes then disclaimer</label>
-                    </div>
-                </div>
 
-                <div class="form-group row">
-                    <div class="formElement">
-                        <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
-                        <!-- <span class="captcha_error"></span> -->
-                    </div>
+                <div class="form-group row my-1">
+                    <!-- <div class="formElement">
+                        <label for="captcha" class="form-label  formLabelTheme">Cpatcha</label>
+                        <input id="captcha" type="text" class="form-control" name="captcha">
+                    </div> -->
 
 
                     <div class="formElement captcha">
@@ -211,17 +262,35 @@
                         </button>
                     </div>
                 </div>
-                <!-- <button class="btn btn-primary" style="width: 100%; background: #208120; border-color: #208120"
-                    type="submit">Register</button> -->
-                <button type="submit" class="btn btn-primary"
-                    style="width: 100%; background: #208120; border-color: #208120"><span
-                        class="indicator-label">Register</span>
-                    <span class="indicator-progress" style="display: none;">Please wait...
-                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
-                <p>Already registered? <a href="{{url('/login')}}">Login</a> </p>
+                <div class="formRow justify-content-between">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="notification" id="inlineCheckbox1"
+                            value="1">
+                        <label class="form-check-label" for="inlineCheckbox1">Notification required, if yes then
+                            disclaimer</label>
+                    </div>
+                        <button type="submit" class="btn btn-primary"
+                            style="width: 100%; background: #208120; border-color: #208120"><span
+                                class="indicator-label">Register</span>
+                            <span class="indicator-progress" style="display: none;">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
+                </div>
+                <p class="text-center">Already registered? <a href="{{url('/login')}}">Login</a> </p>
+
             </form>
         </div>
-    </div>
+    </section>
+
+    <!-- <div class="loginPageContainer container">
+        <div class="droneImageBlock" style="flex: 1">
+            <img src="{{asset('assets/drone.png')}}" alt="drone" />
+        </div>
+        <div class="loginBlock" style="flex: 1">
+            <img src="{{asset('assets/agri-wing-logo.svg')}}" />
+
+          
+        </div>
+    </div> -->
 
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
@@ -325,7 +394,7 @@
     });
 
     //
-    $(document).on("keyup", "#postal_code", function () {
+    $(document).on("keyup", "#postal_code", function() {
         var postcode = $(this).val();
         var postcode_len = postcode.length;
         if (postcode_len > 0) {
@@ -333,17 +402,19 @@
                 url: "/get-address-by-postcode",
                 type: "get",
                 cache: false,
-                data: { postcode: postcode },
+                data: {
+                    postcode: postcode
+                },
                 dataType: "json",
                 headers: {
                     "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
                         "content"
                     ),
                 },
-                success: function (data) {
+                success: function(data) {
                     if (data.success) {
                         console.log(data.zone);
-                        
+
                         // $("#city").val(data.data.city);
                         $("#district").val(data.zone.district);
                         $("#state").val(data.zone.state);
