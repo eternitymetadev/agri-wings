@@ -130,7 +130,7 @@ jQuery(document).ready(function(){
               required: true,
             },
         },
-        messages:
+        messages: 
         {
             farmer_name: {
               required: "Please Enter Farmer Name"
