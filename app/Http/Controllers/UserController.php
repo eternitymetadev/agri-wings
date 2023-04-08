@@ -459,7 +459,7 @@ class UserController extends Controller
                 $messges->subject('Your Login Credentials for Agriwings');
 
             });
-            return '<h1>User verified successfully, Please Check Your Mail</h1>';
+            return '<h1>User verified successfully, Please Check Your Mail for your Login Credentials</h1>';
         }else{
             return '<h1>Already verified</h1>';
         }
