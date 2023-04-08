@@ -410,11 +410,11 @@ class UserController extends Controller
              
             RegionalClient::create($saveclientdetails);
 
-            $data = ['user_id' => $userid, 'login_id' => $request->email, 'password' => $randPassword];
+            $data = ['contact_name' => $request->contact_name,'user_id' => $userid];
             $user['to'] = $request->email;
             Mail::send('client-verified-email', $data, function ($messges) use ($user) {
                 $messges->to($user['to']);
-                $messges->subject('Please Verified To Login');
+                $messges->subject('Verify Your Email Address for Agriwings');
 
             });
 
@@ -451,7 +451,15 @@ class UserController extends Controller
         $verified = User::where('id',$id)->first();
         if($verified->status == 0){
             User::where('id', $id)->update(['status' => 1]);
-            return '<h1>User verified successfully</h1>';
+
+            $data = ['login_id' => $verified->login_id, 'password' => $verified->user_password,'name' => $verified->name];
+            $user['to'] = $verified->email;
+            Mail::send('client-login-email', $data, function ($messges) use ($user) {
+                $messges->to($user['to']);
+                $messges->subject('Your Login Credentials for Agriwings');
+
+            });
+            return '<h1>User verified successfully, Please Check Your Mail</h1>';
         }else{
             return '<h1>Already verified</h1>';
         }

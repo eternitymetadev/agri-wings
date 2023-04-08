@@ -28,11 +28,34 @@
 
 <body>
     <p>
-        Login ID:{{$login_id}} <br />
-        Password : {{$password}} <br />
+        Dear {{$contact_name}}, <br /> <br />
+        Thank you for signing up for an account with Agriwings. Before you can access your account, we need to
+        verify<br />
+        your email address.<br /><br />
+
+        Please click on the following link to verify your email address: <a
+            href="{{ url('/client-verification/'.Crypt::encrypt($user_id))}}" target="_blank"
+            class="btn btn-primary verify">verify
+            Email</a>
+        <br /><br />
+        Once you have clicked on the link, your email address will be verified, and you will be able to log in to your
+        account.<br /><br />
+
+        If you did not sign up for an account with Agriwings, please ignore this email.<br /><br />
+
+        If you have any questions or concerns, please feel free to contact us by email at secure.services@agriwings.com
+        or by phone at [Customer Support Phone Number].<br /><br />
+
+        Our support team is available [Business hours and days] to assist you.<br /><br />
+
+        Thank you for choosing Agriwings. We look forward to providing you with the best services possible.<br /><br />
+
+        Best regards,<br />
+        Team Agriwings<br />
+        D2F Services Private Limited
+
     </p>
-    <a href="{{ url('/client-verification/'.Crypt::encrypt($user_id))}}" target="_blank" class="btn btn-primary verify">verify
-        Email</a>
+
 </body>
 
 </html>
