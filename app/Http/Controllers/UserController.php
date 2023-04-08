@@ -451,9 +451,9 @@ class UserController extends Controller
         $verified = User::where('id',$id)->first();
         if($verified->status == 0){
             User::where('id', $id)->update(['status' => 1]);
-            return 'User verified successfully';
+            return '<h1>User verified successfully</h1>';
         }else{
-            return 'Already verified';
+            return '<h1>Already verified</h1>';
         }
 
     }
