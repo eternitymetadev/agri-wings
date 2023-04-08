@@ -248,20 +248,27 @@
                     </div>
                 </div>
 
-                <div class="form-group row my-1">
+               
                     <!-- <div class="formElement">
                         <label for="captcha" class="form-label  formLabelTheme">Cpatcha</label>
                         <input id="captcha" type="text" class="form-control" name="captcha">
                     </div> -->
 
 
-                    <div class="formElement captcha">
-                        <span>{!! captcha_img() !!}</span>
-                        <button type="button" class="btn btn-danger" class="reload" id="reload">
-                            &#x21bb;
-                        </button>
-                    </div>
-                </div>
+                    
+                    <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label">Captcha</label>
+                            <div class="col-md-6">
+                                {!! app('captcha')->display() !!}
+                                @if ($errors->has('g-recaptcha-response'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <br>
+
                 <div class="formRow justify-content-between">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" name="notification" id="inlineCheckbox1"
@@ -312,9 +319,7 @@
     <script src="{{asset('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
 
     <script>
-    var APP_URL = {
-        !!json_encode(url('/')) !!
-    };
+    var APP_URL = {!!json_encode(url('/')) !!};
 
 
 
@@ -345,6 +350,7 @@
     <script src="{{asset('assets/js/form-validation.js')}}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
     <script src="{{asset('assets/js/jquery.toast.js')}}"></script>
+    {!! NoCaptcha::renderJs() !!}
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     <script>
     // $("#client_register").submit(function(e) {
