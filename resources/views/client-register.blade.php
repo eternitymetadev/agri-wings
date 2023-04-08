@@ -13,7 +13,7 @@
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
-
+    {!! ReCaptcha::htmlScriptTagJsApi() !!}
 
 
     <style>
@@ -354,7 +354,7 @@
     <script src="{{asset('assets/js/custom.js')}}"></script>
     <script src="{{asset('assets/js/jquery.toast.js')}}"></script>
     <!-- {!! NoCaptcha::renderJs() !!} -->
-    {!! ReCaptcha::htmlScriptTagJsApi() !!}
+    <!-- {!! ReCaptcha::htmlScriptTagJsApi() !!} -->
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     <script>
     // $("#client_register").submit(function(e) {
