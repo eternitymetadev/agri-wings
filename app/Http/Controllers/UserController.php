@@ -450,8 +450,7 @@ class UserController extends Controller
         $id = decrypt($id); 
         $verified = User::where('id',$id)->first();
         if($verified->status == 0){
-            User::where('id', $id)->update(['status' => 1]);
-
+            
             $data = ['login_id' => $verified->login_id, 'password' => $verified->user_password,'name' => $verified->name];
             $user['to'] = $verified->email;
             Mail::send('client-login-email', $data, function ($messges) use ($user) {
@@ -459,6 +458,7 @@ class UserController extends Controller
                 $messges->subject('Your Login Credentials for Agriwings');
 
             });
+            User::where('id', $id)->update(['status' => 1]);
             return '<h1>User verified successfully, Please Check Your Mail for your Login Credentials</h1>';
         }else{
             return '<h1>Already verified</h1>';
