@@ -331,7 +331,7 @@ class UserController extends Controller
              'email' => 'required|unique:users,email',
             // 'email'  => 'required',
             //  'captcha' => ['required', 'captcha'],
-            'g-recaptcha-response' => 'required|captcha',
+            // 'g-recaptcha-response' => 'required|captcha',
         );
 
         $validator = Validator::make($request->all(), $rules);

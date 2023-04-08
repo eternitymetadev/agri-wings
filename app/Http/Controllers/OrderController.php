@@ -1931,7 +1931,7 @@ class OrderController extends Controller
             $consigneesave['nick_name']           = $request->farmer_name;
             $consigneesave['phone']               = $request->phone;
     
-            $saveconsignee = Consignee::create($consigneesave); 
+            $saveconsignee = Consignee::create($consigneesave);
             $farmer_id =  $saveconsignee->id;
 
             if(!empty($request->farm)){ 

@@ -362,7 +362,7 @@ span.select2.select2-container.mb-4 {
                     <img src="{{asset('assets/drone.png')}}" alt="crop" />
                 </label>
             </div>
-
+ 
             <div class="form-group" style="max-width: 100%">
                 <label for="acreage">Acreage<span class="text-danger">*</span></label>
                 <Input type="number" class="form-control" id="acreage" name="acreage" style="max-width: 300px">
@@ -381,21 +381,6 @@ span.select2.select2-container.mb-4 {
                     readonly>
                 <Input type="hidden" class="form-control" id="" name="regclient_id" value="{{$regonal_client->id}}">
 
-            </div>
-            <div class="form-group col-md-2">
-                <label for="exampleFormControlSelect1">
-                    Payment Term<span class="text-danger">*</span>
-                </label>
-                <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                    id="paymentType_">
-                    <?php
-                    $payment_term = explode(',',$regonal_client->payment_term);
-                    // echo'<pre>'; print_r($regonal_client->name); die;
-                    ?>
-                    @foreach($payment_term as $payment)
-                    <option value="{{$payment}}">{{$payment}}</option>
-                    @endforeach
-                </select>
             </div>
 
             <div class="form-group col-md-2">
@@ -446,12 +431,12 @@ span.select2.select2-container.mb-4 {
         </div>
 
 
-        {{--order info--}}
+        <!-- {{--order info--}}
         <div class="orderInfoBlock">
-        </div>
+        </div> -->
 
         {{--vehicle info--}}
-        <div class="form-row">
+        <!-- <div class="form-row">
             <h6 class="col-12">Spray Details Section</h6>
 
             <div class="form-group col-md-4">
@@ -473,7 +458,7 @@ span.select2.select2-container.mb-4 {
                 <Input type="number" class="form-control" id="" name="acreage">
             </div>
 
-        </div>
+        </div> -->
         {{--vehicle info--}}
         <div class="form-row">
             <div class="form-check form-check-inline">

@@ -112,7 +112,7 @@ div.relative {
                                 <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->city ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->address_line1 ?? "-"}}</td>
-                                <td>{{ $consignment->Crop->crop_name ?? "-"}}</td>
+                                <td>{{ $consignment->crop ?? "-"}}</td>
                                 <td>{{ $consignment->acreage ?? "-"}}</td>
                                 <td><a class="btn btn-primary"
                                         href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Complete
