@@ -9,6 +9,7 @@
         "anhskohbo/no-captcha": "^3.5",
         "barryvdh/laravel-dompdf": "^1.0",
         "beyondcode/laravel-websockets": "^1.13",
+        "biscolab/laravel-recaptcha": "^6.0",
         "carlos-meneses/laravel-mpdf": "^2.1",
         "daltcore/lara-pdf-merger": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
