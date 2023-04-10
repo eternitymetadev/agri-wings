@@ -86,6 +86,9 @@ jQuery(document).ready(function(){
             captcha: {
                 required: true,
             },
+            contact_number: {
+                required: true,
+            },
         },
         messages:
         {
@@ -95,6 +98,9 @@ jQuery(document).ready(function(){
              captcha: {
                 required: "Captcha address is required",
                },
+               contact_number: {
+                required: 'Contact number is required',
+            },
         },
         submitHandler : function(form)
         {

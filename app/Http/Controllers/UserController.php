@@ -4,21 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\BaseClient;
-use App\Models\ClientUserDetails;
 use App\Models\Location;
 use App\Models\Permission;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserPermission;
+use DB;
 use Hash;
 use Helper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Mail;
 use URL;
 use Validator;
-use Illuminate\Support\Facades\Storage;
-use DB;
 
 class UserController extends Controller
 {
@@ -325,117 +324,115 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
 
-        $this->prefix = request()->route()->getPrefix();
-        $rules = array(
-            // 'name' => 'required',
-             'email' => 'required|unique:users,email',
-            // 'email'  => 'required',
-            //  'captcha' => ['required', 'captcha'],
-            'g-recaptcha-response' => 'recaptcha',
-        );
+            $this->prefix = request()->route()->getPrefix();
+            $rules = array(
+                // 'name' => 'required',
+                'email' => 'required|unique:users,email',
+                'contact_number' => 'required|unique:regional_clients,phone',
+                //  'captcha' => ['required', 'captcha'],
+                'g-recaptcha-response' => 'recaptcha',
+            );
 
-        $validator = Validator::make($request->all(), $rules);
+            $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $response['success'] = false;
-            $response['validation'] = false; 
-            $response['formErrors'] = true;
-            $response['errors'] = $errors;
-            return response()->json($response);
-        }
-
-        if (!empty($request->contact_name)) {
-            $usersave['name'] = $request->contact_name;
-        }
-        if (!empty($request->email)) {
-            $usersave['login_id'] = $request->email;
-        }
-        if (!empty($request->email)) {
-            $usersave['email'] = $request->email;
-        }
-
-        $randPassword = str_random(10);
-
-        $usersave['password'] = Hash::make($randPassword);
-
-        $usersave['role_id'] = 7;
-        $usersave['user_password'] = $randPassword;
-        $usersave['status'] = 0;
-
-        $saveuser = User::create($usersave);
-        if ($saveuser) {
-
-
-            // ======= gst upload
-            $gstupload = $request->file('upload_gst');
-            $path = Storage::disk('s3')->put('clients', $gstupload);
-            $gst_img_path_save = Storage::disk('s3')->url($path);
-
-            //  ======= pan upload
-            $panupload = $request->file('upload_pan');
-            $pan_path = Storage::disk('s3')->put('clients', $panupload);
-            $pan_img_path_save = Storage::disk('s3')->url($pan_path);
-
-            $userid = $saveuser->id;
-            $saveclientdetails['user_id'] = $userid;
-            // $saveclientdetails['company_name'] = $request->company_name;
-            // $saveclientdetails['contact_name'] = $request->contact_name;
-            // $saveclientdetails['contact_number'] = $request->contact_number;
-            // $saveclientdetails['email'] = $request->email;
-            // $saveclientdetails['gst_no'] = $request->gst_no;
-            // $saveclientdetails['pan'] = $request->pan;
-            // $saveclientdetails['status'] = 1;
-
-            $saveclientdetails['name'] = $request->company_name.'-(Web)';
-            $saveclientdetails['regional_client_nick_name'] = $request->contact_name;
-            $saveclientdetails['email'] = $request->email;
-            $saveclientdetails['phone'] = $request->contact_number;
-            $saveclientdetails['gst_no'] = $request->gst_no;
-            $saveclientdetails['pan'] = $request->pan;
-            $saveclientdetails['pin'] = $request->pin;
-            $saveclientdetails['city'] = $request->city;
-            $saveclientdetails['district'] = $request->district;
-            $saveclientdetails['state'] = $request->state;
-            $saveclientdetails['address'] = $request->address;
-            if(!empty($request->notification)){
-                $saveclientdetails['notification'] = $request->notification;
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $response['success'] = false;
+                $response['validation'] = false;
+                $response['formErrors'] = true;
+                $response['errors'] = $errors;
+                return response()->json($response);
             }
-            $saveclientdetails['upload_gst'] = $gst_img_path_save;
-            $saveclientdetails['upload_pan'] = $pan_img_path_save;
-            $saveclientdetails['status'] = 1;
 
-            $saveclientdetails['payment_term'] = 'Bill To Client';
+            if (!empty($request->contact_name)) {
+                $usersave['name'] = $request->contact_name;
+            }
+            if (!empty($request->email)) {
+                $usersave['login_id'] = $request->email;
+            }
+            if (!empty($request->email)) {
+                $usersave['email'] = $request->email;
+            }
 
-             
-            RegionalClient::create($saveclientdetails);
+            $randPassword = str_random(10);
 
-            $data = ['contact_name' => $request->contact_name,'user_id' => $userid];
-            $user['to'] = $request->email;
-            Mail::send('client-verified-email', $data, function ($messges) use ($user) {
-                $messges->to($user['to']);
-                $messges->subject('Verify Your Email Address for Agriwings');
+            $usersave['password'] = Hash::make($randPassword);
 
-            });
+            $usersave['role_id'] = 7;
+            $usersave['user_password'] = $randPassword;
+            $usersave['status'] = 0;
 
-            $url = URL::to($this->prefix . '/login');
-            $response['success'] = true;
-            $response['success_message'] = "Users Added successfully, Please Check Your Mail To verify";
+            $saveuser = User::create($usersave);
+            if ($saveuser) {
+
+                // ======= gst upload
+                $gstupload = $request->file('upload_gst');
+                $path = Storage::disk('s3')->put('clients', $gstupload);
+                $gst_img_path_save = Storage::disk('s3')->url($path);
+
+                //  ======= pan upload
+                $panupload = $request->file('upload_pan');
+                $pan_path = Storage::disk('s3')->put('clients', $panupload);
+                $pan_img_path_save = Storage::disk('s3')->url($pan_path);
+
+                $userid = $saveuser->id;
+                $saveclientdetails['user_id'] = $userid;
+                // $saveclientdetails['company_name'] = $request->company_name;
+                // $saveclientdetails['contact_name'] = $request->contact_name;
+                // $saveclientdetails['contact_number'] = $request->contact_number;
+                // $saveclientdetails['email'] = $request->email;
+                // $saveclientdetails['gst_no'] = $request->gst_no;
+                // $saveclientdetails['pan'] = $request->pan;
+                // $saveclientdetails['status'] = 1;
+
+                $saveclientdetails['name'] = $request->company_name . '-(Web)';
+                $saveclientdetails['regional_client_nick_name'] = $request->contact_name;
+                $saveclientdetails['email'] = $request->email;
+                $saveclientdetails['phone'] = $request->contact_number;
+                $saveclientdetails['gst_no'] = $request->gst_no;
+                $saveclientdetails['pan'] = $request->pan;
+                $saveclientdetails['pin'] = $request->pin;
+                $saveclientdetails['city'] = $request->city;
+                $saveclientdetails['district'] = $request->district;
+                $saveclientdetails['state'] = $request->state;
+                $saveclientdetails['address'] = $request->address;
+                if (!empty($request->notification)) {
+                    $saveclientdetails['notification'] = $request->notification;
+                }
+                $saveclientdetails['upload_gst'] = $gst_img_path_save;
+                $saveclientdetails['upload_pan'] = $pan_img_path_save;
+                $saveclientdetails['status'] = 1;
+
+                $saveclientdetails['payment_term'] = 'Bill To Client';
+
+                RegionalClient::create($saveclientdetails);
+
+                $data = ['contact_name' => $request->contact_name, 'user_id' => $userid];
+                $user['to'] = $request->email;
+                Mail::send('client-verified-email', $data, function ($messges) use ($user) {
+                    $messges->to($user['to']);
+                    $messges->subject('Verify Your Email Address for Agriwings');
+
+                });
+
+                $url = URL::to($this->prefix . '/login');
+                $response['success'] = true;
+                $response['success_message'] = "Users Added successfully, Please Check Your Mail To verify";
+                $response['error'] = false;
+                // $response['resetform'] = true;
+                $response['page'] = 'client-register';
+                $response['redirect_url'] = $url;
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created user please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+        } catch (Exception $e) {
             $response['error'] = false;
-            // $response['resetform'] = true;
-            $response['page'] = 'client-register';
-            $response['redirect_url'] = $url;
-        } else {
+            $response['error_message'] = $e;
             $response['success'] = false;
-            $response['error_message'] = "Can not created user please try again";
-            $response['error'] = true;
         }
-        DB::commit();
-    } catch (Exception $e) {
-        $response['error'] = false;
-        $response['error_message'] = $e;
-        $response['success'] = false;
-    }
 
         return response()->json($response);
     }
@@ -447,11 +444,11 @@ class UserController extends Controller
 
     public function clientVerification($id)
     {
-        $id = decrypt($id); 
-        $verified = User::where('id',$id)->first();
-        if($verified->status == 0){
-            
-            $data = ['login_id' => $verified->login_id, 'password' => $verified->user_password,'name' => $verified->name];
+        $id = decrypt($id);
+        $verified = User::where('id', $id)->first();
+        if ($verified->status == 0) {
+
+            $data = ['login_id' => $verified->login_id, 'password' => $verified->user_password, 'name' => $verified->name];
             $user['to'] = $verified->email;
             Mail::send('client-login-email', $data, function ($messges) use ($user) {
                 $messges->to($user['to']);
@@ -460,7 +457,7 @@ class UserController extends Controller
             });
             User::where('id', $id)->update(['status' => 1]);
             return '<h1>User verified successfully, Please Check Your Mail for your Login Credentials</h1>';
-        }else{
+        } else {
             return '<h1>Already verified</h1>';
         }
 
