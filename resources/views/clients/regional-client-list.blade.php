@@ -70,12 +70,19 @@ div.relative {
                                 <th>Location Id</th>
                                 <th>Gst</th>
                                 <th>Action</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
                                 if(count($regclients)>0) {
                                     foreach ($regclients as $key => $value) {  
+
+                                        if($value->verified_by == 0){
+                                            $status = 'Unverified';
+                                        }else{
+                                            $status = 'Verified';
+                                        }
                                 ?>
                             <tr>
                                 <td>{{ $value->id ?? "-" }}</td>
@@ -93,6 +100,8 @@ div.relative {
                                         href="{{url($prefix.'/'.$segment.'/view-regclient-detail/'.Crypt::encrypt($value->id))}}"><span><i
                                                 class="fa fa-eye" aria-hidden="true"></i> View</span></a> -->
                                 </td>
+                                
+                                <td>{{$status}}</td>
                             </tr>
                             <?php 
                                     }

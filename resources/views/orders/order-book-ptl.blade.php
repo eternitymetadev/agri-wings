@@ -417,10 +417,7 @@ span.select2.select2-container.mb-4 {
                 </label>
                 <select class="form-control form-small my-select2" id="crop" name="crop" tabindex="-1">
                     <option value="">Select Crop</option>
-                    @foreach($Crops as $crop)
-                    <option value="{{$crop->id}}">{{$crop->crop_name}}
-                    </option>
-                    @endforeach
+                    <option value="SurgerCane">SurgerCane</option>
                 </select>
             </div>
             <div class="form-group col-md-4">
