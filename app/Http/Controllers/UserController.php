@@ -330,7 +330,7 @@ class UserController extends Controller
                 'email' => 'required|unique:users,email',
                 'contact_number' => 'required|unique:regional_clients,phone',
                 //  'captcha' => ['required', 'captcha'],
-                'g-recaptcha-response' => 'recaptcha',
+                // 'g-recaptcha-response' => 'recaptcha',
             );
 
             $validator = Validator::make($request->all(), $rules);

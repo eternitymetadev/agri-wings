@@ -22,4 +22,10 @@ class ReceiveAddressController extends Controller
         return response()->json(['success'=>true, 'data'=>Helper::getPostalAddress($request->postal_code)]);
     }
 
+    public function customerQueriesmail(Request $request){
+
+        echo'<pre>'; print_r($request->all()); die;
+
+    }
+
 }

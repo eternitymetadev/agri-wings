@@ -20,3 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/drivers', 'App\Http\Controllers\Api\DriversController@index')->name('api.index.drivers');
+
+Route::any('/customer-queries', 'App\Http\Controllers\Api\ReceiveAddressController@customerQueriesmail');
+
