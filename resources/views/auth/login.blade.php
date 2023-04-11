@@ -145,7 +145,7 @@
 
                     <div class="form-group formElement">
                         <label for="login_id" class="form-label  formLabelTheme">Username</label>
-                        <input type="text" class="form-control" name="login_id" id="login_id" placeholder="@username">
+                        <input type="text" class="form-control" name="login_id" id="login_id" autofocus placeholder="@username">
                     </div>
                     <div class="form-group formElement">
                         <label for="pwd" class="form-label  formLabelTheme">Password</label>
