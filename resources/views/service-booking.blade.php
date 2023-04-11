@@ -266,10 +266,21 @@ span.select2.select2-container.mb-4 {
     color: #000;
 }
 
+.cropSelection {
+    background: url('https://thumbs.dreamstime.com/b/vector-farm-illustration-illustration-banner-book-social-media-other-design-vector-farm-illustration-vector-tractor-181864455.jpg');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .cropSelection .form-group {
     position: relative;
-    max-width: 180px;
+    max-width: 95px;
     width: 100%;
+}
+
+.cropSelection .form-group.farm {
+    max-width: 180px;
 }
 
 
@@ -309,11 +320,236 @@ span.select2.select2-container.mb-4 {
 
 .cropSelection input[type="radio"] {
     position: absolute;
+    top: 2px;
+    right: 2px;
+    height: 20px;
+    width: 20px;
+    accent-color: var(--secondaryColor);
+}
+
+
+.cropSelection .farm input[type="radio"] {
     top: 6px;
-    right: 20px;
+    left: 10px;
     height: 24px;
     width: 24px;
-    accent-color: var(--secondaryColor);
+}
+
+.cropSelection .farm input[type="radio"]+label {
+    padding: 8px;
+}
+
+.cropSelection * {
+    opacity: 0;
+}
+
+.cropSelection.enabled {
+    background: none;
+}
+
+.cropSelection.enabled * {
+    opacity: 1;
+}
+
+
+
+
+/* for toggler */
+.Switcher {
+    position: relative;
+    display: flex;
+    border-radius: 5em;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-animation: r-n 0.5s;
+    animation: r-n 0.5s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 3vmin;
+    will-change: transform;
+    max-width: 320px;
+    outline: 2px solid var(--secondaryColor);
+    outline-offset: 2px;
+}
+
+.Switcher::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    border-radius: inherit;
+    background-color: var(--secondaryColor);
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+}
+
+.Switcher__checkbox:checked+.Switcher::before {
+    transform: translateX(100%);
+}
+
+.Switcher__trigger {
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+    width: 50%;
+    color: var(--secondaryColor);
+}
+
+.Switcher__trigger::after {
+    content: attr(data-value);
+}
+
+.Switcher__trigger::before {
+    --i: var(--x);
+    content: attr(data-value);
+    position: absolute;
+    color: var(--primaryContrast);
+    transition: opacity 0.3s;
+    opacity: calc((var(--i) + 1) / 2);
+    transition-delay: calc(.3s * (var(--i) - 1) / -2);
+}
+
+.Switcher__checkbox:checked+.Switcher .Switcher__trigger::before {
+    --i: calc(var(--x) * -1);
+}
+
+.Switcher__trigger:nth-of-type(1)::before {
+    --x: 1;
+}
+
+.Switcher__trigger:nth-of-type(2)::before {
+    --x: -1;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.box {
+    overflow: hidden;
+    perspective: 750px;
+}
+
+.intro {
+    width: 90%;
+    max-width: 50rem;
+    padding-top: 0.5em;
+    padding-bottom: 1rem;
+    margin: 0 auto 1em;
+    font-size: calc(1rem + 2vmin);
+    text-transform: capitalize;
+    text-align: center;
+    font-family: serif;
+}
+
+.intro small {
+    display: block;
+    text-align: right;
+    opacity: 0.5;
+    font-style: italic;
+    text-transform: none;
+    border-top: 1px dashed rgba(255, 255, 255, 0.75);
+}
+
+.info {
+    margin: 0;
+    padding: 1em;
+    font-size: 0.9em;
+    font-style: italic;
+    font-family: serif;
+    text-align: right;
+    opacity: 0.75;
+}
+
+.info a {
+    color: inherit;
+}
+
+
+
+/* for new form */
+.createButton {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+}
+
+/* for number counters */
+.counter {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-evenly;
+    gap: 4px;
+    border: 1px solid var(--secondaryColor);
+    border-radius: 9px;
+    background: #248f2733;
+    box-shadow: 0 0 5px 2px rgba(194, 213, 255, 0.619608);
+}
+
+.value-button {
+    display: inline-block;
+    margin: 0px;
+    height: -webkit-fill-available;
+    text-align: center;
+    user-select: none;
+    color: var(--secondaryColor);
+    font-size: 36px;
+    line-height: 35px;
+    border-radius: 8px 0 0 8px;
+    background: none;
+    border: none;
+}
+
+.value-button:hover {
+    cursor: pointer;
+}
+
+
+#input-wrap {
+    margin: 0px;
+    padding: 0px;
+}
+
+.counter input[type=number] {
+    text-align: center;
+    border: none;
+    margin: 0px;
+    max-width: 60px;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--secondaryColor);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+
+#sprayTable {
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#sprayTable thead {
+    background: #28a74552;
 }
 </style>
 
@@ -321,6 +557,288 @@ span.select2.select2-container.mb-4 {
 <div class="layout-px-spacing mt-5">
     <form class="general_form" method="POST" action="{{url($prefix.'/store-service-booking')}}" id="service_booking"
         style="margin: auto;">
+
+        <div class="row flex-wrap mx-0" style="gap: 2rem">
+
+            <div style="flex:1; align-content: flex-start">
+                <div class="form-row">
+                    <h6 class="col-12">Farmer Details </h6>
+                    <div class="row col-md-12 align-items-center">
+                        <!-- choose farmer type -->
+                        <div class="box py-2 col-md-6">
+                            <input class="Switcher__checkbox sr-only" id="io" type="checkbox" checked="checked" />
+                            <label class="Switcher" for="io">
+                                <div class="Switcher__trigger" data-value="New"></div>
+                                <div class="Switcher__trigger" data-value="Existing"></div>
+                            </label>
+                        </div>
+
+                        <!-- for existing farmer -->
+                        <div class="col-md-6">
+                            <div class="form-group" style="max-width: 320px">
+                                <label for="exampleFormControlSelect1">
+                                    Select Farmer<span class="text-danger">*</span>
+                                </label>
+                                <select class="form-control my-select2" name="payment_type"
+                                    onchange="displayCropsSection()" id="paymentType_">
+                                    <option value="">-select-</option>
+                                    <option value="TBB">TBB</option>
+                                    <option value="TBB1">TBB1</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-md-6">
+                            <label>Farmer Name <span class="text-danger">*</span></label>
+                            <Input type="text" class="form-control" id="farmer_name" name="farmer_name">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Farmer Mobile<span class="text-danger">*</span></label>
+                            <Input type="number" class="form-control" id="" maxlength="10" name="phone">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Farm Locations<span class="text-danger">*</span></label>
+                            <div class="counter">
+                                <div class="value-button" id="decrease" onclick="decreaseValue()"
+                                    value="Decrease Value">-</div>
+                                <input type="number" id="number" value="1" min='1' />
+                                <div class="value-button" id="increase" onclick="increaseValue()"
+                                    value="Increase Value">+</div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group col-md-3 createButton">
+                            <button class="btn btn-primary">Create</button>
+                        </div> -->
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <h6 class="col-12">Bill To Information</h6>
+
+                    <div class="form-group col-md-7">
+                        <label for="exampleFormControlSelect1">
+                            Bill to Client<span class="text-danger">*</span>
+                        </label>
+                        <Input type="text" class="form-control" id="" name="regional_client"
+                            value="{{$regonal_client->name}}" readonly>
+                        <Input type="hidden" class="form-control" id="" name="regclient_id"
+                            value="{{$regonal_client->id}}">
+
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <label for="exampleFormControlSelect1">
+                            Payment Term<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
+                            id="paymentType_">
+                            <?php
+                    $payment_term = explode(',',$regonal_client->payment_term);
+                    // echo'<pre>'; print_r($regonal_client->name); die;
+                    ?>
+                            @foreach($payment_term as $payment)
+                            <option value="{{$payment}}">{{$payment}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="d-flex flex-column" style="flex:1;">
+                <div id="cropSelection" class="form-row cropSelection"
+                    style="column-gap: 1.5rem; box-shadow: none;flex:1; align-content: flex-start">
+                    <h6 class="col-12">Spray Details</h6>
+                    <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="1" name="farm" value="1" checked />
+                        <label for="sugarcane">Farm 1</label>
+                    </div>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="2" name="farm" value="2" checked />
+                        <label for="sugarcane">Farm 2</label>
+                    </div>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="3" name="farm" value="3" checked />
+                        <label for="sugarcane">Farm 3</label>
+                    </div> -->
+
+                    <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
+
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="sugarcane" name="crop" value="sugarcane" checked />
+                        <label for="sugarcane">Sugarcane
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
+                        <label for="wheat">Wheat
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
+                        <label for="paddy">Paddy
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
+                        <label for="potato">Potato
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
+                        <label for="apple">Apple
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
+                        <label for="cotton">Cotton
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+
+
+                    <div class="row col-12 mt-3 align-items-center">
+                        <div class="form-group col-md-6" style="max-width: 320px">
+                            <label for="exampleFormControlSelect1">
+                                Farm Location<span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control my-select2" name="payment_type" onchange="displayCropsSection()"
+                                id="paymentType_">
+                                <option value="">-select location-</option>
+                                <option value="TBB">Location 1</option>
+                                <option value="TBB1">Location 2</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group" style="flex: 1; max-width: 150px">
+                            <label>Acreage<span class="text-danger">*</span></label>
+                            <div class="counter">
+                                <div class="value-button" id="decrease" onclick="decreaseValue()"
+                                    value="Decrease Value">-</div>
+                                <input type="number" id="number" name="acreage" value="1" min='1' />
+                                <div class="value-button" id="increase" onclick="increaseValue()"
+                                    value="Increase Value">+</div>
+                            </div>
+                        </div>
+
+
+                        <div style="flex: 1; display: flex; justify-content: center;">
+                            <button type="button" class="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-row" style="box-shadow: none">
+                    <table id="sprayTable">
+                        <thead>
+                            <tr>
+                                <th>Crop Name</th>
+                                <th>Farm Location</th>
+                                <th>Acreage</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Wheat</td>
+                                <td>Farm 1</td>
+                                <td>1.5</td>
+                            </tr>
+                            <tr>
+                                <td>Sugarcane</td>
+                                <td>Farm 2</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>Paddy</td>
+                                <td>Farm 1</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+
+            <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
+                placeholder="" value="<?php echo date('d-m-Y'); ?>" />
+
+        </div>
+
+        {{--vehicle info--}}
+        <div class="form-check form-check-inline justify-content-end col-12">
+            <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
+            <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
+                farmer</label>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
+            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
+            <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
+        </div>
+
+
+
+        <!-- farmer details -->
+        <div class="form-row">
+            <h6 class="col-12">Farmer Details </h6>
+
+            <div class="row col-md-12 align-items-center">
+                <!-- choose farmer type -->
+                <div class="box py-2 col-md-6">
+                    <input class="Switcher__checkbox sr-only" id="io" type="checkbox" checked="checked" />
+                    <label class="Switcher" for="io">
+                        <div class="Switcher__trigger" data-value="New"></div>
+                        <div class="Switcher__trigger" data-value="Existing"></div>
+                    </label>
+                </div>
+
+                <!-- for existing farmer -->
+                <div class="col-md-6">
+                    <div class="form-group" style="max-width: 320px">
+                        <label for="exampleFormControlSelect1">
+                            Select Farmer<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
+                            id="paymentType_">
+                            <?php $payment_term = explode(',',$regonal_client->payment_term); ?>
+                            @foreach($payment_term as $payment)
+                            <option value="{{$payment}}">{{$payment}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group col-md-3">
+                <label>Farmer Name <span class="text-danger">*</span></label>
+                <Input type="text" class="form-control" id="" name="farmer_name">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Farmer Mobile<span class="text-danger">*</span></label>
+                <Input type="number" class="form-control" id="" maxlength="10" name="phone">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Number of Farm<span class="text-danger">*</span></label>
+                <Input type="number" class="form-control" id="" name="farm">
+            </div>
+            <div class="form-group col-md-3 createButton">
+                <button class="btn btn-primary">Create</button>
+            </div>
+        </div>
 
         {{--bill to info--}}
         <div class="form-row cropSelection" style="column-gap: 1.5rem; box-shadow: none;">
@@ -362,7 +880,7 @@ span.select2.select2-container.mb-4 {
                     <img src="{{asset('assets/drone.png')}}" alt="crop" />
                 </label>
             </div>
- 
+
             <div class="form-group" style="max-width: 100%">
                 <label for="acreage">Acreage<span class="text-danger">*</span></label>
                 <Input type="number" class="form-control" id="acreage" name="acreage" style="max-width: 300px">
@@ -459,21 +977,7 @@ span.select2.select2-container.mb-4 {
             </div>
 
         </div> -->
-        {{--vehicle info--}}
-        <div class="form-row">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
-                <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
-                    farmer</label>
-            </div>
 
-        </div>
-
-        <div class=" col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 3rem;">
-            {{-- <a class="mt-2 btn btn-outline-primary" href="{{url($prefix.'/consignments') }}"> Back</a>--}}
-            <button type="submit" class="mt-2 btn btn-primary disableme"
-                style="height: 40px; width: 200px">Submit</button>
-        </div>
 
     </form>
 </div>
@@ -482,6 +986,44 @@ span.select2.select2-container.mb-4 {
 @endsection
 @section('js')
 <script>
+function increaseValue() {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value++;
+    document.getElementById('number').value = value;
+}
+
+function decreaseValue() {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value < 2 ? value = 2 : '';
+    value--;
+    document.getElementById('number').value = value;
+}
+
+
+
+function displayCropsSection() {
+    $('#cropSelection').addClass('enabled');
+    // else $('#cropSelection').removeClass('enabled');
+};
+
+
+// (function() {
+//     const dd = $('#farmer_name').val();
+//     console.log('agdfjha');
+
+//     if (dd != ) {
+//         $('#cropSelection').removeClass('enabled');
+//         console.log('enabled');
+
+//     } else {
+//         $('#cropSelection').addClass('enabled');
+//         console.log('disabled');
+
+//     }
+// })();
+
 $(document).ready(function() {
 
     jQuery(function() {
