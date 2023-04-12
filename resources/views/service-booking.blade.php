@@ -566,15 +566,15 @@ input[type=number]::-webkit-outer-spin-button {
                     <div class="row col-md-12 align-items-center">
                         <!-- choose farmer type -->
                         <div class="box py-2 col-md-6">
-                            <input class="Switcher__checkbox sr-only" id="io" type="checkbox" checked="checked" />
+                            <input class="Switcher__checkbox sr-only" id="io" type="checkbox" onchange="onFarmerTypeChange()" />
                             <label class="Switcher" for="io">
-                                <div class="Switcher__trigger" data-value="New"></div>
                                 <div class="Switcher__trigger" data-value="Existing"></div>
+                                <div class="Switcher__trigger" data-value="New"></div>
                             </label>
                         </div>
 
                         <!-- for existing farmer -->
-                        <div class="col-md-6">
+                        <div id="selectFarmerId" class="col-md-6" style="display: none">
                             <div class="form-group" style="max-width: 320px">
                                 <label for="exampleFormControlSelect1">
                                     Select Farmer<span class="text-danger">*</span>
@@ -589,69 +589,71 @@ input[type=number]::-webkit-outer-spin-button {
                         </div>
 
 
-                        <div class="form-group col-md-6">
-                            <label>Farmer Name <span class="text-danger">*</span></label>
-                            <Input type="text" class="form-control" id="farmer_name" name="farmer_name">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Farmer Mobile<span class="text-danger">*</span></label>
-                            <Input type="number" class="form-control" id="" maxlength="10" name="phone">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Farm Locations<span class="text-danger">*</span></label>
-                            <div class="counter">
-                                <div class="value-button" id="decrease" onclick="decreaseValue()"
-                                    value="Decrease Value">-</div>
-                                <input type="number" id="number" value="1" min='1' />
-                                <div class="value-button" id="increase" onclick="increaseValue()"
-                                    value="Increase Value">+</div>
+                        <div id="createFarmerBox" class="row" style="width: 100%">
+                            <div class="form-group col-md-6">
+                                <label>Farmer Name <span class="text-danger">*</span></label>
+                                <Input type="text" class="form-control" id="farmer_name" name="farmer_name">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Farmer Mobile<span class="text-danger">*</span></label>
+                                <Input type="number" class="form-control" id="" maxlength="10" name="phone">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Farm Locations<span class="text-danger">*</span></label>
+                                <div class="counter">
+                                    <div class="value-button" id="decrease" onclick="decreaseValue()"
+                                        value="Decrease Value">-</div>
+                                    <input type="number" id="number" value="1" min='1' />
+                                    <div class="value-button" id="increase" onclick="increaseValue()"
+                                        value="Increase Value">+</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12 createButton">
+                                <button class="btn btn-primary">Create</button>
                             </div>
                         </div>
-                        <!-- <div class="form-group col-md-3 createButton">
-                            <button class="btn btn-primary">Create</button>
-                        </div> -->
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <h6 class="col-12">Bill To Information</h6>
-
-                    <div class="form-group col-md-7">
-                        <label for="exampleFormControlSelect1">
-                            Bill to Client<span class="text-danger">*</span>
-                        </label>
-                        <Input type="text" class="form-control" id="" name="regional_client"
-                            value="{{$regonal_client->name}}" readonly>
-                        <Input type="hidden" class="form-control" id="" name="regclient_id"
-                            value="{{$regonal_client->id}}">
-
                     </div>
 
-                    <div class="form-group col-md-5">
-                        <label for="exampleFormControlSelect1">
-                            Payment Term<span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                            id="paymentType_">
-                            <?php
+                    <div class="form-row">
+                        <h6 class="col-12">Bill To Information</h6>
+
+                        <div class="form-group col-md-7">
+                            <label for="exampleFormControlSelect1">
+                                Bill to Client<span class="text-danger">*</span>
+                            </label>
+                            <Input type="text" class="form-control" id="" name="regional_client"
+                                value="{{$regonal_client->name}}" readonly>
+                            <Input type="hidden" class="form-control" id="" name="regclient_id"
+                                value="{{$regonal_client->id}}">
+
+                        </div>
+
+                        <div class="form-group col-md-5">
+                            <label for="exampleFormControlSelect1">
+                                Payment Term<span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
+                                id="paymentType_">
+                                <?php
                     $payment_term = explode(',',$regonal_client->payment_term);
                     // echo'<pre>'; print_r($regonal_client->name); die;
                     ?>
-                            @foreach($payment_term as $payment)
-                            <option value="{{$payment}}">{{$payment}}</option>
-                            @endforeach
-                        </select>
+                                @foreach($payment_term as $payment)
+                                <option value="{{$payment}}">{{$payment}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
-
-            <div class="d-flex flex-column" style="flex:1;">
-                <div id="cropSelection" class="form-row cropSelection"
-                    style="column-gap: 1.5rem; box-shadow: none;flex:1; align-content: flex-start">
-                    <h6 class="col-12">Spray Details</h6>
-                    <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
+                <div class="d-flex flex-column" style="flex:1;">
+                    <div id="cropSelection" class="form-row cropSelection"
+                        style="column-gap: 1.5rem; flex:1; align-content: flex-start">
+                        <h6 class="col-12">Spray Details</h6>
+                        <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
                     <div class="form-group farm">
                         <Input type="radio" class="form-control" id="1" name="farm" value="1" checked />
                         <label for="sugarcane">Farm 1</label>
@@ -665,319 +667,116 @@ input[type=number]::-webkit-outer-spin-button {
                         <label for="sugarcane">Farm 3</label>
                     </div> -->
 
-                    <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
+                        <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
 
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="sugarcane" name="crop" value="sugarcane" checked />
-                        <label for="sugarcane">Sugarcane
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
-                        <label for="wheat">Wheat
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
-                        <label for="paddy">Paddy
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
-                        <label for="potato">Potato
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
-                        <label for="apple">Apple
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
-                        <label for="cotton">Cotton
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-
-
-                    <div class="row col-12 mt-3 align-items-center">
-                        <div class="form-group col-md-6" style="max-width: 320px">
-                            <label for="exampleFormControlSelect1">
-                                Farm Location<span class="text-danger">*</span>
+                        <div class="form-group">
+                            <Input type="radio" class="form-control" id="sugarcane" name="crop" value="sugarcane"
+                                checked />
+                            <label for="sugarcane">Sugarcane
+                                <img src="{{asset('assets/drone.png')}}" alt="crop" />
                             </label>
-                            <select class="form-control my-select2" name="payment_type" onchange="displayCropsSection()"
-                                id="paymentType_">
-                                <option value="">-select location-</option>
-                                <option value="TBB">Location 1</option>
-                                <option value="TBB1">Location 2</option>
-                            </select>
+                        </div>
+                        <div class="form-group">
+                            <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
+                            <label for="wheat">Wheat
+                                <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
+                            <label for="paddy">Paddy
+                                <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
+                            <label for="potato">Potato
+                                <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
+                            <label for="apple">Apple
+                                <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
+                            <label for="cotton">Cotton
+                                <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                            </label>
                         </div>
 
 
-                        <div class="form-group" style="flex: 1; max-width: 150px">
-                            <label>Acreage<span class="text-danger">*</span></label>
-                            <div class="counter">
-                                <div class="value-button" id="decrease" onclick="decreaseValue()"
-                                    value="Decrease Value">-</div>
-                                <input type="number" id="number" name="acreage" value="1" min='1' />
-                                <div class="value-button" id="increase" onclick="increaseValue()"
-                                    value="Increase Value">+</div>
+                        <div class="row col-12 mt-3 align-items-center">
+                            <div class="form-group col-md-6" style="max-width: 320px">
+                                <label for="exampleFormControlSelect1">
+                                    Farm Location<span class="text-danger">*</span>
+                                </label>
+                                <select class="form-control my-select2" name="payment_type"
+                                    onchange="displayCropsSection()" id="farmLocation">
+                                    <option value="" readonly>-select location-</option>
+                                    <option value="TBB">Location 1</option>
+                                    <option value="TBB1">Location 2</option>
+                                </select>
+                                <label id="farmLocationError" style="display:none" class="error"
+                                    for="farmLocation">Please Select Farm</label>
+                            </div>
+
+
+                            <div class="form-group" style="flex: 1; max-width: 150px">
+                                <label>Acreage<span class="text-danger">*</span></label>
+                                <div class="counter">
+                                    <div class="value-button" id="decrease" onclick="decreaseDecimalValue()"
+                                        value="Decrease Value">-</div>
+                                    <input type="number" id="acreage" name="acreage" value="1" min='1' />
+                                    <div class="value-button" id="increase" onclick="increaseDecimalValue()"
+                                        value="Increase Value">+</div>
+                                </div>
+                            </div>
+
+
+                            <div style="flex: 1; display: flex; justify-content: center;">
+                                <button type="button" class="btn btn-primary" onclick="onAddCrop()"
+                                    style="width: 100px;">Add</button>
                             </div>
                         </div>
 
-
-                        <div style="flex: 1; display: flex; justify-content: center;">
-                            <button type="button" class="btn btn-primary">Add</button>
-                        </div>
                     </div>
 
-                </div>
+                    <div class="form-row" style="box-shadow: none">
+                        <table id="sprayTable" style="display: none">
+                            <thead>
+                                <tr>
+                                    <th>Crop Name</th>
+                                    <th>Farm Location</th>
+                                    <th>Acreage</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
 
-                <div class="form-row" style="box-shadow: none">
-                    <table id="sprayTable">
-                        <thead>
-                            <tr>
-                                <th>Crop Name</th>
-                                <th>Farm Location</th>
-                                <th>Acreage</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>Wheat</td>
-                                <td>Farm 1</td>
-                                <td>1.5</td>
-                            </tr>
-                            <tr>
-                                <td>Sugarcane</td>
-                                <td>Farm 2</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>Paddy</td>
-                                <td>Farm 1</td>
-                                <td>1</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-
-
-            <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
-                placeholder="" value="<?php echo date('d-m-Y'); ?>" />
-
-        </div>
-
-        {{--vehicle info--}}
-        <div class="form-check form-check-inline justify-content-end col-12">
-            <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
-            <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
-                farmer</label>
-        </div>
-
-        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
-            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
-            <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
-        </div>
-
-
-
-        <!-- farmer details -->
-        <div class="form-row">
-            <h6 class="col-12">Farmer Details </h6>
-
-            <div class="row col-md-12 align-items-center">
-                <!-- choose farmer type -->
-                <div class="box py-2 col-md-6">
-                    <input class="Switcher__checkbox sr-only" id="io" type="checkbox" checked="checked" />
-                    <label class="Switcher" for="io">
-                        <div class="Switcher__trigger" data-value="New"></div>
-                        <div class="Switcher__trigger" data-value="Existing"></div>
-                    </label>
-                </div>
-
-                <!-- for existing farmer -->
-                <div class="col-md-6">
-                    <div class="form-group" style="max-width: 320px">
-                        <label for="exampleFormControlSelect1">
-                            Select Farmer<span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                            id="paymentType_">
-                            <?php $payment_term = explode(',',$regonal_client->payment_term); ?>
-                            @foreach($payment_term as $payment)
-                            <option value="{{$payment}}">{{$payment}}</option>
-                            @endforeach
-                        </select>
                     </div>
                 </div>
 
-            </div>
 
-            <div class="form-group col-md-3">
-                <label>Farmer Name <span class="text-danger">*</span></label>
-                <Input type="text" class="form-control" id="" name="farmer_name">
-            </div>
-            <div class="form-group col-md-3">
-                <label>Farmer Mobile<span class="text-danger">*</span></label>
-                <Input type="number" class="form-control" id="" maxlength="10" name="phone">
-            </div>
-            <div class="form-group col-md-3">
-                <label>Number of Farm<span class="text-danger">*</span></label>
-                <Input type="number" class="form-control" id="" name="farm">
-            </div>
-            <div class="form-group col-md-3 createButton">
-                <button class="btn btn-primary">Create</button>
-            </div>
-        </div>
 
-        {{--bill to info--}}
-        <div class="form-row cropSelection" style="column-gap: 1.5rem; box-shadow: none;">
-            <h6 class="col-12" style="margin-bottom: 1rem; font-weight: 700;">Choose Crop</h6>
-
-            <div class="form-group">
-                <Input type="radio" class="form-control" id="sugarcane" name="crop" value="sugarcane" checked />
-                <label for="sugarcane">Sugarcane
-                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                </label>
-            </div>
-            <div class="form-group">
-                <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
-                <label for="wheat">Wheat
-                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                </label>
-            </div>
-            <div class="form-group">
-                <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
-                <label for="paddy">Paddy
-                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                </label>
-            </div>
-            <div class="form-group">
-                <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
-                <label for="potato">Potato
-                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                </label>
-            </div>
-            <div class="form-group">
-                <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
-                <label for="apple">Apple
-                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                </label>
-            </div>
-            <div class="form-group">
-                <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
-                <label for="cotton">Cotton
-                    <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                </label>
-            </div>
-
-            <div class="form-group" style="max-width: 100%">
-                <label for="acreage">Acreage<span class="text-danger">*</span></label>
-                <Input type="number" class="form-control" id="acreage" name="acreage" style="max-width: 300px">
-            </div>
-        </div>
-
-        {{--bill to info--}}
-        <div class="form-row">
-            <h6 class="col-12">Bill To Information</h6>
-
-            <div class="form-group col-md-4">
-                <label for="exampleFormControlSelect1">
-                    Bill to Client<span class="text-danger">*</span>
-                </label>
-                <Input type="text" class="form-control" id="" name="regional_client" value="{{$regonal_client->name}}"
-                    readonly>
-                <Input type="hidden" class="form-control" id="" name="regclient_id" value="{{$regonal_client->id}}">
+                <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
+                    placeholder="" value="<?php echo date('d-m-Y'); ?>" />
 
             </div>
 
-            <div class="form-group col-md-2">
-                <label for="exampleFormControlSelect1">
-                    Payment Term<span class="text-danger">*</span>
-                </label>
-                <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                    id="paymentType_">
-                    <?php
-                    $payment_term = explode(',',$regonal_client->payment_term);
-                    // echo'<pre>'; print_r($regonal_client->name); die;
-                    ?>
-                    @foreach($payment_term as $payment)
-                    <option value="{{$payment}}">{{$payment}}</option>
-                    @endforeach
-                </select>
+            {{--vehicle info--}}
+            <div class="form-check form-check-inline justify-content-end col-12">
+                <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
+                <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
+                    farmer</label>
             </div>
 
-        </div>
-
-        <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date" placeholder=""
-            value="<?php echo date('d-m-Y'); ?>" />
-
-
-        {{--Farmer Address Details Section: --}}
-        <div class="form-row">
-            <h6 class="col-12">Farmer Address Details </h6>
-
-            <div class="form-group col-md-4">
-                <label>
-                    Farmer Name <span class="text-danger">*</span>
-                </label>
-                <Input type="text" class="form-control" id="" name="farmer_name">
+            <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
+                <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
+                <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
             </div>
-
-            <div class="form-group col-md-4">
-                <label>
-                    Farmer Mobile<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" id="" maxlength="10" name="phone">
-            </div>
-            <div class="form-group col-md-4">
-                <label>
-                    Number of Farm<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" id="" name="farm">
-            </div>
-        </div>
-
-
-        <!-- {{--order info--}}
-        <div class="orderInfoBlock">
-        </div> -->
-
-        {{--vehicle info--}}
-        <!-- <div class="form-row">
-            <h6 class="col-12">Spray Details Section</h6>
-
-            <div class="form-group col-md-4">
-                <label>
-                    Crop<span class="text-danger">*</span>
-                </label>
-                <select class="form-control form-small my-select2" id="crop" name="crop" tabindex="-1">
-                    <option value="">Select Crop</option>
-                    @foreach($Crops as $crop)
-                    <option value="{{$crop->id}}">{{$crop->crop_name}}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label>
-                    Acreage<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" id="" name="acreage">
-            </div>
-
-        </div> -->
-
 
     </form>
 </div>
@@ -999,6 +798,58 @@ function decreaseValue() {
     value < 2 ? value = 2 : '';
     value--;
     document.getElementById('number').value = value;
+}
+
+function increaseDecimalValue() {
+    var value = parseInt(document.getElementById('acreage').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value++;
+    document.getElementById('acreage').value = value;
+}
+
+function decreaseDecimalValue() {
+    var value = parseInt(document.getElementById('acreage').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value < 2 ? value = 2 : '';
+    value--;
+    document.getElementById('acreage').value = value;
+}
+
+
+const onFarmerTypeChange = () => {
+    if ($('#io').checked) {
+        $('#selectFarmerId').show();
+        $('#selectFarmerId').hide();
+
+    } else {
+        $('#selectFarmerId').hide();
+
+        $('#selectFarmerId').show();
+    }
+}
+
+
+let cropList = [];
+
+const onAddCrop = () => {
+    let listItem = ``;
+    let cropName = $('input[name="crop"]:checked').val();
+    let farmLocation = $('#farmLocation').find(":selected").val();
+    let acreage = $('#acreage').val();
+
+    if (farmLocation != '') {
+        $('#sprayTable').show();
+        listItem += `<tr>
+                <td>${cropName}</td>
+                <td>${farmLocation}</td>
+                <td>${acreage}</td>
+            </tr>`;
+        $('#sprayTable').append(listItem);
+
+        $('#farmLocation').val('').change();
+        $('#acreage').val('1');
+        $('#farmLocationError').hide();
+    } else $('#farmLocationError').show();
 }
 
 
