@@ -381,4 +381,55 @@ class ConsigneeController extends Controller
         return response()->json($response);
     }
 
+    public function createnewFarmer(Request $request)
+    {
+      
+
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+        
+        $consigneesave['nick_name']           = $request->farmer_name;
+        $consigneesave['phone']               = $request->farmer_phone;
+        $consigneesave['user_id']             = $authuser->id;
+
+        $saveconsignee = Consignee::create($consigneesave); 
+        if($saveconsignee)
+        {
+            $farmer_id =  $saveconsignee->id;
+
+            if(!empty($request->number)){ 
+                $loop = $request->number;
+                for ($i= 1; $i <= $loop; $i++) { 
+                    $save_data['farmer_id'] = $saveconsignee->id;
+                    $save_data['field_area'] = 'Farm '.$i;
+                    $saveregclients = Farm::create($save_data);
+                }
+            }
+
+            $new_farmer = Consignee::with('Farm')->where('id', $farmer_id)->first();
+
+            $response['farmer_details'] = $new_farmer;
+            $response['success'] = true;
+            $response['success_message'] = "Farmer Added successfully";
+            $response['error'] = false;
+        }else{
+            $response['success'] = false;
+            $response['error_message'] = "Can not created consignee please try again";
+            $response['error'] = true;
+        }
+
+        return response()->json($response);
+    }
+
+    public function getfarmerDetails(Request $request)
+    {
+        $get_farmer = Consignee::with('farm')->where('id',$request->farmer_id)->first();
+
+        $response['success']                    = true;
+        $response['get_farmer_details']         = $get_farmer;
+        $response['success_message']            = 'Farmer Fetch successfully';
+        $response['error']                      = false;
+        return response()->json($response);
+    }
+
 }

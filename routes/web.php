@@ -991,6 +991,8 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::get('pod-view', [ConsignmentController::class, 'podView']);
     Route::any('/service-booking', [OrderController::class, 'serviceBookingPage']);
     Route::any('/store-service-booking', [OrderController::class, 'storeServiceBooking']);
+    Route::any('/create-new-farmer', [ConsigneeController::class, 'createnewFarmer']);
+    Route::any('/get-farmer-details', [ConsigneeController::class, 'getfarmerDetails']);
 
 });
 

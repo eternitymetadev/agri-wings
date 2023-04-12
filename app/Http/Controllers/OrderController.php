@@ -8,6 +8,7 @@ use App\Models\Consigner;
 use App\Models\ConsignmentItem;
 use App\Models\ConsignmentNote;
 use App\Models\ConsignmentSubItem;
+use App\Models\OrderFarm;
 use App\Models\Crop;
 use App\Models\Driver;
 use App\Models\Farm;
@@ -20,7 +21,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
 use Auth;
-use DB;
+use DB; 
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Storage;
@@ -1889,10 +1890,13 @@ class OrderController extends Controller
              $query->where('id', '=', $authuser->id);
         })->first();
 
-        return view('service-booking', ['prefix' => $this->prefix,'Crops' => $Crops,'regonal_client' => $regonal_client]);
+        $farmers = Consignee::get();
+
+        return view('service-booking', ['prefix' => $this->prefix,'Crops' => $Crops,'regonal_client' => $regonal_client,'farmers' => $farmers]);
     }
     public function storeServiceBooking(Request $request)
     {
+        echo'<pre>'; print_r($request->all()); die;
         try {
             DB::beginTransaction();
 
@@ -1916,40 +1920,40 @@ class OrderController extends Controller
             $authuser = Auth::user();
             $cc = explode(',', $authuser->branch_id);
 
-                 $client['client_name'] = $request->farmer_name;
-                 $baseclient = BaseClient::create($client);
+            //      $client['client_name'] = $request->farmer_name;
+            //      $baseclient = BaseClient::create($client);
 
-                 $baseclient_id = $baseclient->id;
-                 $regionalclient['baseclient_id'] = $baseclient_id;
-                 $regionalclient['name'] = $request->farmer_name.'-(Web)';
-                 $regionalclient['regional_client_nick_name'] = $request->farmer_name;
-                 $regionalclient['status'] = 1;
+            //      $baseclient_id = $baseclient->id;
+            //      $regionalclient['baseclient_id'] = $baseclient_id;
+            //      $regionalclient['name'] = $request->farmer_name.'-(Web)';
+            //      $regionalclient['regional_client_nick_name'] = $request->farmer_name;
+            //      $regionalclient['status'] = 1;
 
-                 $saveregional_client = RegionalClient::create($regionalclient);
-                 $saveregional_client_id = $saveregional_client->id;
+            //      $saveregional_client = RegionalClient::create($regionalclient);
+            //      $saveregional_client_id = $saveregional_client->id;
            
-            $consigneesave['nick_name']           = $request->farmer_name;
-            $consigneesave['phone']               = $request->phone;
+            // $consigneesave['nick_name']           = $request->farmer_name;
+            // $consigneesave['phone']               = $request->phone;
     
-            $saveconsignee = Consignee::create($consigneesave);
-            $farmer_id =  $saveconsignee->id;
+            // $saveconsignee = Consignee::create($consigneesave);
+            // $farmer_id =  $saveconsignee->id;
 
-            if(!empty($request->farm)){ 
-                $loop = $request->farm;
-                for ($i= 1; $i <= $loop; $i++) { 
-                    $save_data['farmer_id'] = $saveconsignee->id;
-                    $save_data['field_area'] = 'Farm '.$i;
-                    $saveregclients = Farm::create($save_data);
-                }
-            }
+            // if(!empty($request->farm)){ 
+            //     $loop = $request->farm;
+            //     for ($i= 1; $i <= $loop; $i++) { 
+            //         $save_data['farmer_id'] = $saveconsignee->id;
+            //         $save_data['field_area'] = 'Farm '.$i;
+            //         $saveregclients = Farm::create($save_data);
+            //     }
+            // }
 
             $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $farmer_id;
             // $consignmentsave['ship_to_id'] = $request->farm_id;
             $consignmentsave['consignment_date'] = $request->consignment_date;
             $consignmentsave['payment_type'] = $request->payment_type;
-            $consignmentsave['crop'] = $request->crop;
-            $consignmentsave['acreage'] = $request->acreage;
+            // $consignmentsave['crop'] = $request->crop;
+            // $consignmentsave['acreage'] = $request->acreage;
             if(!empty($request->noc)){
             $consignmentsave['noc'] = $request->noc;
             }
@@ -1960,6 +1964,18 @@ class OrderController extends Controller
             $consignmentsave['user_id'] = $authuser->id;
 
             $saveconsignment = ConsignmentNote::create($consignmentsave);
+
+            if (!empty($request->data)) {
+                $get_data = $request->data;
+                foreach ($get_data as $key => $save_data) {
+                    $save_data['order_id'] = $saveconsignment->id;
+                    $save_data['farm_location'] = $saveconsignment->id;
+                    $save_data['crop'] = $saveconsignment->id;
+                    $save_data['acreage'] = $saveconsignment->id;
+                    $save_data['status'] = 1;
+                    $saveconsignmentitems = OrderFarm::create($save_data);
+                }
+            }
 
             $url = $this->prefix . '/orders';
             $response['success'] = true;
