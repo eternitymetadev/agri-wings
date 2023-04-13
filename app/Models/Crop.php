@@ -9,6 +9,6 @@ class Crop extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'crop_name','status','created_at','updated_at'        
+        'crop_name','crop_price','crop_image','status','created_at','updated_at'        
     ];
 }

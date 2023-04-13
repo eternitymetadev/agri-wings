@@ -4910,7 +4910,7 @@ class ConsignmentController extends Controller
         return view('consignments.crop-list', ['prefix' => $this->prefix, 'title' => $this->title, 'crops' => $crops]);
     }
     public function addCrop(Request $request)
-    {
+    { 
         
         try {
             DB::beginTransaction();
@@ -4930,7 +4930,13 @@ class ConsignmentController extends Controller
                 return response()->json($response);
             }
 
+            $cropupload = $request->file('crop_image');
+            $path = Storage::disk('s3')->put('crops', $cropupload);
+            $crop_img_path_save = Storage::disk('s3')->url($path);
+
             $gstsave['crop_name'] = $request->crop_name;
+            $gstsave['crop_price'] = $request->crop_price;
+            $gstsave['crop_image'] = $crop_img_path_save;
             $gstsave['status'] = 1;
 
             $gstsave = Crop::create($gstsave);
@@ -4955,6 +4961,17 @@ class ConsignmentController extends Controller
             $response['success'] = false;
             $response['redirect_url'] = $url;
         }
+        return response()->json($response);
+    }
+
+    public function getCropPrice(Request $request)
+    {
+        $get_crop = Crop::where('id',$request->crop_id)->first();
+
+        $response['success']                    = true;
+        $response['get_crop']         = $get_crop;
+        $response['success_message']            = 'Farmer Fetch successfully';
+        $response['error']                      = false;
         return response()->json($response);
     }
 }

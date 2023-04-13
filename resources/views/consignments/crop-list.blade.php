@@ -113,6 +113,18 @@ div.relative {
                             <input type="text" class="form-control" name="crop_name">
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Price</label>
+                            <input type="number" class="form-control" name="crop_price">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Crop Image</label>
+                            <input type="file" class="form-control" name="crop_image">
+                        </div>
+                    </div>
 
             </div>
             <div class="modal-footer">

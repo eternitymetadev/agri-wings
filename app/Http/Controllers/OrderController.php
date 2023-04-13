@@ -1896,7 +1896,7 @@ class OrderController extends Controller
     }
     public function storeServiceBooking(Request $request)
     {
-        echo'<pre>'; print_r($request->all()); die;
+        // echo'<pre>'; print_r($request->all()); die;
         try {
             DB::beginTransaction();
 
@@ -1948,7 +1948,7 @@ class OrderController extends Controller
             // }
 
             $consignmentsave['regclient_id'] = $request->regclient_id;
-            $consignmentsave['consignee_id'] = $farmer_id;
+            $consignmentsave['consignee_id'] = $request->farmer_common_id;
             // $consignmentsave['ship_to_id'] = $request->farm_id;
             $consignmentsave['consignment_date'] = $request->consignment_date;
             $consignmentsave['payment_type'] = $request->payment_type;
@@ -1968,10 +1968,11 @@ class OrderController extends Controller
             if (!empty($request->data)) {
                 $get_data = $request->data;
                 foreach ($get_data as $key => $save_data) {
+                    
                     $save_data['order_id'] = $saveconsignment->id;
-                    $save_data['farm_location'] = $saveconsignment->id;
-                    $save_data['crop'] = $saveconsignment->id;
-                    $save_data['acreage'] = $saveconsignment->id;
+                    $save_data['farm_location'] = $save_data['farm_location'];
+                    $save_data['crop'] = $save_data['crop_name'];
+                    $save_data['acreage'] = $save_data['acerage'];
                     $save_data['status'] = 1;
                     $saveconsignmentitems = OrderFarm::create($save_data);
                 }

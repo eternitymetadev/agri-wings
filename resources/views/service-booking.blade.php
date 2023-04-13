@@ -761,13 +761,15 @@ input[type=number]::-webkit-outer-spin-button {
 
                     <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
 
+                    @foreach($Crops as $crop)
                     <div class="form-group">
-                        <Input type="radio" class="form-control" id="sugarcane" name="crop" value="sugarcane" checked />
-                        <label for="sugarcane">Sugarcane
+                        <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop" value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}" data-crop-name="{{$crop->crop_name}}" checked />
+                        <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
                             <img src="{{asset('assets/drone.png')}}" alt="crop" />
                         </label>
                     </div>
-                    <div class="form-group">
+                    @endforeach
+                    <!-- <div class="form-group">
                         <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
                         <label for="wheat">Wheat
                             <img src="{{asset('assets/drone.png')}}" alt="crop" />
@@ -796,7 +798,7 @@ input[type=number]::-webkit-outer-spin-button {
                         <label for="cotton">Cotton
                             <img src="{{asset('assets/drone.png')}}" alt="crop" />
                         </label>
-                    </div>
+                    </div> -->
 
 
                     <div class="row col-12 mt-3 align-items-center">
@@ -928,16 +930,21 @@ let cropIndex = 1;
 const onAddCrop = () => {
     let listItem = ``;
     let cropName = $('input[name="crop"]:checked').val();
+    let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
     let farmLocation = $('#farmLocation').find(":selected").val();
+    let farmLocationText = $('#farmLocation').find(":selected").text();
     let acreage = $('#acreage').val();
+    let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
+    let totalPrice = cropPrice * acreage;
+    alert(cropNameText);
 
     if (farmLocation != '') {
         $('#sprayTable').show();
         listItem += `<tr>
-                <td>${cropName}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex +`][crop_name]"/></td>
-                <td>${farmLocation}<input type="text" value="` + cropName + `" name="data[` + cropIndex +`][farm_location]"/></td>
-                <td>${acreage}<input type="text" value="` + cropName + `" name="data[` + cropIndex +`][acerage]"/></td>
-                <td>₹2300</td>
+                <td>${cropNameText}<input type="text" value="` + cropName + `" name="data[` + cropIndex +`][crop_name]"/></td>
+                <td>${farmLocationText}<input type="text" value="` + farmLocation + `" name="data[` + cropIndex +`][farm_location]"/></td>
+                <td>${acreage}<input type="text" value="` + acreage + `" name="data[` + cropIndex +`][acerage]"/></td>
+                <td>${totalPrice}<input type="text" value="` + totalPrice + `" name="data[` + cropIndex +`][crop_price]"/></td>
             </tr>`;
         $('#sprayTable').append(listItem);
 
@@ -1197,8 +1204,19 @@ $('#createFarmerButton').click(function() {
             console.log(response.farmer_details);
             $('#farmer_common_id').val(response.farmer_details.id)
             appendFarmerDes(response.farmer_details);
+            $("#farmer_name").prop('disabled', true);
+            $("#farmer_phone").prop('disabled', true);
+            $("#createFarmerButton").prop('disabled', true);
 
-
+            $.each(response.farmer_details.farm, function (index, value) {
+                    $("#farmLocation").append(
+                        '<option value="' +
+                        value.id +
+                        '">' +
+                        value.field_area +
+                        "</option>"
+                    );
+                });
 
         },
     });
@@ -1238,6 +1256,37 @@ jQuery(document).on("change", "#farmer_id", function() {
         },
     });
     return false;
+});
+
+$('.price_click').click(function() {
+
+var crop_id = $(this).val();
+
+
+var data = {
+    crop_id: crop_id
+
+};
+
+jQuery.ajax({
+    url: "get-crop-price",
+    type: "get",
+    cache: false,
+    data: data,
+    dataType: "json",
+    headers: {
+        "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+            "content"
+        ),
+    },
+    processData: true,
+
+    success: function(response) {
+        console.log(response.get_crop);
+
+    },
+});
+
 });
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap">
