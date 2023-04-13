@@ -19,6 +19,7 @@ class CreateOrderFarmsTable extends Migration
             $table->string('farm_location')->nullable();
             $table->string('crop')->nullable();
             $table->string('acreage')->nullable();
+            $table->string('crop_price')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

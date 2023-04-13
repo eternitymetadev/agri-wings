@@ -659,7 +659,7 @@ input[type=number]::-webkit-outer-spin-button {
                             </div>
                         </div>
 
-                        <Input type="hidden"  id="farmer_common_id"  name="farmer_common_id">
+                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
                         <div id="createFarmerBox" class="row align-items-center px-2" style="width: 100%">
                             <div class="form-group col-md-5 px-1">
                                 <label>Farmer Name <span class="text-danger">*</span></label>
@@ -668,6 +668,7 @@ input[type=number]::-webkit-outer-spin-button {
                             <div class="form-group col-md-3 px-1">
                                 <label>Farmer Mobile<span class="text-danger">*</span></label>
                                 <Input type="number" class="form-control" id="farmer_phone" maxlength="10" name="phone">
+                                <span id="phone_error" style="color:red;"></span>
                             </div>
                             <div class="form-group col-md-3 px-1">
                                 <label>Farm Locations<span class="text-danger">*</span></label>
@@ -763,7 +764,9 @@ input[type=number]::-webkit-outer-spin-button {
 
                     @foreach($Crops as $crop)
                     <div class="form-group">
-                        <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop" value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}" data-crop-name="{{$crop->crop_name}}" checked />
+                        <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop"
+                            value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
+                            data-crop-name="{{$crop->crop_name}}" checked />
                         <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
                             <img src="{{asset('assets/drone.png')}}" alt="crop" />
                         </label>
@@ -936,15 +939,14 @@ const onAddCrop = () => {
     let acreage = $('#acreage').val();
     let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
     let totalPrice = cropPrice * acreage;
-    alert(cropNameText);
 
     if (farmLocation != '') {
         $('#sprayTable').show();
         listItem += `<tr>
-                <td>${cropNameText}<input type="text" value="` + cropName + `" name="data[` + cropIndex +`][crop_name]"/></td>
-                <td>${farmLocationText}<input type="text" value="` + farmLocation + `" name="data[` + cropIndex +`][farm_location]"/></td>
-                <td>${acreage}<input type="text" value="` + acreage + `" name="data[` + cropIndex +`][acerage]"/></td>
-                <td>${totalPrice}<input type="text" value="` + totalPrice + `" name="data[` + cropIndex +`][crop_price]"/></td>
+                <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
+                <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
+                <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
+                <td>${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/></td>
             </tr>`;
         $('#sprayTable').append(listItem);
 
@@ -1175,7 +1177,7 @@ const appendFarmerDes = (des) => {
 }
 
 $('#createFarmerButton').click(function() {
-
+    $('#phone_error').empty();
     var farmer_name = $('#farmer_name').val();
     var farmer_phone = $('#farmer_phone').val();
     var number = $('#number').val();
@@ -1201,22 +1203,27 @@ $('#createFarmerButton').click(function() {
         processData: true,
 
         success: function(response) {
-            console.log(response.farmer_details);
+
+            if(response.success == true) {
             $('#farmer_common_id').val(response.farmer_details.id)
             appendFarmerDes(response.farmer_details);
             $("#farmer_name").prop('disabled', true);
             $("#farmer_phone").prop('disabled', true);
             $("#createFarmerButton").prop('disabled', true);
+            $("#io").prop('disabled', true);
 
-            $.each(response.farmer_details.farm, function (index, value) {
-                    $("#farmLocation").append(
-                        '<option value="' +
-                        value.id +
-                        '">' +
-                        value.field_area +
-                        "</option>"
-                    );
-                });
+            $.each(response.farmer_details.farm, function(index, value) {
+                $("#farmLocation").append(
+                    '<option value="' +
+                    value.id +
+                    '">' +
+                    value.field_area +
+                    "</option>"
+                );
+            });
+        }else{
+            $('#phone_error').html(response.error_message);
+        }
 
         },
     });
@@ -1244,50 +1251,54 @@ jQuery(document).on("change", "#farmer_id", function() {
             $('#farmer_common_id').val(response.get_farmer_details.id)
             appendFarmerDes(response.get_farmer_details)
 
-            $.each(response.get_farmer_details.farm, function (index, value) {
-                    $("#farmLocation").append(
-                        '<option value="' +
-                        value.id +
-                        '">' +
-                        value.field_area +
-                        "</option>"
-                    );
-                });
+            $("#farmLocation").append(
+                `<option value="">--select--
+                        </option>`
+            );
+            $.each(response.get_farmer_details.farm, function(index, value) {
+                $("#farmLocation").append(
+                    '<option value="' +
+                    value.id +
+                    '">' +
+                    value.field_area +
+                    "</option>"
+                );
+            });
         },
     });
     return false;
 });
 
-$('.price_click').click(function() {
+// $('.price_click').click(function() {
 
-var crop_id = $(this).val();
+// var crop_id = $(this).val();
 
 
-var data = {
-    crop_id: crop_id
+// var data = {
+//     crop_id: crop_id
 
-};
+// };
 
-jQuery.ajax({
-    url: "get-crop-price",
-    type: "get",
-    cache: false,
-    data: data,
-    dataType: "json",
-    headers: {
-        "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
-            "content"
-        ),
-    },
-    processData: true,
+// jQuery.ajax({
+//     url: "get-crop-price",
+//     type: "get",
+//     cache: false,
+//     data: data,
+//     dataType: "json",
+//     headers: {
+//         "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+//             "content"
+//         ),
+//     },
+//     processData: true,
 
-    success: function(response) {
-        console.log(response.get_crop);
+//     success: function(response) {
+//         console.log(response.get_crop);
 
-    },
-});
+//     },
+// });
 
-});
+// });
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap">
 </script>

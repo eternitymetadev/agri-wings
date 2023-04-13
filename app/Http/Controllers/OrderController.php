@@ -1973,6 +1973,7 @@ class OrderController extends Controller
                     $save_data['farm_location'] = $save_data['farm_location'];
                     $save_data['crop'] = $save_data['crop_name'];
                     $save_data['acreage'] = $save_data['acerage'];
+                    $save_data['crop_price'] = $save_data['crop_price'];
                     $save_data['status'] = 1;
                     $saveconsignmentitems = OrderFarm::create($save_data);
                 }

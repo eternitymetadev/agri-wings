@@ -387,6 +387,16 @@ class ConsigneeController extends Controller
 
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
+        // === phone no. check
+        $number_check = Consignee::where('phone',$request->farmer_phone)->first();
+        if(!empty($number_check)){
+
+            $response['success'] = false;
+            $response['error_message'] = "Already exist";
+            $response['error'] = true;
+            return response()->json($response);
+
+        }
         
         $consigneesave['nick_name']           = $request->farmer_name;
         $consigneesave['phone']               = $request->farmer_phone;
