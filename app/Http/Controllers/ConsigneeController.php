@@ -424,7 +424,7 @@ class ConsigneeController extends Controller
             $response['error'] = false;
         }else{
             $response['success'] = false;
-            $response['error_message'] = "Can not created consignee please try again";
+            $response['error_message'] = "Can not created farmer please try again";
             $response['error'] = true;
         }
 
@@ -437,6 +437,17 @@ class ConsigneeController extends Controller
 
         $response['success']                    = true;
         $response['get_farmer_details']         = $get_farmer;
+        $response['success_message']            = 'Farmer Fetch successfully';
+        $response['error']                      = false;
+        return response()->json($response);
+    }
+
+    public function farmerList(Request $request)
+    {
+        $get_farmer = Consignee::select('id','nick_name','phone')->get();
+
+        $response['success']                    = true;
+        $response['farmer_list']         = $get_farmer;
         $response['success_message']            = 'Farmer Fetch successfully';
         $response['error']                      = false;
         return response()->json($response);

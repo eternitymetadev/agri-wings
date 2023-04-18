@@ -492,6 +492,11 @@ Route::group(['prefix'=>'branch-manager', 'middleware'=>['auth','PermissionCheck
     Route::any('update-postal-code', [SettingController::class, 'updatePostalCode']);
     Route::get('pod-view', [ConsignmentController::class, 'podView']);
 
+    Route::any('/create-new-farmer', [ConsigneeController::class, 'createnewFarmer']);
+    Route::any('/get-farmer-details', [ConsigneeController::class, 'getfarmerDetails']);
+    Route::any('/get-crop-price', [ConsignmentController::class, 'getCropPrice']);
+    Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
+
 });
 Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionCheck']], function()
 {
@@ -674,6 +679,15 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('rm-approver', [HubtoHubController::class, 'rmApproverRequest']);
     Route::any('update-purchas-price-hrs', [HubtoHubController::class, 'updatePurchasePriceHrs']);
     Route::any('show-hrs', [HubtoHubController::class, 'showHrs']);
+
+
+    Route::get('reginal-clients', [ClientController::class, 'regionalClients']);
+    Route::post('/clients/delete-client', [ClientController::class, 'deleteClient']);
+    Route::get('/reginal-clients/add-regclient-detail/{id}', [ClientController::class, 'createRegclientdetail']);
+    Route::post('/regclient-detail/update-detail', [ClientController::class, 'updateRegclientdetail']);
+    Route::get('/reginal-clients/view-regclient-detail/{id}', [ClientController::class, 'viewRegclientdetail']);
+    Route::get('/regclient-detail/{id}/edit', [ClientController::class, 'editRegClientDetail']);
+    Route::post('/save-regclient-detail', [ClientController::class, 'storeRegclientdetail']);
 
 
 
@@ -994,6 +1008,9 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/create-new-farmer', [ConsigneeController::class, 'createnewFarmer']);
     Route::any('/get-farmer-details', [ConsigneeController::class, 'getfarmerDetails']);
     Route::any('/get-crop-price', [ConsignmentController::class, 'getCropPrice']);
+    Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
+    Route::any('/user-profile', [UserController::class, 'userProfile']);
+    
 
 });
 
@@ -1030,6 +1047,7 @@ Route::any('client-register', [UserController::class, 'addClientUser']);
 Route::get('/reload-captcha', [UserController::class, 'reloadCaptcha']);
 Route::any('/client-verification/{id}', [UserController::class, 'clientVerification']);
 Route::any('/get-address-by-postcode', [ConsignerController::class, 'getPostalAddress']);
+Route::any('/check-user-phone', [UserController::class, 'userPhoneCheck']);
 
 
 

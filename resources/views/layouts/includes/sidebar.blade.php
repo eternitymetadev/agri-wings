@@ -817,6 +817,7 @@
             <li>
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/locations')}}">Branches </a>
             </li>
+            <?php } if($authuser->role_id == 1 || $authuser->role_id == 3){ ?>
             <li>
                 <div class="submenuListStyle"></div><a href="{{$prefixurl.'clients'}}"> Base Clients </a>
             </li>

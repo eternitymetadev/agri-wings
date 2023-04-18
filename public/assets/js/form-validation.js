@@ -1903,7 +1903,8 @@ function formSubmitRedirect(form)
             }else if(response.page == 'user-create' || response.page == 'user-update'){
                 setTimeout(() => {window.location.href = response.redirect_url},2000);
             }else if(response.page == 'client-register'){
-                setTimeout(() => {window.location.href = response.redirect_url},2000);
+                $('#client_register')[0].reset();
+                $('#thankyou_model').modal('show');
             }else if(response.page == 'role'){
                 setTimeout(() => {window.location.href = response.redirect_url},1000);
             }else if(response.page == 'branch-create' || response.page == 'branch-update'){

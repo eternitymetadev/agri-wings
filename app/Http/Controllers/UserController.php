@@ -327,10 +327,10 @@ class UserController extends Controller
             $this->prefix = request()->route()->getPrefix();
             $rules = array(
                 // 'name' => 'required',
-                'email' => 'required|unique:users,email',
+                'contact_number' => 'required|unique:users,phone',
                 'contact_number' => 'required|unique:regional_clients,phone',
                 //  'captcha' => ['required', 'captcha'],
-                 'g-recaptcha-response' => 'recaptcha',
+                //  'g-recaptcha-response' => 'recaptcha',
             );
 
             $validator = Validator::make($request->all(), $rules);
@@ -347,19 +347,20 @@ class UserController extends Controller
             if (!empty($request->contact_name)) {
                 $usersave['name'] = $request->contact_name;
             }
-            if (!empty($request->email)) {
-                $usersave['login_id'] = $request->email;
+            if (!empty($request->contact_number)) {
+                $usersave['login_id'] = $request->contact_number;
             }
             if (!empty($request->email)) {
                 $usersave['email'] = $request->email;
             }
 
-            $randPassword = str_random(10);
+            $randPassword = $request->contact_number . '@d2f';
 
             $usersave['password'] = Hash::make($randPassword);
 
             $usersave['role_id'] = 7;
             $usersave['user_password'] = $randPassword;
+            $usersave['phone'] = $request->contact_number;
             $usersave['status'] = 0;
 
             $saveuser = User::create($usersave);
@@ -375,15 +376,18 @@ class UserController extends Controller
                 $pan_path = Storage::disk('s3')->put('clients', $panupload);
                 $pan_img_path_save = Storage::disk('s3')->url($pan_path);
 
+                $getpin_transfer = Zone::where('postal_code', $request->pin)->first();
+                if(!empty($getpin_transfer)){
+                $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+                $client_assign_branch = $get_branch->id;
+                }else{
+                $get_branch = Location::where('name', 'Karnal')->first();
+                $client_assign_branch = $get_branch->id; 
+                }
+
+
                 $userid = $saveuser->id;
                 $saveclientdetails['user_id'] = $userid;
-                // $saveclientdetails['company_name'] = $request->company_name;
-                // $saveclientdetails['contact_name'] = $request->contact_name;
-                // $saveclientdetails['contact_number'] = $request->contact_number;
-                // $saveclientdetails['email'] = $request->email;
-                // $saveclientdetails['gst_no'] = $request->gst_no;
-                // $saveclientdetails['pan'] = $request->pan;
-                // $saveclientdetails['status'] = 1;
 
                 $saveclientdetails['name'] = $request->company_name . '-(Web)';
                 $saveclientdetails['regional_client_nick_name'] = $request->contact_name;
@@ -401,6 +405,7 @@ class UserController extends Controller
                 }
                 $saveclientdetails['upload_gst'] = $gst_img_path_save;
                 $saveclientdetails['upload_pan'] = $pan_img_path_save;
+                $saveclientdetails['location_id'] = $client_assign_branch;
                 $saveclientdetails['status'] = 1;
 
                 $saveclientdetails['payment_term'] = 'Bill To Client';
@@ -445,9 +450,16 @@ class UserController extends Controller
     public function clientVerification($id)
     {
         $id = decrypt($id);
-        $verified = User::where('id', $id)->first();
-        if ($verified->status == 0) {
+        $verified = User::with('UserClient')->where('id', $id)->first();
+        // $user_branch = $verified->UserClient->location_id;
+   
+        // $regional_manager = User::whereRaw('FIND_IN_SET('.$user_branch.',branch_id)')->where('role_id', 3)->get();
+        // foreach($regional_manager as $regional){
+         
 
+        // }
+
+        if ($verified->status == 0) {
             $data = ['login_id' => $verified->login_id, 'password' => $verified->user_password, 'name' => $verified->name];
             $user['to'] = $verified->email;
             Mail::send('client-login-email', $data, function ($messges) use ($user) {
@@ -456,11 +468,40 @@ class UserController extends Controller
 
             });
             User::where('id', $id)->update(['status' => 1]);
+           // === email sent to rm === //
+           
             return '<h1>User verified successfully, Please Check Your Mail for your Login Credentials</h1>';
         } else {
             return '<h1>Already verified</h1>';
         }
 
+    }
+
+    public function userPhoneCheck(Request $request)
+    {
+
+        $usernumber = User::where('phone', $request->number)->first();
+
+        if ($usernumber) {
+            $response['success'] = true;
+            $response['error_message'] = "Already Exist";
+            $response['error'] = true;
+        } else {
+            $response['success'] = false;
+            $response['error_message'] = "not found";
+            $response['error'] = true;
+        }
+        return response()->json($response);
+
+    }
+
+    public function userProfile()
+    {
+        $this->prefix = request()->route()->getPrefix();
+
+        // $getuser = User::where('id', $id)->first();
+
+        return view('users.user-profile', ['prefix' => $this->prefix, 'title' => $this->title]);
     }
 
 }

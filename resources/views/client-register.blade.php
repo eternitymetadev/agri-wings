@@ -191,32 +191,39 @@
                 @csrf
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <label for="company_name" class="form-label  formLabelTheme">Company Name</label>
+                        <label for="company_name" class="form-label  formLabelTheme">Legal Entity Name <span
+                                class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="company_name" name="company_name" />
                     </div>
                     <div class="form-group formElement">
-                        <label for="contact_name" class="form-label  formLabelTheme">Contact Person</label>
+                        <label for="contact_name" class="form-label  formLabelTheme">Billing Client <span
+                                class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="contact_name" name="contact_name" />
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <label for="contact_number" class="form-label  formLabelTheme">Contact Number</label>
-                        <input type="text" class="form-control" id="contact_number" name="contact_number"
+                        <label for="contact_number" class="form-label  formLabelTheme">Contact Number <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="contact_number" name="contact_number"
                             maxlength="10" />
+                        <span id="check_phone" style="color:red"></span>
                     </div>
                     <div class="form-group formElement">
-                        <label for="email" class="form-label  formLabelTheme">Email</label>
+                        <label for="email" class="form-label  formLabelTheme">Email ID <span
+                                class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="email" name="email" value="">
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="form-group formElement">
-                        <label for="postal_code" class="form-label  formLabelTheme">Pincode</label>
-                        <input type="text" class="form-control" id="postal_code" name="pin" maxlength="6">
+                        <label for="postal_code" class="form-label  formLabelTheme">PIN Code <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="postal_code" name="pin" maxlength="6">
                     </div>
                     <div class="form-group formElement">
-                        <label for="city" class="form-label  formLabelTheme">City</label>
+                        <label for="city" class="form-label  formLabelTheme">City <span
+                                class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="city" name="city" value="">
                     </div>
                     <div class="form-group formElement">
@@ -248,18 +255,18 @@
                     </div>
                 </div>
 
-               
-                    <!-- <div class="formElement">
+
+                <!-- <div class="formElement">
                         <label for="captcha" class="form-label  formLabelTheme">Cpatcha</label>
                         <input id="captcha" type="text" class="form-control" name="captcha">
                     </div> -->
 
-                    <div class="form-group row">
-                         
-                            <div class="col-md-6"> {!! htmlFormSnippet() !!} </div>
-                        </div>
-                    
-                    <!-- <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                <div class="form-group row">
+
+                    <div class="col-md-6"> {!! htmlFormSnippet() !!} </div>
+                </div>
+
+                <!-- <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
                             <label class="col-md-4 control-label">Captcha</label>
                             <div class="col-md-6">
                                 {!! app('captcha')->display() !!}
@@ -270,26 +277,52 @@
                                 @endif
                             </div>
                         </div> -->
-                        <br>
+                <br>
 
                 <div class="formRow justify-content-between">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="notification" id="inlineCheckbox1"
-                            value="1">
-                        <label class="form-check-label" for="inlineCheckbox1">Notification required, if yes then
-                            disclaimer</label>
+                    <div class="form-group col-md-6">
+                        <label for="exampleFormControlInput2">NOC for Notifications<span
+                                class="text-danger">*</span></label>
+                        <div class="check-box d-flex">
+                            <div class="checkbox radio">
+                                <label class="check-label">Yes
+                                    <input type="radio" value='1' name="notification">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="checkbox radio">
+                                <label class="check-label">No
+                                    <input type="radio" name="notification" value='0' checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                        <button type="submit" class="btn btn-primary"
-                            style="width: 100%; background: #208120; border-color: #208120"><span
-                                class="indicator-label">Register</span>
-                            <span class="indicator-progress" style="display: none;">Please wait...
-                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; background: #208120; border-color: #208120"><span
+                            class="indicator-label">Register</span>
+                        <span class="indicator-progress" style="display: none;">Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
                 </div>
                 <p class="text-center">Already registered? <a href="{{url('/login')}}">Login</a> </p>
 
             </form>
         </div>
     </section>
+    <!-- <span onclick="sss()">aaa</span> -->
+
+    <div class="modal fade" id="thankyou_model" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
+        role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{{ asset('assets/thankYou.png') }}" alt="thank you" style="width: 100%; border-radius: 12px"/>
+                    <p class="text-center mx-auto mt-2 mb-5" style="max-width: 30ch">Please check your registered email for your login credentials.</p>
+                    <a href="{{url('/login')}}" class="btn btn-primary" style="width: 100%; background: #208120; border-color: #208120;">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- <div class="loginPageContainer container">
         <div class="droneImageBlock" style="flex: 1">
@@ -302,6 +335,12 @@
         </div>
     </div> -->
 
+    <script>
+    const sss = () => {
+        $('#thankyou_model').modal('show')
+
+    }
+    </script>
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{asset('assets/js/libs/jquery-3.1.1.min.js')}}"></script>
@@ -322,7 +361,9 @@
     <script src="{{asset('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
 
     <script>
-    var APP_URL = {!!json_encode(url('/')) !!};
+    var APP_URL = {
+        !!json_encode(url('/')) !!
+    };
 
 
 
@@ -451,6 +492,35 @@
             $("#district").val("");
             $("#zone").val("");
         }
+    });
+
+    $("#contact_number").blur(function() {
+        var number = $(this).val();
+        if (!number) {
+            return false;
+        }
+        $.ajax({
+            url: "check-user-phone",
+            type: "get",
+            cache: false,
+            data: {
+                number: number
+            },
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                    "content"
+                ),
+            },
+            success: function(data) {
+                if (data.success == true) {
+                    $("#check_phone").html(data.error_message);
+                } else {
+                    $("#check_phone").html('');
+                }
+
+            },
+        });
     });
     </script>
 

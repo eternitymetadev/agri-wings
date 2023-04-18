@@ -618,6 +618,55 @@ input[type=number]::-webkit-outer-spin-button {
     height: 87px;
     margin-bottom: 0;
 }
+
+.lastCol {
+    position: relative;
+}
+
+.dltItemRow {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: red;
+    height: 2rem;
+    width: 2rem;
+    background: #fae3e5;
+    padding: 7px;
+    border-radius: 50vh;
+    box-shadow: 0 0 2px inset;
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+tr:hover .dltItemRow {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.ui-widget-content {
+    border: none !important;
+    background: #c7f8d3 !important;
+    color: #333;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    list-style: none;
+}
+
+.ui-menu .ui-menu-item:hover {
+    background: var(--secondaryColor) !important;
+    border-radius: 8px !important;
+    border: none !important;
+}
+
+.ui-menu .ui-menu-item-wrapper:hover {
+    background: var(--secondaryColor) !important;
+    border-radius: 8px !important;
+    border: none !important;
+    padding: 6px !important;
+}
 </style>
 
 
@@ -648,22 +697,35 @@ input[type=number]::-webkit-outer-spin-button {
                                     <label for="exampleFormControlSelect1">
                                         Select Farmer<span class="text-danger">*</span>
                                     </label>
-                                    <select class="form-control my-select2" name="payment_type"
+                                    <!-- <input class="form-control" list="browsers" name="farmer_id" id="farmer_id"> -->
+                                    <!-- <datalist id="browsers" style="background: #f16334">
+                                        @foreach($farmers as $farmer)
+                                        <option data-value="{{$farmer->id}}" value="{{$farmer->nick_name}}">
+                                            {{$farmer->phone}}
+                                        </option>
+                                        @endforeach
+                                    </datalist> -->
+                                    <!-- <input onkeyup="demoFunction()" name='pp' id='pp' /> -->
+                                    <!-- <select class="form-control my-select2" name="payment_type"
                                         onchange="displayCropsSection()" id="farmer_id">
                                         <option value="">-select-</option>
                                         @foreach($farmers as $farmer)
-                                        <option value="{{$farmer->id}}">{{$farmer->nick_name}}</option>
+                                        <option value="{{$farmer->id}}">{{$farmer->nick_name}}-{{$farmer->phone}}
+                                        </option>
                                         @endforeach
-                                    </select>
+                                    </select> -->
+                                    <input id="farmer_id" class="form-control" type="text" placeholder="Search.." />
                                 </div>
                             </div>
                         </div>
+
 
                         <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
                         <div id="createFarmerBox" class="row align-items-center px-2" style="width: 100%">
                             <div class="form-group col-md-5 px-1">
                                 <label>Farmer Name <span class="text-danger">*</span></label>
                                 <Input type="text" class="form-control" id="farmer_name" name="farmer_name">
+                                <span id="farmer_req" style="color:red"></span>
                             </div>
                             <div class="form-group col-md-3 px-1">
                                 <label>Farmer Mobile<span class="text-danger">*</span></label>
@@ -883,7 +945,38 @@ input[type=number]::-webkit-outer-spin-button {
 
 @endsection
 @section('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
+
 <script>
+let farmerList = [];
+
+$(document).ready(function() {
+
+    var branch_id = 'list';
+
+    $.ajax({
+        url: "get-farmer-list",
+        type: "get",
+        cache: false,
+        data: {
+            branch_id: branch_id
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+        },
+        beforeSend: function() {
+            $("#select_regclient").empty();
+        },
+        success: function(res) {
+            console.log(res.farmer_list);
+            farmerList = res.farmer_list
+        },
+    });
+});
+
+
 function increaseValue() {
     var value = parseInt(document.getElementById('number').value, 10);
     value = isNaN(value) ? 1 : value;
@@ -926,6 +1019,7 @@ const onFarmerTypeChange = () => {
 }
 
 
+
 let cropList = [];
 
 let cropIndex = 1;
@@ -946,7 +1040,11 @@ const onAddCrop = () => {
                 <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
                 <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
                 <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
-                <td>${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/></td>
+                <td class="lastCol">
+                    ${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </td>
+                
             </tr>`;
         $('#sprayTable').append(listItem);
 
@@ -957,6 +1055,10 @@ const onAddCrop = () => {
     } else $('#farmLocationError').show();
 }
 
+$("#sprayTable").on('click', '.dltItemRow', function() {
+    $(this).closest('tr').remove();
+})
+
 
 
 function displayCropsSection() {
@@ -966,21 +1068,6 @@ function displayCropsSection() {
     // else $('#cropSelection').removeClass('enabled');
 };
 
-
-// (function() {
-//     const dd = $('#farmer_name').val();
-//     console.log('agdfjha');
-
-//     if (dd != ) {
-//         $('#cropSelection').removeClass('enabled');
-//         console.log('enabled');
-
-//     } else {
-//         $('#cropSelection').addClass('enabled');
-//         console.log('disabled');
-
-//     }
-// })();
 
 $(document).ready(function() {
 
@@ -1178,9 +1265,18 @@ const appendFarmerDes = (des) => {
 
 $('#createFarmerButton').click(function() {
     $('#phone_error').empty();
+    $('#farmer_req').empty();
     var farmer_name = $('#farmer_name').val();
     var farmer_phone = $('#farmer_phone').val();
     var number = $('#number').val();
+    if (!farmer_name) {
+        $('#farmer_req').html('Please enter farmer name');
+        return false;
+    }
+    if (!farmer_phone) {
+        $('#phone_error').html('Please enter phone number');
+        return false;
+    }
 
     var data = {
         farmer_name: farmer_name,
@@ -1204,101 +1300,156 @@ $('#createFarmerButton').click(function() {
 
         success: function(response) {
 
-            if(response.success == true) {
-            $('#farmer_common_id').val(response.farmer_details.id)
-            appendFarmerDes(response.farmer_details);
-            $("#farmer_name").prop('disabled', true);
-            $("#farmer_phone").prop('disabled', true);
-            $("#createFarmerButton").prop('disabled', true);
-            $("#io").prop('disabled', true);
+            if (response.success == true) {
+                $('#farmer_common_id').val(response.farmer_details.id)
+                appendFarmerDes(response.farmer_details);
+                $("#farmer_name").prop('disabled', true);
+                $("#farmer_phone").prop('disabled', true);
+                $("#createFarmerButton").prop('disabled', true);
+                $("#io").prop('disabled', true);
 
-            $.each(response.farmer_details.farm, function(index, value) {
-                $("#farmLocation").append(
-                    '<option value="' +
-                    value.id +
-                    '">' +
-                    value.field_area +
-                    "</option>"
-                );
-            });
-        }else{
-            $('#phone_error').html(response.error_message);
-        }
+
+                $.each(response.farmer_details.farm, function(index, value) {
+                    $("#farmLocation").append(
+                        '<option value="' +
+                        value.id +
+                        '">' +
+                        value.field_area +
+                        "</option>"
+                    );
+                });
+                $('#sprayTable tbody').html('');
+            } else {
+                $('#phone_error').html(response.error_message);
+            }
 
         },
     });
 
 });
 
+const demoFunction = () => {
+    let ss = $('#pp').val();
+    if (ss?.length == 10) {
+        console.log('Look Sahil..', ss);
+    }
+}
+// var mydata = [{
+//         "id": 1,
+//         "name": "John",
+//         "age": 23
+//     },
+//     {
+//         "id": 2,
+//         "name": "Mary",
+//         "age": 33
+//     },
+//     {
+//         "id": 3,
+//         "name": "Richard",
+//         "age": 53
+//     },
+//     {
+//         "id": 4,
+//         "name": "Ashley",
+//         "age": 25
+//     },
+//     {
+//         "id": 5,
+//         "name": "Kyle",
+//         "age": 17
+//     },
+//     {
+//         "id": 6,
+//         "name": "Samantha",
+//         "age": 29
+//     },
+//     {
+//         "id": 7,
+//         "name": "David",
+//         "age": 43
+//     },
+//     {
+//         "id": 8,
+//         "name": "Charles",
+//         "age": 27
+//     },
+//     {
+//         "id": 9,
+//         "name": "Elaine",
+//         "age": 41
+//     },
+//     {
+//         "id": 10,
+//         "name": "William",
+//         "age": 22
+//     }
+// ];
 
+$('#farmer_id').autocomplete({
+    minLength: 1,
+    source: function(request, response) {
+        response($.map(farmerList, function(obj, key) {
+            var name = obj.nick_name.toUpperCase();
+            var phone = obj.phone.toUpperCase();
+            if (name.indexOf(request.term.toUpperCase()) != -1 || phone.indexOf(request.term
+                    .toUpperCase()) != -1) {
+                return {
+                    label: obj.nick_name + " (" + obj.phone + ")", // Label for Display
+                    value: obj.id // Value
+                }
+            } else {
+                return null;
+            }
+        }));
+    },
+    focus: function(event, ui) {
+        event.preventDefault();
+    },
+    // Once a value in the drop down list is selected, do the following:
+    select: function(event, ui) {
+        event.preventDefault();
+        // place the person.given_name value into the textfield called 'select_origin'...
+        $('#farmer_id').val(ui.item.label);
+        $('#farmer_id').attr('data-val', ui.item.value);
+        // ... any other tasks (like setting Hidden Fields) go here...
+        $("#farmLocation").empty();
+        jQuery.ajax({
+            type: "get",
+            url: 'get-farmer-details',
+            data: {
+                farmer_id: ui.item.value
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function(response) {
+                console.log(response.get_farmer_details);
+                $('#farmer_common_id').val(response.get_farmer_details.id)
+                appendFarmerDes(response.get_farmer_details)
 
-jQuery(document).on("change", "#farmer_id", function() {
-    $("#farmLocation").empty();
-    var farmer_id = jQuery(this).val();
-
-    jQuery.ajax({
-        type: "get",
-        url: 'get-farmer-details',
-        data: {
-            farmer_id: farmer_id
-        },
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        dataType: "json",
-        success: function(response) {
-            console.log(response.get_farmer_details);
-            $('#farmer_common_id').val(response.get_farmer_details.id)
-            appendFarmerDes(response.get_farmer_details)
-
-            $("#farmLocation").append(
-                `<option value="">--select--
+                $("#farmLocation").append(
+                    `<option value="">--select--
                         </option>`
-            );
-            $.each(response.get_farmer_details.farm, function(index, value) {
-                $("#farmLocation").append(
-                    '<option value="' +
-                    value.id +
-                    '">' +
-                    value.field_area +
-                    "</option>"
                 );
-            });
-        },
-    });
-    return false;
+                $.each(response.get_farmer_details.farm, function(index, value) {
+                    $("#farmLocation").append(
+                        '<option value="' +
+                        value.id +
+                        '">' +
+                        value.field_area +
+                        "</option>"
+                    );
+                });
+
+                $('#sprayTable tbody').html('');
+
+            },
+        });
+        return false;
+    }
 });
-
-// $('.price_click').click(function() {
-
-// var crop_id = $(this).val();
-
-
-// var data = {
-//     crop_id: crop_id
-
-// };
-
-// jQuery.ajax({
-//     url: "get-crop-price",
-//     type: "get",
-//     cache: false,
-//     data: data,
-//     dataType: "json",
-//     headers: {
-//         "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
-//             "content"
-//         ),
-//     },
-//     processData: true,
-
-//     success: function(response) {
-//         console.log(response.get_crop);
-
-//     },
-// });
-
-// });
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap">
 </script>

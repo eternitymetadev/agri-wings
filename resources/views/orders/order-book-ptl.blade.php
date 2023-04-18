@@ -1,4 +1,6 @@
 @extends('layouts.main')
+@section('page-heading')Order Book @endsection
+
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
@@ -263,176 +265,676 @@ span.select2.select2-container.mb-4 {
     background: #f9b60024;
     color: #000;
 }
+
+.cropSelection {
+    background: url('https://thumbs.dreamstime.com/b/vector-farm-illustration-illustration-banner-book-social-media-other-design-vector-farm-illustration-vector-tractor-181864455.jpg');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.cropSelection .form-group {
+    position: relative;
+    max-width: 82px;
+    width: 100%;
+}
+
+.cropSelection .form-group.farm {
+    max-width: 180px;
+}
+
+
+.cropSelection input[type="radio"]:checked+label {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    outline: 4px solid #28a745db;
+    outline-offset: 2px;
+    border: 1px solid var(--secondaryColor);
+    padding: 1rem 0.5rem 0.3rem;
+    font-size: 14px;
+    color: var(--secondaryColor) !important;
+}
+
+.cropSelection input[type="radio"]+label {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    outline: 4px solid #28a74515;
+    outline-offset: 2px;
+    border: 1px solid #28a74500;
+    padding: 1rem 0.5rem 0.3rem;
+    font-size: 14px;
+    color: #838383;
+    transition: all 350ms ease-in-out;
+}
+
+.cropSelection label img {
+    width: 100%;
+    max-width: 120px;
+}
+
+.cropSelection input[type="radio"] {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    height: 20px;
+    width: 20px;
+    accent-color: var(--secondaryColor);
+}
+
+
+.cropSelection .farm input[type="radio"] {
+    top: 6px;
+    left: 10px;
+    height: 24px;
+    width: 24px;
+}
+
+.cropSelection .farm input[type="radio"]+label {
+    padding: 8px;
+}
+
+.cropSelection * {
+    opacity: 0;
+}
+
+.cropSelection.enabled {
+    background: none;
+}
+
+.cropSelection.enabled * {
+    opacity: 1;
+}
+
+
+
+
+/* for toggler */
+.Switcher {
+    position: relative;
+    display: flex;
+    border-radius: 5em;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-animation: r-n 0.5s;
+    animation: r-n 0.5s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 3vmin;
+    will-change: transform;
+    /* max-width: 320px; */
+    outline: 2px solid var(--secondaryColor);
+    outline-offset: 2px;
+}
+
+.Switcher::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    border-radius: inherit;
+    background-color: var(--secondaryColor);
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+}
+
+.Switcher__checkbox:checked+.Switcher::before {
+    transform: translateX(100%);
+}
+
+.Switcher__trigger {
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+    width: 50%;
+    color: var(--secondaryColor);
+}
+
+.Switcher__trigger::after {
+    content: attr(data-value);
+}
+
+.Switcher__trigger::before {
+    --i: var(--x);
+    content: attr(data-value);
+    position: absolute;
+    color: var(--primaryContrast);
+    transition: opacity 0.3s;
+    opacity: calc((var(--i) + 1) / 2);
+    transition-delay: calc(.3s * (var(--i) - 1) / -2);
+}
+
+.Switcher__checkbox:checked+.Switcher .Switcher__trigger::before {
+    --i: calc(var(--x) * -1);
+}
+
+.Switcher__trigger:nth-of-type(1)::before {
+    --x: 1;
+}
+
+.Switcher__trigger:nth-of-type(2)::before {
+    --x: -1;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.box {
+    overflow: hidden;
+    perspective: 750px;
+}
+
+.intro {
+    width: 90%;
+    max-width: 50rem;
+    padding-top: 0.5em;
+    padding-bottom: 1rem;
+    margin: 0 auto 1em;
+    font-size: calc(1rem + 2vmin);
+    text-transform: capitalize;
+    text-align: center;
+    font-family: serif;
+}
+
+.intro small {
+    display: block;
+    text-align: right;
+    opacity: 0.5;
+    font-style: italic;
+    text-transform: none;
+    border-top: 1px dashed rgba(255, 255, 255, 0.75);
+}
+
+.info {
+    margin: 0;
+    padding: 1em;
+    font-size: 0.9em;
+    font-style: italic;
+    font-family: serif;
+    text-align: right;
+    opacity: 0.75;
+}
+
+.info a {
+    color: inherit;
+}
+
+
+
+/* for new form */
+.createButton {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+}
+
+/* for number counters */
+.counter {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-evenly;
+    gap: 4px;
+    border: 1px solid var(--secondaryColor);
+    border-radius: 9px;
+    background: #248f2733;
+    box-shadow: 0 0 5px 2px rgba(194, 213, 255, 0.619608);
+}
+
+.value-button {
+    display: inline-block;
+    margin: 0px;
+    height: -webkit-fill-available;
+    text-align: center;
+    user-select: none;
+    color: var(--secondaryColor);
+    font-size: 36px;
+    line-height: 35px;
+    border-radius: 8px 0 0 8px;
+    background: none;
+    border: none;
+}
+
+.value-button:hover {
+    cursor: pointer;
+}
+
+
+#input-wrap {
+    margin: 0px;
+    padding: 0px;
+}
+
+.counter input[type=number] {
+    text-align: center;
+    border: none;
+    margin: 0px;
+    max-width: 60px;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--secondaryColor);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+
+#sprayTable {
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#sprayTable thead {
+    background: #28a74552;
+}
+
+
+
+
+.farmerInfo {
+    background: #28a74526;
+    padding: 1rem;
+    border-radius: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    /* max-width: 320px; */
+}
+
+.farmerInfo img {
+    /* background: #28a74563; */
+    border-radius: inherit;
+    /* padding: 2px; */
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.farmerDes {
+    padding: 8px 16px;
+}
+
+.farmerDes p {
+    font-size: 14px;
+    margin: 0;
+    line-height: 24px;
+    color: var(--secondaryColor);
+}
+
+.farmerDes p.title {
+    font-size: 18px;
+    font-weight: 600
+}
+
+.farmerDes p:has(svg) {
+    font-size: 14px;
+}
+
+.farmerDes p svg {
+    height: 1rem;
+    width: 1rem;
+    margin-right: 4px;
+}
+
+.cButton {
+    height: 2.5rem;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    border-radius: 50vh;
+}
+
+
+.farmerInfo {
+    opacity: 0.05;
+    user-select: none;
+    transition: all 300ms ease-in-out;
+}
+
+.form-group {
+    height: 87px;
+    margin-bottom: 0;
+}
+
+.lastCol {
+    position: relative;
+}
+
+.dltItemRow {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: red;
+    height: 2rem;
+    width: 2rem;
+    background: #fae3e5;
+    padding: 7px;
+    border-radius: 50vh;
+    box-shadow: 0 0 2px inset;
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+tr:hover .dltItemRow {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.ui-widget-content {
+    border: none !important;
+    background: #c7f8d3 !important;
+    color: #333;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    list-style: none;
+}
+
+.ui-menu .ui-menu-item:hover {
+    background: var(--secondaryColor) !important;
+    border-radius: 8px !important;
+    border: none !important;
+}
+
+.ui-menu .ui-menu-item-wrapper:hover {
+    background: var(--secondaryColor) !important;
+    border-radius: 8px !important;
+    border: none !important;
+    padding: 6px !important;
+}
 </style>
 
 
-<div class="layout-px-spacing">
-    {{--page title--}}
-    <div class="page-header layout-spacing">
-        <h2 class="pageHeading">Order Book </h2>
-    </div>
+<div class="layout-px-spacing mt-5">
+<form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment" style="margin: auto;" >
+
+        <div class="row flex-wrap mx-0" style="gap: 2rem">
+
+            <div style="flex:1; align-content: flex-start; justify-content: center">
+                <div class="form-row justify-content-center" style="min-height: 340px; align-content: flex-start">
+                    <h6 class="col-12">Farmer Details </h6>
+                    <div class="row align-items-center justify-content-center" style="width: 100%">
+                        <!-- choose farmer type -->
+                        <div class="box py-2 col-md-12">
+                            <input class="Switcher__checkbox sr-only" id="io" type="checkbox"
+                                onchange="onFarmerTypeChange()" />
+                            <label class="Switcher" for="io">
+                                <div class="Switcher__trigger" data-value="New"></div>
+                                <div class="Switcher__trigger" data-value="Existing"></div>
+                            </label>
+                        </div>
+
+                        <!-- for existing farmer -->
+                        <div id="selectFarmerId" class="row" style="width: 100%; display: none">
+                            <div class="col-md-12">
+                                <div class="form-group" style="max-width: 320px">
+                                    <label for="exampleFormControlSelect1">
+                                        Select Farmer<span class="text-danger">*</span>
+                                    </label>
+                                    <!-- <input class="form-control" list="browsers" name="farmer_id" id="farmer_id"> -->
+                                    <!-- <datalist id="browsers" style="background: #f16334">
+                                        @foreach($farmers as $farmer)
+                                        <option data-value="{{$farmer->id}}" value="{{$farmer->nick_name}}">
+                                            {{$farmer->phone}}
+                                        </option>
+                                        @endforeach
+                                    </datalist> -->
+                                    <!-- <input onkeyup="demoFunction()" name='pp' id='pp' /> -->
+                                    <!-- <select class="form-control my-select2" name="payment_type"
+                                        onchange="displayCropsSection()" id="farmer_id">
+                                        <option value="">-select-</option>
+                                        @foreach($farmers as $farmer)
+                                        <option value="{{$farmer->id}}">{{$farmer->nick_name}}-{{$farmer->phone}}
+                                        </option>
+                                        @endforeach
+                                    </select> -->
+                                    <input id="farmer_id" class="form-control" type="text" placeholder="Search.." />
+                                </div>
+                            </div>
+                        </div>
 
 
-    <form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment"
-        style="margin: auto;">
-        {{--Branch Location--}}
-        <!-- <div class="form-row">
-            <h6 class="col-12">Branch</h6>
-             
-            <?php $authuser = Auth::user();
-            if($authuser->role_id == 2 || $authuser->role_id == 4)
-            {
-            ?>
-            <div class="form-group col-md-4">
-                <label for="exampleFormControlSelect1">
-                    Select Branch <span class="text-danger">*</span>
-                </label>
-                <select class="form-control  my-select2" id="branch_id" name="branch_id" tabindex="-1">
-                    @foreach($branchs as $branch)
-                    <option value="{{ $branch->id }}">{{ucwords($branch->name)}}</option>
+                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
+                        <div id="createFarmerBox" class="row align-items-center px-2" style="width: 100%">
+                            <div class="form-group col-md-5 px-1">
+                                <label>Farmer Name <span class="text-danger">*</span></label>
+                                <Input type="text" class="form-control" id="farmer_name" name="farmer_name">
+                                <span id="farmer_req" style="color:red"></span>
+                            </div>
+                            <div class="form-group col-md-3 px-1">
+                                <label>Farmer Mobile<span class="text-danger">*</span></label>
+                                <Input type="number" class="form-control" id="farmer_phone" maxlength="10" name="phone">
+                                <span id="phone_error" style="color:red;"></span>
+                            </div>
+                            <div class="form-group col-md-3 px-1">
+                                <label>Farm Locations<span class="text-danger">*</span></label>
+                                <div class="counter">
+                                    <div class="value-button" id="decrease" onclick="decreaseValue()"
+                                        value="Decrease Value">-</div>
+                                    <input type="number" id="number" value="1" min='1' />
+                                    <div class="value-button" id="increase" onclick="increaseValue()"
+                                        value="Increase Value">+</div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="form-group col-md-12 createButton"> -->
+                            <button type="button" id="createFarmerButton" class="btn btn-primary cButton">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-check">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </button>
+                            <!-- </div> -->
+                        </div>
+
+                        <div id='farmerInfo' class="farmerInfo">
+                            <img src="{{asset('assets/farmer-icon.png')}}" />
+                            <div id="farmerDes" class="farmerDes">
+                                <!-- <p class="title">Farmer Name</p>
+                                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-phone">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                        </path>
+                                    </svg> +91-1234567890</p>
+                                <p>Farm Locations - <span>4</span></p> -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <h6 class="col-12">Bill To Information</h6>
+
+                    <div class="form-group col-md-7">
+                        <label for="exampleFormControlSelect1">
+                            Bill to Client<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control my-select2" name=""
+                            id="select_reg">
+                            <option value="">--select--</option>
+                            @foreach($regionalclient as $regional)
+                            <option value="{{$regional->id}}">{{$regional->name}}</option>
+                            @endforeach
+                        </select>
+                        <Input type="hidden" class="form-control" id="regional_id" name="regclient_id"
+                            value="">
+
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <label for="exampleFormControlSelect1">
+                            Payment Term<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
+                            id="paymentType_">
+                           
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column" style="flex:1;">
+                <div id="cropSelection" class="form-row cropSelection"
+                    style="column-gap: 1.2rem; align-content: flex-start">
+                    <h6 class="col-12">Spray Details</h6>
+                    <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="1" name="farm" value="1" checked />
+                        <label for="sugarcane">Farm 1</label>
+                    </div>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="2" name="farm" value="2" checked />
+                        <label for="sugarcane">Farm 2</label>
+                    </div>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="3" name="farm" value="3" checked />
+                        <label for="sugarcane">Farm 3</label>
+                    </div> -->
+
+                    <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
+
+                    @foreach($Crops as $crop)
+                    <div class="form-group">
+                        <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop"
+                            value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
+                            data-crop-name="{{$crop->crop_name}}" checked />
+                        <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
                     @endforeach
-                </select>
+                    <!-- <div class="form-group">
+                        <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
+                        <label for="wheat">Wheat
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
+                        <label for="paddy">Paddy
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
+                        <label for="potato">Potato
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
+                        <label for="apple">Apple
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
+                        <label for="cotton">Cotton
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div> -->
+
+
+                    <div class="row col-12 mt-3 align-items-center">
+                        <div class="form-group col-md-6" style="max-width: 320px">
+                            <label for="exampleFormControlSelect1">
+                                Farm Location<span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control my-select2" name="payment_type" onchange="displayCropsSection()"
+                                id="farmLocation">
+                                <option value="" readonly>-select location-</option>
+                                <!-- <option value="TBB">Location 1</option>
+                                <option value="TBB1">Location 2</option> -->
+                            </select>
+                            <label id="farmLocationError" style="display:none" class="error" for="farmLocation">Please
+                                Select Farm</label>
+                        </div>
+
+
+                        <div class="form-group" style="flex: 1; max-width: 150px">
+                            <label>Acreage<span class="text-danger">*</span></label>
+                            <div class="counter">
+                                <div class="value-button" id="decrease" onclick="decreaseDecimalValue()"
+                                    value="Decrease Value">-
+                                </div>
+                                <input type="number" id="acreage" name="acreage" value="1" min='1' />
+                                <div class="value-button" id="increase" onclick="increaseDecimalValue()"
+                                    value="Increase Value">+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div style="flex: 1; display: flex; justify-content: center;">
+                            <button type="button" class="btn btn-primary" onclick="onAddCrop()"
+                                style="width: 100px;">Add</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-row" style="box-shadow: none">
+                    <table id="sprayTable" style="display: none">
+                        <thead>
+                            <tr>
+                                <th>Crop Name</th>
+                                <th>Farm Location</th>
+                                <th>Acreage</th>
+                                <th>Estd. Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                </div>
             </div>
-            <?php } else { ?>
-                <div class="form-group col-md-4">
-                <label for="exampleFormControlSelect1">
-                    Select Branch <span class="text-danger">*</span>
-                </label>
-                <select class="form-control  my-select2" id="branch_id" name="branch_id" tabindex="-1">
-                    <option value="">Select..</option>
-                    @foreach($branchs as $branch)
-                    <option value="{{ $branch->id }}">{{ucwords($branch->name)}}</option>
-                    @endforeach
-                </select>
-            </div>
-
-                <?php } ?>
-
-        </div> -->
-        {{--bill to info--}}
-        <div class="form-row">
-            <h6 class="col-12">Bill To Information</h6>
-
-            <div class="form-group col-md-4">
-                <label for="exampleFormControlSelect1">
-                    Select Bill to Client<span class="text-danger">*</span>
-                </label>
-                <select class="form-control form-control-sm my-select2" id="select_regclient" name="regclient_id">
-                    <option selected="selected" disabled>select client..</option>
-                    @foreach($regionalclient as $client)
-                    <option value="{{$client->id}}">{{$client->name}}</option>
-                    @endforeach
-                    <option value="0">Self Pay</option>
-                </select>
-
-            </div>
-
-            <input type="hidden" name="invoice_check" id="inv_check" />
-            <div class="form-group col-md-2">
-                <label for="exampleFormControlSelect1">
-                    Payment Term<span class="text-danger">*</span>
-                </label>
-                <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                    id="paymentType">
-                    <option value="Bill to client" selected="selected">Bill to client </option>
-                    <!-- <option value="UPI/Wallet">UPI/Wallet </option>
-                    <option value="Cash">Cash </option>
-                    <option value="Card">Card </option>
-                    <option value="Net Banking">Net Banking</option> -->
-                </select>
-            </div>
-            <!-- <div class="form-group col-md-2">
-                <label for="exampleFormControlSelect1">
-                    Purchase Freight<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" name="freight">
-            </div> -->
-            <!-- <div class="form-group col-md-2">
-                <label for="exampleFormControlSelect1">
-                    Freight on Delivery
-                </label>
-                <Input type="number" class="form-control" id="freight_on_delivery" name="freight_on_delivery" readonly>
-            </div>
-            <div class="form-group col-md-2" id="codFreightBlock">
-                <label for="exampleFormControlSelect1">Cash to Collect<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" name="cod" id="cod" readonly >
-            </div> -->
-
-        </div>
-
-        <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date" placeholder=""
-            value="<?php echo date('d-m-Y'); ?>" />
 
 
-        {{--Farmer Address Details Section: --}}
-        <div class="form-row">
-            <h6 class="col-12">Farmer Address Details </h6>
 
-            <div class="form-group col-md-4">
-                <label>
-                    Farmer Name and contact search option <span class="text-danger">*</span>
-                </label>
-                <select class="form-control my-select2" id="select_farmer" name="farmer_id">
-                    <option value="">Select Farmer</option>
-                                           @foreach($farmers as $farmer)
-                                             <option value="{{$farmer->id}}">{{$farmer->nick_name}}
-                                               </option>
-                                         @endforeach 
-                </select>
-                <div class="appendedAddress" id="consigner_address"></div>
-            </div>
-            <!-- <div class="form-group col-md-4">
-                <label>
-                    Select Drop location (Bill To Consignee)<span class="text-danger">*</span>
-                </label>
-                <select class="form-control my-select2" name="consignee_id" id="select_consignee">
-                    <option value="">Select Consignee</option>
-                </select>
-                <div class="appendedAddress" id="consignee_address"></div>
-            </div>-->
-            <div class="form-group col-md-4">
-                <label>
-                    Select Farm Location<span class="text-danger">*</span>
-                </label>
-                <select class="form-control my-select2" name="farm_id" id="select_farmer_add">
-                    <option value="">Select Farm</option>
-                </select>
-                <div class="appendedAddress" id="farm_address"></div>
-            </div> 
-        </div>
+            <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
+                placeholder="" value="<?php echo date('d-m-Y'); ?>" />
 
-
-        {{--order info--}}
-        <div class="orderInfoBlock">
         </div>
 
         {{--vehicle info--}}
-        <div class="form-row">
-            <h6 class="col-12">Spray Details Section</h6>
-
-            <div class="form-group col-md-4">
-                <label>
-                    Crop<span class="text-danger">*</span>
-                </label>
-                <select class="form-control form-small my-select2" id="crop" name="crop" tabindex="-1">
-                    <option value="">Select Crop</option>
-                    <option value="SurgerCane">SurgerCane</option>
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label>
-                 Acreage<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" id="" name="acreage">
-            </div>
-
+        <div class="form-check form-check-inline justify-content-end col-12">
+            <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
+            <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
+                farmer</label>
         </div>
 
-        <div class=" col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 3rem;">
-            {{-- <a class="mt-2 btn btn-outline-primary" href="{{url($prefix.'/consignments') }}"> Back</a>--}}
-            <button type="submit" class="mt-2 btn btn-primary disableme"
-                style="height: 40px; width: 200px">Submit</button>
+        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
+            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
+            <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
         </div>
 
     </form>
@@ -441,7 +943,130 @@ span.select2.select2-container.mb-4 {
 
 @endsection
 @section('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
+
 <script>
+let farmerList = [];
+
+$(document).ready(function() {
+
+    var branch_id = 'list';
+
+    $.ajax({
+        url: "get-farmer-list",
+        type: "get",
+        cache: false,
+        data: {
+            branch_id: branch_id
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+        },
+        beforeSend: function() {
+            $("#select_regclient").empty();
+        },
+        success: function(res) {
+            console.log(res.farmer_list);
+            farmerList = res.farmer_list
+        },
+    });
+});
+
+
+function increaseValue() {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value++;
+    document.getElementById('number').value = value;
+}
+
+function decreaseValue() {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value < 2 ? value = 2 : '';
+    value--;
+    document.getElementById('number').value = value;
+}
+
+function increaseDecimalValue() {
+    var value = parseInt(document.getElementById('acreage').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value++;
+    document.getElementById('acreage').value = value;
+}
+
+function decreaseDecimalValue() {
+    var value = parseInt(document.getElementById('acreage').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value < 2 ? value = 2 : '';
+    value--;
+    document.getElementById('acreage').value = value;
+}
+
+
+const onFarmerTypeChange = () => {
+    if ($('#io').is(':checked')) {
+        $('#selectFarmerId').show();
+        $('#createFarmerBox').hide();
+    } else {
+        $('#createFarmerBox').show();
+        $('#selectFarmerId').hide();
+    }
+}
+
+
+
+let cropList = [];
+
+let cropIndex = 1;
+
+const onAddCrop = () => {
+    let listItem = ``;
+    let cropName = $('input[name="crop"]:checked').val();
+    let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
+    let farmLocation = $('#farmLocation').find(":selected").val();
+    let farmLocationText = $('#farmLocation').find(":selected").text();
+    let acreage = $('#acreage').val();
+    let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
+    let totalPrice = cropPrice * acreage;
+
+    if (farmLocation != '') {
+        $('#sprayTable').show();
+        listItem += `<tr>
+                <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
+                <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
+                <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
+                <td class="lastCol">
+                    ${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </td>
+                
+            </tr>`;
+        $('#sprayTable').append(listItem);
+
+        $('#farmLocation').val('').change();
+        $('#acreage').val('1');
+        $('#farmLocationError').hide();
+        cropIndex++;
+    } else $('#farmLocationError').show();
+}
+
+$("#sprayTable").on('click', '.dltItemRow', function() {
+    $(this).closest('tr').remove();
+})
+
+
+
+function displayCropsSection() {
+    $('#cropSelection').addClass('enabled');
+    $('#farmerInfo').css("opacity", "1");;
+
+    // else $('#cropSelection').removeClass('enabled');
+};
+
+
 $(document).ready(function() {
 
     jQuery(function() {
@@ -469,379 +1094,6 @@ function toggleVehicleInfBlock() {
         $('#vehicleInformationBlock').hide();
 
 }
-
-function insertMaintableRow() {
-    var tid = $("#tid").val();
-    $(".items_table").each(function() {
-        var item_no = parseInt(tid) + 1;
-        $("#tid").val(item_no);
-        var tds = `<tr>
-                            <td>
-                                <table class="mainTr" id="` + item_no + `">
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="form-group form-group-sm">
-                                                <label>Order ID</label>
-                                                <input type="text" class="form-control orderid" name="data[` +
-            item_no + `][order_id]">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group form-group-sm">
-                                                <label>Invoice Number</label>
-                                                <input type="text" class="form-control invc_no" id="1"
-                                                       name="data[` + item_no + `][invoice_no]">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group form-group-sm">
-                                                <label>Invoice Date</label>
-                                                <input type="date" class="form-control invc_date" name="data[` +
-            item_no + `][invoice_date]">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group form-group-sm">
-                                                <label>Invoice Amount</label>
-                                                <input type="number" class="form-control invc_amt" name="data[` +
-            item_no + `][invoice_amount]">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group form-group-sm">
-                                                <label>E-way Bill Number</label>
-                                                <input type="number" class="form-control ew_bill" name="data[` +
-            item_no + `][e_way_bill]">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group form-group-sm">
-                                                <label>E-Way Bill Date</label>
-                                                <input type="date" class="form-control ewb_date" name="data[` +
-            item_no +
-            `][e_way_bill_date]">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7">
-                                            <table id="" class="childTable" style="width: 85%; min-width: 500px; margin-inline: auto;">
-                                                <tbody class="items_table_body"><tr>
-                                                    <td width="200px">
-                                                        <div class="form-group form-group-sm">
-                                                            <label>Item</label>
-                                                            <select class="form-control select_item my-select2" name="data[` +
-            item_no + `][item_data][0][item]" data-action="get-items" onchange="getItem(this);">
-                                                            <option value="" disabled selected>Select</option>
-                                                              @foreach($itemlists as $item_list)
-                                                                <option value="{{$item_list->id}}">{{$item_list->brand_name}}</option>
-                                                               @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group form-group-sm">
-                                                            <label>Quantity</label>
-                                                            <input type="number" class="form-control qty" name="">
-                                                            <input type="hidden" class="form-control" name="data[` +
-            item_no +
-            `][item_data][0][quantity]">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group form-group-sm">
-                                                            <label>Net Weight</label>
-                                                            <input type="number" class="form-control net" name="data[` +
-            item_no +
-            `][item_data][0][net_weight]" readonly>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group form-group-sm">
-                                                            <label>Gross Weight</label>
-                                                            <input type="number" class="form-control gross" name="data[` +
-            item_no +
-            `][item_data][0][gross_weight]" readonly>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group form-group-sm">
-                                                            <label>Chargeable Weight</label>
-                                                            <input type="number" class="form-control charge_wt" name="data[` +
-            item_no + `][item_data][0][chargeable_weight]" readonly>
-                                                        </div>
-
-                                                    </td>
-                                                    <td width="50px"><div class="removeIcon"></div></td>
-                                                </tr></tbody>
-                                            </table>
-                                            <span style="margin-right: 8%" class="addItem" onclick="insertItemTableRow()">+ Add Item</span>
-                                        </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                            </td>
-                            <td width="50px"><div class="removeIcon removeInvoice"><span>x</span></div></td>
-                        </tr>`;
-
-        $(this).append(tds);
-        $(this).find('.my-select2').select2();
-    });
-};
-
-// $(document).on("click", ".removeInvoice", function () {
-//     $(this).closest("tr").remove();
-// });
-
-
-
-//Reassign the Ids of the row
-function reassign_ids() {
-    var i = 0;
-    var t = document.getElementsByClassName("mainTr");
-    var totalMainTr = document.getElementsByClassName("mainTr").length;
-    alert(totalMainTr);
-    $(".mainTr tr").each(function() {
-        var srno = $(t.rows[i].cells[0]).text();
-        if (totalMainTr == 1) {
-            i++;
-        }
-        if (parseInt(totalMainTr) >= 2) {
-            alert(i + "jk");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".orderid")
-                .attr("name", "data[" + i + "][orderid]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".invc_no")
-                .attr("name", "data[" + i + "][invoice_no]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".invc_date")
-                .attr("name", "data[" + i + "][invoice_date]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".invc_amt")
-                .attr("name", "data[" + i + "][invoice_amount]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".ew_bill")
-                .attr("name", "data[" + i + "][e_way_bill]");
-            // $(t.rows[i]).closest('tr').find('.frei').attr('name', 'data['+i+'][freight]');
-            $(t.rows[i])
-                .closest("tr")
-                .find(".ewb_date")
-                .attr("name", "data[" + i + "][e_way_bill_date]");
-
-
-            i++;
-        }
-    });
-}
-
-//Reassign the Ids of the row items
-function reassign_itemids(_this) {
-    var i = 0;
-    // var tid = $(_this).closest("#tid").val();
-    var tid = document.getElementById("tid");
-    // alert(tid+" ll");
-    var t = document.getElementsByClassName("childTable");
-    // var totalChildTr = document.getElementsByClassName("childTable tr").length;
-    var totalChildTr = $(".removeItem").closest('.items_table_body').find('tr').length;
-    // console.log(totalChildTr);
-    $(".childTable tr").each(function() {
-        // var srno = $(t.rows[i].cells[0]).text();
-        if (totalChildTr == 1) {
-            i++;
-        }
-        if (parseInt(totalChildTr) >= 2) {
-            // alert(i+"kk");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".select_item")
-                .attr("name", "data[" + i + "][item_data][" + i + "][item]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".qty")
-                .attr("name", "data[" + i + "][item_data][" + i + "][quantity]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".net")
-                .attr("name", "data[" + i + "][item_data][" + i + "][net_weight]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".gross")
-                .attr("name", "data[" + i + "][item_data][" + i + "][gross_weight]");
-            $(t.rows[i])
-                .closest("tr")
-                .find(".charge_wt")
-                .attr("name", "data[" + i + "][item_data][" + i + "][chargeable_weight]");
-
-
-            i++;
-        }
-    });
-}
-
-
-// add item row btn
-$(document).on("click", ".addItem", function() {
-    // var cc = $(this).siblings('.childTable').find('.charge_wt').length;
-    // var itemrows = cc;
-    var mainrows = $(this).closest('table').attr('id');
-    $(this).siblings(".childTable").each(function() {
-        var itemrows = $(this).parents('.mainTr').children().children().eq(1).children().children(
-            '.childTable').children().children().length;
-        var itemTds = `<tr>
-                            <td width="200px">
-                                <div class="form-group form-group-sm">
-                                    <label>Item</label>
-                                    <select class="form-control select_item my-select2" name="data[` + mainrows +
-            `][item_data][` + itemrows + `][item]" data-action="get-items" onchange="getItem(this);">
-                                    <option value="" disabled selected>Select</option>
-                                        @foreach($itemlists as $item_list)
-                                        <option value="{{$item_list->id}}">{{$item_list->brand_name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group form-group-sm">
-                                    <label>Quantity</label>
-                                    <input type="number" class="form-control qty" name="">
-                                    <input type="hidden" class="form-control" name="data[` + mainrows +
-            `][item_data][` + itemrows + `][quantity]">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group form-group-sm">
-                                    <label>Net Weight</label>
-                                    <input type="number" class="form-control net" name="data[` + mainrows +
-            `][item_data][` + itemrows + `][net_weight]" readonly>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group form-group-sm">
-                                    <label>Gross Weight</label>
-                                    <input type="number" class="form-control gross" name="data[` + mainrows +
-            `][item_data][` + itemrows + `][gross_weight]" readonly>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group form-group-sm">
-                                    <label>Chargeable Weight</label>
-                                    <input type="number" class="form-control charge_wt" name="data[` + mainrows +
-            `][item_data][` + itemrows + `][chargeable_weight]" readonly>
-                                </div>
-
-                            </td>
-                            <td width="50px"><div class="removeIcon removeItem"><span>x</span></div></td>
-                        </tr>`;
-
-        // $(this).siblings(".childTable").children('.items_table_body').append(itemTds);
-        $(this).closest('.childTable').children('.items_table_body').append(itemTds);
-    });
-    $('.my-select2').select2();
-});
-
-
-$(document).on("click", ".removeItem", function() {
-    $(this).closest("tr").remove();
-    var _this = $(this);
-    // reassign_itemids(_this);
-    calculate_totals(_this);
-});
-// calculation total
-$(document).on("blur", ".qty", function() {
-    // var _this = $(this);
-
-    var qty_sum = 0;
-    $("input[class *= 'qty']").each(function() {
-        qty_sum += +$(this).val();
-    });
-    $("#tot_qty").html(qty_sum);
-    var qty_val = $(this).val();
-
-    $(this).siblings().val(qty_val);
-
-    var netwt_val = $(this).closest('tr').find('td').eq(2).find('input').val();
-    var netwt_cal = parseInt(netwt_val) * parseInt(qty_val);
-
-    var grosswt_val = $(this).closest('tr').find('td').eq(3).find('input').val();
-    var grosswt_cal = parseInt(grosswt_val) * parseInt(qty_val);
-
-    var chargewt_val = $(this).closest('tr').find('td').eq(4).find('input').val();
-    var chargewt_cal = parseInt(chargewt_val) * parseInt(qty_val);
-
-    var check_netwt = $(this).closest('tr').find('td').eq(2).find('input').val(netwt_cal);
-    var check_grosswt = $(this).closest('tr').find('td').eq(3).find('input').val(grosswt_cal);
-    var check_chargewt = $(this).closest('tr').find('td').eq(4).find('input').val(chargewt_cal);
-
-    var net_sum = 0;
-    $("input[class *= 'net']").each(function() {
-        net_sum += +$(this).val();
-    });
-    $("#total_nt_wt").html(net_sum);
-
-    var gross_sum = 0;
-    $("input[class *= 'gross']").each(function() {
-        gross_sum += +$(this).val();
-    });
-    $("#total_gt_wt").html(gross_sum);
-
-    $(this).prop('disabled', true);
-});
-
-//Remove the current invoice row
-$(document).on("click", ".removeInvoice", function() {
-    var current_val = $(this).parent().siblings(":first").text();
-    $(this).closest("tr").remove();
-    // reassign_ids();
-    var _this = $(this);
-    calculate_totals(_this);
-});
-
-// Calculate all totals
-function calculate_totals(_this) {
-    var qty_sum = 0;
-    $("input[class *= 'qty']").each(function() {
-        qty_sum += +$(this).val();
-    });
-
-    $("#tot_qty").html(qty_sum);
-    var qty_val = $(_this).val();
-
-    var netwt_val = $(_this).closest('tr').find('td').eq(2).find('input').val();
-    var netwt_cal = parseInt(netwt_val) * parseInt(qty_val);
-
-    var grosswt_val = $(_this).closest('tr').find('td').eq(3).find('input').val();
-    var grosswt_cal = parseInt(grosswt_val) * parseInt(qty_val);
-
-    var chargewt_val = $(_this).closest('tr').find('td').eq(4).find('input').val();
-    var chargewt_cal = parseInt(chargewt_val) * parseInt(qty_val);
-
-    var check_netwt = $(_this).closest('tr').find('td').eq(2).find('input').val(netwt_cal);
-    var check_grosswt = $(_this).closest('tr').find('td').eq(3).find('input').val(grosswt_cal);
-    var check_chargewt = $(_this).closest('tr').find('td').eq(4).find('input').val(chargewt_cal);
-
-    var net_sum = 0;
-    $("input[class *= 'net']").each(function() {
-        net_sum += +$(this).val();
-    });
-    $("#total_nt_wt").html(net_sum);
-
-    var gross_sum = 0;
-    $("input[class *= 'gross']").each(function() {
-        gross_sum += +$(this).val();
-    });
-    $("#total_gt_wt").html(gross_sum);
-
-    $(_this).prop('disabled', true);
-
-}
-
 
 jQuery(function() {
     $('.my-select2').each(function() {
@@ -991,6 +1243,247 @@ function togglePaymentAction() {
         $('#freight_on_delivery').val('');
     }
 }
+
+const appendFarmerDes = (des) => {
+    console.log('sdvbhytrfd');
+    let node = ``;
+    node += `<p class="title">${des.nick_name}</p>
+                                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-phone">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                        </path>
+                                    </svg> +91-${des.phone}</p>
+                                <p>Farm Locations - <span>${des.farm?.length}</span></p>`;
+
+    $('#farmerDes').html(node);
+    displayCropsSection();
+}
+
+$('#createFarmerButton').click(function() {
+    $('#phone_error').empty();
+    $('#farmer_req').empty();
+    var farmer_name = $('#farmer_name').val();
+    var farmer_phone = $('#farmer_phone').val();
+    var number = $('#number').val();
+    if (!farmer_name) {
+        $('#farmer_req').html('Please enter farmer name');
+        return false;
+    }
+    if (!farmer_phone) {
+        $('#phone_error').html('Please enter phone number');
+        return false;
+    }
+
+    var data = {
+        farmer_name: farmer_name,
+        farmer_phone: farmer_phone,
+        number: number
+
+    };
+
+    jQuery.ajax({
+        url: "create-new-farmer",
+        type: "get",
+        cache: false,
+        data: data,
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                "content"
+            ),
+        },
+        processData: true,
+
+        success: function(response) {
+
+            if (response.success == true) {
+                $('#farmer_common_id').val(response.farmer_details.id)
+                appendFarmerDes(response.farmer_details);
+                $("#farmer_name").prop('disabled', true);
+                $("#farmer_phone").prop('disabled', true);
+                $("#createFarmerButton").prop('disabled', true);
+                $("#io").prop('disabled', true);
+
+
+                $.each(response.farmer_details.farm, function(index, value) {
+                    $("#farmLocation").append(
+                        '<option value="' +
+                        value.id +
+                        '">' +
+                        value.field_area +
+                        "</option>"
+                    );
+                });
+                $('#sprayTable tbody').html('');
+            } else {
+                $('#phone_error').html(response.error_message);
+            }
+
+        },
+    });
+
+});
+
+const demoFunction = () => {
+    let ss = $('#pp').val();
+    if (ss?.length == 10) {
+        console.log('Look Sahil..', ss);
+    }
+}
+// var mydata = [{
+//         "id": 1,
+//         "name": "John",
+//         "age": 23
+//     },
+//     {
+//         "id": 2,
+//         "name": "Mary",
+//         "age": 33
+//     },
+//     {
+//         "id": 3,
+//         "name": "Richard",
+//         "age": 53
+//     },
+//     {
+//         "id": 4,
+//         "name": "Ashley",
+//         "age": 25
+//     },
+//     {
+//         "id": 5,
+//         "name": "Kyle",
+//         "age": 17
+//     },
+//     {
+//         "id": 6,
+//         "name": "Samantha",
+//         "age": 29
+//     },
+//     {
+//         "id": 7,
+//         "name": "David",
+//         "age": 43
+//     },
+//     {
+//         "id": 8,
+//         "name": "Charles",
+//         "age": 27
+//     },
+//     {
+//         "id": 9,
+//         "name": "Elaine",
+//         "age": 41
+//     },
+//     {
+//         "id": 10,
+//         "name": "William",
+//         "age": 22
+//     }
+// ];
+
+$('#farmer_id').autocomplete({
+    minLength: 1,
+    source: function(request, response) {
+        response($.map(farmerList, function(obj, key) {
+            var name = obj.nick_name.toUpperCase();
+            var phone = obj.phone.toUpperCase();
+            if (name.indexOf(request.term.toUpperCase()) != -1 || phone.indexOf(request.term
+                    .toUpperCase()) != -1) {
+                return {
+                    label: obj.nick_name + " (" + obj.phone + ")", // Label for Display
+                    value: obj.id // Value
+                }
+            } else {
+                return null;
+            }
+        }));
+    },
+    focus: function(event, ui) {
+        event.preventDefault();
+    },
+    // Once a value in the drop down list is selected, do the following:
+    select: function(event, ui) {
+        event.preventDefault();
+        // place the person.given_name value into the textfield called 'select_origin'...
+        $('#farmer_id').val(ui.item.label);
+        $('#farmer_id').attr('data-val', ui.item.value);
+        // ... any other tasks (like setting Hidden Fields) go here...
+        $("#farmLocation").empty();
+        jQuery.ajax({
+            type: "get",
+            url: 'get-farmer-details',
+            data: {
+                farmer_id: ui.item.value
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function(response) {
+                console.log(response.get_farmer_details);
+                $('#farmer_common_id').val(response.get_farmer_details.id)
+                appendFarmerDes(response.get_farmer_details)
+
+                $("#farmLocation").append(
+                    `<option value="">--select--
+                        </option>`
+                );
+                $.each(response.get_farmer_details.farm, function(index, value) {
+                    $("#farmLocation").append(
+                        '<option value="' +
+                        value.id +
+                        '">' +
+                        value.field_area +
+                        "</option>"
+                    );
+                });
+
+                $('#sprayTable tbody').html('');
+
+            },
+        });
+        return false;
+    }
+});
+
+$("#select_reg").change(function (e) {
+        var regclient_id = $(this).val();
+        $.ajax({
+            url: "/get-consigner-regional",
+            type: "get",
+            cache: false,
+            data: { regclient_id: regclient_id },
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+            },
+            beforeSend: function () {
+                $("#select_consigner").empty();
+            },
+            success: function (res) {
+                $('#regional_id').val(regclient_id);
+                var payment_term = res.data_regclient.payment_term;
+                var payment_array = payment_term.split(",");
+                $("#paymentType_").append(
+                    `<option selected disabled>select..
+                    </option>`
+                );
+                $.each(payment_array, function (index, term) {
+                    $("#paymentType_").append(
+                        '<option value="' +
+                        term +
+                        '">' +
+                        term +
+                        "</option>"
+                    );
+                });
+   
+            },
+        });
+    });
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap">
 </script>
