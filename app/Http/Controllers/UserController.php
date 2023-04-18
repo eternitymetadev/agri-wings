@@ -377,14 +377,14 @@ class UserController extends Controller
                 $pan_path = Storage::disk('s3')->put('clients', $panupload);
                 $pan_img_path_save = Storage::disk('s3')->url($pan_path);
 
-                $getpin_transfer = Zone::where('postal_code', $request->pin)->first();
-                if(!empty($getpin_transfer)){
-                $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
-                $client_assign_branch = $get_branch->id;
-                }else{
-                $get_branch = Location::where('name', 'Karnal')->first();
-                $client_assign_branch = $get_branch->id; 
-                }
+                // $getpin_transfer = Zone::where('postal_code', $request->pin)->first();
+                // if(!empty($getpin_transfer)){
+                // $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+                // $client_assign_branch = $get_branch->id;
+                // }else{
+                // $get_branch = Location::where('name', 'Karnal')->first();
+                // $client_assign_branch = $get_branch->id; 
+                // }
 
 
                 $userid = $saveuser->id;
@@ -406,7 +406,7 @@ class UserController extends Controller
                 }
                 $saveclientdetails['upload_gst'] = $gst_img_path_save;
                 $saveclientdetails['upload_pan'] = $pan_img_path_save;
-                $saveclientdetails['location_id'] = $client_assign_branch;
+                // $saveclientdetails['location_id'] = $client_assign_branch;
                 $saveclientdetails['status'] = 1;
 
                 $saveclientdetails['payment_term'] = 'Bill To Client';
