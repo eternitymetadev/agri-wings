@@ -9,6 +9,7 @@ use App\Models\Permission;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Zone;
 use App\Models\UserPermission;
 use DB;
 use Hash;
