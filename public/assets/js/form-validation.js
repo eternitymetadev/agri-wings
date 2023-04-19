@@ -89,6 +89,15 @@ jQuery(document).ready(function(){
             contact_number: {
                 required: true,
             },
+            company_name: {
+                required: true,
+            },
+            contact_name: {
+                required: true,
+            },
+            pin: {
+                required: true,
+            },
         },
         messages:
         {
@@ -100,6 +109,15 @@ jQuery(document).ready(function(){
                },
                contact_number: {
                 required: 'Contact number is required',
+            },
+            company_name: {
+                required: 'Legal Entity Name is required',
+            },
+            contact_name: {
+                required: 'Billing Client is required',
+            },
+            pin: {
+                required: 'Pin Code is required',
             },
         },
         submitHandler : function(form)
@@ -1883,6 +1901,9 @@ function formSubmitRedirect(form)
 		    	});
 	        }
             if(response.success == false){
+                    if(response.otp == false){
+                        $('#otp-error').html(response.error_message);
+                    }
                 $.toast({
                     heading             : 'Error',
                     text                : response.error_message,
@@ -1958,6 +1979,7 @@ function formSubmitRedirect(form)
                   $("select[name='"+index+"']").after('<label id="'+index+'-error" class="has-error" for="'+index+'">'+value+'</label>');
                   i++;
               });
+
 	        }
 
             if(response.cnr_nickname_duplicate_error){

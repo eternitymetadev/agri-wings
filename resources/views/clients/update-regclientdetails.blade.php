@@ -167,17 +167,24 @@
                                 <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='To Pay'
-                                            {{in_array("To Pay", $payment_term) ? 'checked' : '' }} />
-                                        To Pay
+                                        <input type="checkbox" name="payment_term[]" value='15 days Credit Period'
+                                            {{in_array("15 days Credit Period", $payment_term) ? 'checked' : '' }} />15 days Credit Period
                                     </label>
                                 </div>
                                 <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='Paid'
-                                            {{in_array("Paid", $payment_term) ? 'checked' : '' }} />
-                                        Paid
+                                        <input type="checkbox" name="payment_term[]" value='30 days Credit Period'
+                                            {{in_array("30 days Credit Period", $payment_term) ? 'checked' : '' }} />
+                                            30 days Credit Period
+                                    </label>
+                                </div>
+                                <div class="checkbox radio">
+                                    <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                        <span class="checkmark"></span>
+                                        <input type="checkbox" name="payment_term[]" value='3Bill to Farmer'
+                                            {{in_array("Bill to Farmer", $payment_term) ? 'checked' : '' }} />
+                                            Bill to Farmer
                                     </label>
                                 </div>
                             </div>

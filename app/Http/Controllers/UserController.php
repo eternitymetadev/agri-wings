@@ -9,8 +9,9 @@ use App\Models\Permission;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Zone;
+use App\Models\UserOtp;
 use App\Models\UserPermission;
+use App\Models\Zone;
 use DB;
 use Hash;
 use Helper;
@@ -29,6 +30,7 @@ class UserController extends Controller
     {
         $this->title = "Users";
         $this->segment = \Request::segment(2);
+        $this->sms_link = \Config::get('sms_api.req_sms');
     }
 
     /**
@@ -327,7 +329,10 @@ class UserController extends Controller
 
             $this->prefix = request()->route()->getPrefix();
             $rules = array(
-                // 'name' => 'required',
+                 'email' => 'required',
+                'company_name' => 'required',
+                'contact_name' => 'required',
+                'pin' => 'required',
                 'contact_number' => 'required|unique:users,phone',
                 'contact_number' => 'required|unique:regional_clients,phone',
                 //  'captcha' => ['required', 'captcha'],
@@ -342,6 +347,27 @@ class UserController extends Controller
                 $response['validation'] = false;
                 $response['formErrors'] = true;
                 $response['errors'] = $errors;
+                return response()->json($response);
+            }
+
+            $opt = $request->otp;
+            $check_otp_no = UserOtp::where('phone', $request->contact_number)->first();
+            if ($check_otp_no->status == 0) {
+                if ($check_otp_no->otp == $opt) {
+                    UserOtp::where('phone', $request->contact_number)->update(['status' => 1]);
+                } else {
+
+                    $response['success'] = false;
+                    $response['error_message'] = "Otp Not Match";
+                    $response['error'] = true;
+                    $response['otp'] = false;
+                    return response()->json($response);
+                }
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Phone Already Register";
+                $response['error'] = true;
+                $response['otp'] = false;
                 return response()->json($response);
             }
 
@@ -378,14 +404,13 @@ class UserController extends Controller
                 $pan_img_path_save = Storage::disk('s3')->url($pan_path);
 
                 $getpin_transfer = Zone::where('postal_code', $request->pin)->first();
-                if(!empty($getpin_transfer->hub_transfer)){
-                $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
-                $client_assign_branch = $get_branch->id;
-                }else{
-                $get_branch = Location::where('name', 'Karnal')->first();
-                $client_assign_branch = $get_branch->id; 
+                if (!empty($getpin_transfer->hub_transfer)) {
+                    $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+                    $client_assign_branch = $get_branch->id;
+                } else {
+                    $get_branch = Location::where('name', 'Karnal')->first();
+                    $client_assign_branch = $get_branch->id;
                 }
-
 
                 $userid = $saveuser->id;
                 $saveclientdetails['user_id'] = $userid;
@@ -453,10 +478,9 @@ class UserController extends Controller
         $id = decrypt($id);
         $verified = User::with('UserClient')->where('id', $id)->first();
         // $user_branch = $verified->UserClient->location_id;
-   
+
         // $regional_manager = User::whereRaw('FIND_IN_SET('.$user_branch.',branch_id)')->where('role_id', 3)->get();
         // foreach($regional_manager as $regional){
-         
 
         // }
 
@@ -469,8 +493,8 @@ class UserController extends Controller
 
             });
             User::where('id', $id)->update(['status' => 1]);
-           // === email sent to rm === //
-           
+            // === email sent to rm === //
+
             return '<h1>User verified successfully, Please Check Your Mail for your Login Credentials</h1>';
         } else {
             return '<h1>Already verified</h1>';
@@ -503,6 +527,70 @@ class UserController extends Controller
         // $getuser = User::where('id', $id)->first();
 
         return view('users.user-profile', ['prefix' => $this->prefix, 'title' => $this->title]);
+    }
+
+    public function sendOtp(Request $request)
+    {
+        $phone = $request->phone;
+        $generate_otp = random_int(100000, 999999);
+        $text = 'Dear User, Your OTP is '.$generate_otp.' for AgriWings registration . Thanks, Agriwings Team';
+
+        $check_number = UserOtp::where('phone', $phone)->first();
+        if (!empty($check_number)) {
+            if ($check_number->status == 1) {
+
+                $response['success'] = false;
+                $response['error_message'] = "Number Already Register";
+                $response['error'] = true;
+                return response()->json($response);
+
+            } else {
+                $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey='.$this->sms_link.'&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number='.urlencode($phone).'&text='.urlencode($text).'&route=2&peid=1701168155524038890';
+                $result = $this->SendTSMS($url);
+
+                $update = UserOtp::where('phone', $phone)->update(['otp' => $generate_otp]);
+
+                $response['success'] = true;
+                $response['error_message'] = "Otp Sent Successfully";
+                $response['error'] = true;
+                return response()->json($response);
+            }
+
+        }
+
+        $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey='.$this->sms_link.'&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number='.urlencode($phone).'&text='.urlencode($text).'&route=2&peid=1701168155524038890';
+
+        $result = $this->SendTSMS($url); // call function that return response with code
+
+        $saveotp['phone'] = $phone;
+        $saveotp['otp'] = $generate_otp;
+
+        $save = UserOtp::create($saveotp);
+
+        if ($save) {
+            $response['success'] = true;
+            $response['error_message'] = "Otp Sent Successfully";
+            $response['error'] = true;
+        } else {
+            $response['success'] = false;
+            $response['error_message'] = "not found";
+            $response['error'] = true;
+        }
+        return response()->json($response);
+
+    }
+
+    public function SendTSMS($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // change to 1 to verify cert
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        $result = curl_exec($ch);
+
     }
 
 }

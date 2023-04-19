@@ -188,22 +188,29 @@
                                         <div class="checkbox radio">
                                             <label class="check-label d-flex align-items-center" style="gap: 6px">
                                                 <span class="checkmark"></span>
-                                                <input type="checkbox" value='Bill To Client' name="payment_term[]" />
+                                                <input type="checkbox" value='Bill To Client' name="payment_term[]" checked/>
                                                 Bill To Client
                                             </label>
                                         </div>
                                         <div class="checkbox radio">
                                             <label class="check-label d-flex align-items-center" style="gap: 6px">
                                                 <span class="checkmark"></span>
-                                                <input type="checkbox" name="payment_term[]" value='Bill to Farmer – Cash/UPI' checked />
-                                                Bill to Farmer – Cash/UPI
+                                                <input type="checkbox" name="payment_term[]" value='15 days Credit Period' />
+                                                15 days Credit Period
                                             </label>
                                         </div>
                                         <div class="checkbox radio">
                                             <label class="check-label d-flex align-items-center" style="gap: 6px">
                                                 <span class="checkmark"></span>
-                                                <input type="checkbox" name="payment_term[]" value='Bill to Client 0 days' checked />
-                                                Bill to Client 0 days
+                                                <input type="checkbox" name="payment_term[]" value='30 days Credit Period' />
+                                                30 days Credit Period
+                                            </label>
+                                        </div>
+                                        <div class="checkbox radio">
+                                            <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                                <span class="checkmark"></span>
+                                                <input type="checkbox" name="payment_term[]" value='Bill to Farmer' />
+                                                Bill to Farmer
                                             </label>
                                         </div>
                                     </div>

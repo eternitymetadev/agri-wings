@@ -688,6 +688,9 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::get('/reginal-clients/view-regclient-detail/{id}', [ClientController::class, 'viewRegclientdetail']);
     Route::get('/regclient-detail/{id}/edit', [ClientController::class, 'editRegClientDetail']);
     Route::post('/save-regclient-detail', [ClientController::class, 'storeRegclientdetail']);
+    Route::get('create-regional-client', [ClientController::class, 'createRegionalClient']);
+    Route::any('generate-regional', [ClientController::class, 'generateRegionalName']);
+    Route::any('regclient-detail/update-generate-regional', [ClientController::class, 'updateGenerateRegionalName']);
 
 
 
@@ -1011,6 +1014,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
     Route::any('/user-profile', [UserController::class, 'userProfile']);
     
+    
 
 });
 
@@ -1031,6 +1035,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('invoice-check', [ConsignmentController::class, 'invoiceCheck']);
     Route::get('vehicle/get-item', [PickupRunSheetController::class, 'getVehicleItem']);
     Route::get('get-items', [ConsignmentController::class, 'getItems']);
+  
 
 });
 
@@ -1048,6 +1053,7 @@ Route::get('/reload-captcha', [UserController::class, 'reloadCaptcha']);
 Route::any('/client-verification/{id}', [UserController::class, 'clientVerification']);
 Route::any('/get-address-by-postcode', [ConsignerController::class, 'getPostalAddress']);
 Route::any('/check-user-phone', [UserController::class, 'userPhoneCheck']);
+Route::any('/sent-otp', [UserController::class, 'sendOtp']);
 
 
 

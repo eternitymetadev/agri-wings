@@ -179,6 +179,13 @@
         margin: 1rem;
 
     }
+
+    .otpPromptLine {
+        margin: 4px 0;
+        color: #000;
+    }
+
+    .otpPromptLine .number {}
     </style>
 </head>
 
@@ -245,7 +252,7 @@
                 <div class="formRow">
                     <div class="form-group formElement" style="margin-bottom: 16px">
                         <label for="gst" class="form-label  formLabelTheme">Gst No</label>
-                        <input type="text" class="form-control" id="gst" name="gst_no">
+                        <input type="text" class="form-control" id="gst" name="gst_no" maxlength="15">
                         <input type="file" class="form-control" id="" name="upload_gst">
                     </div>
                     <div class="form-group formElement" style="margin-bottom: 16px">
@@ -261,48 +268,66 @@
                         <input id="captcha" type="text" class="form-control" name="captcha">
                     </div> -->
 
-                <div class="form-group row">
 
-                    <div class="col-md-6"> {!! htmlFormSnippet() !!} </div>
+                <!-- <br> -->
+                <div class="form-group col-md-6">
+                    <label for="exampleFormControlInput2" class="d-flex align-items-center" style="gap: 5px">
+                    <input type="checkbox" name="notification" style="height: 1rem;width: 1rem; accent-color: var(--primaryColor)">
+                    NOC for Notifications</label>
+
+
+                    <!-- <label for="exampleFormControlInput2">NOC for Notifications<span
+                            class="text-danger">*</span></label>
+                    <div class="check-box d-flex">
+                        <div class="checkbox radio">
+                            <label class="check-label">Yes
+                                <input type="radio" value='1' name="notification">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="checkbox radio">
+                            <label class="check-label">No
+                                <input type="radio" name="notification" value='0' checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div> -->
                 </div>
 
-                <!-- <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Captcha</label>
-                            <div class="col-md-6">
-                                {!! app('captcha')->display() !!}
-                                @if ($errors->has('g-recaptcha-response'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div> -->
-                <br>
-
                 <div class="formRow justify-content-between">
-                    <div class="form-group col-md-6">
-                        <label for="exampleFormControlInput2">NOC for Notifications<span
-                                class="text-danger">*</span></label>
-                        <div class="check-box d-flex">
-                            <div class="checkbox radio">
-                                <label class="check-label">Yes
-                                    <input type="radio" value='1' name="notification">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkbox radio">
-                                <label class="check-label">No
-                                    <input type="radio" name="notification" value='0' checked>
-                                    <span class="checkmark"></span>
-                                </label>
+                    <div class="form-group row align-items-center" style="min-height: 100px; flex: 1">
+
+                        <p class="otpPromptLine" style="flex: 1">Verify your register mobile number</p>
+
+                        <div id="enterOTPBox" class="row align-items-start" style="display: none; flex: 1">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP">
+                                <span id="otp-error" style="color:red;"></span>
+                                <!-- <label class="form-label formLabelTheme">Resend OTP</label> -->
                             </div>
                         </div>
+
+
+                        <!-- <div class="col-md-6"> {!! htmlFormSnippet() !!} </div> -->
                     </div>
-                    <button type="submit" class="btn btn-primary"
-                        style="width: 100%; background: #208120; border-color: #208120"><span
-                            class="indicator-label">Register</span>
-                        <span class="indicator-progress" style="display: none;">Please wait...
-                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
+
+                    <button type="button" id="sendOTPButton" class="btn btn-primary" style="width: 100%;"
+                        onclick="sendOtp()">
+                        <span class="indicator-label">Send OTP</span>
+                        <span class="indicator-progress" style="display: none;">
+                            Sending...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+
+                    <button type="submit" id="verifyOTPButton" class="btn btn-primary"
+                        style="width: 100%; background: #208120; border-color: #208120; display: none">
+                        <span class="indicator-label">Verify</span>
+                        <span class="indicator-progress" style="display: none;">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
                 </div>
                 <p class="text-center">Already registered? <a href="{{url('/login')}}">Login</a> </p>
 
@@ -316,9 +341,12 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <img src="{{ asset('assets/thankYou.png') }}" alt="thank you" style="width: 100%; border-radius: 12px"/>
-                    <p class="text-center mx-auto mt-2 mb-5" style="max-width: 30ch">Please check your registered email for your login credentials.</p>
-                    <a href="{{url('/login')}}" class="btn btn-primary" style="width: 100%; background: #208120; border-color: #208120;">Login</a>
+                    <img src="{{ asset('assets/thankYou.png') }}" alt="thank you"
+                        style="width: 100%; border-radius: 12px" />
+                    <p class="text-center mx-auto mt-2 mb-5" style="max-width: 30ch">Please check your registered email
+                        for your login credentials.</p>
+                    <a href="{{url('/login')}}" class="btn btn-primary"
+                        style="width: 100%; background: #208120; border-color: #208120;">Login</a>
                 </div>
             </div>
         </div>
@@ -331,14 +359,20 @@
         <div class="loginBlock" style="flex: 1">
             <img src="{{asset('assets/agri-wing-logo.svg')}}" />
 
-          
+
         </div>
     </div> -->
 
     <script>
     const sss = () => {
         $('#thankyou_model').modal('show')
+    }
 
+
+    const sendOtp = () => {
+        $('#sendOTPButton').toggle();
+        $('#enterOTPBox').toggle();
+        $('#verifyOTPButton').toggle();
     }
     </script>
 
@@ -361,9 +395,7 @@
     <script src="{{asset('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
 
     <script>
-    var APP_URL = {
-        !!json_encode(url('/')) !!
-    };
+    var APP_URL = {!!json_encode(url('/')) !!};
 
 
 
@@ -518,6 +550,39 @@
                 } else {
                     $("#check_phone").html('');
                 }
+
+            },
+        });
+    });
+
+    $('#sendOTPButton').click(function() {
+
+        var phone = $('#contact_number').val();
+        if(! phone){
+            $('#check_phone').html('Please enter phone number');
+              return false;
+        }
+
+        $.ajax({
+            url: "sent-otp",
+            type: "get",
+            cache: false,
+            data: {
+                phone: phone
+            },
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                    "content"
+                ),
+            },
+            success: function(data) {
+                if(data.success == true) {
+                    swal('success',data.error_message,'success')
+                }else{
+                    swal('error',data.error_message,'error')
+                }
+
 
             },
         });
