@@ -855,9 +855,9 @@ class ClientController extends Controller
         $cc = explode(',', $authuser->branch_id);
 
         if ($authuser->role_id == 2) {
-            $regional_clients = RegionalClient::where('verified_by', 0)->get();
+            $regional_clients = RegionalClient::with('Location')->where('verified_by', 0)->get();
         } else {
-            $regional_clients = RegionalClient::where('verified_by', 1)->get();
+            $regional_clients = RegionalClient::with('Location')->whereIn('verified_by', [1,0])->get();
         }
 
         return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients]);
@@ -935,6 +935,21 @@ class ClientController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function verifiedClient(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $baseclient = explode(',', $authuser->baseclient_id);
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+
+        
+            $regional_clients = RegionalClient::with('Location')->where('verified_by', 3)->get();
+
+        return view('clients.verified-client', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients]);
     }
 
 }

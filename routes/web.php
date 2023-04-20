@@ -692,6 +692,12 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('generate-regional', [ClientController::class, 'generateRegionalName']);
     Route::any('regclient-detail/update-generate-regional', [ClientController::class, 'updateGenerateRegionalName']);
 
+    Route::any('unverified-client-list', [ClientController::class, 'unverifiedClient']);
+    Route::get('/unverified-client-list/{id}/edit', [ClientController::class, 'editverificationRegional']);
+    Route::post('/unverified-client-list/update-verification', [ClientController::class, 'updateVerificationClient']);
+    Route::any('verified-client-list', [ClientController::class, 'verifiedClient']);
+
+
 
 
 });

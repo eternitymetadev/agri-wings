@@ -197,11 +197,14 @@
             <form class="general_form" method="POST" action="{{url('/client-register')}}" id="client_register">
                 @csrf
                 <div class="formRow">
-                    <div class="form-group formElement">
-                        <label for="company_name" class="form-label  formLabelTheme">Legal Entity Name <span
+                <div class="form-group formElement">
+                        <label for="contact_number" class="form-label  formLabelTheme">Contact Number <span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="company_name" name="company_name" />
+                        <input type="number" class="form-control" id="contact_number" name="contact_number"
+                            maxlength="10" />
+                        <span id="check_phone" style="color:red"></span>
                     </div>
+                    
                     <div class="form-group formElement">
                         <label for="contact_name" class="form-label  formLabelTheme">Billing Client <span
                                 class="text-danger">*</span></label>
@@ -209,12 +212,10 @@
                     </div>
                 </div>
                 <div class="formRow">
-                    <div class="form-group formElement">
-                        <label for="contact_number" class="form-label  formLabelTheme">Contact Number <span
+                <div class="form-group formElement">
+                        <label for="company_name" class="form-label  formLabelTheme">Legal Entity Name <span
                                 class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="contact_number" name="contact_number"
-                            maxlength="10" />
-                        <span id="check_phone" style="color:red"></span>
+                        <input type="text" class="form-control" id="company_name" name="company_name" />
                     </div>
                     <div class="form-group formElement">
                         <label for="email" class="form-label  formLabelTheme">Email ID <span
@@ -271,9 +272,12 @@
 
                 <!-- <br> -->
                 <div class="form-group col-md-6">
-                    <label for="exampleFormControlInput2" class="d-flex align-items-center" style="gap: 5px">
-                    <input type="checkbox" name="notification" style="height: 1rem;width: 1rem; accent-color: var(--primaryColor)">
-                    NOC for Notifications</label>
+
+                    <label for="exampleFormControlInput2" class="d-flex align-items-center" style="gap: 5px"
+                        data-toggle="modal" data-target="#acceptanceModal">
+                        <input type="checkbox" name="notification" onclick="()=> return false"
+                            style="height: 1rem;width: 1rem; accent-color: var(--primaryColor); pointer-events: none" value="1">
+                        General Term</label>
 
 
                     <!-- <label for="exampleFormControlInput2">NOC for Notifications<span
@@ -311,7 +315,7 @@
                         <!-- <div class="col-md-6"> {!! htmlFormSnippet() !!} </div> -->
                     </div>
 
-                    <button type="button" id="sendOTPButton" class="btn btn-primary" style="width: 100%;"
+                    <button type="button" id="sendOTPButton" class="btn btn-primary" disabled style="width: 100%;"
                         onclick="sendOtp()">
                         <span class="indicator-label">Send OTP</span>
                         <span class="indicator-progress" style="display: none;">
@@ -336,8 +340,10 @@
     </section>
     <!-- <span onclick="sss()">aaa</span> -->
 
+
+    <!-- thank you modal -->
     <div class="modal fade" id="thankyou_model" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"
-        role="dialog" aria-labelledby="exampleModalLabel">
+        role="dialog" aria-labelledby="thankyou_modelLabel">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -347,6 +353,50 @@
                         for your login credentials.</p>
                     <a href="{{url('/login')}}" class="btn btn-primary"
                         style="width: 100%; background: #208120; border-color: #208120;">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- modal for noc acceptance -->
+    <div class="modal fade" id="acceptanceModal" tabindex="-1" role="dialog" aria-labelledby="acceptanceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 900px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="acceptanceModalLabel">NOC</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Dear Customer,<br />
+                        We would like to remind you that the notifications you receive after registering on our site are
+                        for informational purposes only. While we strive to provide accurate and timely information, we
+                        cannot guarantee the completeness or reliability of the information provided in these
+                        notifications.<br />
+                        We will not be liable for any loss or damage that may result from your reliance on the
+                        information provided in these notifications. We advise that you verify any information received
+                        through our service before taking any action or making any decisions based on that information.
+                        Please note that notifications received through our site registration are intended solely for
+                        the recipient and should not be shared with any third party without our prior written consent.
+                        If you have received a notification in error, please notify us immediately and delete the
+                        notification from your device.<br />
+                        We reserve the right to modify or discontinue our notification service at any time without prior
+                        notice. We will not be liable for any damages or losses resulting from the modification or
+                        discontinuation of our notification service.<br />
+                        Thank you for registering on our site, and we look forward to providing you with reliable and
+                        timely information.<br /><br />
+                        Best regards,<br />
+                        AgriWings<br />
+                        D2F Services Private Limited
+                    </p>
+                </div>
+                <div class="modal-footer justify-content-around" style="border-top: 0">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width: 100%; max-width: 300px; background: #9f123c; border-color: #9f123c;" onclick="onDeclineTerms()">Decline</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="width: 100%; max-width: 300px; background: #208120; border-color: #208120;" onclick="onAcceptTerms()   ">Accept</button>
                 </div>
             </div>
         </div>
@@ -374,6 +424,18 @@
         $('#enterOTPBox').toggle();
         $('#verifyOTPButton').toggle();
     }
+
+    const onAcceptTerms = () => {
+        $('input[name=notification]').prop('checked', true);
+        $('#acceptanceModal').modal('hide');
+        $('#sendOTPButton').removeAttr('disabled');
+    }
+
+    const onDeclineTerms = () => {
+        $('input[name=notification]').prop('checked', false);
+        $('#acceptanceModal').modal('hide');
+        $('#sendOTPButton').attr('disabled', 'true');
+    }
     </script>
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
@@ -395,7 +457,9 @@
     <script src="{{asset('plugins/sweetalerts/custom-sweetalert.js')}}"></script>
 
     <script>
-    var APP_URL = {!!json_encode(url('/')) !!};
+    var APP_URL = {
+        !!json_encode(url('/')) !!
+    };
 
 
 
@@ -558,9 +622,9 @@
     $('#sendOTPButton').click(function() {
 
         var phone = $('#contact_number').val();
-        if(! phone){
+        if (!phone) {
             $('#check_phone').html('Please enter phone number');
-              return false;
+            return false;
         }
 
         $.ajax({
@@ -577,10 +641,10 @@
                 ),
             },
             success: function(data) {
-                if(data.success == true) {
-                    swal('success',data.error_message,'success')
-                }else{
-                    swal('error',data.error_message,'error')
+                if (data.success == true) {
+                    swal('success', data.error_message, 'success')
+                } else {
+                    swal('error', data.error_message, 'error')
                 }
 
 

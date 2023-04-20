@@ -69,6 +69,9 @@ strong {
 code {
     color: #e7515a;
 }
+button:disabled{
+    cursor: disabled;
+}
 
 /*Page title*/
 .navbar .navbar-item .nav-item.page-heading {

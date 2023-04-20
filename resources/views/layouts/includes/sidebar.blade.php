@@ -828,6 +828,41 @@
 
         </ul>
     </li>
+    <?php } if($authuser->role_id == 1 || $authuser->role_id == 3){ ?>
+    <li class="menu">
+        <a href="#billing_client" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <div
+                class="@if(str_contains($currentURL, 'bulk-import') || str_contains($currentURL, 'branch-address')) active @endif">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-clipboard">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                </svg>
+                <span>Billing Client Module</span>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-chevron-right">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </a>
+        <ul class="collapse submenu " id="billing_client" data-parent="#accordionExample">
+            <li>
+                <div class="submenuListStyle"></div><a href="{{$prefixurl.'clients'}}"> Base Clients </a>
+            </li>
+            <li>
+                <div class="submenuListStyle"></div><a href="{{$prefixurl.'reginal-clients'}}"> Billing Client </a>
+            </li>
+            <li>
+                <div class="submenuListStyle"></div><a href="{{$prefixurl.'unverified-client-list'}}">Unverified Client </a>
+            </li>
+            <li>
+                <div class="submenuListStyle"></div><a href="{{$prefixurl.'verified-client-list'}}">Verified Client </a>
+            </li>
+
+        </ul>
+    </li>
     <?php } ?>
 
 </ul>
