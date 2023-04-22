@@ -696,7 +696,10 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::get('/unverified-client-list/{id}/edit', [ClientController::class, 'editverificationRegional']);
     Route::post('/unverified-client-list/update-verification', [ClientController::class, 'updateVerificationClient']);
     Route::any('verified-client-list', [ClientController::class, 'verifiedClient']);
-
+    Route::any('rm-check-client', [ClientController::class, 'rmCheckClient']);
+    Route::post('sent-for-verification', [ClientController::class, 'sentForVerificationAc']);
+    Route::post('save-as-draft', [ClientController::class, 'saveAsDraft']);
+    Route::any('view-regional-details/{id}', [ClientController::class, 'ViewRegionalDetails']);
 
 
 
@@ -991,6 +994,10 @@ Route::group(['prefix'=>'account-manager', 'middleware'=>['auth','PermissionChec
     Route::any('unverified-client-list', [ClientController::class, 'unverifiedClient']);
     Route::get('/unverified-client-list/{id}/edit', [ClientController::class, 'editverificationRegional']);
     Route::post('/unverified-client-list/update-verification', [ClientController::class, 'updateVerificationClient']);
+    Route::any('verified-client-list', [ClientController::class, 'verifiedClient']);
+
+    Route::any('/account-check-verification', [ClientController::class, 'accountCheckVerification']);
+    Route::any('/account-approver', [ClientController::class, 'accountApprover']);
 
 });
 Route::group(['prefix'=>'client-account', 'middleware'=>['auth','PermissionCheck']], function()
@@ -1002,6 +1009,9 @@ Route::group(['prefix'=>'client-account', 'middleware'=>['auth','PermissionCheck
 });
 Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']], function()
 {
+    Route::resource('dashboard', DashboardController::class);
+    Route::resource('/', DashboardController::class);
+
     Route::resource('consignments', ConsignmentController::class);
     Route::get('consignments/{id}/print-view/{typeid}', [ConsignmentController::class, 'consignPrintview']);
     Route::any('print-sticker/{id}', [ConsignmentController::class, 'printSticker']);

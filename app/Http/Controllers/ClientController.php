@@ -11,6 +11,7 @@ use App\Models\RegionalClient;
 use App\Models\RegionalClientDetail;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\VerificationPending;
 use App\Models\Zone;
 use Auth;
 use Config;
@@ -856,11 +857,15 @@ class ClientController extends Controller
 
         if ($authuser->role_id == 2) {
             $regional_clients = RegionalClient::with('Location')->where('verified_by', 0)->get();
+        } elseif ($authuser->role_id == 5) {
+            $regional_clients = RegionalClient::with('Location')->where('verified_by', 1)->get();
         } else {
-            $regional_clients = RegionalClient::with('Location')->whereIn('verified_by', [1,0])->get();
+            $regional_clients = RegionalClient::with('Location')->whereIn('verified_by', [1, 0])->get();
         }
 
-        return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients]);
+        $base_clients = BaseClient::get();
+
+        return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients,'base_clients' => $base_clients]);
     }
     // ===================
     public function editverificationRegional($id)
@@ -946,10 +951,179 @@ class ClientController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        
-            $regional_clients = RegionalClient::with('Location')->where('verified_by', 3)->get();
+        $regional_clients = RegionalClient::with('Location')->where('verified_by', 2)->get();
 
         return view('clients.verified-client', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients]);
+    }
+
+    public function rmCheckClient(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+
+        $getclient = RegionalClient::with('verification')->where('id', $request->client_id)->first();
+
+        $response['success'] = true;
+        $response['getclient'] = $getclient;
+        $response['success_message'] = "Successfully";
+        $response['error'] = false;
+        return response()->json($response);
+
+    }
+
+    public function sentForVerificationAc(Request $request)
+    {
+        
+        try {
+            DB::beginTransaction();
+            $payment_term = implode(",", $request->payment_term);
+
+            $verificationpending['client_id'] = $request->client_id;
+            $verificationpending['customer_type'] = $request->customer_type;
+            $verificationpending['business_plan'] = $request->business_plan;
+            $verificationpending['payment_term'] = $payment_term;
+            $verificationpending['verification_done_by'] = $request->verification_done_by;
+            $verificationpending['remarks'] = $request->remarks;
+            $verificationpending['draft_mode'] = 2;
+
+            if($request->draft_mode == 1){
+                $sentAccount = VerificationPending::where('client_id', $request->client_id)->update($verificationpending);
+            }else{
+                $sentAccount = VerificationPending::create($verificationpending);
+            }
+          
+            if ($sentAccount) {
+
+                $rmstatus = RegionalClient::where('id', $request->client_id)->update(['verified_by' => 1]);
+
+                $response['success'] = true;
+                $response['success_message'] = "Send for verification";
+                $response['error'] = false;
+            } else {
+                $response['success'] = false;
+                $response['success_message'] = "Not Sent";
+                $response['error'] = false;
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+
+    }
+    // =============================================
+    public function saveAsDraft(Request $request)
+    {
+      
+        try {
+            DB::beginTransaction();
+            $payment_term = implode(",", $request->payment_term);
+
+            $verificationpending['client_id'] = $request->client_id;
+            $verificationpending['customer_type'] = $request->customer_type;
+            $verificationpending['business_plan'] = $request->business_plan;
+            $verificationpending['payment_term'] = $payment_term;
+            $verificationpending['verification_done_by'] = $request->verification_done_by;
+            $verificationpending['remarks'] = $request->remarks;
+            $verificationpending['draft_mode'] = 1;
+
+            if ($request->draft_mode == 1) {
+                $sentAccount = VerificationPending::where('client_id', $request->client_id)->update($verificationpending);
+            } else {
+                $sentAccount = VerificationPending::create($verificationpending);
+                
+            }
+            if ($sentAccount) {
+
+                $response['success'] = true;
+                $response['success_message'] = "Save Draft";
+                $response['error'] = false;
+            } else {
+                $response['success'] = false;
+                $response['success_message'] = "Not Sent";
+                $response['error'] = false;
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+
+    }
+
+    public function accountCheckVerification(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+
+        $getclient = VerificationPending::with('RegionalDetails')->where('client_id', $request->client_id)->first();
+
+        $response['success'] = true;
+        $response['getclient'] = $getclient;
+        $response['success_message'] = "Successfully";
+        $response['error'] = false;
+        return response()->json($response);
+
+    }
+
+    public function ViewRegionalDetails(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+
+        $getregional = RegionalClient::where('id', $request->id)->first();
+
+        return view('clients.view-regional-details', ['prefix' => $this->prefix, 'getregional' => $getregional]);
+    }
+
+    /////
+    public function accountApprover(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $payment_term = implode(",", $request->payment_term);
+
+            $verificationpending['baseclient_id'] = $request->base_client_id;
+            $verificationpending['customer_type'] = $request->customer_type;
+            $verificationpending['business_plan'] = $request->business_plan;
+            $verificationpending['payment_term'] = $payment_term;
+            $verificationpending['verification_done_by'] = $request->verification_done_by;
+            $verificationpending['remarks'] = $request->remarks;
+            $verificationpending['verified_by'] = 2;
+
+           
+            $accountApprover = RegionalClient::where('id', $request->client_id)->update($verificationpending);
+          
+            if ($accountApprover) {
+
+                $rmstatus = VerificationPending::where('client_id', $request->client_id)->update(['status' => 1]);
+
+                $response['success'] = true;
+                $response['success_message'] = "Approver successfully";
+                $response['error'] = false;
+            } else {
+                $response['success'] = false;
+                $response['success_message'] = "Not Sent";
+                $response['error'] = false;
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+
     }
 
 }

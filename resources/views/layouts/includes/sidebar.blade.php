@@ -828,7 +828,7 @@
 
         </ul>
     </li>
-    <?php } if($authuser->role_id == 1 || $authuser->role_id == 3){ ?>
+    <?php } if($authuser->role_id == 1 || $authuser->role_id == 3 || $authuser->role_id == 5){ ?>
     <li class="menu">
         <a href="#billing_client" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
             <div

@@ -91,6 +91,9 @@ div.relative {
                         </thead>
                         <tbody>
                             @foreach($regional_clients as $client)
+                            <?php
+                            $authuser = Auth::user();
+                            ?>
                             <tr>
                                 <td>{{$client->name}}</td>
                                 <td>{{$client->regional_client_nick_name}}</td>
@@ -100,8 +103,19 @@ div.relative {
                                 <td>{{$client->city}}</td>
                                 <td>{{$client->state}}</td>
                                 <td>{{$client->Location->name}}</td>
-                                <td><button type="button" class="btn btn-sm btn-primary verify"
-                                        value="{{$client->id}}">verify</button></td>
+                                <?php if($client->verified_by == 0){?>
+                                <td><a href="{{ url($prefix.'/view-regional-details/'.$client->id) }}"
+                                        class="edit btn btn-sm btn-primary ml-2">view</a>||<button type="button"
+                                        class="btn btn-sm btn-primary verify" value="{{$client->id}}">verify</button>
+                                </td>
+                                <?php } else {
+                                            if($authuser->role_id == 3) {?>
+                                <td><button type="button" class="btn btn-sm btn-warning" value="{{$client->id}}">Sent to
+                                        Account</button></td>
+                                <?php   }else{ ?>
+                                <td><button type="button" class="btn btn-sm btn-warning approve_acc"
+                                        value="{{$client->id}}">Approve Verification</button></td>
+                                <?php }} ?>
                                 <!-- <td><a class="btn btn-primary"
                                         href="{{url($prefix.'/unverified-client-list/'.Crypt::encrypt($client->id).'/edit')}}"><span><i
                                                 class="fa fa-edit" aria-hidden="true"></i> Edit<span></a></td> -->
@@ -116,7 +130,7 @@ div.relative {
     </div>
 </div>
 
-<!---------- View Vendor Modal -------------------------->
+<!---------- send to acc Modal -------------------------->
 <div class="modal fade bd-example-modal-xl" id="verify_model" tabindex="-1" role="dialog"
     aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -126,215 +140,585 @@ div.relative {
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             </div>
             <div class="modal-body">
-                <div class="statbox widget box box-shadow">
+                <form id="sent_for_verification">
+                    <input type="hidden" class="form-control" id="bill_client_id" name="bill_client_id">
+                    <input type="hidden" class="form-control" id="gst_chk" name="gst_chk">
+                    <input type="hidden" class="form-control" id="pan_chk" name="pan_chk">
+                    <input type="hidden" class="form-control" id="draft_mode" name="draft_mode">
+                    <div class="statbox widget box box-shadow">
 
-                    <div class="formRow">
-                        <div class="form-group formElement" style="margin-bottom: 16px">
-                            <label for="gst" class="form-label  formLabelTheme">Customer Type</label>
-                            <select class="form-control my-select2" name="customer_type" id="customer_type">
-                                <option value="" readonly>-select-</option>
-                                <option value="Commercial Shop Owners">Commercial Shop Owners (CSO)</option>
-                                <option value="Common Service Centres">Common Service Centres (CSC)</option>
-                                <option value="Mandi Operators">Mandi Operators</option>
-                                <option value="Direct D2F Clients">Direct D2F Clients</option>
-                                <option value="Other B2B Channel">Other B2B Channels</option>
-                            </select>
-                        </div>
-                        <div class="form-group formElement" style="margin-bottom: 16px">
-                            <label for="pan" class="form-label  formLabelTheme">Projected Business Plan</label>
-                            <input type="number" class="form-control" id="business_plan" name="business_plan">
-                        </div>
-                    </div>
-                    <div class="formRow">
-                        <div class="form-group col-md-6">
-                            <label for="exampleFormControlInput2">Select Payment Terms<span
-                                    class="text-danger">*</span></label>
-                            <div class="check-box d-flex" style="margin: 6px 0 0 6px">
-                                <div class="checkbox radio">
-                                    <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                        <span class="checkmark"></span>
-                                        <input type="checkbox" value='Bill To Client' name="payment_term[]" checked />
-                                        Bill To Client
-                                    </label>
-                                </div>
-                                <div class="checkbox radio">
-                                    <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                        <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='15 days Credit Period' />
-                                        15 days Credit Period
-                                    </label>
-                                </div>
-                                <div class="checkbox radio">
-                                    <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                        <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='30 days Credit Period' />
-                                        30 days Credit Period
-                                    </label>
-                                </div>
-                                <div class="checkbox radio">
-                                    <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                        <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='Bill to Farmer' />
-                                        Bill to Farmer
-                                    </label>
-                                </div>
+                        <div class="formRow">
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="gst" class="form-label  formLabelTheme">Customer Type</label>
+                                <select class="form-control my-select2" name="customer_type" id="customer_type">
+                                    <option value="" readonly>-select-</option>
+                                    <option value="Commercial Shop Owners">Commercial Shop Owners (CSO)</option>
+                                    <option value="Common Service Centres">Common Service Centres (CSC)</option>
+                                    <option value="Mandi Operators">Mandi Operators</option>
+                                    <option value="Direct D2F Clients">Direct D2F Clients</option>
+                                    <option value="Other B2B Channel">Other B2B Channels</option>
+                                </select>
+                            </div>
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="pan" class="form-label  formLabelTheme">Projected Business Plan(In
+                                    Lakhs)</label>
+                                <input type="number" class="form-control" id="business_plan" name="business_plan">
                             </div>
                         </div>
-                        <div class="form-group formElement" style="margin-bottom: 16px">
-                            <label for="pan" class="form-label  formLabelTheme">verify </label>
-                            <select class="form-control my-select2" name="verification_done_by" id="customer_type">
-                                <option value="" readonly>-select-</option>
-                                <option value="Verified by Calling">verified by Calling</option>
-                                <option value="Verify by Visit">Verify by Visit</option>
-                            </select>
+                        <div class="formRow">
+                            <div class="form-group col-md-6">
+                                <label for="exampleFormControlInput2">Select Payment Terms<span
+                                        class="text-danger">*</span></label>
+                                <div class="check-box d-flex" style="margin: 6px 0 0 6px">
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" value='Bill To Client' name="payment_term[]"
+                                                checked />
+                                            Bill To Client
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" class="check_doc" name="payment_term[]"
+                                                value='15 days Credit Period' id="15Days_draft" />
+                                            15 days Credit Period
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" class="check_doc" name="payment_term[]"
+                                                value='30 days Credit Period' id="30Days_draft" />
+                                            30 days Credit Period
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" name="payment_term[]" value='Bill To Farmer'
+                                                id="billToFarmer_draft" />
+                                            Bill to Farmer
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="pan" class="form-label  formLabelTheme">verify </label>
+                                <select class="form-control my-select2" name="verification_done_by"
+                                    id="verification_done_by">
+                                    <option value="" readonly>-select-</option>
+                                    <option value="Verified by Calling">verified by Calling</option>
+                                    <option value="Verify by Visit">Verify by Visit</option>
+                                </select>
+                            </div>
                         </div>
+                        <div class="formRow">
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="pan" class="form-label  formLabelTheme">Remarks</label>
+                                <input type="text" class="form-control" id="remarks" name="remarks">
+                            </div>
+                        </div>
+
                     </div>
 
-                </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                        <button type="button" class="btn btn-primary save_as_draft">Save as Draft</button>
+                        <button type="button" class="btn btn-primary sent_acc">Send To Account</button>
 
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                    <button class="btn btn-primary">Verified</button>
-
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    @endsection
-    @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
+<!---------- approve to acc Modal -------------------------->
+<div class="modal fade bd-example-modal-xl" id="acc_verify_model" tabindex="-1" role="dialog"
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Verify Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            </div>
+            <div class="modal-body">
+                <form id="sent_for_verification">
+                    <input type="hidden" class="form-control" id="acc_client_id" name="client_id">
+                    <input type="hidden" class="form-control" id="acc_gst_chk" name="gst_chk">
+                    <input type="hidden" class="form-control" id="acc_pan_chk" name="pan_chk">
+
+                    <div class="statbox widget box box-shadow">
+                    <div class="formRow">
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="gst" class="form-label  formLabelTheme">Base Client</label>
+                                <select class="form-control my-select2" name="base_client_id" id="base_client_id">
+                                    <option value="" readonly>-select-</option>
+                                    @foreach($base_clients as $base_client)
+                                    <option value="{{$base_client->id}}">{{$base_client->client_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="formRow">
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="gst" class="form-label  formLabelTheme">Customer Type</label>
+                                <select class="form-control" name="customer_type" id="acc_customer_type">
+                                    <option value="" readonly>-select-</option>
+                                    <option value="Commercial Shop Owners">Commercial Shop Owners (CSO)</option>
+                                    <option value="Common Service Centres">Common Service Centres (CSC)</option>
+                                    <option value="Mandi Operators">Mandi Operators</option>
+                                    <option value="Direct D2F Clients">Direct D2F Clients</option>
+                                    <option value="Other B2B Channel">Other B2B Channels</option>
+                                </select>
+                            </div>
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="pan" class="form-label  formLabelTheme">Projected Business Plan(In
+                                    Lakhs)</label>
+                                <input type="number" class="form-control" id="acc_business_plan" name="business_plan">
+                            </div>
+                        </div>
+                        <div class="formRow">
+                            <div class="form-group col-md-6">
+                                <label for="exampleFormControlInput2">Select Payment Terms<span
+                                        class="text-danger">*</span></label>
+                                <div class="check-box d-flex" style="margin: 6px 0 0 6px">
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" value='Bill To Client' name="payment_terms[]"
+                                                id="billToClient" />
+                                            Bill To Client
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" class="acc_chk_doc" name="payment_terms[]" id="15Days"
+                                                value='15 days Credit Period' />
+                                            15 days Credit Period
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" class="acc_chk_doc" name="payment_terms[]" id="30Days"
+                                                value='30 days Credit Period' />
+                                            30 days Credit Period
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" name="payment_terms[]" id="billToFarmer"
+                                                value='Bill To Farmer' />
+                                            Bill to Farmer
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="pan" class="form-label  formLabelTheme">verify </label>
+                                <select class="form-control" name="verification_done_by"
+                                    id="acc_verification_done_by">
+                                    <option value="" readonly>-select-</option>
+                                    <option value="Verified by Calling">verified by Calling</option>
+                                    <option value="Verify by Visit">Verify by Visit</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="formRow">
+                            <div class="form-group formElement" style="margin-bottom: 16px">
+                                <label for="pan" class="form-label  formLabelTheme">Remarks</label>
+                                <input type="text" class="form-control" id="acc_remarks" name="remarks" readonly>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                        <button type="button" class="btn btn-primary account_approver">Approve</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
     $(document).ready(function() {
 
-        ///// check box checked unverified lr page
-        jQuery(document).on('click', '#ckbCheckAll', function() {
-            if (this.checked) {
-                jQuery('#create_edd').prop('disabled', false);
-                jQuery('.chkBoxClass').each(function() {
-                    this.checked = true;
-                });
-            } else {
-                jQuery('.chkBoxClass').each(function() {
-                    this.checked = false;
-                });
+jQuery(function() {
+    $('.my-select2').each(function() {
+        $(this).select2({
+            theme: "bootstrap-5",
+            dropdownParent: $(this).parent(), // fix select2 search input focus bug
+        })
+    })
+
+    // fix select2 bootstrap modal scroll bug
+    $(document).on('select2:close', '.my-select2', function(e) {
+        var evt = "scroll.select2"
+        $(e.target).parents().off(evt)
+        $(window).off(evt)
+    })
+})
+
+});
+$(document).ready(function() {
+
+    ///// check box checked unverified lr page
+    jQuery(document).on('click', '#ckbCheckAll', function() {
+        if (this.checked) {
+            jQuery('#create_edd').prop('disabled', false);
+            jQuery('.chkBoxClass').each(function() {
+                this.checked = true;
+            });
+        } else {
+            jQuery('.chkBoxClass').each(function() {
+                this.checked = false;
+            });
+            jQuery('#create_edd').prop('disabled', true);
+        }
+    });
+
+    jQuery(document).on('click', '.chkBoxClass', function() {
+        if ($('.chkBoxClass:checked').length == $('.chkBoxClass').length) {
+            $('#ckbCheckAll').prop('checked', true);
+            jQuery('#launch_model').prop('disabled', false);
+        } else {
+            var checklength = $('.chkBoxClass:checked').length;
+            if (checklength < 1) {
                 jQuery('#create_edd').prop('disabled', true);
-            }
-        });
-
-        jQuery(document).on('click', '.chkBoxClass', function() {
-            if ($('.chkBoxClass:checked').length == $('.chkBoxClass').length) {
-                $('#ckbCheckAll').prop('checked', true);
-                jQuery('#launch_model').prop('disabled', false);
             } else {
-                var checklength = $('.chkBoxClass:checked').length;
-                if (checklength < 1) {
-                    jQuery('#create_edd').prop('disabled', true);
-                } else {
-                    jQuery('#create_edd').prop('disabled', false);
-                }
-
-                $('#ckbCheckAll').prop('checked', false);
+                jQuery('#create_edd').prop('disabled', false);
             }
-        });
 
+            $('#ckbCheckAll').prop('checked', false);
+        }
     });
-    /////////////////////////////////////////////////////////////////
-    $('#unverified-table').DataTable({
 
-        "dom": "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-            "<'table-responsive'tr>" +
-            "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
-        buttons: {
-            buttons: [
-                // { extend: 'copy', className: 'btn btn-sm' },
-                // { extend: 'csv', className: 'btn btn-sm' },
-                {
-                    extend: 'excel',
-                    className: 'btn btn-sm'
-                },
-                // { extend: 'print', className: 'btn btn-sm' }
-            ]
-        },
-        "oLanguage": {
-            "oPaginate": {
-                "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
-                "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
+});
+/////////////////////////////////////////////////////////////////
+$('#unverified-table').DataTable({
+
+    "dom": "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
+        "<'table-responsive'tr>" +
+        "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+    buttons: {
+        buttons: [
+            // { extend: 'copy', className: 'btn btn-sm' },
+            // { extend: 'csv', className: 'btn btn-sm' },
+            {
+                extend: 'excel',
+                className: 'btn btn-sm'
             },
-            "sInfo": "Showing page PAGE of _PAGES_",
-            "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
-            "sSearchPlaceholder": "Search...",
-            "sLengthMenu": "Results :  _MENU_",
+            // { extend: 'print', className: 'btn btn-sm' }
+        ]
+    },
+    "oLanguage": {
+        "oPaginate": {
+            "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+            "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
         },
+        "sInfo": "Showing page PAGE of _PAGES_",
+        "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+        "sSearchPlaceholder": "Search...",
+        "sLengthMenu": "Results :  _MENU_",
+    },
 
-        "ordering": true,
-        "paging": false,
-        // "pageLength": 100,
+    "ordering": true,
+    "paging": false,
+    // "pageLength": 100,
+
+});
+
+$(document).on('click', '.verify', function() {
+
+    var client_id = $(this).val();
+    $('#verify_model').modal('show');
+    $('#bill_client_id').val(client_id);
+    $.ajax({
+        type: "GET",
+        url: "rm-check-client",
+        data: {
+            client_id: client_id
+        },
+        beforeSend: //reinitialize Datatables
+            function() {
+                $('#customer_type').val('');
+                $('#business_plan').val('');
+                $('#verification_done_by').val('');
+                $('#draft_mode').val('');
+                $('#15Days_draft').prop('checked', false);
+                $('#30Days_draft').prop('checked', false);
+                $('#billToFarmer_draft').prop('checked', false);
+                $('#billToClient_draft').prop('checked', false);
+                $('#remarks').val('');
+                $('#gst_chk').val('');
+                $('#pan_chk').val('');
+            },
+        success: function(data) {
+            // console.log(data.getclient);
+            $('#gst_chk').val(data.getclient.upload_gst);
+            $('#pan_chk').val(data.getclient.upload_pan);
+
+            if (data.getclient.verification != null) {
+
+                var payment_term = data.getclient.verification.payment_term;
+                var myArray = payment_term.split(",");
+
+                if (myArray.includes('15 days Credit Period')) $('#15Days_draft').prop('checked',
+                    true);
+                if (myArray.includes('30 days Credit Period')) $('#30Days_draft').prop('checked',
+                    true);
+                if (myArray.includes('Bill To Farmer')) $('#billToFarmer_draft').prop('checked',
+                    true);
+                if (myArray.includes('Bill To Client')) $('#billToClient_draft').prop('checked',
+                    true);
+
+                $("#customer_type").val(data.getclient.verification.customer_type).change();
+                $("#business_plan").val(data.getclient.verification.business_plan).val();
+                $("#verification_done_by").val(data.getclient.verification.verification_done_by)
+                    .val();
+                $("#draft_mode").val(data.getclient.verification.draft_mode).val();
+                $("#remarks").val(data.getclient.verification.remarks).val();
+
+            }
+
+
+        }
 
     });
 
-    $(document).on('click', '.verify', function() {
+});
 
-        var vendor_id = $(this).val();
-        $('#verify_model').modal('show');
+$(document).on('click', '.check_doc', function() {
+
+    var check_gst = $('#gst_chk').val();
+    var check_pan = $('#pan_chk').val();
+
+    if (check_gst == '' || check_pan == '') {
+        swal('error', 'Please upload document', 'error');
+        $('#15Days_draft').prop('checked', false);
+        $('#30Days_draft').prop('checked', false);
         return false;
-        $.ajax({
-            type: "GET",
-            url: "view-vendor-details",
-            data: {
-                vendor_id: vendor_id
-            },
-            beforeSend: //reinitialize Datatables
-                function() {
-                    $('#name').empty()
-                    $('#trans_name').empty()
-                    $('#driver_nm').empty()
-                    $('#cont_num').empty()
-                    $('#cont_email').empty()
-                    $('#acc_holder').empty()
-                    $('#acc_no').empty()
-                    $('#ifsc_code').empty()
-                    $('#bank_name').empty()
-                    $('#branch_name').empty()
-                    $('#pan').empty()
-                    $('#vendor_type').empty()
-                    $('#decl_avl').empty()
-                    $('#tds_rate').empty()
-                    $('#branch_id').empty()
-                    $('#gst').empty()
-                    $('#gst_no').empty()
-                },
-            success: function(data) {
+    }
 
-                var other_details = jQuery.parseJSON(data.view_details.other_details);
-                var bank_details = jQuery.parseJSON(data.view_details.bank_details);
+});
 
-                $('#name').html(data.view_details.name)
-                $('#trans_name').html(other_details.transporter_name)
-                if (data.view_details.driver_detail == '' || data.view_details.driver_detail ==
-                    null) {
-                    $('#driver_nm').html('-')
-                } else {
-                    $('#driver_nm').html(data.view_details.driver_detail.name)
-                }
-                $('#cont_num').html(other_details.contact_person_number)
-                $('#cont_email').html(data.view_details.email)
-                $('#acc_holder').html(bank_details.acc_holder_name)
-                $('#acc_no').html(bank_details.account_no)
-                $('#ifsc_code').html(bank_details.ifsc_code)
-                $('#bank_name').html(bank_details.bank_name)
-                $('#branch_name').html(bank_details.branch_name)
-                $('#pan').html(data.view_details.pan)
-                $('#vendor_type').html(data.view_details.vendor_type)
-                $('#decl_avl').html(data.view_details.declaration_available)
-                $('#tds_rate').html(data.view_details.tds_rate)
-                $('#branch_id').html(data.view_details.branch_id)
-                $('#gst').html(data.view_details.gst_register)
-                $('#gst_no').html(data.view_details.gst_no)
+
+$('.sent_acc').click(function() {
+
+    var payment_term = [];
+    $(':checkbox[name="payment_term[]"]:checked').each(function() {
+        payment_term.push(this.value);
+    });
+
+    var customer_type = $('#customer_type').val();
+    var business_plan = $('#business_plan').val();
+    var verification_done_by = $('#verification_done_by').val();
+    var client_id = $('#bill_client_id').val();
+    var remarks = $('#remarks').val();
+    var draft_mode = $('#draft_mode').val();
+
+
+    $.ajax({
+        url: "sent-for-verification",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        type: "POST",
+        data: {
+            client_id: client_id,
+            customer_type: customer_type,
+            business_plan: business_plan,
+            payment_term: payment_term,
+            verification_done_by: verification_done_by,
+            remarks: remarks,
+            draft_mode: draft_mode
+        },
+
+        beforeSend: function() {
+
+        },
+        success: function(data) {
+            if (data.success == true) {
+                swal('success', data.success_message, 'success')
+            } else {
+                swal('error', data.error_message, 'error')
             }
 
-        });
+
+        },
+    });
+});
+// ================= SAVE AS DRAFT ================= //
+$('.save_as_draft').click(function() {
+
+    var payment_term = [];
+    $(':checkbox[name="payment_term[]"]:checked').each(function() {
+        payment_term.push(this.value);
+    });
+
+    var customer_type = $('#customer_type').val();
+    var business_plan = $('#business_plan').val();
+    var verification_done_by = $('#verification_done_by').val();
+    var client_id = $('#bill_client_id').val();
+    var draft_mode = $('#draft_mode').val();
+    var remarks = $('#remarks').val();
+
+
+    $.ajax({
+        url: "save-as-draft",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        type: "POST",
+        data: {
+            client_id: client_id,
+            customer_type: customer_type,
+            business_plan: business_plan,
+            payment_term: payment_term,
+            verification_done_by: verification_done_by,
+            draft_mode: draft_mode,
+            remarks: remarks
+        },
+
+        beforeSend: function() {
+
+        },
+        success: function(data) {
+            if (data.success == true) {
+                swal('success', data.success_message, 'success')
+                location.reload();
+            } else {
+                swal('error', data.error_message, 'error')
+            }
+
+
+        },
+    });
+});
+// ------------ account ------- process //
+$(document).on('click', '.approve_acc', function() {
+
+    var client_id = $(this).val();
+    $('#acc_verify_model').modal('show');
+    $('#acc_client_id').val(client_id);
+    $.ajax({
+        type: "GET",
+        url: "account-check-verification",
+        data: {
+            client_id: client_id
+        },
+        beforeSend: //reinitialize Datatables
+            function() {
+                $('#acc_customer_type').val('');
+                $('#acc_business_plan').val('');
+                $('#acc_verification_done_by').val('');
+                $('#acc_draft_mode').val('');
+                $('#15Days').prop('checked', false);
+                $('#30Days').prop('checked', false);
+                $('#billToFarmer').prop('checked', false);
+                $('#billToClient').prop('checked', false);
+                $('#acc_remarks').val('');
+                $('#acc_gst_chk').val('');
+                $('#acc_pan_chk').val('');
+
+            },
+        success: function(data) {
+            // console.log(data.getclient.payment_term);
+            var payment_term = data.getclient.payment_term;
+            var myArray = payment_term.split(",");
+            if (myArray.includes('15 days Credit Period')) $('#15Days').prop('checked', true);
+            if (myArray.includes('30 days Credit Period')) $('#30Days').prop('checked', true);
+            if (myArray.includes('Bill To Farmer')) $('#billToFarmer').prop('checked', true);
+            if (myArray.includes('Bill To Client')) $('#billToClient').prop('checked', true);
+
+            $("#acc_customer_type").val(data.getclient.customer_type).change();
+            $("#acc_business_plan").val(data.getclient.business_plan).val();
+            $("#acc_verification_done_by").val(data.getclient.verification_done_by).val();
+            $("#acc_remarks").val(data.getclient.remarks).val();
+            $("#acc_gst_chk").val(data.getclient.regional_details.upload_gst).val();
+            $("#acc_pan_chk").val(data.getclient.regional_details.upload_pan).val();
+
+
+
+        }
 
     });
-    </script>
-    @endsection
+
+});
+$(document).on('click', '.acc_chk_doc', function() {
+
+    var check_gst = $('#acc_gst_chk').val();
+    var check_pan = $('#acc_pan_chk').val();
+
+    if (check_gst == '' || check_pan == '') {
+        swal('error', 'Please upload document', 'error');
+        $('#15Days').prop('checked', false);
+        $('#30Days').prop('checked', false);
+        return false;
+    }
+
+});
+
+///
+
+$('.account_approver').click(function() {
+
+    var payment_term = [];
+    $(':checkbox[name="payment_terms[]"]:checked').each(function() {
+        payment_term.push(this.value);
+    });
+
+    var customer_type = $('#customer_type').val();
+    var business_plan = $('#business_plan').val();
+    var verification_done_by = $('#verification_done_by').val();
+    var client_id = $('#acc_client_id').val();
+    var remarks = $('#remarks').val();
+    var base_client_id = $('#base_client_id').val();
+
+
+    $.ajax({
+        url: "account-approver",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        type: "POST",
+        data: {
+            client_id: client_id,
+            customer_type: customer_type,
+            business_plan: business_plan,
+            payment_term: payment_term,
+            verification_done_by: verification_done_by,
+            remarks: remarks,
+            base_client_id:base_client_id
+        },
+
+        beforeSend: function() {
+
+        },
+        success: function(data) {
+            if (data.success == true) {
+                swal('success', data.success_message, 'success')
+                location.reload();
+            } else {
+                swal('error', data.error_message, 'error')
+            }
+
+
+        },
+    });
+});
+</script>
+@endsection

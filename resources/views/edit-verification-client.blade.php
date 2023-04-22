@@ -164,20 +164,28 @@
                                         Bill To Client
                                     </label>
                                 </div>
-                                <div class="checkbox radio">
+                                <div class="checkbox radio"> 
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='Bill to Farmer – Cash/UPI'
-                                            {{in_array("Bill to Farmer – Cash/UPI", $payment_term) ? 'checked' : '' }} />
-                                            Bill to Farmer – Cash/UPI
+                                        <input type="checkbox" name="payment_term[]" value='15 days Credit Period'
+                                            {{in_array("15 days Credit Period", $payment_term) ? 'checked' : '' }} />
+                                            15 days Credit Period
                                     </label>
                                 </div>
                                 <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" name="payment_term[]" value='Bill to Client 0 days'
-                                            {{in_array("Bill to Client 0 days", $payment_term) ? 'checked' : '' }} />
-                                            Bill to Client 0 days
+                                        <input type="checkbox" name="payment_term[]" value='30 days Credit Period'
+                                            {{in_array("30 days Credit Period", $payment_term) ? 'checked' : '' }} />
+                                            30 days Credit Period
+                                    </label>
+                                </div>
+                                <div class="checkbox radio">
+                                    <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                        <span class="checkmark"></span>
+                                        <input type="checkbox" name="payment_term[]" value='Bill To Farmer'
+                                            {{in_array("Bill To Farmer", $payment_term) ? 'checked' : '' }} />
+                                            Bill To Farmer
                                     </label>
                                 </div>
                             </div>

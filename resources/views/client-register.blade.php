@@ -277,7 +277,7 @@
                         data-toggle="modal" data-target="#acceptanceModal">
                         <input type="checkbox" name="notification" onclick="()=> return false"
                             style="height: 1rem;width: 1rem; accent-color: var(--primaryColor); pointer-events: none" value="1">
-                        General Term</label>
+                            General Terms & Conditions while Registration on Site</label>
 
 
                     <!-- <label for="exampleFormControlInput2">NOC for Notifications<span
@@ -365,10 +365,10 @@
         <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 900px">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="acceptanceModalLabel">NOC</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <!-- <h5 class="modal-title" id="acceptanceModalLabel">NOC</h5> -->
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="modal-body">
                     <p>

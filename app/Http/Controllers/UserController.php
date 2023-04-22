@@ -394,14 +394,21 @@ class UserController extends Controller
             if ($saveuser) {
 
                 // ======= gst upload
-                $gstupload = $request->file('upload_gst');
-                $path = Storage::disk('s3')->put('clients', $gstupload);
-                $gst_img_path_save = Storage::disk('s3')->url($path);
+                if(!empty($request->file('upload_gst'))){
+                    $gstupload = $request->file('upload_gst');
+                    $path = Storage::disk('s3')->put('clients', $gstupload);
+                    $gst_img_path_save = Storage::disk('s3')->url($path);
+                    $saveclientdetails['upload_gst'] = $gst_img_path_save;
+                }
+                
 
                 //  ======= pan upload
+                if(!empty($request->file('upload_gst'))){
                 $panupload = $request->file('upload_pan');
                 $pan_path = Storage::disk('s3')->put('clients', $panupload);
                 $pan_img_path_save = Storage::disk('s3')->url($pan_path);
+                $saveclientdetails['upload_pan'] = $pan_img_path_save;
+                }
 
                 $getpin_transfer = Zone::where('postal_code', $request->pin)->first();
                 if (!empty($getpin_transfer->hub_transfer)) {
@@ -429,8 +436,8 @@ class UserController extends Controller
                 if (!empty($request->notification)) {
                     $saveclientdetails['notification'] = $request->notification;
                 }
-                $saveclientdetails['upload_gst'] = $gst_img_path_save;
-                $saveclientdetails['upload_pan'] = $pan_img_path_save;
+               
+               
                 $saveclientdetails['location_id'] = $client_assign_branch;
                 $saveclientdetails['status'] = 1;
                 $saveclientdetails['booking_client'] = 1;
@@ -477,7 +484,7 @@ class UserController extends Controller
     public function clientVerification($id)
     {
         $id = decrypt($id);
-        $verified = User::with('UserClient')->where('id', $id)->first();
+        $verified = User::with('UserClient')->where('id', $id)->first();        
         // $user_branch = $verified->UserClient->location_id;
 
         // $regional_manager = User::whereRaw('FIND_IN_SET('.$user_branch.',branch_id)')->where('role_id', 3)->get();
