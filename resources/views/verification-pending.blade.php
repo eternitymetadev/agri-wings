@@ -150,7 +150,7 @@ div.relative {
                         <div class="formRow">
                             <div class="form-group formElement" style="margin-bottom: 16px">
                                 <label for="gst" class="form-label  formLabelTheme">Customer Type</label>
-                                <select class="form-control my-select2" name="customer_type" id="customer_type">
+                                <select class="form-control" name="customer_type" id="customer_type">
                                     <option value="" readonly>-select-</option>
                                     <option value="Commercial Shop Owners">Commercial Shop Owners (CSO)</option>
                                     <option value="Common Service Centres">Common Service Centres (CSC)</option>
@@ -194,19 +194,11 @@ div.relative {
                                             30 days Credit Period
                                         </label>
                                     </div>
-                                    <div class="checkbox radio">
-                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                            <span class="checkmark"></span>
-                                            <input type="checkbox" name="payment_term[]" value='Bill To Farmer'
-                                                id="billToFarmer_draft" />
-                                            Bill to Farmer
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                             <div class="form-group formElement" style="margin-bottom: 16px">
-                                <label for="pan" class="form-label  formLabelTheme">verify </label>
-                                <select class="form-control my-select2" name="verification_done_by"
+                                <label for="pan" class="form-label  formLabelTheme">Verified by</label>
+                                <select class="form-control" name="verification_done_by"
                                     id="verification_done_by">
                                     <option value="" readonly>-select-</option>
                                     <option value="Verified by Calling">verified by Calling</option>
@@ -321,7 +313,7 @@ div.relative {
                                 </div>
                             </div>
                             <div class="form-group formElement" style="margin-bottom: 16px">
-                                <label for="pan" class="form-label  formLabelTheme">verify </label>
+                                <label for="pan" class="form-label  formLabelTheme">Verified by</label>
                                 <select class="form-control" name="verification_done_by"
                                     id="acc_verification_done_by">
                                     <option value="" readonly>-select-</option>
@@ -715,8 +707,6 @@ $('.account_approver').click(function() {
             } else {
                 swal('error', data.error_message, 'error')
             }
-
-
         },
     });
 });

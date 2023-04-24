@@ -87,15 +87,16 @@ div.relative {
                                 <!-- <th> </th> -->
                                 <th>Order Number</th>
                                 <th>Order Date</th>
-                                <th>Booking Location</th>
-                                <th>Spraying Branch</th>
+                                <th>Booking Partner</th>
                                 <th>Billing Client</th>
-                                <th>Farmer Name</th>
-                                <th>Farmer City</th>
-                                <th>Farm Address</th>
-                                <th>Crop</th>
-                                <th>Acreage</th>
-                                <th>Order Status</th>
+                                <th>Service receiver</th>
+                                <th>District</th>
+                                <th>State</th>
+                                <th>Pincode</th>
+                                <th>acers</th>
+                                <th>Estimated Amount</th>
+                                <th>Status of Order</th>
+                                <th>Payment Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,20 +104,19 @@ div.relative {
                             foreach ($consignments as $key => $consignment) {
                                 ?>
                             <tr>
-                                <!-- <td class="dt-control">+</td> -->
                                 <td>{{ $consignment->id ?? "-" }}</td>
                                 <td>{{ $consignment->consignment_date ?? "NA" }}</td>
-                                <td>{{ $consignment->Branch->name ?? "-" }}</td>
-                                <td>{{ $consignment->fallIn->name ?? "-" }}</td>
+                                <td></td>
+                                <td></td>
                                 <td>{{ $consignment->RegClient->name ?? "-" }}</td>
                                 <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->city ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->address_line1 ?? "-"}}</td>
-                                <td>{{ $consignment->crop ?? "-"}}</td>
-                                <td>{{ $consignment->acreage ?? "-"}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td><a class="btn btn-primary"
-                                        href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Complete
-                                            Order</span></a></td>
+                                        href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Pending for Verification</span></a></td>
                             </tr>
                             <?php } ?>
                         </tbody>

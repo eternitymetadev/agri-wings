@@ -453,4 +453,22 @@ class ConsigneeController extends Controller
         return response()->json($response);
     }
 
+    public function checkFarmerPhone(Request $request)
+    {
+        $number_check = Consignee::where('phone',$request->number)->first();
+        if(!empty($number_check)){
+
+            $response['success'] = true;
+            $response['error_message'] = "Already exist";
+            $response['error'] = true;
+            return response()->json($response);
+
+        }
+
+        $response['success']                    = false;
+        $response['success_message']            = 'Not Found';
+        $response['error']                      = false;
+        return response()->json($response);
+    }
+
 }

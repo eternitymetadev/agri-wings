@@ -208,14 +208,14 @@
                     <div class="form-group formElement">
                         <label for="contact_name" class="form-label  formLabelTheme">Billing Client <span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="contact_name" name="contact_name" />
+                        <input type="text" class="form-control" id="contact_name" name="contact_name" placeholder="Name of Billing Client"/>
                     </div>
                 </div>
                 <div class="formRow">
                 <div class="form-group formElement">
                         <label for="company_name" class="form-label  formLabelTheme">Legal Entity Name <span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="company_name" name="company_name" />
+                        <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Company/ Firm / Individual’s Name"/>
                     </div>
                     <div class="form-group formElement">
                         <label for="email" class="form-label  formLabelTheme">Email ID <span

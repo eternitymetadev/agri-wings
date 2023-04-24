@@ -9,8 +9,8 @@ class ConsignmentNote extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'crop',
-        'acreage',
+        'total_acerage',
+        'total_amount',
         'noc',
         'lr_type',
         'h2h_check',
@@ -135,9 +135,6 @@ class ConsignmentNote extends Model
     }
     public function fallIn(){
         return $this->belongsTo('App\Models\Location','fall_in');
-    }
-    public function Crop(){
-        return $this->belongsTo('App\Models\Crop','crop');
     }
     public function Farm()
     {

@@ -722,16 +722,17 @@ tr:hover .dltItemRow {
 
                         <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
                         <div id="createFarmerBox" class="row align-items-center px-2" style="width: 100%">
+                        <div class="form-group col-md-3 px-1">
+                                <label>Farmer Mobile<span class="text-danger">*</span></label>
+                                <Input type="number" class="form-control" id="farmer_phone" maxlength="10" name="phone">
+                                <span id="phone_error" style="color:red;"></span>
+                            </div>
                             <div class="form-group col-md-5 px-1">
                                 <label>Farmer Name <span class="text-danger">*</span></label>
                                 <Input type="text" class="form-control" id="farmer_name" name="farmer_name">
                                 <span id="farmer_req" style="color:red"></span>
                             </div>
-                            <div class="form-group col-md-3 px-1">
-                                <label>Farmer Mobile<span class="text-danger">*</span></label>
-                                <Input type="number" class="form-control" id="farmer_phone" maxlength="10" name="phone">
-                                <span id="phone_error" style="color:red;"></span>
-                            </div>
+                           
                             <div class="form-group col-md-3 px-1">
                                 <label>Farm Locations<span class="text-danger">*</span></label>
                                 <div class="counter">
@@ -779,10 +780,14 @@ tr:hover .dltItemRow {
                         <label for="exampleFormControlSelect1">
                             Bill to Client<span class="text-danger">*</span>
                         </label>
-                        <Input type="text" class="form-control" id="" name="regional_client"
+                        <select class="form-control my-select2" name="regclient_id">
+                                <option value="{{$regonal_client->id}}">{{$regonal_client->name}}</option>
+                             
+                            </select>
+                        <!-- <Input type="text" class="form-control" id="" name="regional_client"
                             value="{{$regonal_client->name}}" readonly>
                         <Input type="hidden" class="form-control" id="" name="regclient_id"
-                            value="{{$regonal_client->id}}">
+                            value="{{$regonal_client->id}}"> -->
 
                     </div>
 
@@ -928,11 +933,11 @@ tr:hover .dltItemRow {
         </div>
 
         {{--vehicle info--}}
-        <div class="form-check form-check-inline justify-content-end col-12">
+        <!-- <div class="form-check form-check-inline justify-content-end col-12">
             <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
             <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
                 farmer</label>
-        </div>
+        </div> -->
 
         <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
             <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
@@ -1450,6 +1455,36 @@ $('#farmer_id').autocomplete({
         return false;
     }
 });
+
+$("#farmer_phone").blur(function() {
+        var number = $(this).val();
+        if (!number) {
+            return false;
+        }
+        $.ajax({
+            url: "check-farmer-phone",
+            type: "get",
+            cache: false,
+            data: {
+                number: number
+            },
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                    "content"
+                ),
+            },
+            success: function(data) {
+                if (data.success == true) {
+                    $("#phone_error").html(data.error_message);
+                } else {
+                    $("#phone_error").html('');
+                }
+
+            },
+        });
+    });
+
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap">
 </script>

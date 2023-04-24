@@ -1028,6 +1028,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/get-farmer-details', [ConsigneeController::class, 'getfarmerDetails']);
     Route::any('/get-crop-price', [ConsignmentController::class, 'getCropPrice']);
     Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
+    Route::any('/check-farmer-phone', [ConsigneeController::class, 'checkFarmerPhone']);
     Route::any('/user-profile', [UserController::class, 'userProfile']);
     
     

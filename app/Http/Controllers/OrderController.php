@@ -8,20 +8,18 @@ use App\Models\Consigner;
 use App\Models\ConsignmentItem;
 use App\Models\ConsignmentNote;
 use App\Models\ConsignmentSubItem;
-use App\Models\OrderFarm;
 use App\Models\Crop;
 use App\Models\Driver;
 use App\Models\Farm;
 use App\Models\ItemMaster;
 use App\Models\Location;
-use App\Models\BaseClient;
+use App\Models\OrderFarm;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
-use App\Models\Zone;
 use Auth;
-use DB; 
+use DB;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Storage;
@@ -52,7 +50,7 @@ class OrderController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'PrsDetail', 'RegClient','Crop');
+        $query = $query->where('status', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'PrsDetail', 'RegClient');
 
         if ($authuser->role_id == 1) {
             $query;
@@ -63,7 +61,7 @@ class OrderController extends Controller
         } elseif ($authuser->role_id == 7) {
             $query = $query->whereIn('regclient_id', $regclient);
         } else {
-                $query;
+            $query;
             // $query = $query->whereIn('branch_id', $cc)->orWhere(function ($query) use ($cc) {
             //     $query->whereIn('fall_in', $cc)->where('status', 5);
             // });
@@ -405,7 +403,7 @@ class OrderController extends Controller
         $farms = Farm::where('farmer_id', $getconsignments->consignee_id)->get();
         $crops = Crop::get();
 
-        return view('orders.update-order', ['prefix' => $this->prefix, 'getconsignments' => $getconsignments, 'consigners' => $consigners, 'consignees' => $consignees, 'vehicles' => $vehicles, 'vehicletypes' => $vehicletypes, 'drivers' => $drivers, 'regionalclient' => $regionalclient, 'itemlists' => $itemlists, 'branchs' => $branchs, 'farms' => $farms,'crops'=>$crops]);
+        return view('orders.update-order', ['prefix' => $this->prefix, 'getconsignments' => $getconsignments, 'consigners' => $consigners, 'consignees' => $consignees, 'vehicles' => $vehicles, 'vehicletypes' => $vehicletypes, 'drivers' => $drivers, 'regionalclient' => $regionalclient, 'itemlists' => $itemlists, 'branchs' => $branchs, 'farms' => $farms, 'crops' => $crops]);
     }
 
     /**
@@ -1298,16 +1296,16 @@ class OrderController extends Controller
 
             //      $saveregional_client = RegionalClient::create($regionalclient);
             //      $saveregional_client_id = $saveregional_client->id;
-           
+
             // $consigneesave['nick_name']           = $request->farmer_name;
             // $consigneesave['phone']               = $request->phone;
-    
+
             // $saveconsignee = Consignee::create($consigneesave);
             // $farmer_id =  $saveconsignee->id;
 
-            // if(!empty($request->farm)){ 
+            // if(!empty($request->farm)){
             //     $loop = $request->farm;
-            //     for ($i= 1; $i <= $loop; $i++) { 
+            //     for ($i= 1; $i <= $loop; $i++) {
             //         $save_data['farmer_id'] = $saveconsignee->id;
             //         $save_data['field_area'] = 'Farm '.$i;
             //         $saveregclients = Farm::create($save_data);
@@ -1321,8 +1319,8 @@ class OrderController extends Controller
             $consignmentsave['payment_type'] = $request->payment_type;
             // $consignmentsave['crop'] = $request->crop;
             // $consignmentsave['acreage'] = $request->acreage;
-            if(!empty($request->noc)){
-            $consignmentsave['noc'] = $request->noc;
+            if (!empty($request->noc)) {
+                $consignmentsave['noc'] = $request->noc;
             }
             $consignmentsave['status'] = 5;
             // $consignmentsave['branch_id'] = 29;
@@ -1335,7 +1333,7 @@ class OrderController extends Controller
             if (!empty($request->data)) {
                 $get_data = $request->data;
                 foreach ($get_data as $key => $save_data) {
-                    
+
                     $save_data['order_id'] = $saveconsignment->id;
                     $save_data['farm_location'] = $save_data['farm_location'];
                     $save_data['crop'] = $save_data['crop_name'];
@@ -1989,13 +1987,13 @@ class OrderController extends Controller
         $Crops = Crop::get();
         $query = RegionalClient::query();
 
-        $regonal_client = $query->with('UserId')->whereHas('UserId', function ($query) use ($authuser){
-             $query->where('id', '=', $authuser->id);
+        $regonal_client = $query->with('UserId')->whereHas('UserId', function ($query) use ($authuser) {
+            $query->where('id', '=', $authuser->id);
         })->first();
 
         $farmers = Consignee::get();
 
-        return view('service-booking', ['prefix' => $this->prefix,'Crops' => $Crops,'regonal_client' => $regonal_client,'farmers' => $farmers]);
+        return view('service-booking', ['prefix' => $this->prefix, 'Crops' => $Crops, 'regonal_client' => $regonal_client, 'farmers' => $farmers]);
     }
     public function storeServiceBooking(Request $request)
     {
@@ -2034,16 +2032,16 @@ class OrderController extends Controller
 
             //      $saveregional_client = RegionalClient::create($regionalclient);
             //      $saveregional_client_id = $saveregional_client->id;
-           
+
             // $consigneesave['nick_name']           = $request->farmer_name;
             // $consigneesave['phone']               = $request->phone;
-    
+
             // $saveconsignee = Consignee::create($consigneesave);
             // $farmer_id =  $saveconsignee->id;
 
-            // if(!empty($request->farm)){ 
+            // if(!empty($request->farm)){
             //     $loop = $request->farm;
-            //     for ($i= 1; $i <= $loop; $i++) { 
+            //     for ($i= 1; $i <= $loop; $i++) {
             //         $save_data['farmer_id'] = $saveconsignee->id;
             //         $save_data['field_area'] = 'Farm '.$i;
             //         $saveregclients = Farm::create($save_data);
@@ -2057,8 +2055,8 @@ class OrderController extends Controller
             $consignmentsave['payment_type'] = $request->payment_type;
             // $consignmentsave['crop'] = $request->crop;
             // $consignmentsave['acreage'] = $request->acreage;
-            if(!empty($request->noc)){
-            $consignmentsave['noc'] = $request->noc;
+            if (!empty($request->noc)) {
+                $consignmentsave['noc'] = $request->noc;
             }
             $consignmentsave['status'] = 5;
             // $consignmentsave['branch_id'] = 29;
@@ -2070,8 +2068,14 @@ class OrderController extends Controller
 
             if (!empty($request->data)) {
                 $get_data = $request->data;
+
+                $acerage = array();
+                $crop_price = array();
                 foreach ($get_data as $key => $save_data) {
-                    
+
+                    $acerage[] = $save_data['acerage'];
+                    $crop_price[] = $save_data['crop_price'];
+
                     $save_data['order_id'] = $saveconsignment->id;
                     $save_data['farm_location'] = $save_data['farm_location'];
                     $save_data['crop'] = $save_data['crop_name'];
@@ -2080,9 +2084,15 @@ class OrderController extends Controller
                     $save_data['status'] = 1;
                     $saveconsignmentitems = OrderFarm::create($save_data);
                 }
+
+                $total_acerage = array_sum($acerage);
+                $total_crop_price = array_sum($crop_price);
+
+                ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
+
             }
 
-            $url = $this->prefix . '/orders';
+            $url = $this->prefix . '/consignments';
             $response['success'] = true;
             $response['success_message'] = "Order Added successfully";
             $response['error'] = false;
