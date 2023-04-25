@@ -198,13 +198,23 @@ div.relative {
                             </div>
                             <div class="form-group formElement" style="margin-bottom: 16px">
                                 <label for="pan" class="form-label  formLabelTheme">Verified by</label>
-                                <select class="form-control" name="verification_done_by"
-                                    id="verification_done_by">
+                                <select class="form-control" name="verification_done_by" id="verification_done_by">
                                     <option value="" readonly>-select-</option>
                                     <option value="Verified by Calling">verified by Calling</option>
                                     <option value="Verify by Visit">Verify by Visit</option>
                                 </select>
                             </div>
+                        </div>
+                        <label for="pan" class="form-label  formLabelTheme">Bill To Farmer</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bill_to_farmer" id="farmer_enable"
+                                value="1">
+                            <label class="form-check-label" for="inlineRadio1">Enable</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bill_to_farmer" id="farmer_disable"
+                                value="0" checked>
+                            <label class="form-check-label" for="inlineRadio2">Disable</label>
                         </div>
                         <div class="formRow">
                             <div class="form-group formElement" style="margin-bottom: 16px">
@@ -243,7 +253,7 @@ div.relative {
                     <input type="hidden" class="form-control" id="acc_pan_chk" name="pan_chk">
 
                     <div class="statbox widget box box-shadow">
-                    <div class="formRow">
+                        <div class="formRow">
                             <div class="form-group formElement" style="margin-bottom: 16px">
                                 <label for="gst" class="form-label  formLabelTheme">Base Client</label>
                                 <select class="form-control my-select2" name="base_client_id" id="base_client_id">
@@ -289,16 +299,16 @@ div.relative {
                                     <div class="checkbox radio">
                                         <label class="check-label d-flex align-items-center" style="gap: 6px">
                                             <span class="checkmark"></span>
-                                            <input type="checkbox" class="acc_chk_doc" name="payment_terms[]" id="15Days"
-                                                value='15 days Credit Period' />
+                                            <input type="checkbox" class="acc_chk_doc" name="payment_terms[]"
+                                                id="15Days" value='15 days Credit Period' />
                                             15 days Credit Period
                                         </label>
                                     </div>
                                     <div class="checkbox radio">
                                         <label class="check-label d-flex align-items-center" style="gap: 6px">
                                             <span class="checkmark"></span>
-                                            <input type="checkbox" class="acc_chk_doc" name="payment_terms[]" id="30Days"
-                                                value='30 days Credit Period' />
+                                            <input type="checkbox" class="acc_chk_doc" name="payment_terms[]"
+                                                id="30Days" value='30 days Credit Period' />
                                             30 days Credit Period
                                         </label>
                                     </div>
@@ -314,13 +324,23 @@ div.relative {
                             </div>
                             <div class="form-group formElement" style="margin-bottom: 16px">
                                 <label for="pan" class="form-label  formLabelTheme">Verified by</label>
-                                <select class="form-control" name="verification_done_by"
-                                    id="acc_verification_done_by">
+                                <select class="form-control" name="verification_done_by" id="acc_verification_done_by">
                                     <option value="" readonly>-select-</option>
                                     <option value="Verified by Calling">verified by Calling</option>
                                     <option value="Verify by Visit">Verify by Visit</option>
                                 </select>
                             </div>
+                        </div>
+                        <label for="pan" class="form-label  formLabelTheme">Bill To Farmer</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bill_to_farmers" id="acc_farmer_enable"
+                                value="1">
+                            <label class="form-check-label" for="inlineRadio1">Enable</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bill_to_farmers" id="acc_farmer_disable"
+                                value="0" checked>
+                            <label class="form-check-label" for="inlineRadio2">Disable</label>
                         </div>
                         <div class="formRow">
                             <div class="form-group formElement" style="margin-bottom: 16px">
@@ -346,23 +366,23 @@ div.relative {
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
 
-jQuery(function() {
-    $('.my-select2').each(function() {
-        $(this).select2({
-            theme: "bootstrap-5",
-            dropdownParent: $(this).parent(), // fix select2 search input focus bug
+    jQuery(function() {
+        $('.my-select2').each(function() {
+            $(this).select2({
+                theme: "bootstrap-5",
+                dropdownParent: $(this).parent(), // fix select2 search input focus bug
+            })
+        })
+
+        // fix select2 bootstrap modal scroll bug
+        $(document).on('select2:close', '.my-select2', function(e) {
+            var evt = "scroll.select2"
+            $(e.target).parents().off(evt)
+            $(window).off(evt)
         })
     })
-
-    // fix select2 bootstrap modal scroll bug
-    $(document).on('select2:close', '.my-select2', function(e) {
-        var evt = "scroll.select2"
-        $(e.target).parents().off(evt)
-        $(window).off(evt)
-    })
-})
 
 });
 $(document).ready(function() {
@@ -464,18 +484,7 @@ $(document).on('click', '.verify', function() {
             $('#pan_chk').val(data.getclient.upload_pan);
 
             if (data.getclient.verification != null) {
-
-                var payment_term = data.getclient.verification.payment_term;
-                var myArray = payment_term.split(",");
-
-                if (myArray.includes('15 days Credit Period')) $('#15Days_draft').prop('checked',
-                    true);
-                if (myArray.includes('30 days Credit Period')) $('#30Days_draft').prop('checked',
-                    true);
-                if (myArray.includes('Bill To Farmer')) $('#billToFarmer_draft').prop('checked',
-                    true);
-                if (myArray.includes('Bill To Client')) $('#billToClient_draft').prop('checked',
-                    true);
+                console.log(data.getclient.verification.bill_to_farmer);
 
                 $("#customer_type").val(data.getclient.verification.customer_type).change();
                 $("#business_plan").val(data.getclient.verification.business_plan).val();
@@ -484,8 +493,21 @@ $(document).on('click', '.verify', function() {
                 $("#draft_mode").val(data.getclient.verification.draft_mode).val();
                 $("#remarks").val(data.getclient.verification.remarks).val();
 
-            }
+                if (data.getclient.verification.bill_to_farmer == 1) $('#farmer_enable').prop(
+                    'checked',
+                    true);
+                else $('#farmer_disable').prop('checked', true);
 
+
+            }
+            var myArray = data.getclient.payment_term;
+
+            if (myArray.some(e => e.payment_term === '15 days Credit Period')) $('#15Days_draft')
+                .prop('checked', true);
+            // $('#15Days_draft').attr('id', '9');
+            if (myArray.some(e => e.payment_term === '30 days Credit Period')) $('#30Days_draft')
+                .prop('checked', true);
+            // if (myArray.some(e => e.payment_term === 'Bill To Client')) $('#15Days_draft').prop('checked', true);
 
         }
 
@@ -513,7 +535,9 @@ $('.sent_acc').click(function() {
     var payment_term = [];
     $(':checkbox[name="payment_term[]"]:checked').each(function() {
         payment_term.push(this.value);
+
     });
+    var bill_to_farmer = $('input[name="bill_to_farmer"]:checked').val();
 
     var customer_type = $('#customer_type').val();
     var business_plan = $('#business_plan').val();
@@ -536,7 +560,8 @@ $('.sent_acc').click(function() {
             payment_term: payment_term,
             verification_done_by: verification_done_by,
             remarks: remarks,
-            draft_mode: draft_mode
+            draft_mode: draft_mode,
+            bill_to_farmer: bill_to_farmer
         },
 
         beforeSend: function() {
@@ -559,7 +584,10 @@ $('.save_as_draft').click(function() {
     var payment_term = [];
     $(':checkbox[name="payment_term[]"]:checked').each(function() {
         payment_term.push(this.value);
+        // var id = $(this).attr('id');
+        // payment_term.push(id);
     });
+    var bill_to_farmer = $('input[name="bill_to_farmer"]:checked').val();
 
     var customer_type = $('#customer_type').val();
     var business_plan = $('#business_plan').val();
@@ -582,7 +610,8 @@ $('.save_as_draft').click(function() {
             payment_term: payment_term,
             verification_done_by: verification_done_by,
             draft_mode: draft_mode,
-            remarks: remarks
+            remarks: remarks,
+            bill_to_farmer: bill_to_farmer
         },
 
         beforeSend: function() {
@@ -601,6 +630,8 @@ $('.save_as_draft').click(function() {
     });
 });
 // ------------ account ------- process //
+let sahil = []
+
 $(document).on('click', '.approve_acc', function() {
 
     var client_id = $(this).val();
@@ -628,13 +659,42 @@ $(document).on('click', '.approve_acc', function() {
 
             },
         success: function(data) {
-            // console.log(data.getclient.payment_term);
-            var payment_term = data.getclient.payment_term;
-            var myArray = payment_term.split(",");
-            if (myArray.includes('15 days Credit Period')) $('#15Days').prop('checked', true);
-            if (myArray.includes('30 days Credit Period')) $('#30Days').prop('checked', true);
-            if (myArray.includes('Bill To Farmer')) $('#billToFarmer').prop('checked', true);
-            if (myArray.includes('Bill To Client')) $('#billToClient').prop('checked', true);
+            console.log(data.getclient.pending_term);
+            var myArray = data.getclient.pending_term;
+
+
+            const fifteenDaysArray = myArray.filter((e) => e.payment_term ==
+                '15 days Credit Period');
+            const thirtyDaysArray = myArray.filter((e) => e.payment_term ==
+                '30 days Credit Period');
+            const billToClient = myArray.filter((e) => e.payment_term == 'Bill To Client');
+            const billTOFarmer = myArray.filter((e) => e.payment_term == 'Bill To Farmer');
+
+            if (fifteenDaysArray.length > 0) {
+                $('#15Days').prop('checked', true);
+                console.log('fifteenDaysArray', fifteenDaysArray);
+                sahil = [...sahil, {
+                    id: fifteenDaysArray[0].id,
+                    name: fifteenDaysArray[0].payment_term
+                }];
+            }
+            if (thirtyDaysArray.length > 0) {
+                $('#30Days').prop('checked', true);
+                console.log('thirtyDaysArray', thirtyDaysArray);
+                sahil = [...sahil, {
+                    id: thirtyDaysArray[0].id,
+                    name: thirtyDaysArray[0].payment_term
+                }];
+            }
+            if (billToClient.length > 0) {
+                $('#billToClient').prop('checked', true);
+                console.log('billToClient', billToClient);
+
+                sahil = [...sahil, {
+                    id: billToClient[0].id,
+                    name: billToClient[0].payment_term
+                }];
+            }
 
             $("#acc_customer_type").val(data.getclient.customer_type).change();
             $("#acc_business_plan").val(data.getclient.business_plan).val();
@@ -642,6 +702,10 @@ $(document).on('click', '.approve_acc', function() {
             $("#acc_remarks").val(data.getclient.remarks).val();
             $("#acc_gst_chk").val(data.getclient.regional_details.upload_gst).val();
             $("#acc_pan_chk").val(data.getclient.regional_details.upload_pan).val();
+
+            if (data.getclient.bill_to_farmer == 1) $('#acc_farmer_enable').prop('checked',
+                true);
+            else $('#acc_farmer_disable').prop('checked', true);
 
 
 
@@ -672,12 +736,20 @@ $('.account_approver').click(function() {
     $(':checkbox[name="payment_terms[]"]:checked').each(function() {
         payment_term.push(this.value);
     });
+    // for (let w = 0; w <= payment_term.length; w++) {
+    //     sahil.filter((e) => e.name != payment_term[w])
+    //     console.log('sahil', sahil);
+    // }
+    // // console.log('sahil', sahil.filter((e) => e.name != payment_term[0]));
+    // console.log('payment_term', payment_term);
+    // return false;
+    var bill_to_farmer = $('input[name="bill_to_farmers"]:checked').val();
 
-    var customer_type = $('#customer_type').val();
-    var business_plan = $('#business_plan').val();
-    var verification_done_by = $('#verification_done_by').val();
+    var customer_type = $('#acc_customer_type').val();
+    var business_plan = $('#acc_business_plan').val();
+    var verification_done_by = $('#acc_verification_done_by').val();
     var client_id = $('#acc_client_id').val();
-    var remarks = $('#remarks').val();
+    var remarks = $('#acc_remarks').val();
     var base_client_id = $('#base_client_id').val();
 
 
@@ -694,7 +766,8 @@ $('.account_approver').click(function() {
             payment_term: payment_term,
             verification_done_by: verification_done_by,
             remarks: remarks,
-            base_client_id:base_client_id
+            base_client_id: base_client_id,
+            bill_to_farmer: bill_to_farmer
         },
 
         beforeSend: function() {

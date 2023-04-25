@@ -7,6 +7,7 @@ use App\Models\BaseClient;
 use App\Models\ClientPriceDetail;
 use App\Models\ConsignmentNote;
 use App\Models\Location;
+use App\Models\PaymentTerms;
 use App\Models\RegionalClient;
 use App\Models\RegionalClientDetail;
 use App\Models\Role;
@@ -736,9 +737,7 @@ class ClientController extends Controller
             if (!empty($request->notification)) {
                 $client['notification'] = $request->notification;
             }
-            // $client['is_multiple_invoice'] = $request->is_multiple_invoice;
-            // $client['is_prs_pickup'] = $request->is_prs_pickup;
-            // $client['is_email_sent'] = $request->is_email_sent;
+
             $client['location_id'] = $request->branch_id;
             $client['upload_gst'] = $gst_img_path_save;
             $client['upload_pan'] = $pan_img_path_save;
@@ -746,6 +745,25 @@ class ClientController extends Controller
             $client['status'] = "1";
 
             $saveclient = RegionalClient::create($client);
+
+
+            foreach ($request->payment_term as $terms) {
+                $savepayment['client_id'] = $saveclient->id;
+                $savepayment['bill_to'] = 'Client';
+                $savepayment['payment_term'] = $terms;
+                $savepayment['status'] = 1;
+
+                PaymentTerms::create($savepayment);
+            }
+
+            if ($request->bill_to_farmer == 1) {
+                $savefarmeerbill['client_id'] = $saveclient->id;
+                $savefarmeerbill['bill_to'] = 'Farmer';
+                $savefarmeerbill['payment_term'] = 'Cash/UPI before Advance';
+                $savefarmeerbill['status'] = 1;
+                PaymentTerms::create($savefarmeerbill);
+            }
+
 
             $url = URL::to($this->prefix . '/clients');
             $response['success'] = true;
@@ -865,7 +883,7 @@ class ClientController extends Controller
 
         $base_clients = BaseClient::get();
 
-        return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients,'base_clients' => $base_clients]);
+        return view('verification-pending', ['prefix' => $this->prefix, 'title' => $this->title, 'regional_clients' => $regional_clients, 'base_clients' => $base_clients]);
     }
     // ===================
     public function editverificationRegional($id)
@@ -961,7 +979,7 @@ class ClientController extends Controller
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
 
-        $getclient = RegionalClient::with('verification')->where('id', $request->client_id)->first();
+        $getclient = RegionalClient::with('verification', 'PaymentTerm')->where('id', $request->client_id)->first();
 
         $response['success'] = true;
         $response['getclient'] = $getclient;
@@ -973,7 +991,7 @@ class ClientController extends Controller
 
     public function sentForVerificationAc(Request $request)
     {
-        
+
         try {
             DB::beginTransaction();
             $payment_term = implode(",", $request->payment_term);
@@ -985,13 +1003,54 @@ class ClientController extends Controller
             $verificationpending['verification_done_by'] = $request->verification_done_by;
             $verificationpending['remarks'] = $request->remarks;
             $verificationpending['draft_mode'] = 2;
+            $verificationpending['bill_to_farmer'] = $request->bill_to_farmer;
 
-            if($request->draft_mode == 1){
+            if ($request->draft_mode == 1) {
+
                 $sentAccount = VerificationPending::where('client_id', $request->client_id)->update($verificationpending);
-            }else{
+                foreach ($request->payment_term as $terms) {
+                    $savepayment['client_id'] = $request->client_id;
+                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['payment_term'] = $terms;
+                    $savepayment['status'] = 0;
+                    $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
+                    if (empty($getpayment)) {
+                        PaymentTerms::create($savepayment);
+                    }
+
+                }
+                if ($request->bill_to_farmer == 1) {
+                    $savefarmeerbill['client_id'] = $request->client_id;
+                    $savefarmeerbill['bill_to'] = 'Farmer';
+                    $savefarmeerbill['payment_term'] = 'Cash/UPI before Advance';
+                    $savefarmeerbill['status'] = 0;
+                    $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', 'Cash/UPI before Advance')->first();
+                    if (empty($getpayment)) {
+                        PaymentTerms::create($savefarmeerbill);
+                    }
+                }
+            } else {
                 $sentAccount = VerificationPending::create($verificationpending);
+                foreach ($request->payment_term as $terms) {
+                    $savepayment['client_id'] = $request->client_id;
+                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['payment_term'] = $terms;
+                    $savepayment['status'] = 0;
+                    $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
+                    if (empty($getpayment)) {
+                        PaymentTerms::create($savepayment);
+                    }
+
+                }
+                if ($request->bill_to_farmer == 1) {
+                    $savefarmeerbill['client_id'] = $request->client_id;
+                    $savefarmeerbill['bill_to'] = 'Farmer';
+                    $savefarmeerbill['payment_term'] = 'Cash/UPI before Advance';
+                    $savefarmeerbill['status'] = 0;
+                    PaymentTerms::create($savefarmeerbill);
+                }
             }
-          
+
             if ($sentAccount) {
 
                 $rmstatus = RegionalClient::where('id', $request->client_id)->update(['verified_by' => 1]);
@@ -1018,7 +1077,7 @@ class ClientController extends Controller
     // =============================================
     public function saveAsDraft(Request $request)
     {
-      
+
         try {
             DB::beginTransaction();
             $payment_term = implode(",", $request->payment_term);
@@ -1030,12 +1089,54 @@ class ClientController extends Controller
             $verificationpending['verification_done_by'] = $request->verification_done_by;
             $verificationpending['remarks'] = $request->remarks;
             $verificationpending['draft_mode'] = 1;
+            $verificationpending['bill_to_farmer'] = $request->bill_to_farmer;
 
             if ($request->draft_mode == 1) {
                 $sentAccount = VerificationPending::where('client_id', $request->client_id)->update($verificationpending);
+
+                foreach ($request->payment_term as $terms) {
+                    $savepayment['client_id'] = $request->client_id;
+                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['payment_term'] = $terms;
+                    $savepayment['status'] = 0;
+                    $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
+                    if (empty($getpayment)) {
+                        PaymentTerms::create($savepayment);
+                    }
+
+                }
+                if ($request->bill_to_farmer == 1) {
+                    $savefarmeerbill['client_id'] = $request->client_id;
+                    $savefarmeerbill['bill_to'] = 'Farmer';
+                    $savefarmeerbill['payment_term'] = 'Cash/UPI before Advance';
+                    $savefarmeerbill['status'] = 0;
+                    $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', 'Cash/UPI before Advance')->first();
+                    if (empty($getpayment)) {
+                        PaymentTerms::create($savefarmeerbill);
+                    }
+                }
+
             } else {
                 $sentAccount = VerificationPending::create($verificationpending);
-                
+                foreach ($request->payment_term as $terms) {
+                    $savepayment['client_id'] = $request->client_id;
+                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['payment_term'] = $terms;
+                    $savepayment['status'] = 0;
+                    $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
+                    if (empty($getpayment)) {
+                        PaymentTerms::create($savepayment);
+                    }
+
+                }
+                if ($request->bill_to_farmer == 1) {
+                    $savefarmeerbill['client_id'] = $request->client_id;
+                    $savefarmeerbill['bill_to'] = 'Farmer';
+                    $savefarmeerbill['payment_term'] = 'Cash/UPI before Advance';
+                    $savefarmeerbill['status'] = 0;
+                    PaymentTerms::create($savefarmeerbill);
+                }
+
             }
             if ($sentAccount) {
 
@@ -1064,7 +1165,7 @@ class ClientController extends Controller
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
 
-        $getclient = VerificationPending::with('RegionalDetails')->where('client_id', $request->client_id)->first();
+        $getclient = VerificationPending::with('RegionalDetails', 'PendingTerm')->where('client_id', $request->client_id)->first();
 
         $response['success'] = true;
         $response['getclient'] = $getclient;
@@ -1098,11 +1199,27 @@ class ClientController extends Controller
             $verificationpending['verification_done_by'] = $request->verification_done_by;
             $verificationpending['remarks'] = $request->remarks;
             $verificationpending['verified_by'] = 2;
+            $verificationpending['bill_to_farmer'] = $request->bill_to_farmer;
 
-           
             $accountApprover = RegionalClient::where('id', $request->client_id)->update($verificationpending);
-          
+
             if ($accountApprover) {
+                foreach ($request->payment_term as $terms) {
+
+                    $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
+                    if (empty($getpayment)) {
+                        $savepayment['client_id'] = $request->client_id;
+                        $savepayment['bill_to'] = 'Client';
+                        $savepayment['payment_term'] = $terms;
+                        $savepayment['status'] = 1;
+                        PaymentTerms::create($savepayment);
+                    } else {
+                        PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->update(['status' => 1]);
+                    }
+                }
+                if ($request->bill_to_farmer == 1) {
+                    PaymentTerms::where('client_id', $request->client_id)->where('payment_term', 'Cash/UPI before Advance')->update(['status' => 1]);
+                }
 
                 $rmstatus = VerificationPending::where('client_id', $request->client_id)->update(['status' => 1]);
 
@@ -1122,6 +1239,21 @@ class ClientController extends Controller
             $response['success'] = false;
             $response['redirect_url'] = $url;
         }
+        return response()->json($response);
+
+    }
+
+    public function getRegionalPaymentTerm(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+
+        $getterms = PaymentTerms::where('bill_to', $request->bill_to)->where('client_id', $request->regional_id)->where('status', 1)->get();
+
+        $response['success'] = true;
+        $response['getterms'] = $getterms;
+        $response['success_message'] = "Successfully";
+        $response['error'] = false;
         return response()->json($response);
 
     }

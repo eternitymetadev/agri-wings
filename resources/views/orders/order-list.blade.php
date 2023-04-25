@@ -106,17 +106,17 @@ div.relative {
                             <tr>
                                 <td>{{ $consignment->id ?? "-" }}</td>
                                 <td>{{ $consignment->consignment_date ?? "NA" }}</td>
-                                <td></td>
-                                <td></td>
                                 <td>{{ $consignment->RegClient->name ?? "-" }}</td>
+                                <td>{{ $consignment->BillingClient->name ?? "-" }}</td>
                                 <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
-                                <td>{{ $consignment->ConsigneeDetail->city ?? "-"}}</td>
-                                <td>{{ $consignment->ConsigneeDetail->address_line1 ?? "-"}}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ $consignment->ConsigneeDetail->district ?? "-"}} </td>
+                                <td>{{ $consignment->ConsigneeDetail->state ?? "-"}}</td>
+                                <td>{{ $consignment->ConsigneeDetail->postal_code ?? "-"}}</td>
+                                <td>{{ $consignment->total_acerage ?? "-" }}</td>
+                                <td>{{ $consignment->total_amount ?? "-" }}</td>
                                 <td><a class="btn btn-primary"
                                         href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Pending for Verification</span></a></td>
+                                        <td></td>
                             </tr>
                             <?php } ?>
                         </tbody>

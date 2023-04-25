@@ -11,6 +11,8 @@ class ConsignmentNote extends Model
     protected $fillable = [
         'total_acerage',
         'total_amount',
+        'bill_to',
+        'billing_client',
         'noc',
         'lr_type',
         'h2h_check',
@@ -115,6 +117,10 @@ class ConsignmentNote extends Model
     public function RegClient()
     {
         return $this->hasOne('App\Models\RegionalClient','id','regclient_id');
+    }
+    public function BillingClient()
+    {
+        return $this->hasOne('App\Models\RegionalClient','id','billing_client');
     }
 
     public function DrsDetail()

@@ -16,6 +16,8 @@ class AddTotalAcersToConsignmentNotesTable extends Migration
         Schema::table('consignment_notes', function (Blueprint $table) {
             $table->string('total_acerage')->after('id')->nullable();
             $table->string('total_amount')->after('total_acerage')->nullable();
+            $table->string('bill_to')->after('total_amount')->nullable();
+            $table->string('billing_client')->after('bill_to')->nullable();
             $table->dropColumn('crop');
             $table->dropColumn('acreage');
         });

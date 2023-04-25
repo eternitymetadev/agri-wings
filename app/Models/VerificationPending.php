@@ -15,6 +15,7 @@ class VerificationPending extends Model
         'verification_done_by',
         'payment_term',
         'remarks',
+        'bill_to_farmer',
         'draft_mode',
         'status',
         'created_at',
@@ -24,6 +25,10 @@ class VerificationPending extends Model
     public function RegionalDetails()
     {
         return $this->hasOne('App\Models\RegionalClient','id','client_id');
+    }
+    public function PendingTerm()
+    {
+        return $this->hasMany('App\Models\PaymentTerms','client_id','client_id');
     }
 
 }

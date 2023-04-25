@@ -9,7 +9,7 @@ class RegionalClient extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'booking_client','baseclient_id', 'location_id', 'name','user_id','regional_client_nick_name', 'email', 'phone', 'gst_no','pan','pin','city','district','state','address','notification','verified_by','upload_gst','upload_pan','customer_type','business_plan','verification_done_by','remarks','payment_term','is_multiple_invoice', 'is_prs_pickup', 'status','is_email_sent', 'created_at', 'updated_at'
+        'booking_client','baseclient_id', 'location_id', 'name','user_id','regional_client_nick_name', 'email', 'phone', 'gst_no','pan','pin','city','district','state','address','notification','verified_by','upload_gst','upload_pan','customer_type','business_plan','verification_done_by','remarks','bill_to_farmer','payment_term','is_multiple_invoice', 'is_prs_pickup', 'status','is_email_sent', 'created_at', 'updated_at'
     ]; 
 
 
@@ -29,6 +29,10 @@ class RegionalClient extends Model
     public function verification()
     {
         return $this->hasOne('App\Models\VerificationPending','client_id','id');
+    }
+    public function PaymentTerm()
+    {
+        return $this->hasMany('App\Models\PaymentTerms','client_id','id');
     }
 
 }

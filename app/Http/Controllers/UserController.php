@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserOtp;
 use App\Models\UserPermission;
 use App\Models\Zone;
+use App\Models\PaymentTerms;
 use DB;
 use Hash;
 use Helper;
@@ -329,7 +330,7 @@ class UserController extends Controller
 
             $this->prefix = request()->route()->getPrefix();
             $rules = array(
-                 'email' => 'required',
+                'email' => 'required',
                 'company_name' => 'required',
                 'contact_name' => 'required',
                 'pin' => 'required',
@@ -394,20 +395,19 @@ class UserController extends Controller
             if ($saveuser) {
 
                 // ======= gst upload
-                if(!empty($request->file('upload_gst'))){
+                if (!empty($request->file('upload_gst'))) {
                     $gstupload = $request->file('upload_gst');
                     $path = Storage::disk('s3')->put('clients', $gstupload);
                     $gst_img_path_save = Storage::disk('s3')->url($path);
                     $saveclientdetails['upload_gst'] = $gst_img_path_save;
                 }
-                
 
                 //  ======= pan upload
-                if(!empty($request->file('upload_gst'))){
-                $panupload = $request->file('upload_pan');
-                $pan_path = Storage::disk('s3')->put('clients', $panupload);
-                $pan_img_path_save = Storage::disk('s3')->url($pan_path);
-                $saveclientdetails['upload_pan'] = $pan_img_path_save;
+                if (!empty($request->file('upload_gst'))) {
+                    $panupload = $request->file('upload_pan');
+                    $pan_path = Storage::disk('s3')->put('clients', $panupload);
+                    $pan_img_path_save = Storage::disk('s3')->url($pan_path);
+                    $saveclientdetails['upload_pan'] = $pan_img_path_save;
                 }
 
                 $getpin_transfer = Zone::where('postal_code', $request->pin)->first();
@@ -436,15 +436,19 @@ class UserController extends Controller
                 if (!empty($request->notification)) {
                     $saveclientdetails['notification'] = $request->notification;
                 }
-               
-               
+
                 $saveclientdetails['location_id'] = $client_assign_branch;
                 $saveclientdetails['status'] = 1;
                 $saveclientdetails['booking_client'] = 1;
 
-                $saveclientdetails['payment_term'] = 'Bill To Client';
+                $saveRegional = RegionalClient::create($saveclientdetails);
 
-                RegionalClient::create($saveclientdetails);
+                ////==== Payment terms =====
+                $saveterm['client_id'] = $saveRegional->id;
+                $saveterm['bill_to'] = 'Client';
+                $saveterm['payment_term'] = 'Bill To Client';
+                $saveterm['status'] = 1;
+                PaymentTerms::create($saveterm);
 
                 $data = ['contact_name' => $request->contact_name, 'user_id' => $userid];
                 $user['to'] = $request->email;
@@ -484,7 +488,7 @@ class UserController extends Controller
     public function clientVerification($id)
     {
         $id = decrypt($id);
-        $verified = User::with('UserClient')->where('id', $id)->first();        
+        $verified = User::with('UserClient')->where('id', $id)->first();
         // $user_branch = $verified->UserClient->location_id;
 
         // $regional_manager = User::whereRaw('FIND_IN_SET('.$user_branch.',branch_id)')->where('role_id', 3)->get();
@@ -494,14 +498,14 @@ class UserController extends Controller
         // }
 
         if ($verified->status == 0) {
-            
+
             $html = '<!DOCTYPE html>
             <html>
-            
+
             <head>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
                     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-            
+
                 <style>
                 p {
                     margin-bottom: 0px !important;
@@ -510,7 +514,7 @@ class UserController extends Controller
                 }
                 </style>
             </head>
-            
+
             <body>
                 <p>
                 Dear Customer,<br /><br />
@@ -532,7 +536,7 @@ class UserController extends Controller
 
                 </p>
             </body>
-            
+
             </html>';
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($html);
@@ -540,7 +544,7 @@ class UserController extends Controller
 
             $data = ['login_id' => $verified->login_id, 'password' => $verified->user_password, 'name' => $verified->name];
             $user['to'] = $verified->email;
-            Mail::send('client-login-email', $data, function ($messges) use ($user,$pdf) {
+            Mail::send('client-login-email', $data, function ($messges) use ($user, $pdf) {
                 $messges->to($user['to']);
                 $messges->subject('Your Login Credentials for Agriwings');
                 $messges->attachData($pdf->output(), "welcome.pdf");
@@ -588,7 +592,7 @@ class UserController extends Controller
     {
         $phone = $request->phone;
         $generate_otp = random_int(100000, 999999);
-        $text = 'Dear User, Your OTP is '.$generate_otp.' for AgriWings registration . Thanks, Agriwings Team';
+        $text = 'Dear User, Your OTP is ' . $generate_otp . ' for AgriWings registration . Thanks, Agriwings Team';
 
         $check_number = UserOtp::where('phone', $phone)->first();
         if (!empty($check_number)) {
@@ -600,7 +604,7 @@ class UserController extends Controller
                 return response()->json($response);
 
             } else {
-                $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey='.$this->sms_link.'&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number='.urlencode($phone).'&text='.urlencode($text).'&route=2&peid=1701168155524038890';
+                $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($phone) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
                 $result = $this->SendTSMS($url);
 
                 $update = UserOtp::where('phone', $phone)->update(['otp' => $generate_otp]);
@@ -613,7 +617,7 @@ class UserController extends Controller
 
         }
 
-        $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey='.$this->sms_link.'&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number='.urlencode($phone).'&text='.urlencode($text).'&route=2&peid=1701168155524038890';
+        $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($phone) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
 
         $result = $this->SendTSMS($url); // call function that return response with code
 

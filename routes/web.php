@@ -691,6 +691,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::get('create-regional-client', [ClientController::class, 'createRegionalClient']);
     Route::any('generate-regional', [ClientController::class, 'generateRegionalName']);
     Route::any('regclient-detail/update-generate-regional', [ClientController::class, 'updateGenerateRegionalName']);
+    Route::any('create-regional', [ClientController::class, 'storeRegionalClient']);
 
     Route::any('unverified-client-list', [ClientController::class, 'unverifiedClient']);
     Route::get('/unverified-client-list/{id}/edit', [ClientController::class, 'editverificationRegional']);
@@ -1030,6 +1031,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
     Route::any('/check-farmer-phone', [ConsigneeController::class, 'checkFarmerPhone']);
     Route::any('/user-profile', [UserController::class, 'userProfile']);
+    Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
     
     
 

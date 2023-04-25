@@ -85,20 +85,21 @@
                                     <input type="text" class="form-control" id="postal_code" name="pin" placeholder="">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">City<span
-                                            class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="city" placeholder="">
+                                    <label for="exampleFormControlInput2">City<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="city" placeholder="">
                                 </div>
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlSelect1">District</label>
-                                    <input type="email" class="form-control" id="district" name="district" placeholder="" readonly>
+                                    <input type="text" class="form-control" id="district" name="district"
+                                        placeholder="" readonly>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">State<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="state" name="state" placeholder="" readonly>
+                                    <input type="text" class="form-control" id="state" name="state" placeholder=""
+                                        readonly>
                                 </div>
                             </div>
                             <div class="form-row mb-0">
@@ -181,56 +182,72 @@
                                     </div>
                                 </div> -->
 
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Select Payment Terms<span
-                                            class="text-danger">*</span></label>
-                                    <div class="check-box d-flex" style="margin: 6px 0 0 6px">
-                                        <div class="checkbox radio">
-                                            <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                                <span class="checkmark"></span>
-                                                <input type="checkbox" value='Bill To Client' name="payment_term[]" checked/>
-                                                Bill To Client
-                                            </label>
-                                        </div>
-                                        <div class="checkbox radio">
-                                            <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                                <span class="checkmark"></span>
-                                                <input type="checkbox" name="payment_term[]" value='15 days Credit Period' />
-                                                15 days Credit Period
-                                            </label>
-                                        </div>
-                                        <div class="checkbox radio">
-                                            <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                                <span class="checkmark"></span>
-                                                <input type="checkbox" name="payment_term[]" value='30 days Credit Period' />
-                                                30 days Credit Period
-                                            </label>
-                                        </div>
-                                        <div class="checkbox radio">
+                            <div class="form-group col-md-6">
+                                <label for="exampleFormControlInput2">Select Payment Terms<span
+                                        class="text-danger">*</span></label>
+                                <div class="check-box d-flex" style="margin: 6px 0 0 6px">
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" value='Bill To Client' name="payment_term[]"
+                                                checked />
+                                            Bill To Client
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" name="payment_term[]"
+                                                value='15 days Credit Period' />
+                                            15 days Credit Period
+                                        </label>
+                                    </div>
+                                    <div class="checkbox radio">
+                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
+                                            <span class="checkmark"></span>
+                                            <input type="checkbox" name="payment_term[]"
+                                                value='30 days Credit Period' />
+                                            30 days Credit Period
+                                        </label>
+                                    </div>
+                                    <!-- <div class="checkbox radio">
                                             <label class="check-label d-flex align-items-center" style="gap: 6px">
                                                 <span class="checkmark"></span>
                                                 <input type="checkbox" name="payment_term[]" value='Bill to Farmer' />
                                                 Bill to Farmer
                                             </label>
-                                        </div>
-                                    </div>
+                                        </div> -->
                                 </div>
-                                <div class="formRow">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="notification" id="inlineCheckbox1" value="1">
-                        <label class="form-check-label" for="inlineCheckbox1">Notification required, if yes then disclaimer</label>
-                    </div>
-                </div>
                             </div>
-
-                            <button type="submit" class="mt-4 mb-4 btn btn-primary">Submit</button>
-                            <a class="btn btn-primary" href="{{url($prefix.'/clients') }}"> Back</a>
-                        </form>
+                            <label for="pan" class="form-label  formLabelTheme">Bill To Farmer</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bill_to_farmer"
+                                    id="acc_farmer_enable" value="1">
+                                <label class="form-check-label" for="inlineRadio1">Enable</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="bill_to_farmer"
+                                    id="acc_farmer_disable" value="0" checked>
+                                <label class="form-check-label" for="inlineRadio2">Disable</label>
+                            </div>
+                            <div class="formRow">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="notification"
+                                        id="inlineCheckbox1" value="1">
+                                    <label class="form-check-label" for="inlineCheckbox1">Notification required, if yes
+                                        then disclaimer</label>
+                                </div>
+                            </div>
                     </div>
+
+                    <button type="submit" class="mt-4 mb-4 btn btn-primary">Submit</button>
+                    <a class="btn btn-primary" href="{{url($prefix.'/clients') }}"> Back</a>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @endsection

@@ -21,6 +21,7 @@ class CreateVerificationPendingsTable extends Migration
             $table->string('verification_done_by')->nullable();
             $table->string('payment_term')->nullable();
             $table->string('remarks')->nullable();
+            $table->string('bill_to_farmer')->default(0)->comment('0 =>disable  1=>enable');
             $table->string('draft_mode')->default(2)->comment('1 =>save as draft  2=>verified');
             $table->tinyinteger('status')->default(0)->comment('0 =>unverified  1=>verified');
             $table->timestamps();
