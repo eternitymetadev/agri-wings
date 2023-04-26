@@ -179,14 +179,14 @@
                                             30 days Credit Period
                                     </label>
                                 </div>
-                                <div class="checkbox radio">
+                                <!-- <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
                                         <input type="checkbox" name="payment_term[]" value='Bill To Farmer'
                                             {{in_array("Bill To Farmer", $payment_term) ? 'checked' : '' }} />
                                             Bill To Farmer
                                     </label>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

@@ -697,23 +697,6 @@ tr:hover .dltItemRow {
                                     <label for="exampleFormControlSelect1">
                                         Select Farmer<span class="text-danger">*</span>
                                     </label>
-                                    <!-- <input class="form-control" list="browsers" name="farmer_id" id="farmer_id"> -->
-                                    <!-- <datalist id="browsers" style="background: #f16334">
-                                        @foreach($farmers as $farmer)
-                                        <option data-value="{{$farmer->id}}" value="{{$farmer->nick_name}}">
-                                            {{$farmer->phone}}
-                                        </option>
-                                        @endforeach
-                                    </datalist> -->
-                                    <!-- <input onkeyup="demoFunction()" name='pp' id='pp' /> -->
-                                    <!-- <select class="form-control my-select2" name="payment_type"
-                                        onchange="displayCropsSection()" id="farmer_id">
-                                        <option value="">-select-</option>
-                                        @foreach($farmers as $farmer)
-                                        <option value="{{$farmer->id}}">{{$farmer->nick_name}}-{{$farmer->phone}}
-                                        </option>
-                                        @endforeach
-                                    </select> -->
                                     <input id="farmer_id" class="form-control" type="text" placeholder="Search.." />
                                 </div>
                             </div>
@@ -877,7 +860,7 @@ tr:hover .dltItemRow {
                             <label for="exampleFormControlSelect1">
                                 Farm Location<span class="text-danger">*</span>
                             </label>
-                            <select class="form-control my-select2" name="payment_type" onchange="displayCropsSection()"
+                            <select class="form-control my-select2" name="" onchange="displayCropsSection()"
                                 id="farmLocation">
                                 <option value="" readonly>-select location-</option>
                                 <!-- <option value="TBB">Location 1</option>
@@ -955,7 +938,7 @@ tr:hover .dltItemRow {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
 
 <script>
-let farmerList = [];
+let farmerList = []; 
 
 $(document).ready(function() {
 
@@ -1513,7 +1496,7 @@ $("#bill_term").change(function(e) {
 
             $.each(res.getterms, function(index, value) {
                 $("#paymentType_").append(
-                    '<option value="' +
+                    '<option value="' + 
                     value.payment_term +
                     '">' +
                     value.payment_term +

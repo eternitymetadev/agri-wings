@@ -891,7 +891,7 @@ class ClientController extends Controller
 
         $this->prefix = request()->route()->getPrefix();
         $id = decrypt($id);
-        $regclient_name = RegionalClient::where('id', $id)->first();
+        $regclient_name = RegionalClient::with('PaymentTerm')->where('id', $id)->first();
         $zonestates = Zone::all()->unique('state')->pluck('state', 'id');
         $locations = Location::all();
         $base_clients = BaseClient::all();

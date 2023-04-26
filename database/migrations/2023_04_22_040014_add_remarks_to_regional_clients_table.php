@@ -15,7 +15,8 @@ class AddRemarksToRegionalClientsTable extends Migration
     {
         Schema::table('regional_clients', function (Blueprint $table) {
             $table->string('remarks')->after('verification_done_by')->nullable();
-            $table->string('bill_to_farmer')->after('remarks')->default(0)->comment('0 =>disable  1=>enable');
+            $table->string('farmer_id')->after('remarks')->nullable();
+            $table->string('bill_to_farmer')->after('farmer_id')->default(0)->comment('0 =>disable  1=>enable');
         });
     }
 

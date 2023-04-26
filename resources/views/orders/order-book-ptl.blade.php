@@ -671,7 +671,8 @@ tr:hover .dltItemRow {
 
 
 <div class="layout-px-spacing mt-5">
-<form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment" style="margin: auto;" >
+    <form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment"
+        style="margin: auto;">
 
         <div class="row flex-wrap mx-0" style="gap: 2rem">
 
@@ -696,25 +697,8 @@ tr:hover .dltItemRow {
                                     <label for="exampleFormControlSelect1">
                                         Select Farmer<span class="text-danger">*</span>
                                     </label>
-                                    <!-- <input class="form-control" list="browsers" name="farmer_id" id="farmer_id"> -->
-                                    <!-- <datalist id="browsers" style="background: #f16334">
-                                        @foreach($farmers as $farmer)
-                                        <option data-value="{{$farmer->id}}" value="{{$farmer->nick_name}}">
-                                            {{$farmer->phone}}
-                                        </option>
-                                        @endforeach
-                                    </datalist> -->
-                                    <!-- <input onkeyup="demoFunction()" name='pp' id='pp' /> -->
-                                    <!-- <select class="form-control my-select2" name="payment_type"
-                                        onchange="displayCropsSection()" id="farmer_id">
-                                        <option value="">-select-</option>
-                                        @foreach($farmers as $farmer)
-                                        <option value="{{$farmer->id}}">{{$farmer->nick_name}}-{{$farmer->phone}}
-                                        </option>
-                                        @endforeach
-                                    </select> -->
                                     <input id="farmer_id" class="form-control" type="text" placeholder="Search.." />
-                                </div>
+                                </div> 
                             </div>
                         </div>
 
@@ -776,27 +760,31 @@ tr:hover .dltItemRow {
 
                     <div class="form-group col-md-7">
                         <label for="exampleFormControlSelect1">
-                            Bill to Client<span class="text-danger">*</span>
+                            Client<span class="text-danger">*</span>
                         </label>
-                        <select class="form-control my-select2" name=""
-                            id="select_reg">
+                        <select class="form-control my-select2" name="" id="select_reg">
                             <option value="">--select--</option>
                             @foreach($regionalclient as $regional)
                             <option value="{{$regional->id}}">{{$regional->name}}</option>
                             @endforeach
                         </select>
-                        <Input type="hidden" class="form-control" id="regional_id" name="regclient_id"
-                            value="">
-
+                        <Input type="hidden" class="form-control" id="regional_id" name="regclient_id" value="">
                     </div>
 
                     <div class="form-group col-md-5">
                         <label for="exampleFormControlSelect1">
+                            Bill To<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control my-select2" name="bill_to" id="bill_to">
+
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="exampleFormControlSelect1">
                             Payment Term<span class="text-danger">*</span>
                         </label>
-                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                            id="paymentType_">
-                           
+                        <select class="form-control my-select2" name="payment_type" id="paymentType_">
+
                         </select>
                     </div>
                 </div>
@@ -869,7 +857,7 @@ tr:hover .dltItemRow {
                             <label for="exampleFormControlSelect1">
                                 Farm Location<span class="text-danger">*</span>
                             </label>
-                            <select class="form-control my-select2" name="payment_type" onchange="displayCropsSection()"
+                            <select class="form-control my-select2" name="" onchange="displayCropsSection()"
                                 id="farmLocation">
                                 <option value="" readonly>-select location-</option>
                                 <!-- <option value="TBB">Location 1</option>
@@ -926,11 +914,11 @@ tr:hover .dltItemRow {
         </div>
 
         {{--vehicle info--}}
-        <div class="form-check form-check-inline justify-content-end col-12">
+        <!-- <div class="form-check form-check-inline justify-content-end col-12">
             <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
             <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
                 farmer</label>
-        </div>
+        </div> -->
 
         <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
             <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
@@ -1229,20 +1217,20 @@ $("#branch_id").change(function(e) {
     });
 });
 
-function togglePaymentAction() {
+// function togglePaymentAction() {
 
-    if ($('#paymentType').val() == 'To Pay') {
-        $('#freight_on_delivery').attr('readonly', false);
-        $('#cod').attr('readonly', false);
-    } else if ($('#paymentType').val() == 'Paid') {
-        $('#cod').attr('readonly', true);
-        $('#freight_on_delivery').attr('readonly', true);
-    } else {
-        $('#freight_on_delivery').attr('readonly', true);
-        $('#cod').attr('readonly', false);
-        $('#freight_on_delivery').val('');
-    }
-}
+//     if ($('#paymentType').val() == 'To Pay') {
+//         $('#freight_on_delivery').attr('readonly', false);
+//         $('#cod').attr('readonly', false);
+//     } else if ($('#paymentType').val() == 'Paid') {
+//         $('#cod').attr('readonly', true);
+//         $('#freight_on_delivery').attr('readonly', true);
+//     } else {
+//         $('#freight_on_delivery').attr('readonly', true);
+//         $('#cod').attr('readonly', false);
+//         $('#freight_on_delivery').val('');
+//     }
+// }
 
 const appendFarmerDes = (des) => {
     console.log('sdvbhytrfd');
@@ -1449,41 +1437,94 @@ $('#farmer_id').autocomplete({
     }
 });
 
-$("#select_reg").change(function (e) {
-        var regclient_id = $(this).val();
-        $.ajax({
-            url: "/get-consigner-regional",
-            type: "get",
-            cache: false,
-            data: { regclient_id: regclient_id },
-            dataType: "json",
-            headers: {
-                "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
-            },
-            beforeSend: function () {
-                $("#select_consigner").empty();
-            },
-            success: function (res) {
-                $('#regional_id').val(regclient_id);
-                var payment_term = res.data_regclient.payment_term;
-                var payment_array = payment_term.split(",");
-                $("#paymentType_").append(
-                    `<option selected disabled>select..
+$("#select_reg").change(function(e) {
+    $("#bill_to").empty();
+    var regclient_id = $(this).val();
+
+    $.ajax({
+        url: "/get-consigner-regional",
+        type: "get",
+        cache: false,
+        data: {
+            regclient_id: regclient_id
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+        },
+        beforeSend: function() {
+            $("#bill_to").empty();
+        },
+        success: function(res) {
+            var all_term = res.data_regclient.payment_term;
+
+            $('#regional_id').val(regclient_id);
+            var termarr = [];
+            $.each(all_term, function(index, terms) {
+                termarr.push(terms.bill_to);
+
+            });
+            var filteredArray = termarr.filter(function(item, pos) {
+                return termarr.indexOf(item) == pos;
+            });
+
+            $("#bill_to").append(
+                `<option selected disabled>select..
                     </option>`
+            );
+            $.each(filteredArray, function(index, term) {
+                $("#bill_to").append(
+                    '<option value="' +
+                    term +
+                    '">' +
+                    term +
+                    "</option>"
                 );
-                $.each(payment_array, function (index, term) {
-                    $("#paymentType_").append(
-                        '<option value="' +
-                        term +
-                        '">' +
-                        term +
-                        "</option>"
-                    );
-                });
-   
-            },
-        });
+            });
+
+        },
     });
+});
+
+$("#bill_to").change(function(e) {
+
+    var bill_to = $(this).val();
+    var regional_id = $('#regional_id').val();
+ 
+    $("#paymentType_").empty();
+    $.ajax({
+        url: "get-payment-term",
+        type: "get",
+        cache: false,
+        data: {
+            bill_to: bill_to,
+            regional_id: regional_id
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+        },
+        beforeSend: function() {
+            $("#paymentType_").empty();
+        },
+        success: function(res) {
+            console.log(res.getterms);
+            $("#paymentType_").append(
+                '<option value="">select..</option>'
+            );
+
+            $.each(res.getterms, function(index, value) {
+                $("#paymentType_").append(
+                    '<option value="' +
+                    value.payment_term +
+                    '">' +
+                    value.payment_term +
+                    "</option>"
+                );
+            });
+        },
+    });
+});
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap">
 </script>

@@ -701,6 +701,9 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::post('sent-for-verification', [ClientController::class, 'sentForVerificationAc']);
     Route::post('save-as-draft', [ClientController::class, 'saveAsDraft']);
     Route::any('view-regional-details/{id}', [ClientController::class, 'ViewRegionalDetails']);
+    Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
+    Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
+    Route::any('/get-farmer-details', [ConsigneeController::class, 'getfarmerDetails']);
 
 
 
@@ -999,6 +1002,9 @@ Route::group(['prefix'=>'account-manager', 'middleware'=>['auth','PermissionChec
 
     Route::any('/account-check-verification', [ClientController::class, 'accountCheckVerification']);
     Route::any('/account-approver', [ClientController::class, 'accountApprover']);
+    Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
+    Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
+
 
 });
 Route::group(['prefix'=>'client-account', 'middleware'=>['auth','PermissionCheck']], function()

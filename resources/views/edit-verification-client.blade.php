@@ -15,8 +15,8 @@
                 </nav>
             </div>
             <div class="widget-content widget-content-area br-6">
-                <form class="contact-info" method="POST" action="{{url($prefix.'/unverified-client-list/update-verification')}}"
-                    id="updateregclientdetail">
+                <form class="contact-info" method="POST"
+                    action="{{url($prefix.'/unverified-client-list/update-verification')}}" id="updateregclientdetail">
                     <input type="hidden" name="regclientdetail_id" value="{{$regclient_name->id}}">
 
                     <div class="form-row mb-0">
@@ -150,7 +150,19 @@
                             </div>
                         </div> -->
                         <?php 
-                          $payment_term = explode(',',$regclient_name->payment_term);
+                         $getpayment = DB::table('payment_terms')->where('client_id',$regclient_name->id)->where('status', 1)->get();
+                         $payment_term = array();
+                         foreach($getpayment as $bill_term){
+                             $payment_term[] = $bill_term->payment_term;
+                         }
+                        //  echo'<pre>'; print_r($payment_term); die;
+                        // $get_terms = $regclient_name->PaymentTerm ;
+                        // $payment_term = array();
+                        // foreach($get_terms as $term){
+                        //     $payment_term[] = $term->payment_term;
+
+                        // }
+                        //$payment_term = explode(',',$regclient_name->payment_term);
                          ?>
                         <div class="form-group col-md-6">
                             <label for="exampleFormControlInput2">Select Payment Terms<span
@@ -164,12 +176,12 @@
                                         Bill To Client
                                     </label>
                                 </div>
-                                <div class="checkbox radio"> 
+                                <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
                                         <input type="checkbox" name="payment_term[]" value='15 days Credit Period'
                                             {{in_array("15 days Credit Period", $payment_term) ? 'checked' : '' }} />
-                                            15 days Credit Period
+                                        15 days Credit Period
                                     </label>
                                 </div>
                                 <div class="checkbox radio">
@@ -177,18 +189,29 @@
                                         <span class="checkmark"></span>
                                         <input type="checkbox" name="payment_term[]" value='30 days Credit Period'
                                             {{in_array("30 days Credit Period", $payment_term) ? 'checked' : '' }} />
-                                            30 days Credit Period
+                                        30 days Credit Period
                                     </label>
                                 </div>
-                                <div class="checkbox radio">
+                                <!-- <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
                                         <input type="checkbox" name="payment_term[]" value='Bill To Farmer'
                                             {{in_array("Bill To Farmer", $payment_term) ? 'checked' : '' }} />
                                             Bill To Farmer
                                     </label>
-                                </div>
+                                </div> -->
                             </div>
+                        </div>
+                        <label for="pan" class="form-label  formLabelTheme">Bill To Farmer</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bill_to_farmer" id="acc_farmer_enable"
+                                value="1">
+                            <label class="form-check-label" for="inlineRadio1">Enable</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="bill_to_farmer" id="acc_farmer_disable"
+                                value="0" checked>
+                            <label class="form-check-label" for="inlineRadio2">Disable</label>
                         </div>
                     </div>
 
