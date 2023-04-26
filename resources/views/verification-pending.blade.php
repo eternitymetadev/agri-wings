@@ -102,7 +102,7 @@ div.relative {
                                 <td>{{$client->district}}</td>
                                 <td>{{$client->city}}</td>
                                 <td>{{$client->state}}</td>
-                                <td>{{$client->Location->name}}</td>
+                                <td>{{@$client->Location->name}}</td>
                                 <?php if($client->verified_by == 0){?>
                                 <td><a href="{{ url($prefix.'/view-regional-details/'.$client->id) }}"
                                         class="edit btn btn-sm btn-primary ml-2">view</a>||<button type="button"
