@@ -146,5 +146,9 @@ class ConsignmentNote extends Model
     {
         return $this->hasOne('App\Models\Farm','id','ship_to_id');
     }
+    public function OrderFarmDetails()
+    {
+        return $this->hasMany('App\Models\OrderFarm','order_id','id');
+    }
 
 }

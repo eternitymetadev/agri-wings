@@ -671,7 +671,7 @@ tr:hover .dltItemRow {
 
 
 <div class="layout-px-spacing mt-5">
-<form class="general_form" method="POST" action="{{url($prefix.'/orders/update-order')}}" id="updateorder"
+    <form class="general_form" method="POST" action="{{url($prefix.'/orders/update-order')}}" id="updateorder"
         style="margin: auto; ">
         <input type="hidden" name="consignment_id" value="{{$getconsignments->id}}">
 
@@ -681,24 +681,24 @@ tr:hover .dltItemRow {
                 <div class="form-row justify-content-center" style="min-height: 340px; align-content: flex-start">
                     <h6 class="col-12">Farmer Details </h6>
                     <div class="row align-items-center justify-content-center" style="width: 100%">
-                      
+
 
 
                         <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
-                        
+
 
                         <div id='farmerInfo' class="farmerInfo">
                             <img src="{{asset('assets/farmer-icon.png')}}" />
                             <div id="farmerDes" class="farmerDes">
-                                <p class="title">Farmer Name</p>
+                                <p class="title">{{$getconsignments->ConsigneeDetail->nick_name}}</p>
                                 <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="feather feather-phone">
                                         <path
                                             d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                                         </path>
-                                    </svg> +91-1234567890</p>
-                                <p>Farm Locations - <span>4</span></p>
+                                    </svg> +91-{{$getconsignments->ConsigneeDetail->phone}}</p>
+                                <p>Farm Locations - <span>?</span></p>
                             </div>
                         </div>
 
@@ -713,10 +713,9 @@ tr:hover .dltItemRow {
                             Bill to<span class="text-danger">*</span>
                         </label>
                         <select class="form-control my-select2" name="bill_term" id="bill_term">
-                            
+                            <option value="{{$getconsignments->bill_to}}">{{$getconsignments->bill_to}}</option>
                         </select>
-                        <Input type="hidden" class="form-control" id="regclient_id" name="regclient_id"
-                            value="">
+                        <Input type="hidden" class="form-control" id="regclient_id" name="regclient_id" value="">
 
                     </div>
 
@@ -726,6 +725,8 @@ tr:hover .dltItemRow {
                         </label>
                         <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
                             id="paymentType_">
+                            <option value="{{$getconsignments->payment_type}}">{{$getconsignments->payment_type}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -751,7 +752,7 @@ tr:hover .dltItemRow {
 
                     <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
 
-                    @foreach($Crops as $crop) 
+                    @foreach($Crops as $crop)
                     <div class="form-group">
                         <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop"
                             value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
@@ -761,37 +762,6 @@ tr:hover .dltItemRow {
                         </label>
                     </div>
                     @endforeach
-                    <!-- <div class="form-group">
-                        <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
-                        <label for="wheat">Wheat
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
-                        <label for="paddy">Paddy
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
-                        <label for="potato">Potato
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
-                        <label for="apple">Apple
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
-                        <label for="cotton">Cotton
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div> -->
-
 
                     <div class="row col-12 mt-3 align-items-center">
                         <div class="form-group col-md-6" style="max-width: 320px">
@@ -842,16 +812,18 @@ tr:hover .dltItemRow {
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                <td>cropNameText<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
-                <td>farmLocationText<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
-                <td>acreage<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
+                            @foreach($getconsignments->OrderFarmDetails as $farm_detail)
+                            <tr>
+                                <td>{{$farm_detail->CropName->crop_name}}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
+                <td>{{$farm_detail->FarmerFarm->farm_area}}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
+                <td>{{$farm_detail->acreage}}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
                 <td class="lastCol">
-                    totalPrice<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
+                {{$farm_detail->crop_price}}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </td>
                 
             </tr>
+            @endforeach
                         </tbody>
                     </table>
 
@@ -866,16 +838,17 @@ tr:hover .dltItemRow {
         </div>
 
         {{--vehicle info--}}
-        <!-- <div class="form-check form-check-inline justify-content-end col-12">
+                                    <!-- <div class="form-check form-check-inline justify-content-end col-12">
             <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
             <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
                 farmer</label>
         </div> -->
 
-        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
-            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
-            <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
-        </div>
+                                    <div class="col-12 d-flex justify-content-end align-items-center"
+                                        style="gap: 1rem; margin-top: 1rem;">
+                                        <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
+                                        <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
+                                    </div>
 
     </form>
 </div>
@@ -887,7 +860,7 @@ tr:hover .dltItemRow {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
 
 <script>
-let farmerList = []; 
+let farmerList = [];
 
 $(document).ready(function() {
 
@@ -1428,7 +1401,7 @@ $("#bill_term").change(function(e) {
         cache: false,
         data: {
             bill_to: bill_to,
-            regional_id:regional_id
+            regional_id: regional_id
         },
         dataType: "json",
         headers: {
@@ -1444,7 +1417,7 @@ $("#bill_term").change(function(e) {
 
             $.each(res.getterms, function(index, value) {
                 $("#paymentType_").append(
-                    '<option value="' + 
+                    '<option value="' +
                     value.payment_term +
                     '">' +
                     value.payment_term +

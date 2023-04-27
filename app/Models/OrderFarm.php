@@ -18,4 +18,15 @@ class OrderFarm extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function CropName()
+    {
+        return $this->hasOne('App\Models\Crop','id','crop');
+    }
+
+    public function FarmerFarm()
+    {
+        return $this->hasOne('App\Models\Farm','id','farm_location');
+    }
+
 }
