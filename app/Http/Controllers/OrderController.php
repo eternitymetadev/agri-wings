@@ -61,7 +61,7 @@ class OrderController extends Controller
         } elseif ($authuser->role_id == 6) {
             $query = $query->whereIn('base_clients.id', $baseclient);
         } elseif ($authuser->role_id == 7) {
-            $query = $query->whereIn('regclient_id', $regclient);
+            $query = $query->where('user_id', $authuser->id);
         } else {
             $query;
             // $query = $query->whereIn('branch_id', $cc)->orWhere(function ($query) use ($cc) {
@@ -403,9 +403,9 @@ class OrderController extends Controller
         // }
 
         $farms = Farm::where('farmer_id', $getconsignments->consignee_id)->get();
-        $crops = Crop::get();
+        $Crops = Crop::get();
 
-        return view('orders.update-order', ['prefix' => $this->prefix, 'getconsignments' => $getconsignments, 'consigners' => $consigners, 'consignees' => $consignees, 'vehicles' => $vehicles, 'vehicletypes' => $vehicletypes, 'drivers' => $drivers, 'regionalclient' => $regionalclient, 'itemlists' => $itemlists, 'branchs' => $branchs, 'farms' => $farms, 'crops' => $crops]);
+        return view('orders.update-order', ['prefix' => $this->prefix, 'getconsignments' => $getconsignments, 'consigners' => $consigners, 'consignees' => $consignees, 'vehicles' => $vehicles, 'vehicletypes' => $vehicletypes, 'drivers' => $drivers, 'regionalclient' => $regionalclient, 'itemlists' => $itemlists, 'branchs' => $branchs, 'farms' => $farms, 'Crops' => $Crops]);
     }
 
     /**

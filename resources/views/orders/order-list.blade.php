@@ -102,6 +102,7 @@ div.relative {
                         <tbody>
                             <?php
                             foreach ($consignments as $key => $consignment) {
+                                 $authuser = Auth::user();
                                 ?>
                             <tr>
                                 <td>{{ $consignment->id ?? "-" }}</td>
@@ -114,9 +115,16 @@ div.relative {
                                 <td>{{ $consignment->ConsigneeDetail->postal_code ?? "-"}}</td>
                                 <td>{{ $consignment->total_acerage ?? "-" }}</td>
                                 <td>{{ $consignment->total_amount ?? "-" }}</td>
+                                <?php
+                                if($authuser->role_id == 7){?>
+                                <td><a class="btn btn-primary" href="#"><span>Pending
+                                            for Verification</span></a></td>
+                                <?php }else{ ?>
                                 <td><a class="btn btn-primary"
-                                        href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Pending for Verification</span></a></td>
-                                        <td></td>
+                                        href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Pending
+                                            for Verification</span></a></td>
+                                <?php  } ?>
+                                <td></td>
                             </tr>
                             <?php } ?>
                         </tbody>
@@ -200,7 +208,7 @@ div.relative {
                 <div class="modal-body">
                     <input type="hidden" class="form-control" name="lr_id" id="lr_id" />
 
-                    <input type="text" class="form-control" name="prs_remarks" placeholder="Remarks" Required/>
+                    <input type="text" class="form-control" name="prs_remarks" placeholder="Remarks" Required />
                 </div>
                 <!-- Modal footer -->
                 <div class="modal-footer">

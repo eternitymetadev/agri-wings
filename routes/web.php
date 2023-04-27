@@ -1038,6 +1038,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/check-farmer-phone', [ConsigneeController::class, 'checkFarmerPhone']);
     Route::any('/user-profile', [UserController::class, 'userProfile']);
     Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
+    Route::resource('orders', OrderController::class);
     
     
 

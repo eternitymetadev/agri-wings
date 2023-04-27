@@ -1,4 +1,6 @@
 @extends('layouts.main')
+@section('page-heading')Order Book @endsection
+
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
@@ -264,202 +266,616 @@ span.select2.select2-container.mb-4 {
     color: #000;
 }
 
-select[readonly] {
+.cropSelection {
+    background: url('https://thumbs.dreamstime.com/b/vector-farm-illustration-illustration-banner-book-social-media-other-design-vector-farm-illustration-vector-tractor-181864455.jpg');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.cropSelection .form-group {
+    position: relative;
+    max-width: 82px;
+    width: 100%;
+}
+
+.cropSelection .form-group.farm {
+    max-width: 180px;
+}
+
+
+.cropSelection input[type="radio"]:checked+label {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    outline: 4px solid #28a745db;
+    outline-offset: 2px;
+    border: 1px solid var(--secondaryColor);
+    padding: 1rem 0.5rem 0.3rem;
+    font-size: 14px;
+    color: var(--secondaryColor) !important;
+}
+
+.cropSelection input[type="radio"]+label {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    outline: 4px solid #28a74515;
+    outline-offset: 2px;
+    border: 1px solid #28a74500;
+    padding: 1rem 0.5rem 0.3rem;
+    font-size: 14px;
+    color: #838383;
+    transition: all 350ms ease-in-out;
+}
+
+.cropSelection label img {
+    width: 100%;
+    max-width: 120px;
+}
+
+.cropSelection input[type="radio"] {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    height: 20px;
+    width: 20px;
+    accent-color: var(--secondaryColor);
+}
+
+
+.cropSelection .farm input[type="radio"] {
+    top: 6px;
+    left: 10px;
+    height: 24px;
+    width: 24px;
+}
+
+.cropSelection .farm input[type="radio"]+label {
+    padding: 8px;
+}
+
+.cropSelection * {
+    /* opacity: 0; */
+}
+
+.cropSelection.enabled {
+    background: none;
+}
+
+.cropSelection.enabled * {
+    opacity: 1;
+}
+
+
+
+
+/* for toggler */
+.Switcher {
+    position: relative;
+    display: flex;
+    border-radius: 5em;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-animation: r-n 0.5s;
+    animation: r-n 0.5s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 3vmin;
+    will-change: transform;
+    /* max-width: 320px; */
+    outline: 2px solid var(--secondaryColor);
+    outline-offset: 2px;
+}
+
+.Switcher::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    border-radius: inherit;
+    background-color: var(--secondaryColor);
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+}
+
+.Switcher__checkbox:checked+.Switcher::before {
+    transform: translateX(100%);
+}
+
+.Switcher__trigger {
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+    width: 50%;
+    color: var(--secondaryColor);
+}
+
+.Switcher__trigger::after {
+    content: attr(data-value);
+}
+
+.Switcher__trigger::before {
+    --i: var(--x);
+    content: attr(data-value);
+    position: absolute;
+    color: var(--primaryContrast);
+    transition: opacity 0.3s;
+    opacity: calc((var(--i) + 1) / 2);
+    transition-delay: calc(.3s * (var(--i) - 1) / -2);
+}
+
+.Switcher__checkbox:checked+.Switcher .Switcher__trigger::before {
+    --i: calc(var(--x) * -1);
+}
+
+.Switcher__trigger:nth-of-type(1)::before {
+    --x: 1;
+}
+
+.Switcher__trigger:nth-of-type(2)::before {
+    --x: -1;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.box {
+    overflow: hidden;
+    perspective: 750px;
+}
+
+.intro {
+    width: 90%;
+    max-width: 50rem;
+    padding-top: 0.5em;
+    padding-bottom: 1rem;
+    margin: 0 auto 1em;
+    font-size: calc(1rem + 2vmin);
+    text-transform: capitalize;
+    text-align: center;
+    font-family: serif;
+}
+
+.intro small {
+    display: block;
+    text-align: right;
+    opacity: 0.5;
+    font-style: italic;
+    text-transform: none;
+    border-top: 1px dashed rgba(255, 255, 255, 0.75);
+}
+
+.info {
+    margin: 0;
+    padding: 1em;
+    font-size: 0.9em;
+    font-style: italic;
+    font-family: serif;
+    text-align: right;
+    opacity: 0.75;
+}
+
+.info a {
+    color: inherit;
+}
+
+
+
+/* for new form */
+.createButton {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+}
+
+/* for number counters */
+.counter {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-evenly;
+    gap: 4px;
+    border: 1px solid var(--secondaryColor);
+    border-radius: 9px;
+    background: #248f2733;
+    box-shadow: 0 0 5px 2px rgba(194, 213, 255, 0.619608);
+}
+
+.value-button {
+    display: inline-block;
+    margin: 0px;
+    height: -webkit-fill-available;
+    text-align: center;
+    user-select: none;
+    color: var(--secondaryColor);
+    font-size: 36px;
+    line-height: 35px;
+    border-radius: 8px 0 0 8px;
+    background: none;
+    border: none;
+}
+
+.value-button:hover {
+    cursor: pointer;
+}
+
+
+#input-wrap {
+    margin: 0px;
+    padding: 0px;
+}
+
+.counter input[type=number] {
+    text-align: center;
+    border: none;
+    margin: 0px;
+    max-width: 60px;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--secondaryColor);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+
+#sprayTable {
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#sprayTable thead {
+    background: #28a74552;
+}
+
+
+
+
+.farmerInfo {
+    background: #28a74526;
+    padding: 1rem;
+    border-radius: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    /* max-width: 320px; */
+}
+
+.farmerInfo img {
+    /* background: #28a74563; */
+    border-radius: inherit;
+    /* padding: 2px; */
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.farmerDes {
+    padding: 8px 16px;
+}
+
+.farmerDes p {
+    font-size: 14px;
+    margin: 0;
+    line-height: 24px;
+    color: var(--secondaryColor);
+}
+
+.farmerDes p.title {
+    font-size: 18px;
+    font-weight: 600
+}
+
+.farmerDes p:has(svg) {
+    font-size: 14px;
+}
+
+.farmerDes p svg {
+    height: 1rem;
+    width: 1rem;
+    margin-right: 4px;
+}
+
+.cButton {
+    height: 2.5rem;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    border-radius: 50vh;
+}
+
+
+.farmerInfo {
+    /* opacity: 0.05; */
+    user-select: none;
+    transition: all 300ms ease-in-out;
+}
+
+.form-group {
+    height: 87px;
+    margin-bottom: 0;
+}
+
+.lastCol {
+    position: relative;
+}
+
+.dltItemRow {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: red;
+    height: 2rem;
+    width: 2rem;
+    background: #fae3e5;
+    padding: 7px;
+    border-radius: 50vh;
+    box-shadow: 0 0 2px inset;
+    opacity: 0;
     pointer-events: none;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+tr:hover .dltItemRow {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.ui-widget-content {
+    border: none !important;
+    background: #c7f8d3 !important;
+    color: #333;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    list-style: none;
+}
+
+.ui-menu .ui-menu-item:hover {
+    background: var(--secondaryColor) !important;
+    border-radius: 8px !important;
+    border: none !important;
+}
+
+.ui-menu .ui-menu-item-wrapper:hover {
+    background: var(--secondaryColor) !important;
+    border-radius: 8px !important;
+    border: none !important;
+    padding: 6px !important;
 }
 </style>
-<?php 
-if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
-    $disable = ''; 
-} else{
-    $disable = 'readonly';
-}
-?>
 
-<div class="layout-px-spacing">
-    {{-- page title--}}
-    <div class="page-header layout-spacing">
-        <h2 class="pageHeading">Update Order</h2>
-    </div>
 
-    <form class="general_form" method="POST" action="{{url($prefix.'/orders/update-order')}}" id="updateorder"
+<div class="layout-px-spacing mt-5">
+<form class="general_form" method="POST" action="{{url($prefix.'/orders/update-order')}}" id="updateorder"
         style="margin: auto; ">
         <input type="hidden" name="consignment_id" value="{{$getconsignments->id}}">
-        <input type="hidden" name="booked_drs" value="{{$getconsignments->booked_drs}}">
-        <?php if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){ ?>
-        <input type="hidden" name="lr_type" value="{{$getconsignments->lr_type}}">
-        <?php }else{ ?>
-        <input type="hidden" name="lr_type" value="{{$getconsignments->lr_type}}">
-        <?php } ?>
 
-        {{--Branch Location--}}
+        <div class="row flex-wrap mx-0" style="gap: 2rem">
 
-        {{--bill to info--}}
-        <div class="form-row">
-            <h6 class="col-12">Bill To Information</h6>
+            <div style="flex:1; align-content: flex-start; justify-content: center">
+                <div class="form-row justify-content-center" style="min-height: 340px; align-content: flex-start">
+                    <h6 class="col-12">Farmer Details </h6>
+                    <div class="row align-items-center justify-content-center" style="width: 100%">
+                      
 
-            <div class="form-group col-md-4">
-                <label for="exampleFormControlSelect1">
-                    Select Bill to Client<span class="text-danger">*</span>
-                </label>
-                <select class="form-control form-small my-select2" id="select_regclient" name="regclient_id" disabled>
-                    <option value="">Select</option>
-                    @if(count($regionalclient) > 0)
-                    @foreach($regionalclient as $client)
-                    <option value="{{ $client->id }}"
-                        {{ $client->id == $getconsignments->regclient_id ? 'selected' : ''}}>{{ucwords($client->name)}}
-                    </option>
+
+                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
+                        
+
+                        <div id='farmerInfo' class="farmerInfo">
+                            <img src="{{asset('assets/farmer-icon.png')}}" />
+                            <div id="farmerDes" class="farmerDes">
+                                <p class="title">Farmer Name</p>
+                                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-phone">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                        </path>
+                                    </svg> +91-1234567890</p>
+                                <p>Farm Locations - <span>4</span></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <h6 class="col-12">Bill To Information</h6>
+
+                    <div class="form-group col-md-7">
+                        <label for="exampleFormControlSelect1">
+                            Bill to<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control my-select2" name="bill_term" id="bill_term">
+                            
+                        </select>
+                        <Input type="hidden" class="form-control" id="regclient_id" name="regclient_id"
+                            value="">
+
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <label for="exampleFormControlSelect1">
+                            Payment Term<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
+                            id="paymentType_">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column" style="flex:1;">
+                <div id="cropSelection" class="form-row cropSelection enabled"
+                    style="column-gap: 1.2rem; align-content: flex-start">
+                    <h6 class="col-12">Spray Details</h6>
+                    <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="1" name="farm" value="1" checked />
+                        <label for="sugarcane">Farm 1</label>
+                    </div>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="2" name="farm" value="2" checked />
+                        <label for="sugarcane">Farm 2</label>
+                    </div>
+                    <div class="form-group farm">
+                        <Input type="radio" class="form-control" id="3" name="farm" value="3" checked />
+                        <label for="sugarcane">Farm 3</label>
+                    </div> -->
+
+                    <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
+
+                    @foreach($Crops as $crop) 
+                    <div class="form-group">
+                        <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop"
+                            value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
+                            data-crop-name="{{$crop->crop_name}}" checked />
+                        <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
                     @endforeach
-                    @endif
-                </select>
-                <?php $invc_data = DB::table('regional_clients')->select('id','name','is_multiple_invoice')->where('id',$getconsignments->regclient_id)->first(); ?>
+                    <!-- <div class="form-group">
+                        <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
+                        <label for="wheat">Wheat
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
+                        <label for="paddy">Paddy
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
+                        <label for="potato">Potato
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
+                        <label for="apple">Apple
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
+                        <label for="cotton">Cotton
+                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                        </label>
+                    </div> -->
 
-                <input type="hidden" name="invoice_check" id="inv_check" value="{{$invc_data->is_multiple_invoice}}">
-                <input type="hidden" name="regclient_id" value="{{$getconsignments->regclient_id}}" />
+
+                    <div class="row col-12 mt-3 align-items-center">
+                        <div class="form-group col-md-6" style="max-width: 320px">
+                            <label for="exampleFormControlSelect1">
+                                Farm Location<span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control my-select2" name="" onchange="displayCropsSection()"
+                                id="farmLocation">
+                                <option value="" readonly>-select location-</option>
+                                <!-- <option value="TBB">Location 1</option>
+                                <option value="TBB1">Location 2</option> -->
+                            </select>
+                            <label id="farmLocationError" style="display:none" class="error" for="farmLocation">Please
+                                Select Farm</label>
+                        </div>
+
+
+                        <div class="form-group" style="flex: 1; max-width: 150px">
+                            <label>Acreage<span class="text-danger">*</span></label>
+                            <div class="counter">
+                                <div class="value-button" id="decrease" onclick="decreaseDecimalValue()"
+                                    value="Decrease Value">-
+                                </div>
+                                <input type="number" id="acreage" name="acreage" value="1" min='1' />
+                                <div class="value-button" id="increase" onclick="increaseDecimalValue()"
+                                    value="Increase Value">+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div style="flex: 1; display: flex; justify-content: center;">
+                            <button type="button" class="btn btn-primary" onclick="onAddCrop()"
+                                style="width: 100px;">Add</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-row" style="box-shadow: none">
+                    <table id="sprayTable">
+                        <thead>
+                            <tr>
+                                <th>Crop Name</th>
+                                <th>Farm Location</th>
+                                <th>Acreage</th>
+                                <th>Estd. Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                <td>cropNameText<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
+                <td>farmLocationText<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
+                <td>acreage<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
+                <td class="lastCol">
+                    totalPrice<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </td>
+                
+            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
 
-            <div class="form-group col-md-2">
-                <label for="exampleFormControlSelect1">
-                    Payment Term<span class="text-danger">*</span>
-                </label>
-                <select class="form-control" style="width: 160px;" name="payment_type" id="payment_type"
-                    onchange="togglePaymentAction()" {{$disable}}>
-                    <option value="Bill to client" {{$getconsignments->payment_type == 'To be Billed' ? 'selected' : ''}}>
-                        Bill To Client</option>
-                    <option value="UPI/Wallet" {{$getconsignments->payment_type == 'UPI/Wallet' ? 'selected' : ''}}>
-                        UPI/Wallet
-                    </option>
-                    <option value="Cash" {{$getconsignments->payment_type == 'Cash' ? 'selected' : ''}}>
-                        Cash
-                    </option>
-                    <option value="Card" {{$getconsignments->payment_type == 'Card' ? 'selected' : ''}}>
-                        Card
-                    </option>
-                    <option value="Net Banking" {{$getconsignments->payment_type == 'Net Banking' ? 'selected' : ''}}>
-                        Net Banking
-                    </option>
-                </select>
-            </div>
+
+
+            <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
+                placeholder="" value="<?php echo date('d-m-Y'); ?>" />
+
         </div>
 
-        <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date" placeholder=""
-            value="<?php echo date('d-m-Y'); ?>">
+        {{--vehicle info--}}
+        <!-- <div class="form-check form-check-inline justify-content-end col-12">
+            <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
+            <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
+                farmer</label>
+        </div> -->
 
-        {{--pickup & drop info--}}
-        <div class="form-row">
-            <h6 class="col-12">Farmer Address Details Section:</h6>
-            <div class="form-group col-md-4">
-                <label>
-                Farmer Name and contact search option<span class="text-danger">*</span>
-                </label>
-                <select class="form-control form-small my-select2" style="width: 328px;" type="text" name="consignee_id"
-                    id="select_farmer" disabled>
-                    <option value="">Select Consignee</option>
-                    @if(count($consignees) > 0)
-                    @foreach($consignees as $k => $consignee)
-                    <option value="{{$consignee->id}}"
-                        {{ $consignee->id == $getconsignments->consignee_id ? 'selected' : ''}}>
-                        {{ucwords($consignee->nick_name)}}
-                    </option>
-                    @endforeach
-                    @endif
-                </select>
-                <?php 
-                if(empty($getconsignments->prs_id)){ ?>
-                <input type="hidden" name="consignee_id" value="{{$getconsignments->consignee_id}}" />
-                <?php } ?>
-                <div class="" id="consigner_address"></div>
-            </div>
-            <div class="form-group col-md-4">
-                <label>
-                Select Farm Location<span class="text-danger">*</span>
-                </label>
-                <select class="form-control form-small my-select2" style="width: 328px;" type="text" name="ship_to_id"
-                    id="select_farmer_add">
-                    <option value="">Select Farm</option>
-                    @if(count($farms) > 0)
-                    @foreach($farms as $k => $consignee)
-                    <option value="{{$consignee->id}}"
-                        {{ $consignee->id == $getconsignments->ship_to_id ? 'selected' : ''}}>
-                        {{ucwords($consignee->field_area)}}
-                    </option>
-                    @endforeach
-                    @endif
-                </select>
-                <?php if(empty($getconsignments->prs_id)){ ?>
-                <input type="hidden" name="ship_to_id" value="{{$getconsignments->ship_to_id}}" />
-                <?php } ?>
-                <div id="farm_address">
-
-                </div>
-            </div>
-
-            <div class="form-row" style="width: 100%">
-                <h6 class="col-12">Spray Details Section</h6>
-                <div class="form-group col-md-4">
-                <label>
-                    Crop<span class="text-danger">*</span>
-                </label>
-                <select class="form-control form-small my-select2" id="crop" name="crop" tabindex="-1">
-                    <option value="">Select Crop</option>
-                    @foreach($crops as $crop)
-                    <option value="{{$crop->id}}"
-                        {{ $crop->id == $getconsignments->crop ? 'selected' : ''}}>
-                        {{ucwords($crop->crop_name)}}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label>
-                 Acreage<span class="text-danger">*</span>
-                </label>
-                <Input type="number" class="form-control" id="" name="acreage" value="{{$getconsignments->acreage}}">
-            </div>
-
-            </div>
-            {{--vehicle info--}}
-            <!-- <div class="form-row" style="width: 100%">
-                <h6 class="col-12">Drone Information</h6>
-
-                <div class="form-group col-md-4">
-                    <label>
-                        Drone Number<span class="text-danger">*</span>
-                    </label>
-                    <select class="form-control form-small my-select2" id="vehicle_no" name="vehicle_id" tabindex="-1">
-                        <option value="">Select Drone no</option>
-                        @foreach($vehicles as $vehicle)
-                        <option value="{{$vehicle->id}}">{{$vehicle->regn_no}}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>
-                        Rider<span class="text-danger">*</span>
-                    </label>
-                    <select class="form-control form-small my-select2" id="driver_id" name="driver_id" tabindex="-1">
-                        <option value="">Select Rider</option>
-                        @foreach($drivers as $driver)
-                        <option value="{{$driver->id}}">{{ucfirst($driver->name) ?? '-'}}-{{$driver->phone ??
-                                '-'}}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>
-                        EDD<span class="text-danger">*</span>
-                    </label>
-                    <Input type="date" class="form-control form-small" name="edd" />
-                </div>
-
-            </div> -->
-            <div class=" col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 3rem;">
-                {{-- <a class="mt-2 btn btn-outline-primary" href="{{url($prefix.'/consignments') }}"> Back</a>--}}
-                <button type="submit" class="mt-2 btn btn-primary disableme"
-                    style="height: 40px; width: 200px">Submit</button>
-            </div>
+        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
+            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
+            <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
+        </div>
 
     </form>
 </div>
@@ -467,7 +883,157 @@ if(!empty($getconsignments->prs_id) || ($getconsignments->prs_id != NULL)){
 
 @endsection
 @section('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
+
 <script>
+let farmerList = []; 
+
+$(document).ready(function() {
+
+    var branch_id = 'list';
+
+    $.ajax({
+        url: "get-farmer-list",
+        type: "get",
+        cache: false,
+        data: {
+            branch_id: branch_id
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+        },
+        beforeSend: function() {
+            $("#select_regclient").empty();
+        },
+        success: function(res) {
+            farmerList = res.farmer_list
+        },
+    });
+});
+
+
+function increaseValue() {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value++;
+    document.getElementById('number').value = value;
+}
+
+function decreaseValue() {
+    var value = parseInt(document.getElementById('number').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value < 2 ? value = 2 : '';
+    value--;
+    document.getElementById('number').value = value;
+}
+
+function increaseDecimalValue() {
+    var value = parseInt(document.getElementById('acreage').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value++;
+    document.getElementById('acreage').value = value;
+}
+
+function decreaseDecimalValue() {
+    var value = parseInt(document.getElementById('acreage').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value < 2 ? value = 2 : '';
+    value--;
+    document.getElementById('acreage').value = value;
+}
+
+
+const onFarmerTypeChange = () => {
+    if ($('#io').is(':checked')) {
+        $('#selectFarmerId').show();
+        $('#createFarmerBox').hide();
+    } else {
+        $('#createFarmerBox').show();
+        $('#selectFarmerId').hide();
+    }
+}
+
+
+
+let cropList = [];
+
+let cropIndex = 1;
+
+const onAddCrop = () => {
+    let listItem = ``;
+    let cropName = $('input[name="crop"]:checked').val();
+    let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
+    let farmLocation = $('#farmLocation').find(":selected").val();
+    let farmLocationText = $('#farmLocation').find(":selected").text();
+    let acreage = $('#acreage').val();
+    let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
+    let totalPrice = cropPrice * acreage;
+
+    if (farmLocation != '') {
+        $('#sprayTable').show();
+        listItem += `<tr>
+                <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
+                <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
+                <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
+                <td class="lastCol">
+                    ${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </td>
+                
+            </tr>`;
+        $('#sprayTable').append(listItem);
+
+        $('#farmLocation').val('').change();
+        $('#acreage').val('1');
+        $('#farmLocationError').hide();
+        cropIndex++;
+    } else $('#farmLocationError').show();
+}
+
+$("#sprayTable").on('click', '.dltItemRow', function() {
+    $(this).closest('tr').remove();
+})
+
+
+
+function displayCropsSection() {
+    $('#cropSelection').addClass('enabled');
+    $('#farmerInfo').css("opacity", "1");;
+
+    // else $('#cropSelection').removeClass('enabled');
+};
+
+
+$(document).ready(function() {
+
+    jQuery(function() {
+        $('.my-select2').each(function() {
+            $(this).select2({
+                theme: "bootstrap-5",
+                dropdownParent: $(this).parent(), // fix select2 search input focus bug
+            })
+        })
+
+        // fix select2 bootstrap modal scroll bug
+        $(document).on('select2:close', '.my-select2', function(e) {
+            var evt = "scroll.select2"
+            $(e.target).parents().off(evt)
+            $(window).off(evt)
+        })
+    })
+
+});
+
+function toggleVehicleInfBlock() {
+    if ($('#ftlChecked').is(':checked'))
+        $('#vehicleInformationBlock').show();
+    else
+        $('#vehicleInformationBlock').hide();
+
+}
+
 jQuery(function() {
     $('.my-select2').each(function() {
         $(this).select2({
@@ -504,7 +1070,7 @@ function showResult(str) {
 }
 
 $('#chek').click(function() {
-    $('#veh').toggleClass('d-flex');
+    $('#veh').toggle();
 });
 
 function myMap() {
@@ -565,177 +1131,49 @@ function getItem(item) {
         }
     });
 }
+////
+$("#branch_id").change(function(e) {
 
-// append address
-$(document).ready(function() {
-    var regclient_id = $('#select_regclient').val();
-    var consigner_id = $('#select_farmer').val();
-    var consignee_id = $('#select_consignee').val();
-    var shipto_id = $('#select_farmer_add').val();
+    var branch_id = $(this).val();
+    $("#select_regclient").empty();
     $.ajax({
-        type: 'get',
-        url: APP_URL + '/get_consigners',
+        url: "/get-bill-client",
+        type: "get",
+        cache: false,
         data: {
-            consigner_id: consigner_id,
-            regclient_id: regclient_id
+            branch_id: branch_id
         },
+        dataType: "json",
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
         },
-        dataType: 'json',
+        beforeSend: function() {
+            $("#select_regclient").empty();
+        },
         success: function(res) {
-            // $('#consigner_address').empty();
-            // $('#consignee_address').empty();
-            // $('#ship_to_address').empty();
+            $("#select_regclient").append(
+                '<option value="">select..</option>'
+            );
 
-            $('#select_farmer').append('<option value="">Select Farmer</option>');
-            $('#select_ship_to').append('<option value="">Select Ship To</option>');
-            $.each(res.consignee, function(key, value) {
-                $('#select_farmer').append('<option value="' + value
-                    .id + '">' + value.nick_name + '</option>');
+            $.each(res.data, function(index, value) {
+                $("#select_regclient").append(
+                    '<option value="' +
+                    value.id +
+                    '">' +
+                    value.name +
+                    "</option>"
+                );
             });
-            if (res.data) {
-                console.log(res.data);
-                if (res.data.address_line1 == null) {
-                    var address_line1 = '';
-                } else {
-                    var address_line1 = res.data.address_line1 + '<br>';
-                }
-                if (res.data.address_line2 == null) {
-                    var address_line2 = '';
-                } else {
-                    var address_line2 = res.data.address_line2 + '<br>';
-                }
-                if (res.data.address_line3 == null) {
-                    var address_line3 = '';
-                } else {
-                    var address_line3 = res.data.address_line3 + '<br>';
-                }
-                if (res.data.address_line4 == null) {
-                    var address_line4 = '';
-                } else {
-                    var address_line4 = res.data.address_line4 + '<br>';
-                }
-                if (res.data.gst_number == null) {
-                    var gst_number = '';
-                } else {
-                    var gst_number = 'GST No: ' + res.data.gst_number + '<br>';
-                }
-                if (res.data.phone == null) {
-                    var phone = '';
-                } else {
-                    var phone = 'Phone: ' + res.data.phone;
-                }
-                $('#consigner_address').append(address_line1 + ' ' + address_line2 + '' +
-                    address_line3 + ' ' + address_line4 + ' ' + gst_number + ' ' + phone + '');
-                // $("#dispatch").val(res.data.city);
-                // if (res.data.get_reg_client.name == null) {
-                //     var regclient = '';
-                // } else {
-                //     var regclient = res.data.get_reg_client.name;
-                // }
-                // $("#regclient").val(regclient);
-                // // multiple invoice chaeck on regclicent //
-                // if (res.regclient == null) {
-                //     var multiple_invoice = '';
-                // } else {
-                //     if (res.regclient.is_multiple_invoice == null || res.regclient
-                //         .is_multiple_invoice == '') {
-                //         var multiple_invoice = '';
-                //     } else {
-                //         var multiple_invoice = res.regclient.is_multiple_invoice;
-                //     }
-                // }
-                // if (multiple_invoice == 4) {
-                //     $('.insert-more').attr('disabled', false);
-                // } else {
-                //     $('.insert-more').attr('disabled', true);
-                // }
-            }
-        }
-    });
-    ///////get consinee address//
-    $.ajax({
-        type: 'get',
-        url: APP_URL + '/get_consignees',
-        data: {
-            consignee_id: consignee_id
         },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        dataType: 'json',
-        success: function(res) {
-            // $('#consignee_address').empty();
-            if (res.data) {
-                console.log(res.data);
-                if (res.data.address_line1 == null) {
-                    var address_line1 = '';
-                } else {
-                    var address_line1 = res.data.address_line1 + '<br>';
-                }
-                if (res.data.address_line2 == null) {
-                    var address_line2 = '';
-                } else {
-                    var address_line2 = res.data.address_line2 + '<br>';
-                }
-                if (res.data.address_line3 == null) {
-                    var address_line3 = '';
-                } else {
-                    var address_line3 = res.data.address_line3 + '<br>';
-                }
-                if (res.data.address_line4 == null) {
-                    var address_line4 = '';
-                } else {
-                    var address_line4 = res.data.address_line4 + '<br>';
-                }
-                if (res.data.gst_number == null) {
-                    var gst_number = '';
-                } else {
-                    var gst_number = 'GST No: ' + res.data.gst_number + '<br>';
-                }
-                if (res.data.phone == null) {
-                    var phone = '';
-                } else {
-                    var phone = 'Phone: ' + res.data.phone;
-                }
-                $('#consignee_address').append(address_line1 + ' ' + address_line2 + '' +
-                    address_line3 + ' ' + address_line4 + ' ' + gst_number + ' ' + phone + '');
-            }
-        }
-    });
-    //////////get ship to address///
-    $.ajax({
-        type: 'get',
-        url: APP_URL + '/get_consignees',
-        data: {
-            consignee_id: shipto_id
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        dataType: 'json',
-        success: function(res) {
-            // $('#ship_to_address').empty();
-            console.log(res.data.address);
-            if (res.data) {
-                if (res.data.address == null) {
-                    var address = '';
-                } else {
-                    var address = res.data.address + '<br>';
-                }
-
-                $('#farm_address').append(address);
-            }
-        }
     });
 });
 
 function togglePaymentAction() {
-    if ($('#payment_type').val() == 'To Pay') {
+
+    if ($('#paymentType').val() == 'To Pay') {
         $('#freight_on_delivery').attr('readonly', false);
         $('#cod').attr('readonly', false);
-    } else if ($('#payment_type').val() == 'Paid') {
+    } else if ($('#paymentType').val() == 'Paid') {
         $('#cod').attr('readonly', true);
         $('#freight_on_delivery').attr('readonly', true);
     } else {
@@ -745,21 +1183,278 @@ function togglePaymentAction() {
     }
 }
 
-// function togglePaymentAction() {
+const appendFarmerDes = (des) => {
+    let node = ``;
+    node += `<p class="title">${des.nick_name}</p>
+                                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-phone">
+                                        <path
+                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                        </path>
+                                    </svg> +91-${des.phone}</p>
+                                <p>Farm Locations - <span>${des.farm?.length}</span></p>`;
 
-// if ($('#paymentType').val() == 'To Pay') {
-//     $('#freight_on_delivery').attr('readonly', false);
-//     $('#cod').attr('readonly', false);
-// } else if($('#paymentType').val() == 'Paid'){
-//     $('#cod').attr('readonly', true);
-//     $('#freight_on_delivery').attr('readonly', true);
-// } else {
-//     $('#freight_on_delivery').attr('readonly', true);
-//     $('#cod').attr('readonly', false);
-//     $('#freight_on_delivery').val('');
-// }
-// }
+    $('#farmerDes').html(node);
+    displayCropsSection();
+}
+
+$('#createFarmerButton').click(function() {
+    $('#phone_error').empty();
+    $('#farmer_req').empty();
+    var farmer_name = $('#farmer_name').val();
+    var farmer_phone = $('#farmer_phone').val();
+    var number = $('#number').val();
+    if (!farmer_name) {
+        $('#farmer_req').html('Please enter farmer name');
+        return false;
+    }
+    if (!farmer_phone) {
+        $('#phone_error').html('Please enter phone number');
+        return false;
+    }
+
+    var data = {
+        farmer_name: farmer_name,
+        farmer_phone: farmer_phone,
+        number: number
+
+    };
+
+    jQuery.ajax({
+        url: "create-new-farmer",
+        type: "get",
+        cache: false,
+        data: data,
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                "content"
+            ),
+        },
+        processData: true,
+
+        success: function(response) {
+
+            if (response.success == true) {
+                $('#farmer_common_id').val(response.farmer_details.id)
+                appendFarmerDes(response.farmer_details);
+                $("#farmer_name").prop('disabled', true);
+                $("#farmer_phone").prop('disabled', true);
+                $("#createFarmerButton").prop('disabled', true);
+                $("#io").prop('disabled', true);
+
+
+                $.each(response.farmer_details.farm, function(index, value) {
+                    $("#farmLocation").append(
+                        '<option value="' +
+                        value.id +
+                        '">' +
+                        value.field_area +
+                        "</option>"
+                    );
+                });
+                $('#sprayTable tbody').html('');
+            } else {
+                $('#phone_error').html(response.error_message);
+            }
+
+        },
+    });
+
+});
+
+const demoFunction = () => {
+    let ss = $('#pp').val();
+    if (ss?.length == 10) {
+        console.log('Look Sahil..', ss);
+    }
+}
+// var mydata = [{
+//         "id": 1,
+//         "name": "John",
+//         "age": 23
+//     },
+//     {
+//         "id": 2,
+//         "name": "Mary",
+//         "age": 33
+//     },
+//     {
+//         "id": 3,
+//         "name": "Richard",
+//         "age": 53
+//     },
+//     {
+//         "id": 4,
+//         "name": "Ashley",
+//         "age": 25
+//     },
+//     {
+//         "id": 5,
+//         "name": "Kyle",
+//         "age": 17
+//     },
+//     {
+//         "id": 6,
+//         "name": "Samantha",
+//         "age": 29
+//     },
+//     {
+//         "id": 7,
+//         "name": "David",
+//         "age": 43
+//     },
+//     {
+//         "id": 8,
+//         "name": "Charles",
+//         "age": 27
+//     },
+//     {
+//         "id": 9,
+//         "name": "Elaine",
+//         "age": 41
+//     },
+//     {
+//         "id": 10,
+//         "name": "William",
+//         "age": 22
+//     }
+// ];
+
+$('#farmer_id').autocomplete({
+    minLength: 1,
+    source: function(request, response) {
+        response($.map(farmerList, function(obj, key) {
+            var name = obj.nick_name.toUpperCase();
+            var phone = obj.phone.toUpperCase();
+            if (name.indexOf(request.term.toUpperCase()) != -1 || phone.indexOf(request.term
+                    .toUpperCase()) != -1) {
+                return {
+                    label: obj.nick_name + " (" + obj.phone + ")", // Label for Display
+                    value: obj.id // Value
+                }
+            } else {
+                return null;
+            }
+        }));
+    },
+    focus: function(event, ui) {
+        event.preventDefault();
+    },
+    // Once a value in the drop down list is selected, do the following:
+    select: function(event, ui) {
+        event.preventDefault();
+        // place the person.given_name value into the textfield called 'select_origin'...
+        $('#farmer_id').val(ui.item.label);
+        $('#farmer_id').attr('data-val', ui.item.value);
+        // ... any other tasks (like setting Hidden Fields) go here...
+        $("#farmLocation").empty();
+        jQuery.ajax({
+            type: "get",
+            url: 'get-farmer-details',
+            data: {
+                farmer_id: ui.item.value
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function(response) {
+                console.log(response.get_farmer_details);
+                $('#farmer_common_id').val(response.get_farmer_details.id)
+                appendFarmerDes(response.get_farmer_details)
+
+                $("#farmLocation").append(
+                    `<option value="">--select--
+                        </option>`
+                );
+                $.each(response.get_farmer_details.farm, function(index, value) {
+                    $("#farmLocation").append(
+                        '<option value="' +
+                        value.id +
+                        '">' +
+                        value.field_area +
+                        "</option>"
+                    );
+                });
+
+                $('#sprayTable tbody').html('');
+
+            },
+        });
+        return false;
+    }
+});
+
+$("#farmer_phone").blur(function() {
+    var number = $(this).val();
+    if (!number) {
+        return false;
+    }
+    $.ajax({
+        url: "check-farmer-phone",
+        type: "get",
+        cache: false,
+        data: {
+            number: number
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                "content"
+            ),
+        },
+        success: function(data) {
+            if (data.success == true) {
+                $("#phone_error").html(data.error_message);
+            } else {
+                $("#phone_error").html('');
+            }
+
+        },
+    });
+});
+
+/////
+$("#bill_term").change(function(e) {
+
+    var bill_to = $(this).val();
+    var regional_id = $('#regclient_id').val();
+    $("#paymentType_").empty();
+    $.ajax({
+        url: "get-payment-term",
+        type: "get",
+        cache: false,
+        data: {
+            bill_to: bill_to,
+            regional_id:regional_id
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+        },
+        beforeSend: function() {
+            $("#paymentType_").empty();
+        },
+        success: function(res) {
+            $("#paymentType_").append(
+                '<option value="">select..</option>'
+            );
+
+            $.each(res.getterms, function(index, value) {
+                $("#paymentType_").append(
+                    '<option value="' + 
+                    value.payment_term +
+                    '">' +
+                    value.payment_term +
+                    "</option>"
+                );
+            });
+        },
+    });
+});
 </script>
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap"> -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6x_bU2BIZPPsjS8Y8Zs-yM2g2Bs2mnM&callback=myMap">
 </script>
 @endsection
