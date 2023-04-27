@@ -5086,7 +5086,7 @@ class ConsignmentController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail','Crop','fallIn');
+        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail');
 
         if ($authuser->role_id == 1) {
             $query;
@@ -5095,7 +5095,8 @@ class ConsignmentController extends Controller
         } elseif ($authuser->role_id == 7) {
             $query = $query->whereIn('regclient_id', $regclient);
         } else {
-            $query = $query->where('status', '!=', 5);
+           
+            $query = $query;
             // $query = $query->whereIn('branch_id', $cc)->orWhereIn('fall_in', $cc);
         } 
         $consignments = $query->orderBy('id', 'DESC')->paginate($peritem);

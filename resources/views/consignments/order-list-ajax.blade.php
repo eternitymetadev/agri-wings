@@ -1,26 +1,46 @@
-<?php  $authuser = Auth::user(); ?>
+<?php $authuser = Auth::user();?>
 <div class="custom-table">
     <table class="table mb-3" style="width:100%">
         <thead>
             <tr>
-                <th> </th>
-                <th>Order Details</th>
-                <th>Route(Serving Branch/Farmer)</th>
-                <th>Dates</th>
-                <?php if($authuser->role_id !=6){ ?>
-                <th>Print Order</th>
-                <?php }else {?>
-                <th></th>
-                <?php }?>
-                <th>Spray Status</th>
-                <th>Order Status</th> 
+                <th>Order Number</th>
+                <th>Order Date</th>
+                <th>Booking Partner</th>
+                <th>Billing Client</th>
+                <th>Service receiver</th>
+                <th>District</th>
+                <th>State</th>
+                <th>Pincode</th>
+                <th>acers</th>
+                <th>Estimated Amount</th>
+                <th>Pilot Name</th>
+                <th>Pilot No</th>
+                <th>Date of Spray</th>
+                <th>Status of Order</th>
+                <th>Payment Status</th>
             </tr>
         </thead>
-        <tbody id="accordion" class="accordion">
+        <tbody class="accordion">
             @if(count($consignments)>0)
             @foreach($consignments as $consignment)
             <tr>
-             
+                <td>{{ $consignment->id ?? "-" }}</td>
+                <td>{{ $consignment->consignment_date ?? "NA" }}</td>
+                <td>{{ $consignment->RegClient->name ?? "-" }}</td>
+                <td>{{ $consignment->BillingClient->name ?? "-" }}</td>
+                <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
+                <td>{{ $consignment->ConsigneeDetail->district ?? "-"}} </td>
+                <td>{{ $consignment->ConsigneeDetail->state ?? "-"}}</td>
+                <td>{{ $consignment->ConsigneeDetail->postal_code ?? "-"}}</td>
+                <td>{{ $consignment->total_acerage ?? "-" }}</td>
+                <td>{{ $consignment->total_amount ?? "-" }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a class="btn btn-primary" href="#"><span>
+                                            Unverified</span></a></td>
+                <td></td>
+
             </tr>
             @endforeach
             @else

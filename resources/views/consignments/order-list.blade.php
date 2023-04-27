@@ -436,7 +436,7 @@ a.badge.alert.bg-secondary.shadow-sm {
 
                     @csrf
                     <div class="main-table table-responsive">
-                        @include('consignments.consignment-list-ajax')
+                        @include('consignments.order-list-ajax')
                     </div>
                 </div>
             </div>
