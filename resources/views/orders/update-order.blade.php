@@ -11,7 +11,7 @@
         margin-left: 1px;
     }
 
-}
+} 
 
 h4 {
     font-size: 18px;
@@ -682,11 +682,12 @@ tr:hover .dltItemRow {
                     <h6 class="col-12">Farmer Details </h6>
                     <div class="row align-items-center justify-content-center" style="width: 100%">
 
+                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id" value="{{$getconsignments->consignee_id}}">
 
-
-                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
-
-
+                        <?php 
+                            $farmer_farms = $getconsignments->ConsigneeDetail->Farm;
+                            $count_farm = count($farmer_farms);
+                        ?>
                         <div id='farmerInfo' class="farmerInfo">
                             <img src="{{asset('assets/farmer-icon.png')}}" />
                             <div id="farmerDes" class="farmerDes">
@@ -698,7 +699,7 @@ tr:hover .dltItemRow {
                                             d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                                         </path>
                                     </svg> +91-{{$getconsignments->ConsigneeDetail->phone}}</p>
-                                <p>Farm Locations - <span>?</span></p>
+                                <p>Farm Locations - <span>{{$count_farm}}</span></p>
                             </div>
                         </div>
 
@@ -771,8 +772,9 @@ tr:hover .dltItemRow {
                             <select class="form-control my-select2" name="" onchange="displayCropsSection()"
                                 id="farmLocation">
                                 <option value="" readonly>-select location-</option>
-                                <!-- <option value="TBB">Location 1</option>
-                                <option value="TBB1">Location 2</option> -->
+                                @foreach($getconsignments->ConsigneeDetail->Farm as $farm_loc)
+                                <option value="{{$farm_loc->id}}">{{$farm_loc->field_area}}</option>
+                                @endforeach
                             </select>
                             <label id="farmLocationError" style="display:none" class="error" for="farmLocation">Please
                                 Select Farm</label>
@@ -812,13 +814,21 @@ tr:hover .dltItemRow {
                             </tr>
                         </thead>
                         <tbody>
+                            <?php
+                                $i = 0;
+                                $row_count = $getconsignments->OrderFarmDetails;
+                                $totalRow = count($row_count);
+                            ?>
                             @foreach($getconsignments->OrderFarmDetails as $farm_detail)
+                           <?php
+                            $i++;
+                           ?>
                             <tr>
-                                <td>{{$farm_detail->CropName->crop_name}}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
-                <td>{{$farm_detail->FarmerFarm->farm_area}}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
-                <td>{{$farm_detail->acreage}}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
+                                <td>{{$farm_detail->CropName->crop_name}} <input type="hidden" value="{{$farm_detail->id}}" name="data[{{$i}}][order_farm_id]"/> <input type="hidden" value="{{$farm_detail->crop}}" name="data[{{$i}}][crop_name]"/></td>
+                <td>{{$farm_detail->FarmerFarm->field_area}}<input type="hidden" value="{{$farm_detail->farm_location}}" name="data[{{$i}}][farm_location]"/></td>
+                <td>{{$farm_detail->acreage}}<input type="hidden" value="{{$farm_detail->acreage}}" name="data[{{$i}}][acerage]"/></td>
                 <td class="lastCol">
-                {{$farm_detail->crop_price}}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
+                {{$farm_detail->crop_price}}<input type="hidden" value="{{$farm_detail->crop_price}}" name="data[{{$i}}][crop_price]"/>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </td>
                 
@@ -830,7 +840,7 @@ tr:hover .dltItemRow {
                 </div>
             </div>
 
-
+            <Input type="hidden" class="form-control" id="crop_count" name="cu" value="{{$totalRow}}">
 
             <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
                 placeholder="" value="<?php echo date('d-m-Y'); ?>" />
@@ -847,7 +857,7 @@ tr:hover .dltItemRow {
                                     <div class="col-12 d-flex justify-content-end align-items-center"
                                         style="gap: 1rem; margin-top: 1rem;">
                                         <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
-                                        <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
+                                        <button type="submit" class="mt-2 btn btn-primary disableme">Update</button>
                                     </div>
 
     </form>
@@ -931,10 +941,11 @@ const onFarmerTypeChange = () => {
 
 
 let cropList = [];
-
-let cropIndex = 1;
+let cropIndex = $('#crop_count').val();
 
 const onAddCrop = () => {
+    cropIndex++;
+    
     let listItem = ``;
     let cropName = $('input[name="crop"]:checked').val();
     let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
@@ -947,7 +958,7 @@ const onAddCrop = () => {
     if (farmLocation != '') {
         $('#sprayTable').show();
         listItem += `<tr>
-                <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
+                <td>${cropNameText}<input type="hidden" value="" name="data[` + cropIndex + `][order_farm_id]"/><input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
                 <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
                 <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
                 <td class="lastCol">

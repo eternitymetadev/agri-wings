@@ -704,6 +704,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
     Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
     Route::any('/get-farmer-details', [ConsigneeController::class, 'getfarmerDetails']);
+    Route::any('/order-list-details', [ConsignmentController::class, 'orderList']);
 
 
 

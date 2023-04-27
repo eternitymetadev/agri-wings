@@ -4979,4 +4979,128 @@ class ConsignmentController extends Controller
         $response['error']                      = false;
         return response()->json($response);
     }
+
+    public function orderList(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $peritem = Config::get('variable.PER_PAGE');
+        $query = ConsignmentNote::query();
+
+        if ($request->ajax()) {
+            if (isset($request->resetfilter)) {
+                Session::forget('peritem');
+                $url = URL::to($this->prefix . '/' . $this->segment);
+                return response()->json(['success' => true, 'redirect_url' => $url]); 
+            }
+            if (isset($request->updatestatus)) {
+                ConsignmentNote::where('id', $request->id)->update(['status' => $request->status, 'reason_to_cancel' => $request->reason_to_cancel, 'delivery_status' => 'Cancel']);
+                ConsignmentItem::where('consignment_id', $request->id)->update(['status' => $request->status]);
+
+                $url = $this->prefix . '/consignments';
+                $response['success'] = true;
+                $response['success_message'] = "Consignment updated successfully";
+                $response['error'] = false;
+                $response['page'] = 'consignment-updateupdate';
+                $response['redirect_url'] = $url;
+
+                return response()->json($response);
+            }
+
+            $authuser = Auth::user();
+            $role_id = Role::where('id', '=', $authuser->role_id)->first();
+            $baseclient = explode(',', $authuser->baseclient_id);
+            $regclient = explode(',', $authuser->regionalclient_id);
+            $cc = explode(',', $authuser->branch_id);
+
+            $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'Crop','fallIn');
+
+            if ($authuser->role_id == 1) {  
+                $query;
+            } elseif ($authuser->role_id == 4) {
+                $query = $query->whereIn('regclient_id', $regclient);
+            } elseif ($authuser->role_id == 7) {
+                $query = $query->where('user_id', $authuser->id);
+            } else {
+                $query = $query->whereIn('branch_id', $cc);
+                // ->orWhere(function ($query) use ($cc){
+                //     $query->whereIn('fall_in', $cc);
+                // });
+
+                // if(!empty('to_branch_id')){
+                //     $query = $query->whereIn('to_branch_id', $cc);
+                // }else{
+                // $query = $query->whereIn('branch_id', $cc);
+                // }
+            }
+
+            if (!empty($request->search)) {
+                $search = $request->search;
+                $searchT = str_replace("'", "", $search);
+                $query->where(function ($query) use ($search, $searchT) {
+                    $query->where('id', 'like', '%' . $search . '%')
+                        ->orWhereHas('ConsignerDetail.GetRegClient', function ($regclientquery) use ($search) {
+                            $regclientquery->where('name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('ConsignerDetail', function ($query) use ($search, $searchT) {
+                            $query->where(function ($cnrquery) use ($search, $searchT) {
+                                $cnrquery->where('nick_name', 'like', '%' . $search . '%');
+                            });
+                        })
+                        ->orWhereHas('ConsigneeDetail', function ($query) use ($search, $searchT) {
+                            $query->where(function ($cneequery) use ($search, $searchT) {
+                                $cneequery->where('nick_name', 'like', '%' . $search . '%');
+                            });
+                        });
+                });
+                // ->orWhereHas('ConsignmentItem',function( $query ) use($search,$searchT){
+                //     $query->where(function ($invcquery)use($search,$searchT) {
+                //         $invcquery->where('invoice_no', 'like', '%' . $search . '%');
+                //     });
+                // });
+
+                // });
+            }
+
+            if ($request->peritem) {
+                Session::put('peritem', $request->peritem);
+            }
+
+            $peritem = Session::get('peritem');
+            if (!empty($peritem)) {
+                $peritem = $peritem;
+            } else {
+                $peritem = Config::get('variable.PER_PAGE');
+            }
+
+            $consignments = $query->orderBy('id', 'DESC')->paginate($peritem);
+            $consignments = $consignments->appends($request->query());
+
+            $html = view('consignments.order-list-ajax', ['prefix' => $this->prefix, 'consignments' => $consignments, 'peritem' => $peritem])->render();
+
+            return response()->json(['html' => $html]);
+        }
+
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $baseclient = explode(',', $authuser->baseclient_id);
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+
+        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail','Crop','fallIn');
+
+        if ($authuser->role_id == 1) {
+            $query;
+        } elseif ($authuser->role_id == 4) {
+            $query = $query->whereIn('regclient_id', $regclient);
+        } elseif ($authuser->role_id == 7) {
+            $query = $query->whereIn('regclient_id', $regclient);
+        } else {
+            $query = $query->where('status', '!=', 5);
+            // $query = $query->whereIn('branch_id', $cc)->orWhereIn('fall_in', $cc);
+        } 
+        $consignments = $query->orderBy('id', 'DESC')->paginate($peritem);
+        $consignments = $consignments->appends($request->query());
+
+        return view('consignments.order-list', ['consignments' => $consignments, 'peritem' => $peritem, 'prefix' => $this->prefix, 'segment' => $this->segment]);
+    }
 }

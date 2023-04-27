@@ -459,18 +459,44 @@ class OrderController extends Controller
             // $consignmentsave['consignee_id'] = $request->consignee_id;
             // $consignmentsave['ship_to_id'] = $request->ship_to_id;
             $consignmentsave['payment_type'] = $request->payment_type;
-            $consignmentsave['transporter_name'] = $request->transporter_name;
-            $consignmentsave['vehicle_type'] = $request->vehicle_type;
-            $consignmentsave['purchase_price'] = $request->purchase_price;
 
-            $consignmentsave['vehicle_id'] = $request->vehicle_id;
-            $consignmentsave['driver_id'] = $request->driver_id;
-            $consignmentsave['edd'] = $request->edd;
-            $consignmentsave['crop'] = $request->crop;
-            $consignmentsave['acreage'] = $request->acreage;
             $consignmentsave['status'] = $status;
 
             $saveconsignment = ConsignmentNote::where('id', $request->consignment_id)->update($consignmentsave);
+
+            if (!empty($request->data)) {
+                $get_data = $request->data;
+
+                $acerage = array();
+                $crop_price = array();
+                foreach ($get_data as $key => $save_data) {
+
+                  
+                    $acerage[] = $save_data['acerage'];
+                    $crop_price[] = $save_data['crop_price'];
+
+                    $update_data['order_id'] = $request->consignment_id;
+                    $update_data['farm_location'] = $save_data['farm_location'];
+                    $update_data['crop'] = $save_data['crop_name'];
+                    $update_data['acreage'] = $save_data['acerage'];
+                    $update_data['crop_price'] = $save_data['crop_price'];
+                    $update_data['status'] = 1;
+
+
+                    if(!empty($save_data['order_farm_id'])){
+                        $saveconsignmentitems = OrderFarm::where('id',$save_data['order_farm_id'])->update($update_data);
+                    }else{
+                        $savenewfarm = OrderFarm::create($update_data);
+                    }
+                }
+
+                $total_acerage = array_sum($acerage);
+                $total_crop_price = array_sum($crop_price);
+
+                ConsignmentNote::where('id', $request->consignment_id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
+
+            }
+
 
             $url = $this->prefix . '/consignments';
             $response['success'] = true;
