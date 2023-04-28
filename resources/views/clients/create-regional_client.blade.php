@@ -105,7 +105,7 @@
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlSelect1">Address</label>
-                                    <input type="email" class="form-control" id="" name="address" placeholder="">
+                                    <input type="text" class="form-control" id="" name="address" placeholder="">
                                 </div>
                             </div>
                             <div class="form-row mb-0">

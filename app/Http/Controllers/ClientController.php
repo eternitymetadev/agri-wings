@@ -734,6 +734,7 @@ class ClientController extends Controller
             $client['district'] = $request->district;
             $client['state'] = $request->state;
             $client['address'] = $request->address;
+            $client['bill_to_farmer'] = $request->bill_to_farmer;
             if (!empty($request->notification)) {
                 $client['notification'] = $request->notification;
             }
