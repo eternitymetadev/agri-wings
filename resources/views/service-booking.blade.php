@@ -797,19 +797,6 @@ tr:hover .dltItemRow {
                 <div id="cropSelection" class="form-row cropSelection"
                     style="column-gap: 1.2rem; align-content: flex-start">
                     <h6 class="col-12">Spray Details</h6>
-                    <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="1" name="farm" value="1" checked />
-                        <label for="sugarcane">Farm 1</label>
-                    </div>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="2" name="farm" value="2" checked />
-                        <label for="sugarcane">Farm 2</label>
-                    </div>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="3" name="farm" value="3" checked />
-                        <label for="sugarcane">Farm 3</label>
-                    </div> -->
 
                     <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
 
@@ -819,42 +806,11 @@ tr:hover .dltItemRow {
                             value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
                             data-crop-name="{{$crop->crop_name}}" checked />
                         <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
+                            <img src="{{$crop->crop_image}}" alt="crop" />
                         </label>
                     </div>
                     @endforeach
-                    <!-- <div class="form-group">
-                        <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
-                        <label for="wheat">Wheat
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
-                        <label for="paddy">Paddy
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
-                        <label for="potato">Potato
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
-                        <label for="apple">Apple
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
-                        <label for="cotton">Cotton
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div> -->
-
-
+                   
                     <div class="row col-12 mt-3 align-items-center">
                         <div class="form-group col-md-6" style="max-width: 320px">
                             <label for="exampleFormControlSelect1">

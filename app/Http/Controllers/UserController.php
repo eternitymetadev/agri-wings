@@ -451,7 +451,7 @@ class UserController extends Controller
                 ////==== Payment terms =====
                 $saveterm['client_id'] = $saveRegional->id;
                 $saveterm['bill_to'] = 'Self';
-                $saveterm['payment_term'] = 'Bill to Client Advance';
+                $saveterm['payment_term'] = 'Bill To Client Advance';
                 $saveterm['status'] = 1;
                 PaymentTerms::create($saveterm);
 

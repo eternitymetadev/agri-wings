@@ -155,7 +155,6 @@
                          foreach($getpayment as $bill_term){
                              $payment_term[] = $bill_term->payment_term;
                          }
-                        //  echo'<pre>'; print_r($payment_term); die;
                         // $get_terms = $regclient_name->PaymentTerm ;
                         // $payment_term = array();
                         // foreach($get_terms as $term){
