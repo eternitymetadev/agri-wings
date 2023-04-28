@@ -292,7 +292,7 @@
             </div>
         </a>
         </li>
-        <li class="menu">
+        <!-- <li class="menu">
         <a href="{{$prefixurl.'unverified-client-list'}}" data-active="<?php if($segment == 'unverified-client-list'){?>true<?php }?>"
             class="dropdown-toggle">
             <div class="@if(str_contains($currentURL, 'postal-code')) active @endif">
@@ -307,7 +307,7 @@
                 <span>Unverified Client</span>
             </div>
         </a>
-        </li>
+        </li> -->
     <!-- <li class="menu">
         <a href="#ftl" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
             <div
