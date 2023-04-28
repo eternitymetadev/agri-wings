@@ -1856,9 +1856,8 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
 
-        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*','consignees.nick_name as consignee_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'consignees.district as consignee_district', 'zones.primary_zone as zone','crops.crop_name as crop')
+        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*','consignees.nick_name as consignee_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'consignees.district as consignee_district', 'zones.primary_zone as zone')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
-            ->join('crops', 'crops.id', '=', 'consignment_notes.crop')
             ->leftjoin('zones', 'zones.id', '=', 'consignees.zone_id')
             ->whereIn('consignment_notes.status', ['2', '5', '6'])
             ->where('consignment_notes.booked_drs', '!=', '1');
@@ -1872,14 +1871,8 @@ class ConsignmentController extends Controller
         } elseif ($authuser->role_id == 7) {
             $data = $data->whereIn('regional_clients.id', $regclient);
         } else {
-            $data = $data->whereIn('consignment_notes.branch_id', $cc)->orWhere(function ($data) use ($cc){
-                $data->whereIn('consignment_notes.to_branch_id', $cc)->whereIn('consignment_notes.status', ['2', '5','6']);
-            });
-            // if(!empty('consignment_notes.to_branch_id')){
-            //     $data = $data->whereIn('consignment_notes.to_branch_id', $cc);
-            // }else{
-            // $data = $data->whereIn('consignment_notes.branch_id', $cc);  
-            // }
+            $data = $data->whereIn('consignment_notes.status', ['2','6']);
+          
         }
         $data = $data->orderBy('id', 'DESC');
         $consignments = $data->get();

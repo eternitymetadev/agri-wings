@@ -415,7 +415,7 @@ class UserController extends Controller
                     $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
                     $client_assign_branch = $get_branch->id;
                 } else {
-                    $get_branch = Location::where('name', 'Karnal')->first();
+                    $get_branch = Location::where('nick_name', 'Karnal')->first();
                     if(!empty($get_branch->id)){
                         $client_assign_branch = $get_branch->id;
                     }else{

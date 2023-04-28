@@ -88,8 +88,6 @@ div.relative {
                                 <th>District</th>
                                 <th>City</th>
                                 <th>Pin Code</th>
-                                <th>Crop</th>
-                                <th>Acrage</th>
 
                             </tr>
                         </thead>
@@ -110,8 +108,6 @@ div.relative {
                                 <td>{{ $consignment->consignee_district ?? "-" }}</td>
                                 <td>{{ $consignment->city ?? "-" }}</td>
                                 <td>{{ $consignment->pincode ?? "-" }}</td>
-                                <td>{{ $consignment->crop ?? "-" }}</td>
-                                <td>{{ $consignment->acreage ?? "-" }}</td>
                             </tr>
 
                             <?php  $i++; } ?>

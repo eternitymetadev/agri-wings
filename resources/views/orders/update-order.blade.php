@@ -11,7 +11,7 @@
         margin-left: 1px;
     }
 
-} 
+}
 
 h4 {
     font-size: 18px;
@@ -682,7 +682,8 @@ tr:hover .dltItemRow {
                     <h6 class="col-12">Farmer Details </h6>
                     <div class="row align-items-center justify-content-center" style="width: 100%">
 
-                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id" value="{{$getconsignments->consignee_id}}">
+                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id"
+                            value="{{$getconsignments->consignee_id}}">
 
                         <?php 
                             $farmer_farms = $getconsignments->ConsigneeDetail->Farm;
@@ -820,20 +821,34 @@ tr:hover .dltItemRow {
                                 $totalRow = count($row_count);
                             ?>
                             @foreach($getconsignments->OrderFarmDetails as $farm_detail)
-                           <?php
+                            <?php
                             $i++;
                            ?>
                             <tr>
-                                <td>{{$farm_detail->CropName->crop_name}} <input type="hidden" value="{{$farm_detail->id}}" name="data[{{$i}}][order_farm_id]"/> <input type="hidden" value="{{$farm_detail->crop}}" name="data[{{$i}}][crop_name]"/></td>
-                <td>{{$farm_detail->FarmerFarm->field_area}}<input type="hidden" value="{{$farm_detail->farm_location}}" name="data[{{$i}}][farm_location]"/></td>
-                <td>{{$farm_detail->acreage}}<input type="hidden" value="{{$farm_detail->acreage}}" name="data[{{$i}}][acerage]"/></td>
-                <td class="lastCol">
-                {{$farm_detail->crop_price}}<input type="hidden" value="{{$farm_detail->crop_price}}" name="data[{{$i}}][crop_price]"/>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                </td>
-                
-            </tr>
-            @endforeach
+                                <td>{{$farm_detail->CropName->crop_name}} <input type="hidden"
+                                        value="{{$farm_detail->id}}" name="data[{{$i}}][order_farm_id]" /> <input
+                                        type="hidden" value="{{$farm_detail->crop}}" name="data[{{$i}}][crop_name]" />
+                                </td>
+                                <td>{{$farm_detail->FarmerFarm->field_area}}<input type="hidden"
+                                        value="{{$farm_detail->farm_location}}" name="data[{{$i}}][farm_location]" />
+                                </td>
+                                <td>{{$farm_detail->acreage}}<input type="hidden" value="{{$farm_detail->acreage}}"
+                                        name="data[{{$i}}][acerage]" /></td>
+                                <td class="lastCol">
+                                    {{$farm_detail->crop_price}}<input type="hidden"
+                                        value="{{$farm_detail->crop_price}}" name="data[{{$i}}][crop_price]" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-trash dltItemRow">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path
+                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                        </path>
+                                    </svg>
+                                </td>
+
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
 
@@ -848,17 +863,16 @@ tr:hover .dltItemRow {
         </div>
 
         {{--vehicle info--}}
-                                    <!-- <div class="form-check form-check-inline justify-content-end col-12">
+        <!-- <div class="form-check form-check-inline justify-content-end col-12">
             <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
             <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
                 farmer</label>
         </div> -->
 
-                                    <div class="col-12 d-flex justify-content-end align-items-center"
-                                        style="gap: 1rem; margin-top: 1rem;">
-                                        <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
-                                        <button type="submit" class="mt-2 btn btn-primary disableme">Update</button>
-                                    </div>
+        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
+            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
+            <button type="submit" class="mt-2 btn btn-primary disableme">Update</button>
+        </div>
 
     </form>
 </div>
@@ -945,7 +959,7 @@ let cropIndex = $('#crop_count').val();
 
 const onAddCrop = () => {
     cropIndex++;
-    
+
     let listItem = ``;
     let cropName = $('input[name="crop"]:checked').val();
     let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
@@ -958,7 +972,8 @@ const onAddCrop = () => {
     if (farmLocation != '') {
         $('#sprayTable').show();
         listItem += `<tr>
-                <td>${cropNameText}<input type="hidden" value="" name="data[` + cropIndex + `][order_farm_id]"/><input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
+                <td>${cropNameText}<input type="hidden" value="" name="data[` + cropIndex +
+            `][order_farm_id]"/><input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
                 <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
                 <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
                 <td class="lastCol">
