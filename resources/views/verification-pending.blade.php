@@ -173,9 +173,9 @@ div.relative {
                                     <div class="checkbox radio">
                                         <label class="check-label d-flex align-items-center" style="gap: 6px">
                                             <span class="checkmark"></span>
-                                            <input type="checkbox" value='Bill To Client' name="payment_term[]"
+                                            <input type="checkbox" value='Bill To Client Advance' name="payment_term[]"
                                                 checked />
-                                            Bill To Client
+                                                Bill To Client Advance
                                         </label>
                                     </div>
                                     <div class="checkbox radio">
@@ -291,9 +291,9 @@ div.relative {
                                     <div class="checkbox radio">
                                         <label class="check-label d-flex align-items-center" style="gap: 6px">
                                             <span class="checkmark"></span>
-                                            <input type="checkbox" value='Bill To Client' name="payment_terms[]"
-                                                id="billToClient" />
-                                            Bill To Client
+                                            <input type="checkbox" value='Bill To Client Advance' name="payment_terms[]"
+                                                id="billToClient" checked />
+                                                Bill To Client Advance
                                         </label>
                                     </div>
                                     <div class="checkbox radio">
@@ -310,14 +310,6 @@ div.relative {
                                             <input type="checkbox" class="acc_chk_doc" name="payment_terms[]"
                                                 id="30Days" value='30 days Credit Period' />
                                             30 days Credit Period
-                                        </label>
-                                    </div>
-                                    <div class="checkbox radio">
-                                        <label class="check-label d-flex align-items-center" style="gap: 6px">
-                                            <span class="checkmark"></span>
-                                            <input type="checkbox" name="payment_terms[]" id="billToFarmer"
-                                                value='Bill To Farmer' />
-                                            Bill to Farmer
                                         </label>
                                     </div>
                                 </div>
@@ -653,7 +645,7 @@ $(document).on('click', '.approve_acc', function() {
                 $('#15Days').prop('checked', false);
                 $('#30Days').prop('checked', false);
                 $('#billToFarmer').prop('checked', false);
-                $('#billToClient').prop('checked', false);
+                // $('#billToClient').prop('checked', false);
                 $('#acc_remarks').val('');
                 $('#acc_gst_chk').val('');
                 $('#acc_pan_chk').val('');
@@ -668,7 +660,7 @@ $(document).on('click', '.approve_acc', function() {
                 '15 days Credit Period');
             const thirtyDaysArray = myArray.filter((e) => e.payment_term ==
                 '30 days Credit Period');
-            const billToClient = myArray.filter((e) => e.payment_term == 'Bill To Client');
+            const billToClient = myArray.filter((e) => e.payment_term == 'Bill To Client Advance');
             const billTOFarmer = myArray.filter((e) => e.payment_term == 'Bill To Farmer');
 
             if (fifteenDaysArray.length > 0) {

@@ -159,9 +159,9 @@
                                 <div class="checkbox radio">
                                     <label class="check-label d-flex align-items-center" style="gap: 6px">
                                         <span class="checkmark"></span>
-                                        <input type="checkbox" value='Bill To Client' name="payment_term[]"
-                                            {{in_array("Bill To Client", $payment_term) ? 'checked' : '' }} />
-                                            Bill To Client
+                                        <input type="checkbox" value='Bill To Client Advance' name="payment_term[]"
+                                            {{in_array("Bill To Client Advance", $payment_term) ? 'checked' : '' }} />
+                                            Bill To Client Advance
                                     </label>
                                 </div>
                                 <div class="checkbox radio">

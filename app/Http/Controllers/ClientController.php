@@ -750,7 +750,7 @@ class ClientController extends Controller
 
             foreach ($request->payment_term as $terms) {
                 $savepayment['client_id'] = $saveclient->id;
-                $savepayment['bill_to'] = 'Client';
+                $savepayment['bill_to'] = 'Self';
                 $savepayment['payment_term'] = $terms;
                 $savepayment['status'] = 1;
 
@@ -1011,7 +1011,7 @@ class ClientController extends Controller
                 $sentAccount = VerificationPending::where('client_id', $request->client_id)->update($verificationpending);
                 foreach ($request->payment_term as $terms) {
                     $savepayment['client_id'] = $request->client_id;
-                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['bill_to'] = 'Self';
                     $savepayment['payment_term'] = $terms;
                     $savepayment['status'] = 0;
                     $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
@@ -1034,7 +1034,7 @@ class ClientController extends Controller
                 $sentAccount = VerificationPending::create($verificationpending);
                 foreach ($request->payment_term as $terms) {
                     $savepayment['client_id'] = $request->client_id;
-                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['bill_to'] = 'Self';
                     $savepayment['payment_term'] = $terms;
                     $savepayment['status'] = 0;
                     $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
@@ -1097,7 +1097,7 @@ class ClientController extends Controller
 
                 foreach ($request->payment_term as $terms) {
                     $savepayment['client_id'] = $request->client_id;
-                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['bill_to'] = 'Self';
                     $savepayment['payment_term'] = $terms;
                     $savepayment['status'] = 0;
                     $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();
@@ -1121,7 +1121,7 @@ class ClientController extends Controller
                 $sentAccount = VerificationPending::create($verificationpending);
                 foreach ($request->payment_term as $terms) {
                     $savepayment['client_id'] = $request->client_id;
-                    $savepayment['bill_to'] = 'Client';
+                    $savepayment['bill_to'] = 'Self';
                     $savepayment['payment_term'] = $terms;
                     $savepayment['status'] = 0;
                     $getpayment = PaymentTerms::where('client_id', $request->client_id)->where('payment_term', $terms)->first();

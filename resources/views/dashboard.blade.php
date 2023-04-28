@@ -50,7 +50,8 @@ h4 {
     margin: auto;
     text-align: center;
 }
-.orderButton{
+
+.orderButton {
     padding: 10px 1rem;
     width: 200px;
     border-radius: 12px;
@@ -74,18 +75,16 @@ h4 {
     if($authuser->role_id == 7){ ?>
     <h4>Welcome to our AgriWings service!</h4>
     <p class="dashboardText">
-        We are a team of experienced professionals who provide efficient and reliable
-        drone spraying services for various industries.<br />
-        Using advanced drone technology, we provide precision spraying solutions for agriculture, forestry, landscaping,
-        and other industries. Our team of trained pilots and technicians use state-of-the-art equipment to ensure the
-        highest level of accuracy and safety for our clients.<br />
-        Our drone spraying services offer a range of benefits, including increased efficiency, reduced costs, and
-        minimal environmental impact. We take pride in providing innovative and sustainable solutions for our clients,
-        while maintaining the highest standards of safety and quality. We have the expertise and technology to deliver
-        superior results. Explore our website to learn more about our services and how we can help your business thrive.
+        We're thrilled to have you here. As a Booking Partner, we understand that you value efficient and effective
+        solutions to keep your business running smoothly. That's why we offer cutting-edge drone technology to help you
+        tackle your farmers crop management needs. </br>
+        We're passionate about what we do, and we believe that our services can help revolutionize the way you do
+        business. If you have any questions or would like to learn more about our services, please don't hesitate to
+        reach out to us<Helpline No>. We're here to help you achieve your goals and grow your business.
+            Thank you for choosing AgriWings, and we look forward to working with you!
     </p>
     <a href="{{$prefixurl.'service-booking'}}" class="btn btn-primary orderButton">Book Order</a>
-   <?php }  ?>
+    <?php }  ?>
 </div>
 
 @endsection

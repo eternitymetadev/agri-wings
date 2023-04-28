@@ -2044,7 +2044,9 @@ class ConsignmentController extends Controller
 
         if ($authuser->role_id == 1) {
             $query = $query->with('ConsignmentDetail');
-        } elseif ($authuser->role_id == 4) {
+        } elseif ($authuser->role_id == 3) {
+            $query = $query;
+        }elseif ($authuser->role_id == 4) {
             $query = $query
                 ->whereHas('ConsignmentDetail', function ($query) use ($regclient) {
                     $query->whereIn('regclient_id', $regclient);

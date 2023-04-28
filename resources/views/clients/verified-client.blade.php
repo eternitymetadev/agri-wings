@@ -99,7 +99,7 @@ div.relative {
                             <td>{{$client->district}}</td>
                             <td>{{$client->city}}</td>
                             <td>{{$client->state}}</td>
-                            <td>{{$client->Location->name}}</td>
+                            <td>{{@$client->Location->name}}</td>
                             <td><a class="btn btn-primary"
                                         href="{{url($prefix.'/unverified-client-list/'.Crypt::encrypt($client->id).'/edit')}}"><span><i
                                                 class="fa fa-edit" aria-hidden="true"></i> Edit<span></a></td>
