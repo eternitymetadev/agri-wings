@@ -2144,7 +2144,12 @@ class OrderController extends Controller
                         $client_assign_branch = $get_branch->id;
                     } else {
                         $get_branch = Location::where('name', 'Karnal')->first();
-                        $client_assign_branch = $get_branch->id;
+                        if(!empty($get_branch->id)){
+                            $client_assign_branch = $get_branch->id;
+                        }else{
+                            $client_assign_branch = NULL;
+                        }
+                        
                     }
     
                     $saveclientdetails['name'] = $getfarmerdetails->nick_name;
