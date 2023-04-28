@@ -416,7 +416,12 @@ class UserController extends Controller
                     $client_assign_branch = $get_branch->id;
                 } else {
                     $get_branch = Location::where('name', 'Karnal')->first();
-                    $client_assign_branch = $get_branch->id;
+                    if(!empty($get_branch)){
+                        $client_assign_branch = $get_branch->id;
+                    }else{
+                        $client_assign_branch = NULL;
+                    }
+                   
                 }
 
                 $userid = $saveuser->id;
