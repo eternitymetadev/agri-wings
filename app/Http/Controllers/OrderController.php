@@ -2227,7 +2227,7 @@ class OrderController extends Controller
 
             }
 
-            $url = $this->prefix . '/consignments';
+            $url = $this->prefix . '/orders';
             $response['success'] = true;
             $response['success_message'] = "Order Added successfully";
             $response['error'] = false;

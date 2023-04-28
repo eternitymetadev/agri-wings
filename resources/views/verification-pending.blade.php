@@ -479,7 +479,7 @@ $(document).on('click', '.verify', function() {
                 $('#pan_chk').val('');
             },
         success: function(data) {
-            // console.log(data.getclient);
+            //  console.log(data.getclient);
             $('#gst_chk').val(data.getclient.upload_gst);
             $('#pan_chk').val(data.getclient.upload_pan);
 
@@ -570,6 +570,7 @@ $('.sent_acc').click(function() {
         success: function(data) {
             if (data.success == true) {
                 swal('success', data.success_message, 'success')
+                location.reload();
             } else {
                 swal('error', data.error_message, 'error')
             }
