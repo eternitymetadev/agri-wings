@@ -69,6 +69,7 @@
             </header>
             @yield('content')
             @include('layouts.includes.footer')
+            @include('layouts.includes.loadingComponent')
 
         </div>
         @yield('js')

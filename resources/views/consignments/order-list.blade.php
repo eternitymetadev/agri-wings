@@ -384,7 +384,65 @@ a.badge.alert.bg-secondary.shadow-sm {
     height: 400px;
     width: 600px;
 }
+.update_purchase_price svg {
+    height: 14px;
+    width: 14px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+ 
+.update_purchase_price svg:hover {
+    color: #f9b600;
+}
 
+.pointer {
+    cursor: pointer;
+}
+
+.drsStatus {
+    user-select: none;
+    cursor: default;
+    text-align: center;
+    width: 110px;
+    border-radius: 50vh;
+    padding: 6px 8px;
+    font-size: 11px;
+    line-height: 11px;
+    font-size: 11px;
+    color: #ffffff;
+}
+
+.green {
+    background: #148b00;
+}
+
+.orange {
+    background: #e2a03f;
+}
+
+.extra2 {
+    background: #1abc9c;
+}
+
+#create_request_form span.select2 {
+    margin-bottom: 0 !important;
+}
+
+input[readonly].styledInput {
+    border: none;
+    background-color: transparent !important;
+    color: #000;
+    font-weight: 700;
+}
+
+.select2-results__options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 160px;
+    /* scroll-margin: 38px; */
+    overflow: auto;
+}
 </style>
 <div class="layout-px-spacing">
     <div class="row layout-top-spacing">

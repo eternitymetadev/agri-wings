@@ -34,11 +34,27 @@
                 <td>{{ $consignment->ConsigneeDetail->postal_code ?? "-"}}</td>
                 <td>{{ $consignment->total_acerage ?? "-" }}</td>
                 <td>{{ $consignment->total_amount ?? "-" }}</td>
+                <td>{{ $consignment->DriverDetail->name ?? "-" }}</td>
+                <td>{{ $consignment->DriverDetail->phone ?? "-" }}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td><a class="btn btn-primary" href="#"><span>
-                                            Unverified</span></a></td>
+                <td>
+                    <?php if($consignment->status == 2){ ?>
+                        <a class="approve" >
+                        <p class=" drsStatus pointer" style="background:#be930f; margin-bottom: 0">
+                            <span>Unverified</span>
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </p>
+                    </a>
+                    <?php  }else{  ?>
+                        <a class="approve" 
+                        >
+                        <p class=" drsStatus pointer" style="background:#008000; margin-bottom: 0">
+                            <span>Started</span>
+                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                        </p>
+                    </a>
+                    <?php }  ?>
+                </td>
                 <td></td>
 
             </tr>

@@ -2147,7 +2147,7 @@ class OrderController extends Controller
                         if(!empty($get_branch->id)){
                             $client_assign_branch = $get_branch->id;
                         }else{
-                            $client_assign_branch = NULL;
+                            $client_assign_branch = '';
                         }
                         
                     }

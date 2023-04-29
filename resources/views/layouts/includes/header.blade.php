@@ -51,3 +51,7 @@
 {{--<link href="{{asset('assets/css/newcss/ps.css')}}" rel="stylesheet" type="text/css" />--}}
 {{--<link href="../layouts/modern-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />--}}
 {{--<link href="../layouts/modern-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />--}}
+
+
+<!--animation libraries -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>

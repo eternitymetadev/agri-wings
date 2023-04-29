@@ -556,7 +556,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 .farmerInfo {
-    background: #28a74526;
+    /* background: #28a74526; */
     padding: 1rem;
     border-radius: 0 20px;
     display: flex;
@@ -623,28 +623,21 @@ input[type=number]::-webkit-outer-spin-button {
     position: relative;
 }
 
-.dltItemRow {
+.actionIcon {
     position: absolute;
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: red;
+    color: var(--stsClr);
     height: 2rem;
     width: 2rem;
-    background: #fae3e5;
     padding: 7px;
     border-radius: 50vh;
-    box-shadow: 0 0 2px inset;
-    opacity: 0;
-    pointer-events: none;
+    box-shadow: 0 0 10px inset;
     cursor: pointer;
     transition: all 300ms ease-in-out;
 }
 
-tr:hover .dltItemRow {
-    opacity: 1;
-    pointer-events: all;
-}
 
 .ui-widget-content {
     border: none !important;
@@ -667,144 +660,168 @@ tr:hover .dltItemRow {
     border: none !important;
     padding: 6px !important;
 }
+
+
+
+h6 {
+    width: 100%;
+    font-weight: 700;
+    border-bottom: 2px solid
+}
+
+.orderDetails {
+    display: flex;
+    width: 100%;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.innerItem {
+    flex: 1 1 300px;
+}
+
+.billInfoP {
+    flex: 1;
+    min-width: min-content;
+    font-size: 17px;
+    color: #333;
+}
+
+.farmerStatusBox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.farmerStatusBox a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 18px;
+    padding: 5px 16px;
+    color: var(--stsClr);
+    outline: 2px solid;
+    width: 120px;
+    trait-align: center;
+    cursor: pointer;
+}
+
+input.acreageValue {
+    border: none;
+    outline: 1px solid;
+    border-radius: 8px;
+    padding-inline: 6px
+}
+
+input.acreageValue[disabled] {
+    background-color: #ffffff !important;
+    color: #000000;
+    border: none;
+    outline: none;
+
+}
+
+.onDone {
+    --stsClr: var(--primaryColor);
+}
+
+.onEdit {
+    --stsClr: #2a8fff
+}
 </style>
 
 
 <div class="layout-px-spacing mt-5">
-    <form class="general_form" method="POST" action="{{url($prefix.'/orders/update-order')}}" id="updateorder"
-        style="margin: auto; ">
+    <form class="general_form d-flex justify-content-center" method="POST"
+        action="{{url($prefix.'/orders/update-order')}}" id="updateorder" style="margin: auto auto 160px; ">
         <input type="hidden" name="consignment_id" value="{{$getconsignments->id}}">
 
-        <div class="row flex-wrap mx-0" style="gap: 2rem">
+        <div class="d-flex flex-column flex-wrap mx-0 animate__animated animate__fadeIn" style="gap: 2rem; max-width: 900px; width: 100%">
 
-            <div style="flex:1; align-content: flex-start; justify-content: center">
-                <div class="form-row justify-content-center" style="min-height: 340px; align-content: flex-start">
-                    <h6 class="col-12">Farmer Details </h6>
-                    <div class="row align-items-center justify-content-center" style="width: 100%">
+            <div class="orderDetails animate__animated animate__fadeIn">
+                <div class="innerItem">
+                    <h6>Farmer Details </h6>
 
-                        <Input type="hidden" id="farmer_common_id" name="farmer_common_id"
-                            value="{{$getconsignments->consignee_id}}">
+                    <Input type="hidden" id="farmer_common_id" name="farmer_common_id"
+                        value="{{$getconsignments->consignee_id}}">
 
-                        <?php 
-                            $farmer_farms = $getconsignments->ConsigneeDetail->Farm;
-                            $count_farm = count($farmer_farms);
-                        ?>
-                        <div id='farmerInfo' class="farmerInfo">
-                            <img src="{{asset('assets/farmer-icon.png')}}" />
-                            <div id="farmerDes" class="farmerDes">
-                                <p class="title">{{$getconsignments->ConsigneeDetail->nick_name}}</p>
-                                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="feather feather-phone">
-                                        <path
-                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                        </path>
-                                    </svg> +91-{{$getconsignments->ConsigneeDetail->phone}}</p>
-                                <p>Farm Locations - <span>{{$count_farm}}</span></p>
-                            </div>
+                        <?php
+                        $farmer_farms = $getconsignments->ConsigneeDetail->Farm;
+                        $count_farm = count($farmer_farms);?>
+
+
+                    <div id='farmerInfo' class="farmerInfo">
+                        <img src="{{asset('assets/farmer-icon.png')}}" />
+                        <div id="farmerDes" class="farmerDes">
+                            <p class="title">{{$getconsignments->ConsigneeDetail->nick_name}}</p>
+                            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-phone">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                    </path>
+                                </svg> +91-{{$getconsignments->ConsigneeDetail->phone}}</p>
+                            <p>Farm Locations - <span>{{$count_farm}}</span></p>
                         </div>
 
+                        <div class="farmerStatusBox">
+                            <a style="--stsClr: green" class="swan-tooltip" data-tooltip="Click to edit">
+                                <span style="flex:1; text-align: center">Status</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-check-circle">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+</a>
+
+                            <a style="--stsClr: #d71313" class="swan-tooltip" data-tooltip="Click to edit">
+                                <span style="flex:1; text-align: center">Address</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-alert-circle">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <h6 class="col-12">Bill To Information</h6>
 
-                    <div class="form-group col-md-7">
-                        <label for="exampleFormControlSelect1">
-                            Bill to<span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control my-select2" name="bill_term" id="bill_term">
-                            <option value="{{$getconsignments->bill_to}}">{{$getconsignments->bill_to}}</option>
-                        </select>
-                        <Input type="hidden" class="form-control" id="regclient_id" name="regclient_id" value="">
-
-                    </div>
-
-                    <div class="form-group col-md-5">
-                        <label for="exampleFormControlSelect1">
-                            Payment Term<span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control my-select2" name="payment_type" onchange="togglePaymentAction()"
-                            id="paymentType_">
-                            <option value="{{$getconsignments->payment_type}}">{{$getconsignments->payment_type}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
             </div>
 
-            <div class="d-flex flex-column" style="flex:1;">
-                <div id="cropSelection" class="form-row cropSelection enabled"
-                    style="column-gap: 1.2rem; align-content: flex-start">
-                    <h6 class="col-12">Spray Details</h6>
-                    <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="1" name="farm" value="1" checked />
-                        <label for="sugarcane">Farm 1</label>
-                    </div>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="2" name="farm" value="2" checked />
-                        <label for="sugarcane">Farm 2</label>
-                    </div>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="3" name="farm" value="3" checked />
-                        <label for="sugarcane">Farm 3</label>
-                    </div> -->
-
-                    <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
-
-                    @foreach($Crops as $crop)
-                    <div class="form-group">
-                        <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop"
-                            value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
-                            data-crop-name="{{$crop->crop_name}}" checked />
-                        <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    @endforeach
-
-                    <div class="row col-12 mt-3 align-items-center">
-                        <div class="form-group col-md-6" style="max-width: 320px">
-                            <label for="exampleFormControlSelect1">
-                                Farm Location<span class="text-danger">*</span>
-                            </label>
-                            <select class="form-control my-select2" name="" onchange="displayCropsSection()"
-                                id="farmLocation">
-                                <option value="" readonly>-select location-</option>
-                                @foreach($getconsignments->ConsigneeDetail->Farm as $farm_loc)
-                                <option value="{{$farm_loc->id}}">{{$farm_loc->field_area}}</option>
-                                @endforeach
-                            </select>
-                            <label id="farmLocationError" style="display:none" class="error" for="farmLocation">Please
-                                Select Farm</label>
-                        </div>
 
 
-                        <div class="form-group" style="flex: 1; max-width: 150px">
-                            <label>Acreage<span class="text-danger">*</span></label>
-                            <div class="counter">
-                                <div class="value-button" id="decrease" onclick="decreaseDecimalValue()"
-                                    value="Decrease Value">-
-                                </div>
-                                <input type="number" id="acreage" name="acreage" value="1" min='1' />
-                                <div class="value-button" id="increase" onclick="increaseDecimalValue()"
-                                    value="Increase Value">+
-                                </div>
-                            </div>
-                        </div>
+            <div class="d-flex flex-column animate__animated animate__fadeIn" style="width: 100%; justify-content: flex-start; align-items: center; --animate-delay: 0.9s;">
+                <!-- <div class="innerItem"> -->
+                <h6>Bill To Information</h6>
 
-
-                        <div style="flex: 1; display: flex; justify-content: center;">
-                            <button type="button" class="btn btn-primary" onclick="onAddCrop()"
-                                style="width: 100px;">Add</button>
-                        </div>
-                    </div>
-
+                <div class="d-flex flex-wrap align-items-center justify-content-between mt-2"
+                    style="column-gap: 1rem; width: 100%">
+                    <p class="billInfoP">Bill To: <strong>{{$getconsignments->bill_to}}</strong></p>
+                    <p class="billInfoP">Client Name: <strong>Demo Client</strong></p>
+                    <p class="billInfoP" style="min-width: 100%">Payment Type:
+                        <strong>{{$getconsignments->payment_type}}</strong></p>
                 </div>
 
-                <div class="form-row" style="box-shadow: none">
+                <!-- </div> -->
+            </div>
+
+            <div class="d-flex flex-column animate__animated animate__fadeIn"
+                style="flex: 1; width: 100%; justify-content: flex-start; align-items: center; --animate-delay: 1.8s;">
+                <h6>Crop Information</h6>
+
+                <div class="" style="box-shadow: none; width: 100%">
                     <table id="sprayTable">
                         <thead>
                             <tr>
@@ -821,9 +838,7 @@ tr:hover .dltItemRow {
                                 $totalRow = count($row_count);
                             ?>
                             @foreach($getconsignments->OrderFarmDetails as $farm_detail)
-                            <?php
-                            $i++;
-                           ?>
+                            <?php $i++;?>
                             <tr>
                                 <td>{{$farm_detail->CropName->crop_name}} <input type="hidden"
                                         value="{{$farm_detail->id}}" name="data[{{$i}}][order_farm_id]" /> <input
@@ -832,18 +847,23 @@ tr:hover .dltItemRow {
                                 <td>{{$farm_detail->FarmerFarm->field_area}}<input type="hidden"
                                         value="{{$farm_detail->farm_location}}" name="data[{{$i}}][farm_location]" />
                                 </td>
-                                <td>{{$farm_detail->acreage}}<input type="hidden" value="{{$farm_detail->acreage}}"
-                                        name="data[{{$i}}][acerage]" /></td>
+                                <td><input class="acreageValue" value="{{$farm_detail->acreage}}"
+                                        name="data[{{$i}}][acerage]" disabled /></td>
                                 <td class="lastCol">
                                     {{$farm_detail->crop_price}}<input type="hidden"
                                         value="{{$farm_detail->crop_price}}" name="data[{{$i}}][crop_price]" />
+
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="feather feather-trash dltItemRow">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path
-                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                        </path>
+                                        stroke-linejoin="round" class="feather feather-edit-2 onEdit actionIcon">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                    </svg>
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-check onDone actionIcon"
+                                        style="display: none">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
                                 </td>
 
@@ -862,17 +882,14 @@ tr:hover .dltItemRow {
 
         </div>
 
-        {{--vehicle info--}}
-        <!-- <div class="form-check form-check-inline justify-content-end col-12">
-            <input class="form-check-input" type="checkbox" name="noc" id="inlineCheckbox1" value="1">
-            <label class="form-check-label" for="inlineCheckbox1">if any damage to crop on behalf of the
-                farmer</label>
-        </div> -->
 
-        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
-            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
-            <button type="submit" class="mt-2 btn btn-primary disableme">Update</button>
+
+        <div class="actionButtonRow animate__animated animate__fadeInUp">
+            <a class="mt-2 myBtn" href="{{url($prefix.'/consignments') }}" style="font-weight: 500"> Reset</a>
+            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn"
+                disabled>Verify</button>
         </div>
+
 
     </form>
 </div>
@@ -889,6 +906,9 @@ let farmerList = [];
 $(document).ready(function() {
 
     var branch_id = 'list';
+
+    if ('both status' != 'both status') $('#submitButton').attr('disabled', true);
+     else $('#submitButton').attr('disabled', false);
 
     $.ajax({
         url: "get-farmer-list",
@@ -911,98 +931,37 @@ $(document).ready(function() {
 });
 
 
-function increaseValue() {
-    var value = parseInt(document.getElementById('number').value, 10);
-    value = isNaN(value) ? 1 : value;
-    value++;
-    document.getElementById('number').value = value;
-}
-
-function decreaseValue() {
-    var value = parseInt(document.getElementById('number').value, 10);
-    value = isNaN(value) ? 1 : value;
-    value < 2 ? value = 2 : '';
-    value--;
-    document.getElementById('number').value = value;
-}
-
-function increaseDecimalValue() {
-    var value = parseInt(document.getElementById('acreage').value, 10);
-    value = isNaN(value) ? 1 : value;
-    value++;
-    document.getElementById('acreage').value = value;
-}
-
-function decreaseDecimalValue() {
-    var value = parseInt(document.getElementById('acreage').value, 10);
-    value = isNaN(value) ? 1 : value;
-    value < 2 ? value = 2 : '';
-    value--;
-    document.getElementById('acreage').value = value;
-}
 
 
-const onFarmerTypeChange = () => {
-    if ($('#io').is(':checked')) {
-        $('#selectFarmerId').show();
-        $('#createFarmerBox').hide();
-    } else {
-        $('#createFarmerBox').show();
-        $('#selectFarmerId').hide();
-    }
-}
+
 
 
 
 let cropList = [];
 let cropIndex = $('#crop_count').val();
 
-const onAddCrop = () => {
-    cropIndex++;
-
-    let listItem = ``;
-    let cropName = $('input[name="crop"]:checked').val();
-    let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
-    let farmLocation = $('#farmLocation').find(":selected").val();
-    let farmLocationText = $('#farmLocation').find(":selected").text();
-    let acreage = $('#acreage').val();
-    let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
-    let totalPrice = cropPrice * acreage;
-
-    if (farmLocation != '') {
-        $('#sprayTable').show();
-        listItem += `<tr>
-                <td>${cropNameText}<input type="hidden" value="" name="data[` + cropIndex +
-            `][order_farm_id]"/><input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
-                <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
-                <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
-                <td class="lastCol">
-                    ${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                </td>
-                
-            </tr>`;
-        $('#sprayTable').append(listItem);
-
-        $('#farmLocation').val('').change();
-        $('#acreage').val('1');
-        $('#farmLocationError').hide();
-        cropIndex++;
-    } else $('#farmLocationError').show();
-}
 
 $("#sprayTable").on('click', '.dltItemRow', function() {
     $(this).closest('tr').remove();
 })
 
+$("#sprayTable").on('click', '.onEdit', function() {
+    $(this).closest('tr').find('input.acreageValue').attr('disabled', false);
+    $(this).css('display', 'none');
+    $(this).siblings().css('display', 'flex');
+})
 
+$("#sprayTable").on('click', '.onDone', function() {
+    $(this).closest('tr').find('input.acreageValue').attr('disabled', true);
+    $(this).css('display', 'none');
+    $(this).siblings().css('display', 'flex');
+})
 
-function displayCropsSection() {
-    $('#cropSelection').addClass('enabled');
-    $('#farmerInfo').css("opacity", "1");;
+$(".acreageValue").on('keyup', function() {
+    if ($('.acreageValue').val() == null) $('#submitButton').attr('disabled', true);
+     else $('#submitButton').attr('disabled', false);
+})
 
-    // else $('#cropSelection').removeClass('enabled');
-};
 
 
 $(document).ready(function() {
@@ -1269,57 +1228,7 @@ const demoFunction = () => {
         console.log('Look Sahil..', ss);
     }
 }
-// var mydata = [{
-//         "id": 1,
-//         "name": "John",
-//         "age": 23
-//     },
-//     {
-//         "id": 2,
-//         "name": "Mary",
-//         "age": 33
-//     },
-//     {
-//         "id": 3,
-//         "name": "Richard",
-//         "age": 53
-//     },
-//     {
-//         "id": 4,
-//         "name": "Ashley",
-//         "age": 25
-//     },
-//     {
-//         "id": 5,
-//         "name": "Kyle",
-//         "age": 17
-//     },
-//     {
-//         "id": 6,
-//         "name": "Samantha",
-//         "age": 29
-//     },
-//     {
-//         "id": 7,
-//         "name": "David",
-//         "age": 43
-//     },
-//     {
-//         "id": 8,
-//         "name": "Charles",
-//         "age": 27
-//     },
-//     {
-//         "id": 9,
-//         "name": "Elaine",
-//         "age": 41
-//     },
-//     {
-//         "id": 10,
-//         "name": "William",
-//         "age": 22
-//     }
-// ];
+
 
 $('#farmer_id').autocomplete({
     minLength: 1,

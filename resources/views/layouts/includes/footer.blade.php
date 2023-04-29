@@ -1,19 +1,5 @@
 <div class="footer-wrapper">
-
-    <div class="footer-section f-section-1">
-        <p class="">Copyright © {{ date('Y') }} <a target="_blank" href="#">ETERNITY</a>, All rights reserved.</p>
-    </div>
-    <div class="footer-section f-section-2">
-        <p class="">Coded with
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="feather feather-heart">
-                <path
-                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                </path>
-            </svg>
-        </p>
-    </div>
+        <p class="text-center" style="width: 100%">Copyright © {{ date('Y') }} <a target="_blank" href="#">ETERNITY</a>, All rights reserved.</p>
 </div>
 <!--  END CONTENT AREA  -->
 
@@ -24,7 +10,6 @@ embed,
 iframe,
 img,
 object,
-svg,
 video {
     display: unset !important;
     vertical-align: middle;
@@ -35,68 +20,9 @@ video {
     z-index: 999999;
 }
 </style>
-<!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" defer> -->
-<!-- <div id="message" x-data="{ showMessage: false, message: '' }" class="fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
-    <div  x-show="showMessage"
-        x-transition:enter="transform ease-out duration-300 transition"
-        x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-        x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
-        x-transition:leave="transition ease-in duration-100"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto">
-        <div class="rounded-lg shadow-xs overflow-hidden">
-            <div class="p-4">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-
-                        <svg class="h-6 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div class="ml-3 w-0 flex-1 pt-0.5">
-                        <p class="text-sm leading-5 font-medium text-gray-900" x-text="message">
-                        </p>
-                    </div>
-                    <div class="ml-4 flex-shrink-0 flex">
-                        <button class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150" onclick="closeMessage();">
-
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
 
 </div>
-<!-- END MAIN CONTAINER -->
-
-<!-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script> -->
-<!-- <script src="{{ asset('js/app.js') }}"></script> -->
 <script>
-//     Echo.channel('events')
-//    .listen('RealTimeMessage', (e) => console.log('RealTimeMessage: ' + e.message));
-
-/*function closeMessage() {
-    message.__x.$data.showMessage = false;
-}
-
-Echo.channel('events')
-    .listen('RealTimeMessage', (e) => {
-        let message = document.getElementById('message');
-        //console.log(e.message);
-        message.__x.$data.showMessage = true;
-        message.__x.$data.message = e.message;
-
-
-        setTimeout(function () {
-            closeMessage()
-        }, 115000);
-    });*/
 </script>
 
 <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
