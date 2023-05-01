@@ -173,6 +173,7 @@ class ConsigneeController extends Controller
         $consigneesave['state_id']            = $request->state_id;
         $consigneesave['user_id']             = $authuser->id;
         $consigneesave['branch_id']           = $authuser->branch_id;
+        $consigneesave['is_verified']         = 1;
 
         $saveconsignee = Consignee::create($consigneesave); 
         if($saveconsignee)
@@ -310,7 +311,7 @@ class ConsigneeController extends Controller
             }
             
            
-            $url    =   URL::to($this->prefix.'/consignees');
+            $url    =   URL::to($this->prefix.'/orders');
 
             $response['page'] = 'consignee-update';
             $response['success'] = true;

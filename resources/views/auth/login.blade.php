@@ -47,7 +47,7 @@
 
     .droneImageBlock img {
         max-height: min(60vh, 350px);
-        /* transform: scaleX(-1); */
+        transform: scaleX(-1);
     }
 
     .loginBlock {
@@ -133,7 +133,7 @@
         <img src="{{asset('assets/agri-wing-logo.svg')}}" alt="logo" class="registerLogo" />
         <div class="loginPageContainer container">
             <div class="droneImageBlock" style="flex: 1">
-                <img src="{{asset('assets/drone.png')}}" alt="drone" />
+                <img src="{{asset('assets/drone1.png')}}" alt="drone" />
             </div>
             <div class="formBlock" style="flex: 1; max-width: 350px">
                 <form method="POST" action="{{ route('login') }}" id="loginform" autocomplete="off"

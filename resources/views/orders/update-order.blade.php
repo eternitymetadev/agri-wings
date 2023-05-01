@@ -926,8 +926,8 @@ $totalRow = count($row_count);
 
         <div class="actionButtonRow animate__animated animate__fadeInUp">
             <?php
-$ss = $getconsignments->ConsigneeDetail->is_verified == 0;
-?>
+            $ss = $getconsignments->ConsigneeDetail->is_verified == 0;
+            ?>
             <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn" @if($ss ||
                 $status) disabled @endif>Verify</button>
         </div>

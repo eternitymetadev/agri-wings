@@ -706,6 +706,9 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('/get-farmer-details', [ConsigneeController::class, 'getfarmerDetails']);
     Route::any('/order-list-details', [ConsignmentController::class, 'orderList']);
 
+    Route::any('/check-farmer-phone', [ConsigneeController::class, 'checkFarmerPhone']);
+    Route::any('/create-new-farmer', [ConsigneeController::class, 'createnewFarmer']);
+
 
 
 });
@@ -1040,6 +1043,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/user-profile', [UserController::class, 'userProfile']);
     Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
     Route::resource('orders', OrderController::class);
+    Route::any('/order-list-details', [ConsignmentController::class, 'orderList']);
     
     
 

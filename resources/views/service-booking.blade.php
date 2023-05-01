@@ -799,7 +799,7 @@ tr:hover .dltItemRow {
 
                     <div class="form-group col-md-4">
                         <label for="clientName">Billing Person Name<span class="text-danger">*</span></label>
-                        <input class="form-control" name="clientName" id="clientName" />
+                        <input class="form-control" name="clientName" id="clientName" readonly />
                     </div>
 
                     <div class="form-group col-md-4">

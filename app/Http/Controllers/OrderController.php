@@ -1348,7 +1348,11 @@ class OrderController extends Controller
                         $client_assign_branch = $get_branch->id;
                     } else {
                         $get_branch = Location::where('name', 'Karnal')->first();
-                        $client_assign_branch = $get_branch->id;
+                        if(!empty($get_branch->id)){
+                            $client_assign_branch = $get_branch->id;
+                        }else{
+                            $client_assign_branch = '';
+                        }
                     }
     
                     $saveclientdetails['name'] = $getfarmerdetails->nick_name;
@@ -2223,7 +2227,7 @@ class OrderController extends Controller
 
             }
 
-            $url = $this->prefix . '/orders';
+            $url = $this->prefix . '/service-booking';
             $response['success'] = true;
             $response['success_message'] = "Order Added successfully";
             $response['error'] = false;
