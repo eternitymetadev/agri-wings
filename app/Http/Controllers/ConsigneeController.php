@@ -291,7 +291,7 @@ class ConsigneeController extends Controller
             $consigneesave['district']            = $request->district;
             $consigneesave['postal_code']         = $request->postal_code;
             $consigneesave['state_id']            = $request->state_id;
-            // $consigneesave['status']              = $request->status;
+            $consigneesave['is_verified']         = 1;
 
             Consignee::where('id',$request->consignee_id)->update($consigneesave);
 
@@ -458,7 +458,7 @@ class ConsigneeController extends Controller
         $number_check = Consignee::where('phone',$request->number)->first();
         if(!empty($number_check)){
 
-            $response['success'] = true;
+            $response['success'] = true; 
             $response['error_message'] = "Already exist";
             $response['error'] = true;
             return response()->json($response);

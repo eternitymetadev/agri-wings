@@ -417,6 +417,7 @@ class OrderController extends Controller
      */
     public function updateOrder(Request $request)
     {
+        // echo'<pre>'; print_r($request->all()); die;
         try {
             DB::beginTransaction();
 
@@ -458,7 +459,7 @@ class OrderController extends Controller
             // $consignmentsave['consigner_id'] = $request->consigner_id;
             // $consignmentsave['consignee_id'] = $request->consignee_id;
             // $consignmentsave['ship_to_id'] = $request->ship_to_id;
-            $consignmentsave['payment_type'] = $request->payment_type;
+            // $consignmentsave['payment_type'] = $request->payment_type;
 
             $consignmentsave['status'] = $status;
 
@@ -476,18 +477,13 @@ class OrderController extends Controller
                     $crop_price[] = $save_data['crop_price'];
 
                     $update_data['order_id'] = $request->consignment_id;
-                    $update_data['farm_location'] = $save_data['farm_location'];
-                    $update_data['crop'] = $save_data['crop_name'];
+                    // $update_data['farm_location'] = $save_data['farm_location'];
+                    // $update_data['crop'] = $save_data['crop_name'];
                     $update_data['acreage'] = $save_data['acerage'];
                     $update_data['crop_price'] = $save_data['crop_price'];
                     $update_data['status'] = 1;
 
-
-                    if(!empty($save_data['order_farm_id'])){
                         $saveconsignmentitems = OrderFarm::where('id',$save_data['order_farm_id'])->update($update_data);
-                    }else{
-                        $savenewfarm = OrderFarm::create($update_data);
-                    }
                 }
 
                 $total_acerage = array_sum($acerage);

@@ -723,6 +723,7 @@ tr:hover .dltItemRow {
 
 
                         <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
+                        <Input type="hidden" id="farmer_name_check" name="farmer_name_check" >
                         <div id="createFarmerBox" class="row align-items-center px-2" style="width: 100%">
                             <div class="form-group col-md-3 px-1">
                                 <label>Farmer Mobile<span class="text-danger">*</span></label>
@@ -791,11 +792,13 @@ tr:hover .dltItemRow {
                         </select>
                         <Input type="hidden" class="form-control" id="regclient_id" name="regclient_id"
                             value="{{$regonal_client->id}}">
+                            <Input type="hidden" class="form-control" id="billing_name" name="billing_name"
+                            value="{{$regonal_client->name}}">
 
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="clientName">Billimng Person Name<span class="text-danger">*</span></label>
+                        <label for="clientName">Billing Person Name<span class="text-danger">*</span></label>
                         <input class="form-control" name="clientName" id="clientName" />
                     </div>
 
@@ -1296,12 +1299,14 @@ $('#createFarmerButton').click(function() {
             ),
         },
         processData: true,
-
+ 
         success: function(response) {
             $('#themeLoader').css('display', 'none');
 
             if (response.success == true) {
+                console.log(response.farmer_details.nick_name)
                 $('#farmer_common_id').val(response.farmer_details.id)
+                $('#farmer_name_check').val(response.farmer_details.nick_name)
                 appendFarmerDes(response.farmer_details);
                 $("#farmer_name").prop('disabled', true);
                 $("#farmer_phone").prop('disabled', true);
@@ -1373,8 +1378,8 @@ $('#farmer_id').autocomplete({
             success: function(response) {
                 $('#themeLoader').css('display', 'none');
 
-                console.log(response.get_farmer_details);
                 $('#farmer_common_id').val(response.get_farmer_details.id)
+                $('#farmer_name_check').val(response.get_farmer_details.nick_name)
                 appendFarmerDes(response.get_farmer_details)
 
                 $("#farmLocation").append(
@@ -1436,6 +1441,15 @@ $("#bill_term").change(function(e) {
     $("#paymentType_").empty();
     $('#cropSelection').removeClass('enabled');
     $('#themeLoader').css('display', 'flex');
+
+    if(bill_to == 'Self'){
+        var client_nam = $('#billing_name').val();
+        var show_client_name = $('#clientName').val(client_nam);
+    }else{
+        var farmer_client_nam = $('#farmer_name_check').val();
+        var show_farmer_name = $('#clientName').val(farmer_client_nam);
+    }
+
     $.ajax({
         url: "get-payment-term",
         type: "get",

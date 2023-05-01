@@ -186,7 +186,7 @@ span.select2.select2-container.mb-4 {
 .form-row {
     padding: 1rem;
     border-radius: 12px;
-    box-shadow: 0 0 3px #83838360;
+    /* box-shadow: 0 0 3px #83838360; */
     margin-bottom: 1rem;
 }
 
@@ -266,11 +266,17 @@ span.select2.select2-container.mb-4 {
     color: #000;
 }
 
-.cropSelection {
+#cropSection {
     background: url('https://thumbs.dreamstime.com/b/vector-farm-illustration-illustration-banner-book-social-media-other-design-vector-farm-illustration-vector-tractor-181864455.jpg');
     background-size: 60%;
     background-position: center;
     background-repeat: no-repeat;
+    min-height: 340px;
+}
+
+.cropSelection {
+    min-height: 340px;
+    display: none;
 }
 
 .cropSelection .form-group {
@@ -339,16 +345,15 @@ span.select2.select2-container.mb-4 {
     padding: 8px;
 }
 
-.cropSelection * {
-    opacity: 0;
-}
 
-.cropSelection.enabled {
+
+#cropSection.enabled {
     background: none;
 }
 
-.cropSelection.enabled * {
-    opacity: 1;
+#cropSection.enabled .cropSelection {
+    min-height: 340px;
+    display: flex;
 }
 
 
@@ -495,25 +500,21 @@ span.select2.select2-container.mb-4 {
     gap: 4px;
     border: 1px solid var(--secondaryColor);
     border-radius: 9px;
-    background: #248f2733;
-    box-shadow: 0 0 5px 2px rgba(194, 213, 255, 0.619608);
+    background: #6b6b6b33;
+    min-height: 45.39px;
 }
 
 .value-button {
     display: inline-block;
     margin: 0px;
-    height: -webkit-fill-available;
     text-align: center;
     user-select: none;
     color: var(--secondaryColor);
     font-size: 36px;
-    line-height: 35px;
+    line-height: 41px;
     border-radius: 8px 0 0 8px;
     background: none;
     border: none;
-}
-
-.value-button:hover {
     cursor: pointer;
 }
 
@@ -546,6 +547,12 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100%;
     border-radius: 10px;
     overflow: hidden;
+    z-index: -1;
+}
+
+.form-row:has(#sprayTable):hover #sprayTable {
+    z-index: 0 !important;
+
 }
 
 #sprayTable thead {
@@ -559,10 +566,9 @@ input[type=number]::-webkit-outer-spin-button {
     background: #28a74526;
     padding: 1rem;
     border-radius: 0 20px;
-    display: flex;
     flex-wrap: wrap;
     flex: 1;
-    /* max-width: 320px; */
+    display: none;
 }
 
 .farmerInfo img {
@@ -635,8 +641,8 @@ input[type=number]::-webkit-outer-spin-button {
     padding: 7px;
     border-radius: 50vh;
     box-shadow: 0 0 2px inset;
-    opacity: 0;
-    pointer-events: none;
+    /* opacity: 0; */
+    /* pointer-events: none; */
     cursor: pointer;
     transition: all 300ms ease-in-out;
 }
@@ -667,17 +673,30 @@ tr:hover .dltItemRow {
     border: none !important;
     padding: 6px !important;
 }
+
+.activeFormRow {
+    box-shadow: 0 6px 20px #838383d1;
+}
+
+
+@media(max-width: 600px) {
+    .innerBoxes {
+        min-width: 100%;
+    }
+}
 </style>
 
 
-<div class="layout-px-spacing mt-5">
-    <form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment"
+<div class="layout-px-spacing mt-5 animate__animated animate__fadeIn">
+<form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment"
         style="margin: auto;">
 
         <div class="row flex-wrap mx-0" style="gap: 2rem">
 
-            <div style="flex:1; align-content: flex-start; justify-content: center">
-                <div class="form-row justify-content-center" style="min-height: 340px; align-content: flex-start">
+            <div class="innerBoxes"
+                style="flex:1; align-content: flex-start; justify-content: center; min-width: 300px;">
+                <div class="form-row justify-content-center activeFormRow"
+                    style="min-height: 340px; align-content: flex-start">
                     <h6 class="col-12">Farmer Details </h6>
                     <div class="row align-items-center justify-content-center" style="width: 100%">
                         <!-- choose farmer type -->
@@ -698,23 +717,26 @@ tr:hover .dltItemRow {
                                         Select Farmer<span class="text-danger">*</span>
                                     </label>
                                     <input id="farmer_id" class="form-control" type="text" placeholder="Search.." />
-                                </div> 
+                                </div>
                             </div>
                         </div>
 
 
                         <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
                         <div id="createFarmerBox" class="row align-items-center px-2" style="width: 100%">
-                            <div class="form-group col-md-5 px-1">
-                                <label>Farmer Name <span class="text-danger">*</span></label>
-                                <Input type="text" class="form-control" id="farmer_name" name="farmer_name">
-                                <span id="farmer_req" style="color:red"></span>
-                            </div>
                             <div class="form-group col-md-3 px-1">
                                 <label>Farmer Mobile<span class="text-danger">*</span></label>
-                                <Input type="number" class="form-control" id="farmer_phone" maxlength="10" name="phone">
+                                <Input type="number" class="form-control newFarmerInput" id="farmer_phone"
+                                    maxlength="10" name="phone">
                                 <span id="phone_error" style="color:red;"></span>
                             </div>
+                            <div class="form-group col-md-5 px-1">
+                                <label>Farmer Name <span class="text-danger">*</span></label>
+                                <Input type="text" class="form-control newFarmerInput" id="farmer_name"
+                                    name="farmer_name">
+                                <span id="farmer_req" style="color:red"></span>
+                            </div>
+
                             <div class="form-group col-md-3 px-1">
                                 <label>Farm Locations<span class="text-danger">*</span></label>
                                 <div class="counter">
@@ -727,7 +749,7 @@ tr:hover .dltItemRow {
                             </div>
 
                             <!-- <div class="form-group col-md-12 createButton"> -->
-                            <button type="button" id="createFarmerButton" class="btn btn-primary cButton">
+                            <button type="button" id="createFarmerButton" class="btn btn-primary cButton" disabled>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="feather feather-check">
@@ -737,25 +759,16 @@ tr:hover .dltItemRow {
                             <!-- </div> -->
                         </div>
 
-                        <div id='farmerInfo' class="farmerInfo">
+                        <div id='farmerInfo' class="farmerInfo animate__animated animate__fadeIn">
                             <img src="{{asset('assets/farmer-icon.png')}}" />
                             <div id="farmerDes" class="farmerDes">
-                                <!-- <p class="title">Farmer Name</p>
-                                <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="feather feather-phone">
-                                        <path
-                                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                        </path>
-                                    </svg> +91-1234567890</p>
-                                <p>Farm Locations - <span>4</span></p> -->
                             </div>
                         </div>
 
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="form-row animate__animated animate__fadeInUp" id="billToInfo" style="display: none">
                     <h6 class="col-12">Bill To Information</h6>
 
                     <div class="form-group col-md-7">
@@ -783,115 +796,72 @@ tr:hover .dltItemRow {
                         <label for="exampleFormControlSelect1">
                             Payment Term<span class="text-danger">*</span>
                         </label>
-                        <select class="form-control my-select2" name="payment_type" id="paymentType_">
+                        <select class="form-control my-select2" name="payment_type" id="paymentType_" onchange="togglePaymentAction()">
 
                         </select>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex flex-column" style="flex:1;">
-                <div id="cropSelection" class="form-row cropSelection"
-                    style="column-gap: 1.2rem; align-content: flex-start">
-                    <h6 class="col-12">Spray Details</h6>
-                    <!-- <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Select Farm Location</p>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="1" name="farm" value="1" checked />
-                        <label for="sugarcane">Farm 1</label>
-                    </div>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="2" name="farm" value="2" checked />
-                        <label for="sugarcane">Farm 2</label>
-                    </div>
-                    <div class="form-group farm">
-                        <Input type="radio" class="form-control" id="3" name="farm" value="3" checked />
-                        <label for="sugarcane">Farm 3</label>
-                    </div> -->
+            <div class="d-flex flex-column innerBoxes" style="flex:1;">
+                <div id="cropSection" style="column-gap: 1.2rem; align-content: flex-start">
+                    <div id="cropSelection" class="form-row cropSelection animate__animated animate__fadeIn"
+                        style="column-gap: 1.2rem; align-content: flex-start">
+                        <h6 class="col-12">Spray Details</h6>
 
-                    <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
+                        <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
 
-                    @foreach($Crops as $crop)
-                    <div class="form-group">
-                        <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop"
-                            value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
-                            data-crop-name="{{$crop->crop_name}}" checked />
-                        <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    @endforeach
-                    <!-- <div class="form-group">
-                        <Input type="radio" class="form-control" id="wheat" name="crop" value="wheat" />
-                        <label for="wheat">Wheat
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="paddy" name="crop" value="paddy" />
-                        <label for="paddy">Paddy
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="potato" name="crop" value="potato" />
-                        <label for="potato">Potato
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="apple" name="crop" value="apple" />
-                        <label for="apple">Apple
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <Input type="radio" class="form-control" id="cotton" name="crop" value="cotton" />
-                        <label for="cotton">Cotton
-                            <img src="{{asset('assets/drone.png')}}" alt="crop" />
-                        </label>
-                    </div> -->
-
-
-                    <div class="row col-12 mt-3 align-items-center">
-                        <div class="form-group col-md-6" style="max-width: 320px">
-                            <label for="exampleFormControlSelect1">
-                                Farm Location<span class="text-danger">*</span>
+                        @foreach($Crops as $crop)
+                        <div class="form-group">
+                            <Input type="radio" class="form-control price_click" id="{{$crop->crop_name}}" name="crop"
+                                value="{{$crop->id}}" data-crop-price="{{$crop->crop_price}}"
+                                data-crop-name="{{$crop->crop_name}}" checked />
+                            <label for="{{$crop->crop_name}}">{{$crop->crop_name}}
+                                <img src="{{$crop->crop_image}}" alt="crop" />
                             </label>
-                            <select class="form-control my-select2" name="" onchange="displayCropsSection()"
-                                id="farmLocation">
-                                <option value="" readonly>-select location-</option>
-                                <!-- <option value="TBB">Location 1</option>
-                                <option value="TBB1">Location 2</option> -->
-                            </select>
-                            <label id="farmLocationError" style="display:none" class="error" for="farmLocation">Please
-                                Select Farm</label>
                         </div>
+                        @endforeach
+
+                        <div class="d-flex flex-wrap col-12 mt-5 align-items-center">
+                            <div class="form-group col-md-6" style="max-width: 320px">
+                                <label for="exampleFormControlSelect1">
+                                    Farm Location<span class="text-danger">*</span>
+                                </label>
+                                <select class="form-control my-select2" name="" onchange="displayCropsSection()"
+                                    id="farmLocation">
+                                    <option value="" readonly>-select location-</option>
+                                </select>
+                                <label id="farmLocationError" style="display:none" class="error"
+                                    for="farmLocation">Please
+                                    Select Farm</label>
+                            </div>
 
 
-                        <div class="form-group" style="flex: 1; max-width: 150px">
-                            <label>Acreage<span class="text-danger">*</span></label>
-                            <div class="counter">
-                                <div class="value-button" id="decrease" onclick="decreaseDecimalValue()"
-                                    value="Decrease Value">-
+                            <div class="form-group" style="flex: 1; max-width: 150px">
+                                <label>Acreage<span class="text-danger">*</span></label>
+                                <div class="counter">
+                                    <div class="value-button" id="decrease" onclick="decreaseDecimalValue()"
+                                        value="Decrease Value">-
+                                    </div>
+                                    <input type="number" id="acreage" name="acreage" value="1" min='1' />
+                                    <div class="value-button" id="increase" onclick="increaseDecimalValue()"
+                                        value="Increase Value">+
+                                    </div>
                                 </div>
-                                <input type="number" id="acreage" name="acreage" value="1" min='1' />
-                                <div class="value-button" id="increase" onclick="increaseDecimalValue()"
-                                    value="Increase Value">+
-                                </div>
+                            </div>
+
+
+                            <div style="flex: 1; display: flex; justify-content: center;">
+                                <button type="button" class="btn btn-primary" onclick="onAddCrop()"
+                                    style="width: 120px; height: 43px; margin-inline: auto; border-radius: 18px">Add</button>
                             </div>
                         </div>
 
-
-                        <div style="flex: 1; display: flex; justify-content: center;">
-                            <button type="button" class="btn btn-primary" onclick="onAddCrop()"
-                                style="width: 100px;">Add</button>
-                        </div>
                     </div>
-
                 </div>
 
                 <div class="form-row" style="box-shadow: none">
-                    <table id="sprayTable" style="display: none">
+                    <table id="sprayTable" class="animate__animated animate__fadeIn" style="display: none">
                         <thead>
                             <tr>
                                 <th>Crop Name</th>
@@ -906,8 +876,6 @@ tr:hover .dltItemRow {
                 </div>
             </div>
 
-
-
             <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
                 placeholder="" value="<?php echo date('d-m-Y'); ?>" />
 
@@ -920,9 +888,9 @@ tr:hover .dltItemRow {
                 farmer</label>
         </div> -->
 
-        <div class="col-12 d-flex justify-content-end align-items-center" style="gap: 1rem; margin-top: 1rem;">
-            <a class="mt-2 btn" href="{{url($prefix.'/consignments') }}"> Reset</a>
-            <button type="submit" class="mt-2 btn btn-primary disableme">Submit</button>
+        <div class="actionButtonRow animate__animated animate__fadeInUp">
+            <a class="mt-2 myBtn" href="{{url($prefix.'/order-book-ptl') }}" style="font-weight: 500"> Reset</a>
+            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn" disabled>Submit</button>
         </div>
 
     </form>
@@ -935,9 +903,36 @@ tr:hover .dltItemRow {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
 
 <script>
+$('.form-row input').on("focus", function() {
+    $('.form-row').removeClass('activeFormRow');
+    $(this).closest('.form-row').addClass('activeFormRow');
+});
+
+$('.form-row').on("mousedown", function() {
+    $('.form-row').removeClass('activeFormRow');
+    $(this).addClass('activeFormRow');
+});
+
+$('.newFarmerInput').keyup(function() {
+    if ($('#farmer_name').val() && $('#farmer_phone').val().length == 10) $('#createFarmerButton').attr(
+        'disabled', false);
+    else $('#createFarmerButton').attr('disabled', true);
+});
+
+function displayBillToInfoSection() {
+    $('.form-row').removeClass('activeFormRow');
+    $('#billToInfo').addClass('activeFormRow');
+    $('#bill_term').click();
+
+    $('#billToInfo').show();
+    $('#farmerInfo').css('display', 'flex');
+}
+
+
 let farmerList = [];
 
 $(document).ready(function() {
+    // $('#themeLoader').css('display', 'flex');
 
     var branch_id = 'list';
 
@@ -956,7 +951,7 @@ $(document).ready(function() {
             $("#select_regclient").empty();
         },
         success: function(res) {
-            console.log(res.farmer_list);
+            // $('#themeLoader').css('display', 'none');
             farmerList = res.farmer_list
         },
     });
@@ -1030,7 +1025,7 @@ const onAddCrop = () => {
                     ${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </td>
-                
+
             </tr>`;
         $('#sprayTable').append(listItem);
 
@@ -1038,20 +1033,25 @@ const onAddCrop = () => {
         $('#acreage').val('1');
         $('#farmLocationError').hide();
         cropIndex++;
+        if ($('#sprayTable tr').length < 2) $('#submitButton').attr('disabled', true);
+        else $('#submitButton').attr('disabled', false);
     } else $('#farmLocationError').show();
 }
 
 $("#sprayTable").on('click', '.dltItemRow', function() {
     $(this).closest('tr').remove();
+    if ($('#sprayTable tr').length < 2) {
+        $('#sprayTable').hide();
+        $('#submitButton').attr('disabled', true);
+    }
 })
 
 
 
 function displayCropsSection() {
-    $('#cropSelection').addClass('enabled');
-    $('#farmerInfo').css("opacity", "1");;
-
-    // else $('#cropSelection').removeClass('enabled');
+    $('#cropSection').addClass('enabled');
+    $('.form-row').removeClass('activeFormRow');
+    $('#cropSelection').addClass('activeFormRow');
 };
 
 
@@ -1217,23 +1217,26 @@ $("#branch_id").change(function(e) {
     });
 });
 
-// function togglePaymentAction() {
+function togglePaymentAction() {
 
-//     if ($('#paymentType').val() == 'To Pay') {
-//         $('#freight_on_delivery').attr('readonly', false);
-//         $('#cod').attr('readonly', false);
-//     } else if ($('#paymentType').val() == 'Paid') {
-//         $('#cod').attr('readonly', true);
-//         $('#freight_on_delivery').attr('readonly', true);
-//     } else {
-//         $('#freight_on_delivery').attr('readonly', true);
-//         $('#cod').attr('readonly', false);
-//         $('#freight_on_delivery').val('');
-//     }
-// }
+    if ($('#paymentType_').val() != null) {
+        displayCropsSection();
+    } else $('#cropSelection').removeClass('enabled');
+
+    if ($('#paymentType').val() == 'To Pay') {
+        $('#freight_on_delivery').attr('readonly', false);
+        $('#cod').attr('readonly', false);
+    } else if ($('#paymentType').val() == 'Paid') {
+        $('#cod').attr('readonly', true);
+        $('#freight_on_delivery').attr('readonly', true);
+    } else {
+        $('#freight_on_delivery').attr('readonly', true);
+        $('#cod').attr('readonly', false);
+        $('#freight_on_delivery').val('');
+    }
+}
 
 const appendFarmerDes = (des) => {
-    console.log('sdvbhytrfd');
     let node = ``;
     node += `<p class="title">${des.nick_name}</p>
                                 <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -1246,7 +1249,8 @@ const appendFarmerDes = (des) => {
                                 <p>Farm Locations - <span>${des.farm?.length}</span></p>`;
 
     $('#farmerDes').html(node);
-    displayCropsSection();
+    // displayCropsSection();
+    displayBillToInfoSection();
 }
 
 $('#createFarmerButton').click(function() {
@@ -1255,6 +1259,8 @@ $('#createFarmerButton').click(function() {
     var farmer_name = $('#farmer_name').val();
     var farmer_phone = $('#farmer_phone').val();
     var number = $('#number').val();
+    $('#themeLoader').css('display', 'flex');
+
     if (!farmer_name) {
         $('#farmer_req').html('Please enter farmer name');
         return false;
@@ -1283,8 +1289,9 @@ $('#createFarmerButton').click(function() {
             ),
         },
         processData: true,
-
+ 
         success: function(response) {
+            $('#themeLoader').css('display', 'none');
 
             if (response.success == true) {
                 $('#farmer_common_id').val(response.farmer_details.id)
@@ -1314,63 +1321,7 @@ $('#createFarmerButton').click(function() {
 
 });
 
-const demoFunction = () => {
-    let ss = $('#pp').val();
-    if (ss?.length == 10) {
-        console.log('Look Sahil..', ss);
-    }
-}
-// var mydata = [{
-//         "id": 1,
-//         "name": "John",
-//         "age": 23
-//     },
-//     {
-//         "id": 2,
-//         "name": "Mary",
-//         "age": 33
-//     },
-//     {
-//         "id": 3,
-//         "name": "Richard",
-//         "age": 53
-//     },
-//     {
-//         "id": 4,
-//         "name": "Ashley",
-//         "age": 25
-//     },
-//     {
-//         "id": 5,
-//         "name": "Kyle",
-//         "age": 17
-//     },
-//     {
-//         "id": 6,
-//         "name": "Samantha",
-//         "age": 29
-//     },
-//     {
-//         "id": 7,
-//         "name": "David",
-//         "age": 43
-//     },
-//     {
-//         "id": 8,
-//         "name": "Charles",
-//         "age": 27
-//     },
-//     {
-//         "id": 9,
-//         "name": "Elaine",
-//         "age": 41
-//     },
-//     {
-//         "id": 10,
-//         "name": "William",
-//         "age": 22
-//     }
-// ];
+
 
 $('#farmer_id').autocomplete({
     minLength: 1,
@@ -1400,6 +1351,8 @@ $('#farmer_id').autocomplete({
         $('#farmer_id').attr('data-val', ui.item.value);
         // ... any other tasks (like setting Hidden Fields) go here...
         $("#farmLocation").empty();
+        $('#themeLoader').css('display', 'flex');
+
         jQuery.ajax({
             type: "get",
             url: 'get-farmer-details',
@@ -1411,6 +1364,8 @@ $('#farmer_id').autocomplete({
             },
             dataType: "json",
             success: function(response) {
+                $('#themeLoader').css('display', 'none');
+
                 console.log(response.get_farmer_details);
                 $('#farmer_common_id').val(response.get_farmer_details.id)
                 appendFarmerDes(response.get_farmer_details)
@@ -1435,6 +1390,78 @@ $('#farmer_id').autocomplete({
         });
         return false;
     }
+});
+
+$("#farmer_phone").blur(function() {
+    var number = $(this).val();
+    if (!number) {
+        return false;
+    }
+    $.ajax({
+        url: "check-farmer-phone",
+        type: "get",
+        cache: false,
+        data: {
+            number: number
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
+                "content"
+            ),
+        },
+        success: function(data) {
+            if (data.success == true) {
+                $("#phone_error").html(data.error_message);
+            } else {
+                $("#phone_error").html('');
+            }
+
+        },
+    });
+});
+
+/////
+$("#bill_term").change(function(e) {
+
+    var bill_to = $(this).val();
+    var regional_id = $('#regclient_id').val();
+    $("#paymentType_").empty();
+    $('#cropSelection').removeClass('enabled');
+    $('#themeLoader').css('display', 'flex');
+    $.ajax({
+        url: "get-payment-term",
+        type: "get",
+        cache: false,
+        data: {
+            bill_to: bill_to,
+            regional_id: regional_id
+        },
+        dataType: "json",
+        headers: {
+            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
+        },
+        beforeSend: function() {
+            $("#paymentType_").empty();
+        },
+        success: function(res) {
+            $("#paymentType_").append(
+                '<option value="">select..</option>'
+            );
+
+            $.each(res.getterms, function(index, value) {
+                $("#paymentType_").append(
+                    '<option value="' +
+                    value.payment_term +
+                    '">' +
+                    value.payment_term +
+                    "</option>"
+                );
+            });
+            $('#themeLoader').css('display', 'none');
+
+        },
+    });
 });
 
 $("#select_reg").change(function(e) {

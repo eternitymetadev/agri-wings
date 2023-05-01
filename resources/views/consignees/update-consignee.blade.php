@@ -81,7 +81,7 @@
                                 <table id="myTable">
                                     <tbody>
                                         <tr>
-                                            <th><label for="exampleFormControlInput2">Field Area<span
+                                            <th><label for="exampleFormControlInput2">Farm<span
                                                         class="text-danger">*</span></label></th>
                                             <th><label for="exampleFormControlInput2">Pin Code<span
                                                         class="text-danger">*</span></label></th>

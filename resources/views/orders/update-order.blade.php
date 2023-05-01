@@ -707,7 +707,7 @@ h6 {
     font-weight: 700;
     border-radius: 18px;
     padding: 5px 16px;
-    color: var(--stsClr);
+    color: var(--stsClr) !important;
     outline: 2px solid;
     width: 120px;
     trait-align: center;
@@ -721,7 +721,7 @@ input.acreageValue {
     padding-inline: 6px
 }
 
-input.acreageValue[disabled] {
+input.acreageValue[readonly] {
     background-color: #ffffff !important;
     color: #000000;
     border: none;
@@ -744,7 +744,8 @@ input.acreageValue[disabled] {
         action="{{url($prefix.'/orders/update-order')}}" id="updateorder" style="margin: auto auto 160px; ">
         <input type="hidden" name="consignment_id" value="{{$getconsignments->id}}">
 
-        <div class="d-flex flex-column flex-wrap mx-0 animate__animated animate__fadeIn" style="gap: 2rem; max-width: 900px; width: 100%">
+        <div class="d-flex flex-column flex-wrap mx-0 animate__animated animate__fadeIn"
+            style="gap: 2rem; max-width: 900px; width: 100%">
 
             <div class="orderDetails animate__animated animate__fadeIn">
                 <div class="innerItem">
@@ -753,9 +754,9 @@ input.acreageValue[disabled] {
                     <Input type="hidden" id="farmer_common_id" name="farmer_common_id"
                         value="{{$getconsignments->consignee_id}}">
 
-                        <?php
-                        $farmer_farms = $getconsignments->ConsigneeDetail->Farm;
-                        $count_farm = count($farmer_farms);?>
+                    <?php
+$farmer_farms = $getconsignments->ConsigneeDetail->Farm;
+$count_farm = count($farmer_farms);?>
 
 
                     <div id='farmerInfo' class="farmerInfo">
@@ -773,7 +774,8 @@ input.acreageValue[disabled] {
                         </div>
 
                         <div class="farmerStatusBox">
-                            <a style="--stsClr: green" class="swan-tooltip" data-tooltip="Click to edit">
+                            @if($getconsignments->ConsigneeDetail->is_verified == 1)
+                            <a style="--stsClr: green">
                                 <span style="flex:1; text-align: center">Status</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -781,9 +783,30 @@ input.acreageValue[disabled] {
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                 </svg>
-</a>
-
-                            <a style="--stsClr: #d71313" class="swan-tooltip" data-tooltip="Click to edit">
+                            </a>
+                            @else
+                            <a style="--stsClr: #d71313" class="swan-tooltip" data-tooltip="Click to edit"
+                                href="{{url($prefix.'/consignees/'.Crypt::encrypt($getconsignments->ConsigneeDetail->id).'/edit')}}">
+                                <span style="flex:1; text-align: center">Status</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-alert-circle">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </a>
+                            @endif
+                            <?php
+$status = empty($getconsignments->ConsigneeDetail->postal_code)
+|| empty($getconsignments->ConsigneeDetail->city)
+|| empty($getconsignments->ConsigneeDetail->district)
+|| empty($getconsignments->ConsigneeDetail->state_id)
+|| empty($getconsignments->ConsigneeDetail->address_line1);
+?>
+                            @if($status)
+                            <a style="--stsClr: #d71313" class="swan-tooltip" data-tooltip="Click to edit"
+                                href="{{url($prefix.'/consignees/'.Crypt::encrypt($getconsignments->ConsigneeDetail->id).'/edit')}}">
                                 <span style="flex:1; text-align: center">Address</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -792,7 +815,19 @@ input.acreageValue[disabled] {
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                 </svg>
-</a>
+                            </a>
+                            @else
+                            <a style="--stsClr: green">
+                                <span style="flex:1; text-align: center">Address</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-check-circle">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </a>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -802,16 +837,18 @@ input.acreageValue[disabled] {
 
 
 
-            <div class="d-flex flex-column animate__animated animate__fadeIn" style="width: 100%; justify-content: flex-start; align-items: center; --animate-delay: 0.9s;">
+            <div class="d-flex flex-column animate__animated animate__fadeIn"
+                style="width: 100%; justify-content: flex-start; align-items: center; --animate-delay: 0.9s;">
                 <!-- <div class="innerItem"> -->
                 <h6>Bill To Information</h6>
 
                 <div class="d-flex flex-wrap align-items-center justify-content-between mt-2"
                     style="column-gap: 1rem; width: 100%">
                     <p class="billInfoP">Bill To: <strong>{{$getconsignments->bill_to}}</strong></p>
-                    <p class="billInfoP">Client Name: <strong>Demo Client</strong></p>
+                    <p class="billInfoP">Client Name: <strong>{{$getconsignments->RegClient->name}}</strong></p>
                     <p class="billInfoP" style="min-width: 100%">Payment Type:
-                        <strong>{{$getconsignments->payment_type}}</strong></p>
+                        <strong>{{$getconsignments->payment_type}}</strong>
+                    </p>
                 </div>
 
                 <!-- </div> -->
@@ -833,25 +870,28 @@ input.acreageValue[disabled] {
                         </thead>
                         <tbody>
                             <?php
-                                $i = 0;
-                                $row_count = $getconsignments->OrderFarmDetails;
-                                $totalRow = count($row_count);
-                            ?>
+$i = 0;
+$row_count = $getconsignments->OrderFarmDetails;
+$totalRow = count($row_count);
+?>
                             @foreach($getconsignments->OrderFarmDetails as $farm_detail)
                             <?php $i++;?>
                             <tr>
                                 <td>{{$farm_detail->CropName->crop_name}} <input type="hidden"
+                                        value="{{$farm_detail->CropName->crop_price}}" class="cropPrice" name="" /><input type="hidden"
                                         value="{{$farm_detail->id}}" name="data[{{$i}}][order_farm_id]" /> <input
-                                        type="hidden" value="{{$farm_detail->crop}}" name="data[{{$i}}][crop_name]" />
+                                        type="hidden" value="{{$farm_detail->crop}}"
+                                        name="data[{{$i}}][crop_name]" />
                                 </td>
                                 <td>{{$farm_detail->FarmerFarm->field_area}}<input type="hidden"
                                         value="{{$farm_detail->farm_location}}" name="data[{{$i}}][farm_location]" />
                                 </td>
                                 <td><input class="acreageValue" value="{{$farm_detail->acreage}}"
-                                        name="data[{{$i}}][acerage]" disabled /></td>
+                                        name="data[{{$i}}][acerage]" readonly /></td>
                                 <td class="lastCol">
-                                    {{$farm_detail->crop_price}}<input type="hidden"
-                                        value="{{$farm_detail->crop_price}}" name="data[{{$i}}][crop_price]" />
+                                    <span class="calcPrice">
+                                    {{$farm_detail->crop_price}}</span><input type="hidden"
+                                        value="{{$farm_detail->crop_price}}" class="SetCropPrice" name="data[{{$i}}][crop_price]" />
 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -885,9 +925,11 @@ input.acreageValue[disabled] {
 
 
         <div class="actionButtonRow animate__animated animate__fadeInUp">
-            <a class="mt-2 myBtn" href="{{url($prefix.'/consignments') }}" style="font-weight: 500"> Reset</a>
-            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn"
-                disabled>Verify</button>
+            <?php
+$ss = $getconsignments->ConsigneeDetail->is_verified == 0;
+?>
+            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn" @if($ss ||
+                $status) disabled @endif>Verify</button>
         </div>
 
 
@@ -907,8 +949,7 @@ $(document).ready(function() {
 
     var branch_id = 'list';
 
-    if ('both status' != 'both status') $('#submitButton').attr('disabled', true);
-     else $('#submitButton').attr('disabled', false);
+
 
     $.ajax({
         url: "get-farmer-list",
@@ -946,20 +987,33 @@ $("#sprayTable").on('click', '.dltItemRow', function() {
 })
 
 $("#sprayTable").on('click', '.onEdit', function() {
-    $(this).closest('tr').find('input.acreageValue').attr('disabled', false);
+    $(this).closest('tr').find('input.acreageValue').attr('readonly', false);
     $(this).css('display', 'none');
     $(this).siblings().css('display', 'flex');
+    $('#submitButton').attr('disabled', true);
 })
 
 $("#sprayTable").on('click', '.onDone', function() {
-    $(this).closest('tr').find('input.acreageValue').attr('disabled', true);
-    $(this).css('display', 'none');
-    $(this).siblings().css('display', 'flex');
-})
+    if ($(this).closest('tr').find('input.acreageValue').val() == '') {
+        $(this).closest('tr').find('input.acreageValue').css('border', '1px solid red');
+    } else {
+        $(this).closest('tr').find('input.acreageValue').attr('readonly', true);
+        $(this).css('display', 'none');
+        $(this).siblings().css('display', 'flex');
+        $('#submitButton').attr('disabled', false);
+        $(this).closest('tr').find('input.acreageValue').css('border', 'none');
+    }
 
-$(".acreageValue").on('keyup', function() {
-    if ($('.acreageValue').val() == null) $('#submitButton').attr('disabled', true);
-     else $('#submitButton').attr('disabled', false);
+    var cropPrice = $(this).closest('tr').find('input.cropPrice').val();
+    var calculatePrice = cropPrice * $(this).closest('tr').find('input.acreageValue').val();
+
+     $(this).closest('tr').find('input.SetCropPrice').val(calculatePrice);
+
+     $(this).closest('tr').find('.lastCol .calcPrice').html(calculatePrice);
+
+
+
+
 })
 
 

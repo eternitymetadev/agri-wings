@@ -111,7 +111,7 @@ div.relative {
                                 <td>{{ $consignment->BillingClient->name ?? "-" }}</td>
                                 <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->district ?? "-"}} </td>
-                                <td>{{ $consignment->ConsigneeDetail->state ?? "-"}}</td>
+                                <td>{{ $consignment->ConsigneeDetail->state_id ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->postal_code ?? "-"}}</td>
                                 <td>{{ $consignment->total_acerage ?? "-" }}</td>
                                 <td>{{ $consignment->total_amount ?? "-" }}</td>
