@@ -519,6 +519,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
 
     Route::resource('consignees', ConsigneeController::class);
     Route::post('consignees/update-consignee', [ConsigneeController::class, 'updateConsignee']);
+    Route::any('consignees/{id}/edit/{orderId}', [ConsigneeController::class, 'edit']);
     Route::post('consignees/delete-consignee', [ConsigneeController::class, 'deleteConsignee']);
     Route::get('consignees/export/excel', [ConsigneeController::class, 'exportExcel']);
     Route::get('consignees/export/excel', [ConsigneeController::class, 'exportExcel']);

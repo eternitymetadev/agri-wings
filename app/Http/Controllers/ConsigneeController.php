@@ -2,35 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Consignee;
-use App\Models\Branch;
-use App\Models\State;
-use App\Models\Consigner;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ConsigneeExport;
-use App\Models\Role;
-use App\Models\Zone;
+use App\Models\Consignee;
+use App\Models\Consigner;
 use App\Models\Farm;
-use DB;
-use URL;
+use App\Models\Role;
+use App\Models\State;
+use App\Models\Zone;
 use Auth;
 use Crypt;
 use Helper;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use URL;
 use Validator;
 
 class ConsigneeController extends Controller
 {
     public function __construct()
     {
-      $this->title =  "Consignees";
-      $this->segment = \Request::segment(2);
-    } 
+        $this->title = "Consignees";
+        $this->segment = \Request::segment(2);
+    }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response   
+     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -38,10 +36,10 @@ class ConsigneeController extends Controller
         if ($request->ajax()) {
             $query = Consignee::query();
             $authuser = Auth::user();
-            $role_id = Role::where('id','=',$authuser->role_id)->first();
-            $regclient = explode(',',$authuser->regionalclient_id);
-            $cc = explode(',',$authuser->branch_id);
-            $query = Consignee::with('Consigner.RegClient','Zone');
+            $role_id = Role::where('id', '=', $authuser->role_id)->first();
+            $regclient = explode(',', $authuser->regionalclient_id);
+            $cc = explode(',', $authuser->branch_id);
+            $query = Consignee::with('Consigner.RegClient', 'Zone');
 
             // if($authuser->role_id == 2 || $authuser->role_id == 3){
             //     if($authuser->role_id == $role_id->id){
@@ -71,32 +69,32 @@ class ConsigneeController extends Controller
             $consignees = $query->get();
             return datatables()->of($consignees)
                 ->addIndexColumn()
-                ->addColumn('consigner', function($row){
-                    if(isset($row->Consigner)){
+                ->addColumn('consigner', function ($row) {
+                    if (isset($row->Consigner)) {
                         $consigner = $row->Consigner->nick_name;
-                    }else{
+                    } else {
                         $consigner = '';
                     }
                     return $consigner;
                 })
-                ->addColumn('district', function($row){
-                    if(isset($row->district)){
+                ->addColumn('district', function ($row) {
+                    if (isset($row->district)) {
                         $district = $row->district;
-                    }else{
+                    } else {
                         $district = '';
                     }
                     return $district;
                 })
-                ->addColumn('state', function($row){
-                    if(isset($row->state_id)){
+                ->addColumn('state', function ($row) {
+                    if (isset($row->state_id)) {
                         $state = $row->state_id;
-                    }else{
+                    } else {
                         $state = '';
                     }
                     return $state;
                 })
-                ->addColumn('action', function($row){
-                    $btn = '<a href="'.URL::to($this->prefix.'/'.$this->segment.'/'.Crypt::encrypt($row->id).'/edit').'" class="edit btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="' . URL::to($this->prefix . '/' . $this->segment . '/' . Crypt::encrypt($row->id) . '/edit') . '" class="edit btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
                     $btn .= '&nbsp;&nbsp;';
                     $btn .= '<a href="#" class="view btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>';
                     $btn .= '&nbsp;&nbsp;';
@@ -104,10 +102,10 @@ class ConsigneeController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action','consigner','district','state'])
+                ->rawColumns(['action', 'consigner', 'district', 'state'])
                 ->make(true);
         }
-        return view('consignees.consignee-list',['prefix'=>$this->prefix,'segment'=>$this->segment]);
+        return view('consignees.consignee-list', ['prefix' => $this->prefix, 'segment' => $this->segment]);
     }
 
     /**
@@ -118,23 +116,23 @@ class ConsigneeController extends Controller
     public function create()
     {
         $this->prefix = request()->route()->getPrefix();
-        
+
         $authuser = Auth::user();
-        $role_id = Role::where('id','=',$authuser->role_id)->first();
-        $regclient = explode(',',$authuser->regionalclient_id);
-        $cc = explode(',',$authuser->branch_id);
-        
-        if($authuser->role_id == 2 || $authuser->role_id == 3){
-            if($authuser->role_id == $role_id->id){
-                $consigners = Consigner::whereIn('branch_id',$cc)->orderby('nick_name','ASC')->pluck('nick_name','id');
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+
+        if ($authuser->role_id == 2 || $authuser->role_id == 3) {
+            if ($authuser->role_id == $role_id->id) {
+                $consigners = Consigner::whereIn('branch_id', $cc)->orderby('nick_name', 'ASC')->pluck('nick_name', 'id');
             }
-        }else if($authuser->role_id != 2 || $authuser->role_id != 3){
-            $consigners = Consigner::whereIn('regionalclient_id',$regclient)->orderby('nick_name','ASC')->pluck('nick_name','id');
-        }else{
-            $consigners = Consigner::where('status',1)->orderby('nick_name','ASC')->pluck('nick_name','id');
+        } else if ($authuser->role_id != 2 || $authuser->role_id != 3) {
+            $consigners = Consigner::whereIn('regionalclient_id', $regclient)->orderby('nick_name', 'ASC')->pluck('nick_name', 'id');
+        } else {
+            $consigners = Consigner::where('status', 1)->orderby('nick_name', 'ASC')->pluck('nick_name', 'id');
         }
-        
-        return view('consignees.create-consignee',['consigners'=>$consigners, 'prefix'=>$this->prefix, 'title'=>$this->title, 'pagetitle'=>'Create']);
+
+        return view('consignees.create-consignee', ['consigners' => $consigners, 'prefix' => $this->prefix, 'title' => $this->title, 'pagetitle' => 'Create']);
     }
 
     /**
@@ -150,37 +148,35 @@ class ConsigneeController extends Controller
         $rules = array(
             //  'nick_name' => 'required|unique:consignees',
         );
-        $validator = Validator::make($request->all(),$rules);
-        
-        if($validator->fails())
-        {
-            $errors                  = $validator->errors();
-            $response['success']     = false;
-            $response['validation']  = false;
-            $response['formErrors']  = true;
-            $response['errors']      = $errors;
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $response['success'] = false;
+            $response['validation'] = false;
+            $response['formErrors'] = true;
+            $response['errors'] = $errors;
             return response()->json($response);
         }
-        $consigneesave['nick_name']           = $request->farmer_name;
-        $consigneesave['phone']               = $request->phone;
-        $consigneesave['address_line1']       = $request->address_line1;
+        $consigneesave['nick_name'] = $request->farmer_name;
+        $consigneesave['phone'] = $request->phone;
+        $consigneesave['address_line1'] = $request->address_line1;
         // $consigneesave['address_line2']       = $request->address_line2;
         // $consigneesave['address_line3']       = $request->address_line3;
         // $consigneesave['address_line4']       = $request->address_line4;
-        $consigneesave['city']                = $request->city;
-        $consigneesave['district']            = $request->district;
-        $consigneesave['postal_code']         = $request->postal_code;
-        $consigneesave['state_id']            = $request->state_id;
-        $consigneesave['user_id']             = $authuser->id;
-        $consigneesave['branch_id']           = $authuser->branch_id;
-        $consigneesave['is_verified']         = 1;
+        $consigneesave['city'] = $request->city;
+        $consigneesave['district'] = $request->district;
+        $consigneesave['postal_code'] = $request->postal_code;
+        $consigneesave['state_id'] = $request->state_id;
+        $consigneesave['user_id'] = $authuser->id;
+        $consigneesave['branch_id'] = $authuser->branch_id;
+        $consigneesave['is_verified'] = 1;
 
-        $saveconsignee = Consignee::create($consigneesave); 
-        if($saveconsignee)
-        {
-            if(!empty($request->data)){ 
+        $saveconsignee = Consignee::create($consigneesave);
+        if ($saveconsignee) {
+            if (!empty($request->data)) {
                 $get_data = $request->data;
-                foreach ($get_data as $key => $save_data ) { 
+                foreach ($get_data as $key => $save_data) {
                     $save_data['farmer_id'] = $saveconsignee->id;
                     $save_data['field_area'] = $save_data['field_area'];
                     $save_data['address'] = $save_data['address'];
@@ -193,9 +189,9 @@ class ConsigneeController extends Controller
             $response['success'] = true;
             $response['success_message'] = "Consignee Added successfully";
             $response['error'] = false;
-            $response['page'] = 'consignee-create'; 
-            $response['redirect_url'] = URL::to($this->prefix.'/consignees');
-        }else{
+            $response['page'] = 'consignee-create';
+            $response['redirect_url'] = URL::to($this->prefix . '/consignees');
+        } else {
             $response['success'] = false;
             $response['error_message'] = "Can not created consignee please try again";
             $response['error'] = true;
@@ -213,8 +209,8 @@ class ConsigneeController extends Controller
     {
         $this->prefix = request()->route()->getPrefix();
         $id = decrypt($consignee);
-        $getconsignee = Consignee::where('id',$id)->with('GetConsigner','GetBranch','GetZone')->first();
-        return view('consignees.view-consignee',['prefix'=>$this->prefix,'title'=>$this->title,'getconsignee'=>$getconsignee,'pagetitle'=>'View Details']);
+        $getconsignee = Consignee::where('id', $id)->with('GetConsigner', 'GetBranch', 'GetZone')->first();
+        return view('consignees.view-consignee', ['prefix' => $this->prefix, 'title' => $this->title, 'getconsignee' => $getconsignee, 'pagetitle' => 'View Details']);
     }
 
     /**
@@ -229,21 +225,21 @@ class ConsigneeController extends Controller
         $id = decrypt($id);
         $branches = Helper::getLocations();
         $authuser = Auth::user();
-        $role_id = Role::where('id','=',$authuser->role_id)->first();
-        $regclient = explode(',',$authuser->regionalclient_id);
-        $cc = explode(',',$authuser->branch_id);
-        
-        if($authuser->role_id == 2 || $authuser->role_id == 3){
-            if($authuser->role_id == $role_id->id){
-                $consigners = Consigner::whereIn('branch_id',$cc)->orderby('nick_name','ASC')->pluck('nick_name','id');
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+
+        if ($authuser->role_id == 2 || $authuser->role_id == 3) {
+            if ($authuser->role_id == $role_id->id) {
+                $consigners = Consigner::whereIn('branch_id', $cc)->orderby('nick_name', 'ASC')->pluck('nick_name', 'id');
             }
-        }else if($authuser->role_id != 2 || $authuser->role_id != 3){
-            $consigners = Consigner::whereIn('regionalclient_id',$regclient)->orderby('nick_name','ASC')->pluck('nick_name','id');
-        }else{
-            $consigners = Consigner::where('status',1)->orderby('nick_name','ASC')->pluck('nick_name','id');
-        }      
-        $getconsignee = Consignee::with('GetZone','Farm')->where('id',$id)->first();
-        return view('consignees.update-consignee')->with(['prefix'=>$this->prefix, 'getconsignee'=>$getconsignee,'branches'=>$branches,'consigners'=>$consigners,'title'=>$this->title,'pagetitle'=>'Update']);
+        } else if ($authuser->role_id != 2 || $authuser->role_id != 3) {
+            $consigners = Consigner::whereIn('regionalclient_id', $regclient)->orderby('nick_name', 'ASC')->pluck('nick_name', 'id');
+        } else {
+            $consigners = Consigner::where('status', 1)->orderby('nick_name', 'ASC')->pluck('nick_name', 'id');
+        }
+        $getconsignee = Consignee::with('GetZone', 'Farm')->where('id', $id)->first();
+        return view('consignees.update-consignee')->with(['prefix' => $this->prefix, 'getconsignee' => $getconsignee, 'branches' => $branches, 'consigners' => $consigners, 'title' => $this->title, 'pagetitle' => 'Update']);
     }
 
     /**
@@ -255,23 +251,24 @@ class ConsigneeController extends Controller
      */
     public function updateConsignee(Request $request)
     {
-        try { 
+
+        try {
             $this->prefix = request()->route()->getPrefix();
             $rules = array(
                 // 'nick_name' => 'required',
                 // 'legal_name' => 'required'
             );
 
-            $validator = Validator::make($request->all(),$rules);
-            
-            if($validator->fails())
-            {
-                $errors                  = $validator->errors();
-                $response['success']     = false;
-                $response['formErrors']  = true;
-                $response['errors']      = $errors;
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $response['success'] = false;
+                $response['formErrors'] = true;
+                $response['errors'] = $errors;
                 return response()->json($response);
             }
+
             // $check_nickname_exist = Consignee::where(['nick_name'=>$request['nick_name']])->where('consigner_id',$request->consigner_id)->where('id','!=',$request->consignee_id)->get();
 
             // if(!$check_nickname_exist->isEmpty()){
@@ -281,48 +278,55 @@ class ConsigneeController extends Controller
             //     return response()->json($response);
             // }
 
-            $consigneesave['nick_name']           = $request->farmer_name;
-            $consigneesave['phone']               = $request->phone;
+            $consigneesave['nick_name'] = $request->farmer_name;
+            $consigneesave['phone'] = $request->phone;
             // $consigneesave['branch_id']           = $request->branch_id;
-            $consigneesave['address_line1']       = $request->address_line1;
+            $consigneesave['address_line1'] = $request->address_line1;
             // $consigneesave['address_line2']       = $request->address_line2;
             // $consigneesave['address_line3']       = $request->address_line3;
             // $consigneesave['address_line4']       = $request->address_line4;
-            $consigneesave['city']                = $request->city;
-            $consigneesave['district']            = $request->district;
-            $consigneesave['postal_code']         = $request->postal_code;
-            $consigneesave['state_id']            = $request->state_id;
-            $consigneesave['is_verified']         = 1;
+            $consigneesave['city'] = $request->city;
+            $consigneesave['district'] = $request->district;
+            $consigneesave['postal_code'] = $request->postal_code;
+            $consigneesave['state_id'] = $request->state_id;
+            $consigneesave['is_verified'] = 1;
 
-            Consignee::where('id',$request->consignee_id)->update($consigneesave);
+            Consignee::where('id', $request->consignee_id)->update($consigneesave);
 
-            if(!empty($request->data)){ 
+            if (!empty($request->data)) {
                 $get_data = $request->data;
-               
-                foreach ($get_data as $key => $save_data ) { 
+
+                foreach ($get_data as $key => $save_data) {
                     $update['field_area'] = $save_data['field_area'];
                     $update['address'] = $save_data['address'];
                     $update['pin_code'] = $save_data['pin_code'];
                     $update['city'] = $save_data['city'];
-                    $hidden_id = $save_data['hidden_id'];                      
-                    $updatefarmer = Farm::where('id',$hidden_id)->update($update);
+                    $hidden_id = $save_data['hidden_id'];
+                    $updatefarmer = Farm::where('id', $hidden_id)->update($update);
                     // $saveregclients = Farm::create($save_data);
                 }
             }
-            
-           
-            $url    =   URL::to($this->prefix.'/orders');
+
+            $prev = url()->previous();
+            $uri_parts = explode('/', $prev);
+            $request_url = end($uri_parts);
+
+            if ($request_url == 'edit') {
+                $url = URL::to($this->prefix . '/consignees');
+            } else {
+                $url = URL::to($this->prefix . '/orders/' . Crypt::encrypt($request_url) . '/edit');
+            }
 
             $response['page'] = 'consignee-update';
             $response['success'] = true;
             $response['success_message'] = "Consignee Updated Successfully";
             $response['error'] = false;
             $response['redirect_url'] = $url;
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             $response['error'] = false;
             $response['error_message'] = $e;
             $response['success'] = false;
-            $response['redirect_url'] = $url;   
+            $response['redirect_url'] = $url;
         }
         return response()->json($response);
     }
@@ -335,11 +339,11 @@ class ConsigneeController extends Controller
      */
     public function deleteConsignee(Request $request)
     {
-        Consignee::where('id',$request->consigneeid)->delete();
+        Consignee::where('id', $request->consigneeid)->delete();
 
-        $response['success']         = true;
+        $response['success'] = true;
         $response['success_message'] = 'Consignee deleted successfully';
-        $response['error']           = false;
+        $response['error'] = false;
         return response()->json($response);
     }
 
@@ -350,24 +354,25 @@ class ConsigneeController extends Controller
     }
 
     // get address detail from postal code api
-    public function getPostalAddress(Request $request){
+    public function getPostalAddress(Request $request)
+    {
         $postcode = $request->postcode;
-        if(!empty($postcode)){
-            $getZone = Zone::where('postal_code',$postcode)->first();
-        }else{
+        if (!empty($postcode)) {
+            $getZone = Zone::where('postal_code', $postcode)->first();
+        } else {
             $getZone = '';
         }
-            
+
         $pin = URL::to('get-address-by-postcode');
-        $pin = file_get_contents('https://api.postalpincode.in/pincode/'.$postcode);
+        $pin = file_get_contents('https://api.postalpincode.in/pincode/' . $postcode);
         $pins = json_decode($pin);
-        foreach($pins as $key){
-            if($key->PostOffice == null){
+        foreach ($pins as $key) {
+            if ($key->PostOffice == null) {
                 $response['success'] = false;
                 $response['error_message'] = "Can not fetch postal address please try again";
                 $response['error'] = true;
-                
-            }else{
+
+            } else {
                 $arr['city'] = $key->PostOffice[0]->Block;
                 $arr['district'] = $key->PostOffice[0]->District;
                 $arr['state'] = $key->PostOffice[0]->State;
@@ -384,13 +389,12 @@ class ConsigneeController extends Controller
 
     public function createnewFarmer(Request $request)
     {
-      
 
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
         // === phone no. check
-        $number_check = Consignee::where('phone',$request->farmer_phone)->first();
-        if(!empty($number_check)){
+        $number_check = Consignee::where('phone', $request->farmer_phone)->first();
+        if (!empty($number_check)) {
 
             $response['success'] = false;
             $response['error_message'] = "Already exist";
@@ -398,21 +402,20 @@ class ConsigneeController extends Controller
             return response()->json($response);
 
         }
-        
-        $consigneesave['nick_name']           = $request->farmer_name;
-        $consigneesave['phone']               = $request->farmer_phone;
-        $consigneesave['user_id']             = $authuser->id;
 
-        $saveconsignee = Consignee::create($consigneesave); 
-        if($saveconsignee)
-        {
-            $farmer_id =  $saveconsignee->id;
+        $consigneesave['nick_name'] = $request->farmer_name;
+        $consigneesave['phone'] = $request->farmer_phone;
+        $consigneesave['user_id'] = $authuser->id;
 
-            if(!empty($request->number)){ 
+        $saveconsignee = Consignee::create($consigneesave);
+        if ($saveconsignee) {
+            $farmer_id = $saveconsignee->id;
+
+            if (!empty($request->number)) {
                 $loop = $request->number;
-                for ($i= 1; $i <= $loop; $i++) { 
+                for ($i = 1; $i <= $loop; $i++) {
                     $save_data['farmer_id'] = $saveconsignee->id;
-                    $save_data['field_area'] = 'Farm '.$i;
+                    $save_data['field_area'] = 'Farm ' . $i;
                     $saveregclients = Farm::create($save_data);
                 }
             }
@@ -423,7 +426,7 @@ class ConsigneeController extends Controller
             $response['success'] = true;
             $response['success_message'] = "Farmer Added successfully";
             $response['error'] = false;
-        }else{
+        } else {
             $response['success'] = false;
             $response['error_message'] = "Can not created farmer please try again";
             $response['error'] = true;
@@ -434,41 +437,41 @@ class ConsigneeController extends Controller
 
     public function getfarmerDetails(Request $request)
     {
-        $get_farmer = Consignee::with('farm')->where('id',$request->farmer_id)->first();
+        $get_farmer = Consignee::with('farm')->where('id', $request->farmer_id)->first();
 
-        $response['success']                    = true;
-        $response['get_farmer_details']         = $get_farmer;
-        $response['success_message']            = 'Farmer Fetch successfully';
-        $response['error']                      = false;
+        $response['success'] = true;
+        $response['get_farmer_details'] = $get_farmer;
+        $response['success_message'] = 'Farmer Fetch successfully';
+        $response['error'] = false;
         return response()->json($response);
     }
 
     public function farmerList(Request $request)
     {
-        $get_farmer = Consignee::select('id','nick_name','phone')->get();
+        $get_farmer = Consignee::select('id', 'nick_name', 'phone')->get();
 
-        $response['success']                    = true;
-        $response['farmer_list']         = $get_farmer;
-        $response['success_message']            = 'Farmer Fetch successfully';
-        $response['error']                      = false;
+        $response['success'] = true;
+        $response['farmer_list'] = $get_farmer;
+        $response['success_message'] = 'Farmer Fetch successfully';
+        $response['error'] = false;
         return response()->json($response);
     }
 
     public function checkFarmerPhone(Request $request)
     {
-        $number_check = Consignee::where('phone',$request->number)->first();
-        if(!empty($number_check)){
+        $number_check = Consignee::where('phone', $request->number)->first();
+        if (!empty($number_check)) {
 
-            $response['success'] = true; 
+            $response['success'] = true;
             $response['error_message'] = "Already exist";
             $response['error'] = true;
             return response()->json($response);
 
         }
 
-        $response['success']                    = false;
-        $response['success_message']            = 'Not Found';
-        $response['error']                      = false;
+        $response['success'] = false;
+        $response['success_message'] = 'Not Found';
+        $response['error'] = false;
         return response()->json($response);
     }
 

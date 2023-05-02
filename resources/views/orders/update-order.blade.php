@@ -786,7 +786,7 @@ $count_farm = count($farmer_farms);?>
                             </a>
                             @else
                             <a style="--stsClr: #d71313" class="swan-tooltip" data-tooltip="Click to edit"
-                                href="{{url($prefix.'/consignees/'.Crypt::encrypt($getconsignments->ConsigneeDetail->id).'/edit')}}">
+                                href="{{url($prefix.'/consignees/'.Crypt::encrypt($getconsignments->ConsigneeDetail->id).'/edit/'.$getconsignments->id)}}">
                                 <span style="flex:1; text-align: center">Status</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -806,7 +806,7 @@ $status = empty($getconsignments->ConsigneeDetail->postal_code)
 ?>
                             @if($status)
                             <a style="--stsClr: #d71313" class="swan-tooltip" data-tooltip="Click to edit"
-                                href="{{url($prefix.'/consignees/'.Crypt::encrypt($getconsignments->ConsigneeDetail->id).'/edit')}}">
+                                href="{{url($prefix.'/consignees/'.Crypt::encrypt($getconsignments->ConsigneeDetail->id).'/edit/'.$getconsignments->id)}}">
                                 <span style="flex:1; text-align: center">Address</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
