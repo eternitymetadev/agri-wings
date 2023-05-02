@@ -44,13 +44,13 @@
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Pincode</label>
-                                    <input type="text" class="form-control" id="postal_code" name="postal_code"
+                                    <input type="text" class="form-control reuiredInput" id="postal_code" name="postal_code"
                                         value="{{old('postal_code',isset($getconsignee->postal_code)?$getconsignee->postal_code:'')}}"
                                         placeholder="Pincode" maxlength="6">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Village/City</label>
-                                    <input type="text" class="form-control" id="city" name="city"
+                                    <input type="text" class="form-control reuiredInput" id="city" name="city"
                                         value="{{old('city',isset($getconsignee->city)?$getconsignee->city:'')}}"
                                         placeholder="City">
                                 </div>
@@ -58,13 +58,13 @@
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">District</label>
-                                    <input type="text" class="form-control" id="district" name="district"
+                                    <input type="text" class="form-control reuiredInput" id="district" name="district"
                                         value="{{old('district',isset($getconsignee->district)?$getconsignee->district:'')}}"
                                         placeholder="District">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlSelect1">Select State</label>
-                                    <input type="text" class="form-control" id="state" name="state_id"
+                                    <input type="text" class="form-control reuiredInput" id="state" name="state_id"
                                         value="{{old('state_id',isset($getconsignee->state_id)?$getconsignee->state_id:'')}}"
                                         placeholder="" readonly>
 
@@ -73,7 +73,7 @@
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-8">
                                     <label for="exampleFormControlInput2">Address</label>
-                                    <textarea type="text" class="form-control" name="address_line1"
+                                    <textarea type="text" class="form-control reuiredInput" name="address_line1"
                                         placeholder="">{{old('address_line1',isset($getconsignee->address_line1)?$getconsignee->address_line1:'')}}</textarea>
                                 </div>
                             </div>
@@ -149,22 +149,22 @@
 @section('js')
 <script>
 jQuery(document).ready(function() {
-    // $('#dealer_type').change(function (e) {
-    // e.preventDefault();
-    var valueSelected = $('#dealer_type').val();
-    var gstno = $("#gst_number").val();
-    if (valueSelected == 1 && gstno == '') {
-        $("#gst_number").attr("disabled", false);
-        $('.gstno_error').show();
-        return false;
-    } else if (valueSelected == 1) {
-        $("#gst_number").attr("disabled", false);
-    } else {
-        $("#gst_number").val('');
-        $("#gst_number").attr("disabled", true);
-        $('.gstno_error').hide();
-    }
-    // });
+    setErrorState();
 });
+
+$('.reuiredInput').change(function() {
+    setErrorState()
+});
+
+
+function setErrorState() {
+    $('.reuiredInput').each(function() {
+        if ($(this).val() == '') {
+            $(this).css('border', '1px solid red');
+        } else {
+            $(this).css('border', '1px solid #bfc9d4');
+        }
+    })
+}
 </script>
 @endsection

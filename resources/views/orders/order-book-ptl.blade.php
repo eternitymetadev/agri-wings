@@ -771,7 +771,7 @@ tr:hover .dltItemRow {
                 <div class="form-row animate__animated animate__fadeInUp" id="billToInfo" style="display: none">
                     <h6 class="col-12">Bill To Information</h6>
 
-                    <div class="form-group col-md-7">
+                    <div class="form-group col-md-4">
                         <label for="exampleFormControlSelect1">
                             Client<span class="text-danger">*</span>
                         </label>
@@ -784,7 +784,7 @@ tr:hover .dltItemRow {
                         <Input type="hidden" class="form-control" id="regional_id" name="regclient_id" value="">
                     </div>
 
-                    <div class="form-group col-md-5">
+                    <div class="form-group col-md-4">
                         <label for="exampleFormControlSelect1">
                             Bill To<span class="text-danger">*</span>
                         </label>
@@ -792,7 +792,7 @@ tr:hover .dltItemRow {
 
                         </select>
                     </div>
-                    <div class="form-group col-md-5">
+                    <div class="form-group col-md-4">
                         <label for="exampleFormControlSelect1">
                             Payment Term<span class="text-danger">*</span>
                         </label>
