@@ -2268,7 +2268,7 @@ class ConsignmentController extends Controller
     {
         $id = $request->id;
         $transcationview = TransactionSheet::select('*')
-            ->with('ConsignmentDetail.ConsignerDetail.GetRegClient', 'consigneeDetail', 'ConsignmentItem','ConsignmentDetail.RegClient','ConsignmentDetail.Farm','ConsignmentDetail.Crop')
+            ->with('ConsignmentDetail.ConsignerDetail.GetRegClient', 'consigneeDetail', 'ConsignmentItem','ConsignmentDetail.RegClient','ConsignmentDetail.Farm')
             ->whereHas('ConsignmentDetail', function ($q) {
                 $q->where('status', '!=', 0);
             })
@@ -2429,13 +2429,13 @@ class ConsignmentController extends Controller
 
                     </div>
                     <div class="column" style="width:125px;">
-                        <p style="margin-top:0px;">' . $dataitem['consignment_detail']['farm']['field_area'] . '</p>
+                        <p style="margin-top:0px;">' . @$dataitem['consignment_detail']['farm']['field_area'] . '</p>
                         <p style="margin-top:-13px;">' . @$dataitem['consignment_detail']['farm']['address'] . '</p>
 
                       </div>
                       <div class="column" >
-                        <p style="margin-top:0px;">' . $dataitem['consignment_detail']['crop']['crop_name'] . '</p>
-                        <p style="margin-top:-13px;">' . $dataitem['consignment_detail']['acreage'] . '</p>
+                      
+                        <p style="margin-top:-13px;"></p>
                       </div>
                       <div class="column" style="width:170px;">
                         <p></p>
