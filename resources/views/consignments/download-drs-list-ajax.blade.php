@@ -6,12 +6,12 @@
                 <th>ORS NO</th>
                 <th>ORS Date</th>
                 <th>Drone No</th>
-                <th>Rider Name</th>
-                <th>Rider Number</th>
+                <th>Pilot Name</th>
+                <th>Pilot Number</th>
                 <th>Total Order</th>
                 <th>Action</th>
                 <th>Delivery Status</th>
-                <th>DRS Status</th>
+                <th>ORS Status</th>
                 <th>Payment Status</th>
             </tr>
         </thead>

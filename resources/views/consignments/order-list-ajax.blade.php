@@ -41,7 +41,7 @@
                     <?php if($consignment->status == 2){ ?>
                         <a class="approve" >
                         <p class=" drsStatus pointer" style="background:#be930f; margin-bottom: 0">
-                            <span>Unverified</span>
+                            <span>UnAssigned</span>
                             <i class="fa fa-caret-down" aria-hidden="true"></i>
                         </p>
                     </a>
