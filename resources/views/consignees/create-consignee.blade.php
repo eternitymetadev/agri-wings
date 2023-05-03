@@ -31,7 +31,8 @@
                                     <label for="exampleFormControlInput2">Mobile No.<span
                                             class="text-danger">*</span></label>
                                     <input type="tel" class="form-control mbCheckNm" name="phone"
-                                        placeholder="Enter 10 digit mobile no" maxlength="10">
+                                        placeholder="Enter 10 digit mobile no" maxlength="10" id="farmer_phone">
+                                        <span id="phone_error" style="color:red;"></span>
                                 </div>
                             </div>
                             <div class="form-row mb-0">
@@ -161,7 +162,7 @@ function addrow() {
     rows += '</tr>';
     $('#myTable tbody').append(rows);
 }
-$(document).on('click', '.removeRow', function() {
+$(document).on('click', '.removeRow', function() { 
     $(this).closest('tr').remove();
 });
 </script>

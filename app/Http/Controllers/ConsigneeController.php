@@ -146,7 +146,7 @@ class ConsigneeController extends Controller
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
         $rules = array(
-            //  'nick_name' => 'required|unique:consignees',
+             'phone' => 'required|unique:consignees',
         );
         $validator = Validator::make($request->all(), $rules);
 
@@ -303,7 +303,7 @@ class ConsigneeController extends Controller
                     $update['city'] = $save_data['city'];
                     $hidden_id = $save_data['hidden_id'];
                     $updatefarmer = Farm::where('id', $hidden_id)->update($update);
-                    // $saveregclients = Farm::create($save_data);
+                    //$saveregclients = Farm::create($save_data);
                 }
             }
 

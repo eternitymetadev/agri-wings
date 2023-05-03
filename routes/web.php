@@ -712,6 +712,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
 
 
 
+
 });
 Route::group(['prefix'=>'branch-user', 'middleware'=>['auth','PermissionCheck']], function()
 {
