@@ -2182,6 +2182,7 @@ class OrderController extends Controller
             }else{
                 $consignmentsave['billing_client'] = $request->regclient_id;
             }
+            
 
             $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $request->farmer_common_id;
@@ -2190,9 +2191,9 @@ class OrderController extends Controller
             $consignmentsave['payment_type'] = $request->payment_type;
             // $consignmentsave['crop'] = $request->crop;
             // $consignmentsave['acreage'] = $request->acreage;
-            if (!empty($request->noc)) {
-                $consignmentsave['noc'] = $request->noc;
-            }
+            // if (!empty($request->noc)) {
+            //     $consignmentsave['noc'] = $request->noc;
+            // }
             $consignmentsave['status'] = 5;
             // $consignmentsave['branch_id'] = 29;
             // $consignmentsave['to_branch_id'] = 29;

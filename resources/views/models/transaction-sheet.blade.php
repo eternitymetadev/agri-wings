@@ -32,8 +32,6 @@
                                             <th>Farmer Name</th>
                                             <th>city</th>
                                             <th>Pin Code</th>
-                                            <th>Number Of Boxes</th>
-                                            <th>Net Weight</th>
                                             <th>Action</th>
 
                                         </tr>
@@ -48,8 +46,6 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td id="total_box"></td>
-                                            <td id="totalweight"></td>
                                         </tr>
 
                                     </tfoot>
