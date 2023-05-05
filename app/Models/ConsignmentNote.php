@@ -150,5 +150,17 @@ class ConsignmentNote extends Model
     {
         return $this->hasMany('App\Models\OrderFarm','order_id','id');
     }
+    public function TransactionSheet()
+    {
+        return $this->hasOne('App\Models\TransactionSheet','consignment_no','id');
+    }
+    public function AppMedia()
+    {
+        return $this->hasMany('App\Models\AppMedia','consignment_no','id');
+    }
+    public function OrderFarms()
+    {
+        return $this->hasMany('App\Models\OrderFarm','order_id','id');
+    }
 
 }

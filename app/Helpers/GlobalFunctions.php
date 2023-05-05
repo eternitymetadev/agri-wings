@@ -19,6 +19,17 @@ use Storage;
 class GlobalFunctions
 {
 
+    public static function apiResponseSend($message,$data,$status = true,$errorCode){
+        $errorCode = $status ? 200 : $errorCode;
+        $result = [
+            "status" => $status,
+            "message" => $message,
+            "data" => $data,
+            'statuscode' => $errorCode
+        ];
+        return response()->json($result);
+    }
+
     public static function PrsStatus($status)
     {
         if ($status == 1) {

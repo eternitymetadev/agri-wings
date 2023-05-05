@@ -38,22 +38,12 @@
                 <td>{{ $consignment->DriverDetail->phone ?? "-" }}</td>
                 <td></td>
                 <td>
-                    <?php if($consignment->status == 2){ ?>
-                        <a class="approve" >
+                    <a class="approve">
                         <p class=" drsStatus pointer" style="background:#be930f; margin-bottom: 0">
-                            <span>UnAssigned</span>
+                            <span>{{$consignment->delivery_status}}</span>
                             <i class="fa fa-caret-down" aria-hidden="true"></i>
                         </p>
                     </a>
-                    <?php  }else{  ?>
-                        <a class="approve" 
-                        >
-                        <p class=" drsStatus pointer" style="background:#008000; margin-bottom: 0">
-                            <span>Started</span>
-                            <i class="fa fa-caret-down" aria-hidden="true"></i>
-                        </p>
-                    </a>
-                    <?php }  ?>
                 </td>
                 <td></td>
 

@@ -136,7 +136,7 @@
                                 </table>
 
                                 <input type="submit" class="mt-4 mb-4 btn btn-primary" value="Update">
-                                <a class="btn btn-danger" href="{{url($prefix.'/consignees') }}"> Back</a>
+                                <a class="btn btn-warning" href="{{url($prefix.'/consignees') }}"> Back</a>
                         </form>
                     </div>
                 </div>

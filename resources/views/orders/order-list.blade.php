@@ -123,8 +123,11 @@ div.relative {
                                 <td><a class="btn btn-primary"
                                         href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Pending
                                             for Verification</span></a></td>
-                                <?php  } ?>
-                                <td></td>
+                                <?php  } if($consignment->bill_to == 'Self'){?>
+                                <td>Pre-Paid</td>
+                                <?php } else {?>
+                                    <td>Post-Paid</td>
+                               <?php } ?>
                             </tr>
                             <?php } ?>
                         </tbody>

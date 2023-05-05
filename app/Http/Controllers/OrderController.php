@@ -1386,6 +1386,21 @@ class OrderController extends Controller
                 $consignmentsave['billing_client'] = $request->regclient_id;
             }
 
+            $getfarmerdetails = Consignee::where('id',$request->farmer_common_id)->first();
+
+                    $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
+                    if (!empty($getpin_transfer->hub_transfer)) {
+                        $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+                        $assign_hub = $get_branch->id;
+                    } else {
+                        $get_branch = Location::where('nick_name', 'Karnal')->first();
+                        if(!empty($get_branch->id)){
+                            $assign_hub = $get_branch->id;
+                        }else{
+                            $assign_hub = NULL;
+                        }
+                    }
+
             $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $request->farmer_common_id;
             $consignmentsave['bill_to'] = $request->bill_to;
@@ -1393,11 +1408,11 @@ class OrderController extends Controller
             $consignmentsave['payment_type'] = $request->payment_type;
             // $consignmentsave['crop'] = $request->crop;
             // $consignmentsave['acreage'] = $request->acreage;
-            if (!empty($request->noc)) {
-                $consignmentsave['noc'] = $request->noc;
-            }
+            // if (!empty($request->noc)) {
+            //     $consignmentsave['noc'] = $request->noc;
+            // }
             $consignmentsave['status'] = 5;
-            // $consignmentsave['branch_id'] = 29;
+             $consignmentsave['branch_id'] = $assign_hub;
             // $consignmentsave['to_branch_id'] = 29;
             // $consignmentsave['fall_in'] = 29;
             $consignmentsave['user_id'] = $authuser->id;
@@ -2182,20 +2197,30 @@ class OrderController extends Controller
             }else{
                 $consignmentsave['billing_client'] = $request->regclient_id;
             }
-            
+
+            $getfarmerdetails = Consignee::where('id',$request->farmer_common_id)->first();
+
+                    $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
+                    if (!empty($getpin_transfer->hub_transfer)) {
+                        $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+                        $assign_hub = $get_branch->id;
+                    } else {
+                        $get_branch = Location::where('nick_name', 'Karnal')->first();
+                        if(!empty($get_branch->id)){
+                            $assign_hub = $get_branch->id;
+                        }else{
+                            $assign_hub = NULL;
+                        }
+                    }
 
             $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $request->farmer_common_id;
             $consignmentsave['bill_to'] = $request->bill_term;
             $consignmentsave['consignment_date'] = $request->consignment_date;
             $consignmentsave['payment_type'] = $request->payment_type;
-            // $consignmentsave['crop'] = $request->crop;
-            // $consignmentsave['acreage'] = $request->acreage;
-            // if (!empty($request->noc)) {
-            //     $consignmentsave['noc'] = $request->noc;
-            // }
+
             $consignmentsave['status'] = 5;
-            // $consignmentsave['branch_id'] = 29;
+            $consignmentsave['branch_id'] = $assign_hub;
             // $consignmentsave['to_branch_id'] = 29;
             // $consignmentsave['fall_in'] = 29;
             $consignmentsave['user_id'] = $authuser->id;

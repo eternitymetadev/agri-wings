@@ -852,7 +852,7 @@ tr:hover .dltItemRow {
 
 
                             <div style="flex: 1; display: flex; justify-content: center;">
-                                <button type="button" class="btn btn-primary" onclick="onAddCrop()"
+                                <button type="button" class="btn btn-primary" onclick="onAddCrop()" id="addCropButton"
                                     style="width: 120px; height: 43px; margin-inline: auto; border-radius: 18px">Add</button>
                             </div>
                         </div>
@@ -1016,7 +1016,7 @@ const onAddCrop = () => {
     let totalPrice = cropPrice * acreage;
 
     if (farmLocation != '') {
-        $('#sprayTable').show();
+        $('#sprayTable').show(); 
         listItem += `<tr>
                 <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
                 <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
@@ -1033,6 +1033,7 @@ const onAddCrop = () => {
         $('#acreage').val('1');
         $('#farmLocationError').hide();
         cropIndex++;
+        $('#addCropButton').attr('disabled', true);
         if ($('#sprayTable tr').length < 2) $('#submitButton').attr('disabled', true);
         else $('#submitButton').attr('disabled', false);
     } else $('#farmLocationError').show();
@@ -1040,6 +1041,8 @@ const onAddCrop = () => {
 
 $("#sprayTable").on('click', '.dltItemRow', function() {
     $(this).closest('tr').remove();
+    $('#addCropButton').removeAttr('disabled');
+
     if ($('#sprayTable tr').length < 2) {
         $('#sprayTable').hide();
         $('#submitButton').attr('disabled', true);
