@@ -267,8 +267,8 @@ span.select2.select2-container.mb-4 {
 }
 
 #cropSection {
-    background: url('https://thumbs.dreamstime.com/b/vector-farm-illustration-illustration-banner-book-social-media-other-design-vector-farm-illustration-vector-tractor-181864455.jpg');
-    background-size: 60%;
+    background: url('{{asset('assets/order-book.png')}}');
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     min-height: 340px;
