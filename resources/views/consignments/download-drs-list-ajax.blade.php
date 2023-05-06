@@ -45,7 +45,7 @@ if ($trns->status == 0) {?>
                     <?php if (empty($trns->vehicle_no) || empty($trns->driver_name) || empty($trns->driver_no)) {?>
                     <button type="button" class="btn btn-warning view-sheet" value="{{$trns->drs_no}}"
                         style="margin-right:4px;">Draft</button>
-                    <button type="button" class="btn btn-danger draft-sheet" value="{{$trns->drs_no}}"
+                    <button type="button" class="btn btn-primary draft-sheet" value="{{$trns->drs_no}}"
                         style="margin-right:4px;">Save</button>
                     <?php }?>
                     <?php if (!empty($trns->vehicle_no)) {
@@ -59,7 +59,7 @@ if ($trns->status == 0) {?>
                     <?php }}?>
                     <?php
 if ($trns->delivery_status == 'Unassigned') {?>
-                    <button type="button" class="btn btn-danger" value="{{$trns->drs_no}}"
+                    <button type="button" class="btn btn-warning" value="{{$trns->drs_no}}"
                         style="margin-right:4px;">Unassigned</button>
                     <?php } elseif ($lr == 0) {?>
                     <button type="button" class="btn btn-warning" value="{{$trns->drs_no}}"

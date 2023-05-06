@@ -44,7 +44,7 @@
             <header class="header-container header navbar navbar-expand-sm">
                 <h1>@yield('page-heading','Agri Wings')</h1>
                 <div class="newUserMenu">
-                    <img src="{{asset('newasset/assets/img/90x90.jpg')}}" class="img-fluid" alt="admin-profile" />
+                    <img src="{{asset('assets/user.png')}}" class="img-fluid" alt="admin-profile" />
                     <ul>
                         <li class="userDisplayName">{{ucfirst($authuser->name ?? 'User Name')}}</li>
                         <li>

@@ -2915,6 +2915,7 @@ ul.submenu li .submenuListStyle {
     outline: 2px solid var(--primaryColor);
     outline-offset: 2px;
     cursor: pointer;
+    padding: 4px;
 }
 
 .toggleLogo {

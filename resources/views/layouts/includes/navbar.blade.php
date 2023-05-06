@@ -352,7 +352,7 @@
         <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="user-profile-dropdown"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <div class="media">
-                <img src="{{asset('newasset/assets/img/90x90.jpg')}}" class="img-fluid" alt="admin-profile">
+                <img src="{{asset('assets/user.png')}}" class="img-fluid" alt="admin-profile">
             </div>
         </a>
         <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown">

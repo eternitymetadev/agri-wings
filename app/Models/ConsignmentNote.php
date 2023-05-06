@@ -162,5 +162,9 @@ class ConsignmentNote extends Model
     {
         return $this->hasMany('App\Models\OrderFarm','order_id','id');
     }
+    public function Orderactivity()
+    {
+        return $this->hasOne('App\Models\OrderFarm','order_id','id');
+    }
 
 }
