@@ -67,8 +67,8 @@ div.relative {
                     @csrf
                     <table id="usertable" class="table table-hover get-datatable" style="width:100%">
                         <div class="btn-group relative" style="width: auto">
-                            <a href="{{'order-book-ptl'}}" class="btn btn-primary myButtonExtra"
-                                style="font-size: 13px; padding: 6px 0px;">Create Order</a>
+                            <!-- <a href="{{'order-book-ptl'}}" class="btn btn-primary myButtonExtra"
+                                style="font-size: 13px; padding: 6px 0px;">Create Order</a> -->
                             <!-- <button type="button" class="btn btn-primary myButtonExtra ml-2" data-toggle="modal"
                                 data-target="#exampleModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
