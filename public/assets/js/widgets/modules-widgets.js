@@ -777,7 +777,7 @@ try {
             type: 'donut',
             width: 380
         },
-        colors: ['#5c1ac3', '#e2a03f', '#e7515a', '#e2a03f'],
+        colors: ['#f16334', '#e2a03f', '#002930', '#e2a03f'],
         dataLabels: {
           enabled: false
         },
@@ -838,7 +838,7 @@ try {
           width: 25,
         },
         series: [985, 737, 270],
-        labels: ['Apparel', 'Sports', 'Others'],
+        labels: ['Total', 'processed', 'Unprocessed'],
         responsive: [{
             breakpoint: 1599,
             options: {
@@ -873,7 +873,8 @@ try {
   
   /*
       ==============================
-      |    @Render Charts Script    |
+      |    @Render Charts 
+      cript    |
       ==============================
   */
   

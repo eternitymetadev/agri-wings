@@ -35,10 +35,10 @@
 }
 
 h4 {
-    text-align: center;
     font-size: clamp(1.4rem, 10vw, 2rem);
     font-weight: 600;
-    margin-block: 2rem;
+    margin-bottom: 2rem;
+    text-align: left;
 }
 
 .dashboardText {
@@ -47,8 +47,8 @@ h4 {
     color: #2d2d2d;
     max-width: 900px;
     font-weight: 600;
-    margin: auto;
-    text-align: center;
+    text-align: left;
+    max-width: 500px;
 }
 
 .orderButton {
@@ -58,9 +58,58 @@ h4 {
     font-size: 18px;
     margin: 2rem auto;
 }
+
+.mainDiv {
+    padding-top: 2rem;
+    gap: 2.5rem;
+}
+
+.myWidget {
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px #838383d1;
+}
+
+.ctaBox {
+    display: flex;
+    gap: 1rem;
+    position: relative;
+    flex: 1;
+    padding-bottom: 6rem;
+    justify-content: space-around
+}
+
+.ctaBox .dashboardIllustration {
+    max-width: 400px;
+}
+
+.ctaBox .orderButton {
+    position: absolute;
+    bottom: -46px;
+    right: -8px;
+    border-radius: 16px 0;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    background: linear-gradient(45deg, #28a745, #06601a);
+    border-color: #28a745 !important;
+}
+
+.chartBox: {
+    flex: 1;
+}
+
+@media(max-width: 600px) {
+    .chartBox: {
+        flex: 1;
+    }
+}
 </style>
 
-<div class="layout-px-spacing text-center">
+
+<div class="layout-px-spacing text-center" style="min-height: calc(100vh - 140px);">
     <div class="page-header layout-spacing">
 
     </div>
@@ -73,17 +122,34 @@ h4 {
     $segment = Request::segment(2);
     $prefixurl = $url . '/' . $getprefix . '/';
     if($authuser->role_id == 7){ ?>
-    <h4>Welcome to our AgriWings service!</h4>
-    <p class="dashboardText">
-        We're thrilled to have you here. As a Booking Partner, we understand that you value efficient and effective
-        solutions to keep your business running smoothly. That's why we offer cutting-edge drone technology to help you
-        tackle your farmers crop management needs. </br>
-        We're passionate about what we do, and we believe that our services can help revolutionize the way you do
-        business. If you have any questions or would like to learn more about our services, please don't hesitate to
-        reach out to us<Helpline No>. We're here to help you achieve your goals and grow your business.
-            Thank you for choosing AgriWings, and we look forward to working with you!
-    </p>
-    <a href="{{$prefixurl.'service-booking'}}" class="btn btn-primary orderButton">Book Order</a>
+
+    <div class="row layout-top-spacing mainDiv">
+
+        <div class="myWidget ctaBox flex-wrap">
+            <div class="d-flex flex-column" style="justify-content: center">
+                <h4>Welcome to AgriWings!</h4>
+                <p class="dashboardText">
+                    We're passionate about what we do, and we believe that our services can help revolutionize the
+                    way you do business. Book our cutting-edge drone technology to tackle crop management needs.
+                </p>
+            </div>
+            <img src="{{asset('assets/dashboardIllustration.svg')}}" class="img-responsive dashboardIllustration"
+                alt="" />
+            <a href="{{$prefixurl.'service-booking'}}" class="btn btn-primary orderButton">Book Order</a>
+        </div>
+
+        <div class="myWidget chartBox">
+            <div class="widget-heading">
+                <h5 class="">Orders Analytics</h5>
+            </div>
+            <div class="widget-content">
+                <div id="chart-2" class=""></div>
+            </div>
+        </div>
+
+
+    </div>
+
     <?php }  ?>
 </div>
 

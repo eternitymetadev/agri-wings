@@ -838,7 +838,7 @@ try {
           width: 25,
         },
         series: [985, 737, 270],
-        labels: ['Apparel', 'Sports', 'Others'],
+        labels: ['Under Process', 'Pending', 'Total'],
         responsive: [{
             breakpoint: 1599,
             options: {

@@ -110,7 +110,7 @@ button:disabled {
 #content {
     flex: 1;
     flex-grow: 1;
-    max-width: calc(100% - 60px);
+    max-width: calc(100% - 66px);
     margin-left: auto;
     min-height: auto;
     border-bottom-right-radius: 6px;
@@ -155,7 +155,7 @@ button:disabled {
 
 .layout-px-spacing {
     padding: 0 20px 0 20px !important;
-    min-height: calc(100vh - 125px) !important;
+    min-height: calc(100vh - 66px) !important;
 }
 
 .widget.box .widget-header {
