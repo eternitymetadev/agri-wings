@@ -326,6 +326,7 @@ $(document).on('click', '.upload_noc', function() {
 $('#noc_form').submit(function(e) {
     e.preventDefault();
     var formData = new FormData(this);
+    return false;
 
     $.ajax({
         url: "upload-noc",
