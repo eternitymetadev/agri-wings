@@ -163,7 +163,7 @@ div.relative {
                                             <rect x="6" y="14" width="12" height="8"></rect>
                                         </svg>
                                     </a>
-                                    <a href="" class="iconButton swan-tooltip" data-tooltip="Upload NOC" style="--btnClr: #208120">
+                                    <a href="#" class="iconButton swan-tooltip upload_noc" data-tooltip="Upload NOC" data-orderId="{{$consignment->id}}" style="--btnClr: #208120">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"
@@ -202,65 +202,6 @@ div.relative {
     </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <form id="upload_order" class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Order Upload</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <h6 class="col-12">Branch</h6>
-
-                    <?php $authuser = Auth::user();
-            if($authuser->role_id == 2 || $authuser->role_id == 4)
-            {
-            ?>
-                    <div class="form-group col-md-4">
-                        <label for="exampleFormControlSelect1">
-                            Select Branch <span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control  my-select2" id="branch_id" name="branch_id" tabindex="-1">
-                            @foreach($branchs as $branch)
-                            <option value="{{ $branch->id }}">{{ucwords($branch->name)}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <?php } else { ?>
-                    <div class="form-group col-md-4">
-                        <label for="exampleFormControlSelect1">
-                            Select Branch <span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control  my-select2" id="branch_id" name="branch_id" tabindex="-1">
-                            <option value="">Select..</option>
-                            @foreach($branchs as $branch)
-                            <option value="{{ $branch->id }}">{{ucwords($branch->name)}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <?php } ?>
-
-                </div>
-                <div class="form-group">
-                    <label for="formGroupExampleInput">Excel File*</label>
-                    <input required type="file" class="form-control form-control-sm" id="formGroupExampleInput"
-                        name="order_file" placeholder="Example input">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary"><span class="indicator-label">Upload</span>
-                    <span class="indicator-progress" style="display: none;">Please wait...
-                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <div class="modal fade" id="receve_material" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -269,13 +210,13 @@ div.relative {
                 <!-- <button type="button" class="close" data-dismiss="modal"><img src="{{asset('assets/img/close-bottle.png')}}" class="img-fluid"></button> -->
                 <!-- Modal Header -->
                 <div class="modal-header text-center">
-                    <h4 class="modal-title">Prs Not Required</h4>
+                    <h4 class="modal-title">Upload Noc</h4>
                 </div>
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <input type="hidden" class="form-control" name="lr_id" id="lr_id" />
+                    <input type="hidden" class="form-control" name="order_id" id="order_id" />
 
-                    <input type="text" class="form-control" name="prs_remarks" placeholder="Remarks" Required />
+                    <input type="file" class="form-control" name="noc_upload" placeholder="Remarks" Required />
                 </div>
                 <!-- Modal footer -->
                 <div class="modal-footer">
@@ -376,8 +317,8 @@ $('#upload_order').submit(function(e) {
     });
 });
 ///
-$(document).on('click', '.prs_not_require', function() {
-    var lr_no = $(this).val();
+$(document).on('click', '.upload_noc', function() {
+    var order_no = $(this).attr('data-orderId');
     $('#receve_material').modal('show');
     $('#lr_id').val(lr_no);
 });

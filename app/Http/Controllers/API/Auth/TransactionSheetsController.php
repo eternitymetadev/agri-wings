@@ -7,11 +7,11 @@ use App\Models\AppMedia;
 use App\Models\Consignee;
 use App\Models\ConsignmentNote;
 use App\Models\Coordinate;
+use App\Models\Crop;
 use App\Models\Job;
-use App\Models\TransactionSheet;
 use App\Models\OrderActivityDetails;
 use App\Models\OrderFarm;
-use App\Models\Crop;
+use App\Models\TransactionSheet;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -235,7 +235,7 @@ class TransactionSheetsController extends Controller
 
             foreach ($consignments as $value) {
 
-                $order_details = array('order_id' => $value->Orderactivity->order_id,'crop_name' => $value->Orderactivity->CropName->crop_name, 'farm' => $value->Orderactivity->FarmerFarm->field_area, 'acerage' => $value->Orderactivity->acreage, 'crop_price' => $value->Orderactivity->crop_price);
+                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => $value->Orderactivity->CropName->crop_name, 'farm' => $value->Orderactivity->FarmerFarm->field_area, 'acerage' => $value->Orderactivity->acreage, 'crop_price' => $value->Orderactivity->crop_price);
 
                 // $order_details = array();
                 // foreach ($value->OrderFarms as $order_activity) {
@@ -289,7 +289,7 @@ class TransactionSheetsController extends Controller
                     // 'invoice_no' => $order_item['invoices'],
                     'delivery_status' => $value->delivery_status,
                     // 'delivery_notes' => $value->delivery_notes,
-                     'order_details' => $order_details,
+                    'order_details' => $order_details,
                     // 'success_time' => @$successtime,
                 ];
             }
@@ -414,19 +414,17 @@ class TransactionSheetsController extends Controller
     public function taskStart(Request $request, $id)
     {
         try {
- 
-            $getOrderDetails = OrderFarm::where('order_id',$id)->first();
-            
+
+            $getOrderDetails = OrderFarm::where('order_id', $id)->first();
 
             if (!empty($request->file('noc_upload'))) {
                 $nocupload = $request->file('noc_upload');
                 $path = Storage::disk('s3')->put('agri-wings/noc', $nocupload);
                 $noc_path = Storage::disk('s3')->url($path);
                 $storeOrderDetails['noc_upload'] = $noc_path;
-            }else{
+            } else {
                 $noc_path = NULL;
             }
-
 
             $storeOrderDetails['order_id'] = $id;
             $storeOrderDetails['acerage'] = $request->acerage;
@@ -449,12 +447,11 @@ class TransactionSheetsController extends Controller
             //         'message' => 'Please Complete Previous Task',
             //     ], 200);
             // }
-            
+
             $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop' => $request->crop, 'crop_price' => $request->crop_price]);
 
-
             $update_status = ConsignmentNote::find($id);
-            $res = $update_status->update(['delivery_status' => 'Started' , 'noc_upload' => $noc_path]);
+            $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $noc_path]);
 
             // $mytime = Carbon::now('Asia/Kolkata');
             // $currentdate = $mytime->toDateTimeString();
@@ -620,8 +617,7 @@ class TransactionSheetsController extends Controller
             // echo'<pre>'; print_r(json_decode($consignments)); die;
             foreach ($consignments as $value) {
 
-
-                 $order_details = array('order_id' => $value->Orderactivity->order_id,'crop_name' => $value->Orderactivity->CropName->crop_name, 'farm' => $value->Orderactivity->FarmerFarm->field_area, 'acerage' => $value->Orderactivity->acreage, 'crop_price' => $value->Orderactivity->crop_price);
+                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => $value->Orderactivity->CropName->crop_name, 'farm' => $value->Orderactivity->FarmerFarm->field_area, 'acerage' => $value->Orderactivity->acreage, 'crop_price' => $value->Orderactivity->crop_price);
                 // $order_details = array();
                 // foreach ($value->OrderFarms as $order_activity) {
 
@@ -683,7 +679,7 @@ class TransactionSheetsController extends Controller
                     // 'success_time' => @$successtime,
                 ];
             }
-            $croplist = DB::table('crops')->select('id','crop_name','crop_price')->get();
+            $croplist = DB::table('crops')->select('id', 'crop_name', 'crop_price')->get();
             if ($consignments) {
                 return response([
                     'status' => 'success',

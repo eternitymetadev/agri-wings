@@ -36,7 +36,7 @@
                 <td>{{ $consignment->total_amount ?? "-" }}</td>
                 <td>{{ $consignment->DriverDetail->name ?? "-" }}</td>
                 <td>{{ $consignment->DriverDetail->phone ?? "-" }}</td>
-                <td></td>
+                <td>{{ $consignment->edd ?? "-" }}</td>
                 <td>
                     <a class="approve">
                         <p class=" drsStatus pointer" style="background:#be930f; margin-bottom: 0">
