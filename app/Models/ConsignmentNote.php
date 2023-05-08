@@ -13,6 +13,7 @@ class ConsignmentNote extends Model
         'total_amount',
         'bill_to',
         'billing_client',
+        'noc_upload',
         'noc',
         'lr_type',
         'h2h_check',

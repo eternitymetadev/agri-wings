@@ -43,6 +43,23 @@ div.relative {
     justify-content: center;
     gap: 4px;
 }
+
+.iconButton {
+    min-height: 2rem;
+    min-width: 2rem;
+    text-align: center;
+    border-radius: 50vh;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 8px inset;
+    color: var(--btnClr);
+}
+.iconButton svg{
+    height: 16px;
+    width: 16px;
+}
 </style>
 <!-- BEGIN PAGE LEVEL CUSTOM STYLES -->
 <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
@@ -96,6 +113,7 @@ div.relative {
                                 <th>acers</th>
                                 <th>Estimated Amount</th>
                                 <th>Status of Order</th>
+                                <th style="text-align: center">NOC</th>
                                 <th>Payment Status</th>
                             </tr>
                         </thead>
@@ -115,19 +133,65 @@ div.relative {
                                 <td>{{ $consignment->ConsigneeDetail->postal_code ?? "-"}}</td>
                                 <td>{{ $consignment->total_acerage ?? "-" }}</td>
                                 <td>{{ $consignment->total_amount ?? "-" }}</td>
-                                <?php
-                                if($authuser->role_id == 7){?>
-                                <td><a class="btn btn-primary" href="#"><span>Pending
-                                            for Verification</span></a></td>
-                                <?php }else{ ?>
-                                <td><a class="btn btn-primary"
-                                        href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}"><span>Pending
-                                            for Verification</span></a></td>
-                                <?php  } if($consignment->bill_to == 'Self'){?>
+
+                                @if($authuser->role_id == 7)
+                                <td>
+                                    <a class="btn btn-primary" href="#">
+                                        <span>Pending for Verification</span>
+                                    </a>
+                                </td>
+                                @else
+                                <td>
+                                    <a class="btn btn-primary"
+                                        href="{{url($prefix.'/orders/'.Crypt::encrypt($consignment->id).'/edit')}}">
+                                        <span>Pending for Verification</span>
+                                    </a>
+                                </td>
+                                @endif
+
+                                <td>
+                                    @if(empty($consignment->noc_upload))
+                                    <a href="" class="iconButton swan-tooltip" data-tooltip="Print NOC">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-printer">
+                                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                            <path
+                                                d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2">
+                                            </path>
+                                            <rect x="6" y="14" width="12" height="8"></rect>
+                                        </svg>
+                                    </a>
+                                    <a href="" class="iconButton swan-tooltip" data-tooltip="Upload NOC" style="--btnClr: #208120">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-upload-cloud">
+                                            <polyline points="16 16 12 12 8 16"></polyline>
+                                            <line x1="12" y1="12" x2="12" y2="21"></line>
+                                            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+                                            <polyline points="16 16 12 12 8 16"></polyline>
+                                        </svg>
+                                    </a>
+                                    @else
+                                    <a href="" class="iconButton swan-tooltip" data-tooltip="View NOC" style="--btnClr: #6b6b6b; gap: 4px; min-width: 4.5rem">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        View</a>
+                                    @endif
+                                </td>
+
+                                @if($consignment->bill_to == 'Self')
+
                                 <td>Pre-Paid</td>
-                                <?php } else {?>
-                                    <td>Post-Paid</td>
-                               <?php } ?>
+                                @else
+                                <td>Post-Paid</td>
+                                @endif
                             </tr>
                             <?php } ?>
                         </tbody>

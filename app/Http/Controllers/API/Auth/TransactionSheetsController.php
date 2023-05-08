@@ -282,6 +282,7 @@ class TransactionSheetsController extends Controller
                     'farmer_mobile' => $value->ConsigneeDetail->phone,
                     'farmer_address' => $value->ConsigneeDetail->address_line1,
                     'farmer_pincode' => $value->ConsigneeDetail->postal_code,
+                    'noc_upload' => $value->noc_upload,
                     // 'latitude' => $value->ConsigneeDetail->latitude,
                     // 'longitude' => $value->ConsigneeDetail->longitude,
                     // 'order_id' => $order_item['orders'],
@@ -413,8 +414,19 @@ class TransactionSheetsController extends Controller
     public function taskStart(Request $request, $id)
     {
         try {
-
+ 
             $getOrderDetails = OrderFarm::where('order_id',$id)->first();
+            
+
+            if (!empty($request->file('noc_upload'))) {
+                $nocupload = $request->file('noc_upload');
+                $path = Storage::disk('s3')->put('agri-wings/noc', $nocupload);
+                $noc_path = Storage::disk('s3')->url($path);
+                $storeOrderDetails['noc_upload'] = $noc_path;
+            }else{
+                $noc_path = NULL;
+            }
+
 
             $storeOrderDetails['order_id'] = $id;
             $storeOrderDetails['acerage'] = $request->acerage;
@@ -423,7 +435,6 @@ class TransactionSheetsController extends Controller
             $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
             $storeOrderDetails['checmical_used'] = $request->chemical_used;
             $storeOrderDetails['charging_point'] = $request->charging_point;
-            $storeOrderDetails['noc_upload'] = $request->noc_upload;
 
             $savedetails = OrderActivityDetails::create($storeOrderDetails);
 
@@ -443,7 +454,7 @@ class TransactionSheetsController extends Controller
 
 
             $update_status = ConsignmentNote::find($id);
-            $res = $update_status->update(['delivery_status' => 'Started']);
+            $res = $update_status->update(['delivery_status' => 'Started' , 'noc_upload' => $noc_path]);
 
             // $mytime = Carbon::now('Asia/Kolkata');
             // $currentdate = $mytime->toDateTimeString();
@@ -661,6 +672,7 @@ class TransactionSheetsController extends Controller
                     'farmer_mobile' => $value->ConsigneeDetail->phone,
                     'farmer_address' => $value->ConsigneeDetail->address_line1,
                     'farmer_pincode' => $value->ConsigneeDetail->postal_code,
+                    'noc_upload' => $value->noc_upload,
                     // 'latitude' => $value->ConsigneeDetail->latitude,
                     // 'longitude' => $value->ConsigneeDetail->longitude,
                     // 'order_id' => $order_item['orders'],
