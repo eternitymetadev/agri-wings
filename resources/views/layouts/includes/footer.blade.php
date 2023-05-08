@@ -282,7 +282,7 @@ $(function() {
             success: function(data) {
                 if (data.success == true) {
 
-                    swal('success', 'Drs Created Successfully', 'success');
+                    swal('success', 'SSS Created Successfully', 'success');
                     window.location.href = "transaction-sheet";
                 } else {
                     swal('error', 'something wrong', 'error');
