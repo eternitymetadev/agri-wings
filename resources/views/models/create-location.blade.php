@@ -33,16 +33,16 @@
                                 <input class="form-control form-control-sm" id="phone" name="phone" placeholder="" maxlength="10">
                             </div>
                         </div>
-                        <div class="form-row mb-0">
+                        <!-- <div class="form-row mb-0">
                             <div class="form-group col-md-6">
                                 <label for="location_name">Team ID</label>
                                 <input class="form-control form-control-sm" id="team_id" name="team_id" placeholder="">
                             </div>
                             <div class="form-group col-md-6">
                             <label for="location_name">&nbsp;</label>
-                                <div class="check-box d-flex align-content-center align-items-center ml-2" style="gap: 8px; height: 42px">
+                                <div class="check-box d-flex align-content-center align-items-center ml-2" style="gap: 8px; height: 42px"> -->
                                 <!-- <span style="color: #000"><strong>Is HUB?</strong></span> -->
-                                    <div class="checkbox radio">
+                                    <!-- <div class="checkbox radio">
                                         <label class="check-label">
                                             <input type="radio" value='1' name="isHub">
                                             <span class="checkmark"></span>
@@ -58,9 +58,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     
-                        <div class="form-row mb-0">
+                        <!-- <div class="form-row mb-0">
                             <span style="color: #000"><strong>Allow LR without vehicle no. :</strong></span>
                             <div class="check-box d-flex align-content-center ml-2" style="gap: 8px">
                                 <div class="checkbox radio">
@@ -78,7 +78,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">

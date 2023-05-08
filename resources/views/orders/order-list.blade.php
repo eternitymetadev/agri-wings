@@ -206,7 +206,7 @@ div.relative {
 <div class="modal fade" id="receve_material" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="prs_check_form">
+            <form id="noc_form">
                 <!-- <button type="button" class="close" data-dismiss="modal"><img src="{{asset('assets/img/close-bottle.png')}}" class="img-fluid"></button> -->
                 <!-- Modal Header -->
                 <div class="modal-header text-center">
@@ -214,14 +214,14 @@ div.relative {
                 </div>
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <input type="hidden" class="form-control" name="order_id" id="order_id" />
+                    <input type="text" class="form-control" name="order_id" id="order_id" />
 
                     <input type="file" class="form-control" name="noc_upload" placeholder="Remarks" Required />
                 </div>
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <div class="btn-section w-100 P-0">
-                        <button type="submit" class="btn btn-warnimg">Save</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                         <a type="" class="btn btn-modal" data-dismiss="modal">No</a>
                     </div>
                 </div>
@@ -320,15 +320,15 @@ $('#upload_order').submit(function(e) {
 $(document).on('click', '.upload_noc', function() {
     var order_no = $(this).attr('data-orderId');
     $('#receve_material').modal('show');
-    $('#lr_id').val(lr_no);
+    $('#order_id').val(order_no);
 });
 //
-$('#prs_check_form').submit(function(e) {
+$('#noc_form').submit(function(e) {
     e.preventDefault();
     var formData = new FormData(this);
 
     $.ajax({
-        url: "prs-receive-material",
+        url: "upload-noc",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },

@@ -33,7 +33,7 @@
                             </div> -->
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Client Name<span
+                                    <label for="exampleFormControlInput2">Base Client name<span
                                             class="text-danger">*</span></label>
                                     <select class="form-control  my-select2" id="base_client_id" name="base_client_id"
                                         tabindex="-1">
@@ -57,12 +57,12 @@
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlSelect1">Regional Client Name</label>
+                                    <label for="exampleFormControlSelect1">Billing Client Name</label>
                                     <input type="text" class="form-control" id="regional_client_name" name="name"
                                         placeholder="" readonly>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Regional Client Nick Name<span
+                                    <label for="exampleFormControlInput2">Billing Client Nick Name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="regional_client_nick_name"
                                         placeholder="">

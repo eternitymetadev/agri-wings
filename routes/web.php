@@ -1046,6 +1046,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
     Route::resource('orders', OrderController::class);
     Route::any('/order-list-details', [ConsignmentController::class, 'orderList']);
+    Route::any('/upload-noc', [ConsignmentController::class, 'uploadNoc']);
     
     
 

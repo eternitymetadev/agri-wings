@@ -32,7 +32,7 @@
                             </div> -->
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Client Name<span
+                                    <label for="exampleFormControlInput2">Base Client Name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="client_name" placeholder="">
                                 </div>

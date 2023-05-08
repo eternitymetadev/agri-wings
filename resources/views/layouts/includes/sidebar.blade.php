@@ -836,7 +836,7 @@
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/users')}}">All Users</a>
             </li>
             <li>
-                <div class="submenuListStyle"></div><a href="{{url($prefix.'/locations')}}">Branches </a>
+                <div class="submenuListStyle"></div><a href="{{url($prefix.'/locations')}}">Service Hub </a>
             </li>
             <?php } if($authuser->role_id == 1 || $authuser->role_id == 3){ ?>
             <li>
