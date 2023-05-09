@@ -15,6 +15,7 @@ class AddNocUploadToConsignmentNotesTable extends Migration
     {
         Schema::table('consignment_notes', function (Blueprint $table) {
             $table->string('noc_upload')->after('billing_client')->nullable();
+            $table->string('assign_date')->after('noc_upload')->nullable();
         });
     }
 

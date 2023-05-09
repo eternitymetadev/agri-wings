@@ -1894,8 +1894,9 @@ class ConsignmentController extends Controller
         $vehicleType = $request->vehicle_type;
         $transporterName = $request->transporter_name;
         $purchasePrice = $request->purchase_price;
+        $assigndate = date('Y-m-d');
 
-        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'delivery_status' => 'Assigned']);
+        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'assign_date' => $assigndate, 'delivery_status' => 'Assigned']);
 
         $consignees = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_name', 'consignees.phone as phone', 'consignees.email as email', 'vehicles.regn_no as vehicle_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'drivers.name as driver_id', 'drivers.phone as driver_phone', 'drivers.team_id as team_id', 'drivers.fleet_id as fleet_id')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
