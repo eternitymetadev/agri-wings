@@ -777,7 +777,7 @@ try {
             type: 'donut',
             width: 380
         },
-        colors: ['#5c1ac3', '#e2a03f', '#e7515a', '#e2a03f'],
+        colors: ['#ffb6b6', '#ace8b2', '#28a745', '#ffb6b6'],
         dataLabels: {
           enabled: false
         },
