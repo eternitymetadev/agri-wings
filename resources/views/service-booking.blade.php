@@ -723,7 +723,7 @@ tr:hover .dltItemRow {
 
 
                         <Input type="hidden" id="farmer_common_id" name="farmer_common_id">
-                        <Input type="hidden" id="farmer_name_check" name="farmer_name_check" >
+                        <Input type="hidden" id="farmer_name_check" name="farmer_name_check">
                         <div id="createFarmerBox" class="row align-items-center px-2" style="width: 100%">
                             <div class="form-group col-md-3 px-1">
                                 <label>Farmer Mobile<span class="text-danger">*</span></label>
@@ -737,7 +737,7 @@ tr:hover .dltItemRow {
                                     name="farmer_name">
                                 <span id="farmer_req" style="color:red"></span>
                             </div>
- 
+
                             <div class="form-group col-md-3 px-1">
                                 <label>Farm Locations<span class="text-danger">*</span></label>
                                 <div class="counter">
@@ -792,7 +792,7 @@ tr:hover .dltItemRow {
                         </select>
                         <Input type="hidden" class="form-control" id="regclient_id" name="regclient_id"
                             value="{{$regonal_client->id}}">
-                            <Input type="hidden" class="form-control" id="billing_name" name="billing_name"
+                        <Input type="hidden" class="form-control" id="billing_name" name="billing_name"
                             value="{{$regonal_client->name}}">
 
                     </div>
@@ -817,7 +817,7 @@ tr:hover .dltItemRow {
                 <div id="cropSection" style="column-gap: 1.2rem; align-content: flex-start">
                     <div id="cropSelection" class="form-row cropSelection animate__animated animate__fadeIn"
                         style="column-gap: 1.2rem; align-content: flex-start">
-                        <h6 class="col-12">Spray Details</h6>
+                        <h6 class="col-12" id="cropBlockTitle">Spray Details</h6>
 
                         <p class="col-12" style="font-weight: 700; font-size: 14px; color: #838383;">Choose Crop</p>
 
@@ -863,7 +863,8 @@ tr:hover .dltItemRow {
 
                             <div style="flex: 1; display: flex; justify-content: center;">
                                 <button type="button" class="btn btn-primary" onclick="onAddCrop()"
-                                    style="width: 120px; height: 43px; margin-inline: auto; border-radius: 18px" id="addCropButton">Add</button>
+                                    style="width: 120px; height: 43px; margin-inline: auto; border-radius: 18px"
+                                    id="addCropButton">Add</button>
                             </div>
                         </div>
 
@@ -900,7 +901,8 @@ tr:hover .dltItemRow {
 
         <div class="actionButtonRow animate__animated animate__fadeInUp">
             <a class="mt-2 myBtn" href="{{url($prefix.'/consignments') }}" style="font-weight: 500"> Reset</a>
-            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn" disabled>Submit</button>
+            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn"
+                disabled>Submit</button>
         </div>
 
     </form>
@@ -935,6 +937,10 @@ function displayBillToInfoSection() {
     $('#bill_term').click();
 
     $('#billToInfo').show();
+    $("#billToInfo")[0].scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+    });
     $('#farmerInfo').css('display', 'flex');
 }
 
@@ -1003,9 +1009,20 @@ const onFarmerTypeChange = () => {
     if ($('#io').is(':checked')) {
         $('#selectFarmerId').show();
         $('#createFarmerBox').hide();
+        $('#farmer_id').val('');
+        $('#farmer_id').removeAttr('data-val');
+        $("#farmLocation").empty();
+        $('#farmerInfo').css('display', 'none');
+        $('#billToInfo').hide();
+
     } else {
         $('#createFarmerBox').show();
         $('#selectFarmerId').hide();
+        $('#farmer_id').val('');
+        $('#farmer_id').removeAttr('data-val');
+        $("#farmLocation").empty();
+        $('#farmerInfo').css('display', 'none');
+        $('#billToInfo').hide();
     }
 }
 
@@ -1064,7 +1081,12 @@ function displayCropsSection() {
     $('#cropSection').addClass('enabled');
     $('.form-row').removeClass('activeFormRow');
     $('#cropSelection').addClass('activeFormRow');
+    $("#cropSelection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 };
+
 
 
 $(document).ready(function() {
@@ -1087,13 +1109,6 @@ $(document).ready(function() {
 
 });
 
-function toggleVehicleInfBlock() {
-    if ($('#ftlChecked').is(':checked'))
-        $('#vehicleInformationBlock').show();
-    else
-        $('#vehicleInformationBlock').hide();
-
-}
 
 jQuery(function() {
     $('.my-select2').each(function() {
@@ -1130,109 +1145,14 @@ function showResult(str) {
     }
 }
 
-$('#chek').click(function() {
-    $('#veh').toggle();
-});
-
-function myMap() {
-    var mapProp = {
-        center: new google.maps.LatLng(51.508742, -0.120850),
-        zoom: 5,
-    };
-    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-}
-
-// invoice no duplicate validate
-$('.invc_no').blur(function() {
-    var invc_no = $(this).val();
-    var row_id = jQuery(this).attr('id');
-    $.ajax({
-        url: "/invoice-check",
-        method: "get",
-        data: {
-            invc_no: invc_no
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        dataType: 'json',
-        success: function(response) {
-            console.log(response);
-            if (response.success == true) {
-                swal('error', response.errors, 'error');
-                $("#" + row_id).val('');
-            }
-        }
-    })
-});
-
-// select item onchange
-function getItem(item) {
-    var item_val = item.value;
-    $.ajax({
-        url: '/get-items',
-        method: "get",
-        data: {
-            item_val: item_val
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        dataType: 'json',
-        success: function(res) {
-            console.log(res);
-            if (res.success == true) {
-                ($(item).closest('tr').find('td').eq(1).find('input').prop('disabled', false));
-                ($(item).closest('tr').find('td').eq(1).find('input').val(''));
-
-                ($(item).closest('tr').find('td').eq(2).find('input').val(res.item.net_weight));
-                ($(item).closest('tr').find('td').eq(3).find('input').val(res.item.gross_weight));
-                ($(item).closest('tr').find('td').eq(4).find('input').val(res.item.chargable_weight));
-            }
-        }
-    });
-}
-////
-$("#branch_id").change(function(e) {
-
-    var branch_id = $(this).val();
-    $("#select_regclient").empty();
-    $.ajax({
-        url: "/get-bill-client",
-        type: "get",
-        cache: false,
-        data: {
-            branch_id: branch_id
-        },
-        dataType: "json",
-        headers: {
-            "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr("content"),
-        },
-        beforeSend: function() {
-            $("#select_regclient").empty();
-        },
-        success: function(res) {
-            $("#select_regclient").append(
-                '<option value="">select..</option>'
-            );
-
-            $.each(res.data, function(index, value) {
-                $("#select_regclient").append(
-                    '<option value="' +
-                    value.id +
-                    '">' +
-                    value.name +
-                    "</option>"
-                );
-            });
-        },
-    });
-});
-
 function togglePaymentAction() {
 
     if ($('#paymentType_').val() != null) {
         displayCropsSection();
+        $("#cropSelection")[0].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
     } else $('#cropSelection').removeClass('enabled');
 
     if ($('#paymentType').val() == 'To Pay') {
@@ -1247,6 +1167,7 @@ function togglePaymentAction() {
         $('#freight_on_delivery').val('');
     }
 }
+
 
 const appendFarmerDes = (des) => {
     let node = ``;
@@ -1301,7 +1222,7 @@ $('#createFarmerButton').click(function() {
             ),
         },
         processData: true,
- 
+
         success: function(response) {
             $('#themeLoader').css('display', 'none');
 
@@ -1313,7 +1234,7 @@ $('#createFarmerButton').click(function() {
                 $("#farmer_name").prop('disabled', true);
                 $("#farmer_phone").prop('disabled', true);
                 $("#createFarmerButton").prop('disabled', true);
-                $("#io").prop('disabled', true);
+                // $("#io").prop('disabled', true);
 
 
                 $.each(response.farmer_details.farm, function(index, value) {
@@ -1435,7 +1356,6 @@ $("#farmer_phone").blur(function() {
     });
 });
 
-/////
 $("#bill_term").change(function(e) {
 
     var bill_to = $(this).val();
@@ -1444,10 +1364,10 @@ $("#bill_term").change(function(e) {
     $('#cropSelection').removeClass('enabled');
     $('#themeLoader').css('display', 'flex');
 
-    if(bill_to == 'Self'){
+    if (bill_to == 'Self') {
         var client_nam = $('#billing_name').val();
         var show_client_name = $('#clientName').val(client_nam);
-    }else{
+    } else {
         var farmer_client_nam = $('#farmer_name_check').val();
         var show_farmer_name = $('#clientName').val(farmer_client_nam);
     }

@@ -193,6 +193,7 @@
 
     <section class="authSection">
         <img src="{{asset('assets/agri-wing-logo.svg')}}" alt="logo" class="registerLogo" />
+        <h2>Register</h2>
         <div class="container formBlock" style="max-width: 1100px">
             <form class="general_form" method="POST" action="{{url('/client-register')}}" id="client_register">
                 @csrf
