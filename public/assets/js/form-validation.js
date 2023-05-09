@@ -1849,7 +1849,8 @@ function formSubmit(form)
 /*======= submit redirect fuction =======*/
 function formSubmitRedirect(form)
 {
-    jQuery.ajax({
+    $('#themeLoader').css('display', 'flex');
+    jQuery.ajax({ 
         url         : form.action,
         type        : form.method,
         data        : new FormData(form),
@@ -1885,7 +1886,7 @@ function formSubmitRedirect(form)
         {
             $(".indicator-progress").hide();
             $(".indicator-label").show();
-            // alert('kk');
+            $('#themeLoader').css('display', 'none');
           	$.toast().reset('all');
       		var delayTime = 3000;
 	        if(response.success){

@@ -720,14 +720,20 @@ class ClientController extends Controller
             }
 
             // ======= gst upload
+            if (!empty($request->file('upload_gst'))) {
             $gstupload = $request->file('upload_gst');
             $path = Storage::disk('s3')->put('clients', $gstupload);
             $gst_img_path_save = Storage::disk('s3')->url($path);
+            $client['upload_gst'] = $gst_img_path_save;
+            }
 
             //  ======= pan upload
+            if (!empty($request->file('upload_pan'))) {
             $panupload = $request->file('upload_pan');
             $pan_path = Storage::disk('s3')->put('clients', $panupload);
             $pan_img_path_save = Storage::disk('s3')->url($pan_path);
+            $client['upload_pan'] = $pan_img_path_save;
+            }
 
             $payment_term = implode(',', $request->payment_term);
 
@@ -749,8 +755,8 @@ class ClientController extends Controller
             }
 
             $client['location_id'] = $request->branch_id;
-            $client['upload_gst'] = $gst_img_path_save;
-            $client['upload_pan'] = $pan_img_path_save;
+            
+            
             $client['payment_term'] = $payment_term;
             $client['status'] = "1";
 
@@ -828,36 +834,44 @@ class ClientController extends Controller
             }
 
             // // ======= gst upload
-            // $gstupload = $request->file('upload_gst');
-            // $path = Storage::disk('s3')->put('clients', $gstupload);
-            // $gst_img_path_save = Storage::disk('s3')->url($path);
+            if (!empty($request->file('upload_gst'))) {
+            $gstupload = $request->file('upload_gst');
+            $path = Storage::disk('s3')->put('clients', $gstupload);
+            $gst_img_path_save = Storage::disk('s3')->url($path);
+            $client['upload_gst'] = $gst_img_path_save;
+            }
 
             // //  ======= pan upload
-            // $panupload = $request->file('upload_pan');
-            // $pan_path = Storage::disk('s3')->put('clients', $panupload);
-            // $pan_img_path_save = Storage::disk('s3')->url($pan_path);
+            if (!empty($request->file('upload_pan'))) {
+            $panupload = $request->file('upload_pan');
+            $pan_path = Storage::disk('s3')->put('clients', $panupload);
+            $pan_img_path_save = Storage::disk('s3')->url($pan_path);
+            $client['upload_pan'] = $pan_img_path_save;
+            }
 
             // // // ======= tan upload
-            // $tanupload = $request->file('upload_tan');
-            // $tan_path = Storage::disk('s3')->put('clients', $tanupload);
-            // $tan_img_path_save = Storage::disk('s3')->url($tan_path);
+            if (!empty($request->file('upload_tan'))) {
+            $tanupload = $request->file('upload_tan');
+            $tan_path = Storage::disk('s3')->put('clients', $tanupload);
+            $tan_img_path_save = Storage::disk('s3')->url($tan_path);
+            $client['upload_tan'] = $tan_img_path_save;
+            }
 
             // // // ======= moa upload
-            // $moaupload = $request->file('upload_moa');
-            // $moa_path = Storage::disk('s3')->put('clients', $moaupload);
-            // $moa_img_path_save = Storage::disk('s3')->url($moa_path);
+            if (!empty($request->file('upload_moa'))) {
+            $moaupload = $request->file('upload_moa');
+            $moa_path = Storage::disk('s3')->put('clients', $moaupload);
+            $moa_img_path_save = Storage::disk('s3')->url($moa_path);
+            $client['upload_moa'] = $moa_img_path_save;
+            }
 
             $client['tan'] = $request->tan;
             $client['gst_no'] = $request->gst_no;
             $client['pan'] = $request->pan;
-            // $client['upload_gst'] = $gst_img_path_save;
-            // $client['upload_pan'] = $pan_img_path_save;
-            // $client['upload_tan'] = $tan_img_path_save;
-            // $client['upload_moa'] = $moa_img_path_save;
             $client['status'] = "1";
 
             $saveclient = BaseClient::where('id', $request->base_client)->update($client);
-
+            
             $url = URL::to($this->prefix . '/clients');
             $response['success'] = true;
             $response['success_message'] = "Clients Updated successfully";
