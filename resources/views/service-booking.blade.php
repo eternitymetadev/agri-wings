@@ -837,8 +837,7 @@ tr:hover .dltItemRow {
                                 <label for="exampleFormControlSelect1">
                                     Farm Location<span class="text-danger">*</span>
                                 </label>
-                                <select class="form-control my-select2" name="" onchange="displayCropsSection()"
-                                    id="farmLocation">
+                                <select class="form-control my-select2" id="farmLocation">
                                     <option value="" readonly>-select location-</option>
                                 </select>
                                 <label id="farmLocationError" style="display:none" class="error"
@@ -900,7 +899,8 @@ tr:hover .dltItemRow {
         </div> -->
 
         <div class="actionButtonRow animate__animated animate__fadeInUp">
-            <a class="mt-2 myBtn" href="{{url($prefix.'/consignments') }}" style="font-weight: 500"> Reset</a>
+            <a class="mt-2 myBtn" href="{{url($prefix.'/service-booking
+                ') }}" style="font-weight: 500"> Reset</a>
             <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn"
                 disabled>Submit</button>
         </div>
@@ -915,6 +915,8 @@ tr:hover .dltItemRow {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
 
 <script>
+const isMobileScreen = window.matchMedia("(max-width: 600px)");
+
 $('.form-row input').on("focus", function() {
     $('.form-row').removeClass('activeFormRow');
     $(this).closest('.form-row').addClass('activeFormRow');
@@ -1078,6 +1080,8 @@ $("#sprayTable").on('click', '.dltItemRow', function() {
 
 
 
+
+
 function displayCropsSection() {
     $('#cropSection').addClass('enabled');
     $('.form-row').removeClass('activeFormRow');
@@ -1143,21 +1147,22 @@ function showResult(str) {
 }
 
 function togglePaymentAction() {
-
     if ($('#paymentType_').val() != null) {
         displayCropsSection();
-    } else $('#cropSelection').removeClass('enabled');
-
-    if ($('#paymentType').val() == 'To Pay') {
-        $('#freight_on_delivery').attr('readonly', false);
-        $('#cod').attr('readonly', false);
-    } else if ($('#paymentType').val() == 'Paid') {
-        $('#cod').attr('readonly', true);
-        $('#freight_on_delivery').attr('readonly', true);
+        if (isMobileScreen.matches == false) {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+            });
+        } else {
+            $("#cropSection")[0].scrollIntoView({
+                behavior: "smooth",
+                block: "end"
+            });
+        }
     } else {
-        $('#freight_on_delivery').attr('readonly', true);
-        $('#cod').attr('readonly', false);
-        $('#freight_on_delivery').val('');
+        $('#cropSelection').removeClass('enabled');
     }
 }
 
@@ -1175,7 +1180,6 @@ const appendFarmerDes = (des) => {
                                 <p>Farm Locations - <span>${des.farm?.length}</span></p>`;
 
     $('#farmerDes').html(node);
-    // displayCropsSection();
     displayBillToInfoSection();
 }
 

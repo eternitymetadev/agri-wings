@@ -688,8 +688,8 @@ tr:hover .dltItemRow {
 
 
 <div class="layout-px-spacing mt-5 animate__animated animate__fadeIn">
-<form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment"
-        style="margin: auto;">
+    <form class="general_form" method="POST" action="{{url($prefix.'/store-Ptl-order')}}" id="createconsignment"
+        style="margin: auto auto 170px;">
 
         <div class="row flex-wrap mx-0" style="gap: 2rem">
 
@@ -796,7 +796,8 @@ tr:hover .dltItemRow {
                         <label for="exampleFormControlSelect1">
                             Payment Term<span class="text-danger">*</span>
                         </label>
-                        <select class="form-control my-select2" name="payment_type" id="paymentType_" onchange="togglePaymentAction()">
+                        <select class="form-control my-select2" name="payment_type" id="paymentType_"
+                            onchange="togglePaymentAction()">
 
                         </select>
                     </div>
@@ -890,7 +891,8 @@ tr:hover .dltItemRow {
 
         <div class="actionButtonRow animate__animated animate__fadeInUp">
             <a class="mt-2 myBtn" href="{{url($prefix.'/order-book-ptl') }}" style="font-weight: 500"> Reset</a>
-            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn" disabled>Submit</button>
+            <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn"
+                disabled>Submit</button>
         </div>
 
     </form>
@@ -903,6 +905,8 @@ tr:hover .dltItemRow {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
 
 <script>
+const isMobileScreen = window.matchMedia("(max-width: 600px)");
+
 $('.form-row input').on("focus", function() {
     $('.form-row').removeClass('activeFormRow');
     $(this).closest('.form-row').addClass('activeFormRow');
@@ -919,12 +923,17 @@ $('.newFarmerInput').keyup(function() {
     else $('#createFarmerButton').attr('disabled', true);
 });
 
+
 function displayBillToInfoSection() {
     $('.form-row').removeClass('activeFormRow');
     $('#billToInfo').addClass('activeFormRow');
     $('#bill_term').click();
 
     $('#billToInfo').show();
+    $("#billToInfo")[0].scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+    });
     $('#farmerInfo').css('display', 'flex');
 }
 
@@ -993,9 +1002,20 @@ const onFarmerTypeChange = () => {
     if ($('#io').is(':checked')) {
         $('#selectFarmerId').show();
         $('#createFarmerBox').hide();
+        $('#farmer_id').val('');
+        $('#farmer_id').removeAttr('data-val');
+        $("#farmLocation").empty();
+        $('#farmerInfo').css('display', 'none');
+        $('#billToInfo').hide();
+
     } else {
         $('#createFarmerBox').show();
         $('#selectFarmerId').hide();
+        $('#farmer_id').val('');
+        $('#farmer_id').removeAttr('data-val');
+        $("#farmLocation").empty();
+        $('#farmerInfo').css('display', 'none');
+        $('#billToInfo').hide();
     }
 }
 
@@ -1016,7 +1036,7 @@ const onAddCrop = () => {
     let totalPrice = cropPrice * acreage;
 
     if (farmLocation != '') {
-        $('#sprayTable').show(); 
+        $('#sprayTable').show();
         listItem += `<tr>
                 <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
                 <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
@@ -1221,21 +1241,22 @@ $("#branch_id").change(function(e) {
 });
 
 function togglePaymentAction() {
-
     if ($('#paymentType_').val() != null) {
         displayCropsSection();
-    } else $('#cropSelection').removeClass('enabled');
-
-    if ($('#paymentType').val() == 'To Pay') {
-        $('#freight_on_delivery').attr('readonly', false);
-        $('#cod').attr('readonly', false);
-    } else if ($('#paymentType').val() == 'Paid') {
-        $('#cod').attr('readonly', true);
-        $('#freight_on_delivery').attr('readonly', true);
+        if (isMobileScreen.matches == false) {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+            });
+        } else {
+            $("#cropSection")[0].scrollIntoView({
+                behavior: "smooth",
+                block: "end"
+            });
+        }
     } else {
-        $('#freight_on_delivery').attr('readonly', true);
-        $('#cod').attr('readonly', false);
-        $('#freight_on_delivery').val('');
+        $('#cropSelection').removeClass('enabled');
     }
 }
 
@@ -1252,7 +1273,6 @@ const appendFarmerDes = (des) => {
                                 <p>Farm Locations - <span>${des.farm?.length}</span></p>`;
 
     $('#farmerDes').html(node);
-    // displayCropsSection();
     displayBillToInfoSection();
 }
 
@@ -1292,7 +1312,7 @@ $('#createFarmerButton').click(function() {
             ),
         },
         processData: true,
- 
+
         success: function(response) {
             $('#themeLoader').css('display', 'none');
 
@@ -1520,7 +1540,7 @@ $("#bill_to").change(function(e) {
 
     var bill_to = $(this).val();
     var regional_id = $('#regional_id').val();
- 
+
     $("#paymentType_").empty();
     $.ajax({
         url: "get-payment-term",
