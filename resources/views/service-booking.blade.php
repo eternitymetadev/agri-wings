@@ -1059,6 +1059,7 @@ const onAddCrop = () => {
         $('#farmLocation').val('').change();
         $('#acreage').val('1');
         $('#farmLocationError').hide();
+        console.log('ddddd');
         cropIndex++;
         $('#addCropButton').attr('disabled', true);
         if ($('#sprayTable tr').length < 2) $('#submitButton').attr('disabled', true);
@@ -1081,10 +1082,6 @@ function displayCropsSection() {
     $('#cropSection').addClass('enabled');
     $('.form-row').removeClass('activeFormRow');
     $('#cropSelection').addClass('activeFormRow');
-    $("#cropSelection").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
 };
 
 
@@ -1149,10 +1146,6 @@ function togglePaymentAction() {
 
     if ($('#paymentType_').val() != null) {
         displayCropsSection();
-        $("#cropSelection")[0].scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-        });
     } else $('#cropSelection').removeClass('enabled');
 
     if ($('#paymentType').val() == 'To Pay') {
