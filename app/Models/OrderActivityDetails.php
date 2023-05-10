@@ -17,8 +17,12 @@ class OrderActivityDetails extends Model
         'checmical_used',
         'charging_point',
         'noc_upload',
+        'fresh_water',
+        'farmer_available',
+        'available_person_name',
+        'available_person_phone',
         'status',
         'created_at',
-        'updated_at'
+        'updated_at' 
     ];
 }

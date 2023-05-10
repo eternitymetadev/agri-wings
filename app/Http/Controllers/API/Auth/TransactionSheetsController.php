@@ -435,20 +435,12 @@ class TransactionSheetsController extends Controller
             $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
             $storeOrderDetails['checmical_used'] = $request->chemical_used;
             $storeOrderDetails['charging_point'] = $request->charging_point;
+            $storeOrderDetails['fresh_water'] = $request->fresh_water;
+            $storeOrderDetails['farmer_available'] = $request->farmer_available;
+            $storeOrderDetails['available_person_name'] = $request->available_person_name;
+            $storeOrderDetails['available_person_phone'] = $request->available_person_phone;
 
             $savedetails = OrderActivityDetails::create($storeOrderDetails);
-
-            // $get_driver = ConsignmentNote::where('id', $id)->first();
-            // $get_driver_id = $get_driver->driver_id;
-            // $check_status = ConsignmentNote::where('driver_id', $get_driver_id)->where('delivery_status', 'Started')->first();
-
-            // if(!empty($check_status)){
-            //     return response([
-            //         'error' => true,
-            //         'code' => 1,
-            //         'message' => 'Please Complete Previous Task',
-            //     ], 200);
-            // }
 
             $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop' => $request->crop, 'crop_price' => $request->crop_price]);
 
@@ -683,13 +675,12 @@ class TransactionSheetsController extends Controller
                     // 'success_time' => @$successtime,
                 ];
             }
-            $croplist = DB::table('crops')->select('id', 'crop_name', 'crop_price')->get();
+          
             if ($consignments) {
                 return response([
                     'status' => 'success',
                     'code' => 1,
                     'data' => $data,
-                    'crop_list' => $croplist,
                 ], 200);
             } else {
                 return response([
@@ -894,5 +885,65 @@ class TransactionSheetsController extends Controller
                 'message' => "Failed to update transaction_sheets, please try again. {$exception->getMessage()}",
             ], 500);
         }
+    }
+
+    public function formData($id)
+    {
+
+        try {
+
+            $consignments = ConsignmentNote::with('ConsignerDetail', 'TransactionSheet', 'ConsigneeDetail', 'AppMedia', 'Orderactivity', 'Branch','OrderactivityDetails')->where('id', $id)
+                ->get();
+
+            foreach ($consignments as $value) {
+
+                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => @$value->Orderactivity->CropName->crop_name, 'crop_id' => @$value->Orderactivity->crop,'farm' => @$value->Orderactivity->FarmerFarm->field_area, 'acerage' => @$value->Orderactivity->acreage, 'crop_price' => @$value->Orderactivity->crop_price);
+
+
+                $data[] = [
+                    'order_no' => $value->id,
+                    'noc_upload' => $value->noc_upload,
+                    'order_details' => $order_details,
+                    'checmical_used' => @$value->OrderactivityDetails->checmical_used,
+                    'charging_point' => @$value->OrderactivityDetails->charging_point,
+                    'fresh_water' => @$value->OrderactivityDetails->fresh_water,
+                    'farmer_available' => @$value->OrderactivityDetails->farmer_available,
+                    'available_person_name' => @$value->OrderactivityDetails->available_person_name,
+                    'available_person_phone' => @$value->OrderactivityDetails->available_person_phone,
+
+                ];
+            }
+            $croplist = DB::table('crops')->select('id', 'crop_name', 'crop_price')->get();
+            if ($consignments) {
+                return response([
+                    'status' => 'success',
+                    'code' => 1,
+                    'data' => $data,
+                    'crop_list' => $croplist,
+                ], 200);
+            } else {
+                return response([
+                    'status' => 'error',
+                    'code' => 0,
+                    'message' => "No record found",
+
+                ], 404);
+
+            }
+
+        } catch (\Exception $exception) {
+
+            return response([
+
+                'status' => 'error',
+
+                'code' => 0,
+
+                'message' => "Failed to get transaction_sheets data, please try again. {$exception}",
+
+            ], 500);
+
+        }
+
     }
 }

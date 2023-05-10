@@ -23,8 +23,12 @@ class CreateOrderActivityDetailsTable extends Migration
             $table->string('checmical_used')->nullable();
             $table->string('charging_point')->nullable();
             $table->string('noc_upload')->nullable();
+            $table->string('fresh_water')->nullable();
+            $table->string('farmer_available')->nullable();
+            $table->string('available_person_name')->nullable();
+            $table->string('available_person_phone')->nullable();
             $table->tinyInteger('status')->default(1);
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 
