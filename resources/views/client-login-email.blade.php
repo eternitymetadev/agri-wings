@@ -30,7 +30,7 @@
     <p>
         Dear {{$name}}, <br /><br />
         We are delighted to have you as our customer at Agriwings, and we appreciate your trust in us. As a valued<br />
-        customer, we would like to provide you with your login credentials for our website app.agriwings.in so that
+        customer, we would like to provide you with your login credentials for our website https://app.agriwings.in/ so that
         you<br />
         can start managing your account and accessing our drone spray services.<br /><br />
 
