@@ -336,8 +336,6 @@ class UserController extends Controller
                 'pin' => 'required',
                 'contact_number' => 'required|unique:users,phone',
                 'contact_number' => 'required|unique:regional_clients,phone',
-                //  'captcha' => ['required', 'captcha'],
-                //  'g-recaptcha-response' => 'recaptcha',
             );
 
             $validator = Validator::make($request->all(), $rules);
@@ -455,13 +453,61 @@ class UserController extends Controller
                 $saveterm['status'] = 1;
                 PaymentTerms::create($saveterm);
 
-                $data = ['contact_name' => $request->contact_name, 'user_id' => $userid];
-                $user['to'] = $request->email;
-                Mail::send('client-verified-email', $data, function ($messges) use ($user) {
-                    $messges->to($user['to']);
-                    $messges->subject('Verify Your Email Address for Agriwings');
+                // welcome mail sent  to customer=====================================
+                $verified = User::with('UserClient')->where('id', $userid)->first();
 
-                });
+                $html = '<!DOCTYPE html>
+            <html>
+
+            <head>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+                <style>
+                p {
+                    margin-bottom: 0px !important;
+                    font-size: 0.9rem;
+                    line-height: 1.4rem;
+                }
+                </style>
+            </head>
+
+            <body>
+                <p>
+                Dear Customer,<br /><br />
+            We are delighted to welcome you to our AgriWings family. We appreciate your business and look forward to providing you with our exceptional services.<br />
+            In order to ensure a smooth and hassle-free process for you, we would like to take this opportunity to explain our billing terms and order booking flow chart.<br />
+            Billing Terms: Our billing terms will remain “Bill to Client Advance”. We accept various payment methods, including Cash, UPI, bank transfers.<br />
+            Order Booking Flow Chart:<br />
+            Consultation - We start by discussing your needs and providing you with a consultation to understand your requirements.<br />
+            Quote - After the consultation, we will provide you with a detailed quote for the services you require.<br />
+            Booking - If you agree to the quote, we will proceed with booking the order and scheduling the services.<br />
+            Service Delivery - Our team will provide the services as per the schedule.<br />
+            Invoicing - Once the services are delivered, we will issue an invoice for the services rendered.<br />
+            Payment - Payment is due within 30 days from the invoice date.<br />
+            We hope that this information helps you understand our billing terms and order booking flow chart. If you have any questions or concerns, please do not hesitate to contact us and report/rate us on Page of www.AgriWing.com. We value your feedback and are always looking for ways to improve our services.<br />
+            Thank you for choosing AgriWings. We look forward to working with you and providing you with the best services possible.<br /><br />
+            Sincerely,<br />
+            Team AgriWings<br />
+            D2F Services Private Limited
+
+                </p>
+            </body>
+
+            </html>';
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($html);
+            $pdf->setPaper('legal', 'portrait');
+
+            $data = ['login_id' => $verified->login_id, 'password' => $verified->user_password, 'name' => $verified->name];
+            $user['to'] = $verified->email;
+            Mail::send('client-login-email', $data, function ($messges) use ($user, $pdf) {
+                $messges->to($user['to']);
+                $messges->subject('Your Login Credentials for Agriwings');
+                $messges->attachData($pdf->output(), "welcome.pdf");
+
+            });
+            User::where('id', $userid)->update(['status' => 1]);
 
                 $url = URL::to($this->prefix . '/login');
                 $response['success'] = true;

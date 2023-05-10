@@ -1301,10 +1301,10 @@ $('#farmer_id').autocomplete({
                 $('#farmer_name_check').val(response.get_farmer_details.nick_name)
                 appendFarmerDes(response.get_farmer_details)
 
-                $("#farmLocation").append(
-                    `<option value="">--select--
-                        </option>`
-                );
+                // $("#farmLocation").append(
+                //     `<option value="">--select--
+                //         </option>`
+                // );
                 $.each(response.get_farmer_details.farm, function(index, value) {
                     $("#farmLocation").append(
                         '<option value="' +

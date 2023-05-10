@@ -235,7 +235,7 @@ class TransactionSheetsController extends Controller
 
             foreach ($consignments as $value) {
 
-                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => $value->Orderactivity->CropName->crop_name, 'farm' => $value->Orderactivity->FarmerFarm->field_area, 'acerage' => $value->Orderactivity->acreage, 'crop_price' => $value->Orderactivity->crop_price);
+                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => @$value->Orderactivity->CropName->crop_name, 'farm' => @$value->Orderactivity->FarmerFarm->field_area, 'acerage' => @$value->Orderactivity->acreage, 'crop_price' => @$value->Orderactivity->crop_price);
 
                 // $order_details = array();
                 // foreach ($value->OrderFarms as $order_activity) {
@@ -619,7 +619,7 @@ class TransactionSheetsController extends Controller
             // echo'<pre>'; print_r(json_decode($consignments)); die;
             foreach ($consignments as $value) {
 
-                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => $value->Orderactivity->CropName->crop_name, 'farm' => $value->Orderactivity->FarmerFarm->field_area, 'acerage' => $value->Orderactivity->acreage, 'crop_price' => $value->Orderactivity->crop_price);
+                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => @$value->Orderactivity->CropName->crop_name, 'farm' => @$value->Orderactivity->FarmerFarm->field_area, 'acerage' => @$value->Orderactivity->acreage, 'crop_price' => @$value->Orderactivity->crop_price);
                 // $order_details = array();
                 // foreach ($value->OrderFarms as $order_activity) {
 

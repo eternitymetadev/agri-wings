@@ -45,7 +45,12 @@
                         </p>
                     </a>
                 </td>
-                <td></td>
+                @if($consignment->bill_to == 'Self')
+
+                <td>Pre-Paid</td>
+                @else
+                <td>Post-Paid</td>
+                @endif
 
             </tr>
             @endforeach
