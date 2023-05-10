@@ -5099,7 +5099,7 @@ class ConsignmentController extends Controller
         return view('consignments.order-list', ['consignments' => $consignments, 'peritem' => $peritem, 'prefix' => $this->prefix, 'segment' => $this->segment]);
     }
 
-    public function uploadNoc()
+    public function uploadNoc(Request $request)
     {
 
         if (!empty($request->file('noc_upload'))) {
@@ -5126,8 +5126,9 @@ class ConsignmentController extends Controller
 
     }
 
-    public function nocPrint()
+    public function nocPrint(Request $request, $id)
     {
+
         $html = '<!DOCTYPE html>
             <html>
             <head>

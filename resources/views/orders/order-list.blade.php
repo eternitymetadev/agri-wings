@@ -60,6 +60,10 @@ div.relative {
     height: 16px;
     width: 16px;
 }
+.page-item.active .page-link {
+    background-color: #0c8b4d !important;
+    color: #000 !important;
+}
 </style>
 <!-- BEGIN PAGE LEVEL CUSTOM STYLES -->
 <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
@@ -175,7 +179,7 @@ div.relative {
                                         </svg>
                                     </a>
                                     @else
-                                    <a href="" class="iconButton swan-tooltip" data-tooltip="View NOC" style="--btnClr: #6b6b6b; gap: 4px; min-width: 4.5rem">
+                                    <a href="{{$consignment->noc_upload}}" target="_blank" class="iconButton swan-tooltip" data-tooltip="View NOC" style="--btnClr: #6b6b6b; gap: 4px; min-width: 4.5rem">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
@@ -326,7 +330,6 @@ $(document).on('click', '.upload_noc', function() {
 $('#noc_form').submit(function(e) {
     e.preventDefault();
     var formData = new FormData(this);
-    return false;
 
     $.ajax({
         url: "upload-noc",
