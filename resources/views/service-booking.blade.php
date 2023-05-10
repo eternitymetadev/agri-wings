@@ -904,7 +904,6 @@ tr:hover .dltItemRow {
             <button type="submit" id="submitButton" class="submitBtn mt-2 btn btn-primary disableme myBtn"
                 disabled>Submit</button>
         </div>
-
     </form>
 </div>
 <!-- widget-content-area -->

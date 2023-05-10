@@ -5125,4 +5125,49 @@ class ConsignmentController extends Controller
         return response()->json($response);
 
     }
+
+    public function nocPrint()
+    {
+        $html = '<!DOCTYPE html>
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            </head>
+
+            <body>
+            Annexure A <br /><br />
+                    NO OBJECT CERTIFICATE (NOC) FOR THE PURPOSE OF CHEMICAL SPRAY SERVICE WITH DRONE<br />
+
+                    [Date]<br /><br />
+
+                    I Shri/Smt. _________________________________________________ Son/Wife/Daughter of _________________________ would like to declare that I am the Absolute-Owner / Co-Owner of Agricultural land falling under Farm Address [District ____________________ Sub Division _________________ Circle ____________ Mouza ______________________ Village/Town ___________________ Lat No: _______ Patta No ___________ Dag No_____________ ].<br /><br />
+
+                    This is to certify that I, the undersigned at my own will, I have no objection to D2F Services Private Limited for the use of their drones to conduct Chemical spraying on our farms located at [Address of Farms]. We understand that this service is being provided in compliance with all applicable laws and regulations related to aerial Chemical application.<br /><br />
+
+                    We acknowledge that D2F services Private Limited has provided us with all necessary information related to the scope of work, schedule, and safety measures to be taken during the spraying operation. We also understand that D2F Services Private Limited has obtained all necessary permits and permissions from the relevant authorities to conduct aerial Chemical application.<br /><br />
+
+                    We confirm that we will not hold D2F Services Private Limited or any of their employees or agents responsible for any damages, losses, or claims arising from the use of drones for Chemical spraying on our farms.<br /><br />
+                    Farmer Detail<br />
+                    Farmer Name:<br />
+                    Father Name:<br />
+                    Farmer Mobile No.:<br />
+                    Aadhar No.:<br />
+
+                    Sincerely,<br />
+
+                    Name &Signature of the Farmer/Representative<br />
+                    Mobile Number of Farmer/ Representative<br />
+                    Aadhar No.<br />
+                    Date 										Place
+
+
+            </body>
+            </html>';
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($html);
+        $pdf->setPaper('legal', 'portrait');
+        return $pdf->download('Noc.pdf');
+
+    }
 }

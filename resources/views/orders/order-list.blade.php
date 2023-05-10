@@ -147,11 +147,11 @@ div.relative {
                                         <span>Pending for Verification</span>
                                     </a>
                                 </td>
-                                @endif
+                                @endif 
 
                                 <td>
                                     @if(empty($consignment->noc_upload))
-                                    <a href="" class="iconButton swan-tooltip" data-tooltip="Print NOC">
+                                    <a href="{{url($prefix.'/noc-print/'.$consignment->id)}}" class="iconButton swan-tooltip" data-tooltip="Print NOC">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"

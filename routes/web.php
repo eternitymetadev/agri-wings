@@ -1047,6 +1047,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::resource('orders', OrderController::class);
     Route::any('/order-list-details', [ConsignmentController::class, 'orderList']);
     Route::any('/upload-noc', [ConsignmentController::class, 'uploadNoc']);
+    Route::any('/noc-print/{id}', [ConsignmentController::class, 'nocPrint']);
     
     
 
