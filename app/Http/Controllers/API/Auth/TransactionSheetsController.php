@@ -903,7 +903,11 @@ class TransactionSheetsController extends Controller
                 $data[] = [
                     'order_no' => $value->id,
                     'noc_upload' => $value->noc_upload,
-                    'order_details' => $order_details,
+                    // 'order_details' => $order_details,
+                    'acerage'  => @$value->Orderactivity->acreage,
+                    'crop_name' => @$value->Orderactivity->CropName->crop_name,
+                    'crop_id' => @$value->Orderactivity->crop,
+                    'crop_price' => @$value->Orderactivity->crop_price,
                     'checmical_used' => @$value->OrderactivityDetails->checmical_used,
                     'charging_point' => @$value->OrderactivityDetails->charging_point,
                     'fresh_water' => @$value->OrderactivityDetails->fresh_water,
