@@ -20,7 +20,7 @@
                 <div class="col-lg-12 col-12 layout-spacing">
                     <div class="statbox widget box box-shadow">
                         <form class="general_form" method="POST" action="{{url($prefix.'/consignees')}}"
-                            id="createconsignee">
+                            id="createconsignee" autocomplete="false">
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Farmer Name<span
@@ -101,19 +101,19 @@
                                         <tr class="rowcls">
                                             <td>
                                                 <input type="text" class="form-control name" name="data[1][field_area]"
-                                                    placeholder="">
+                                                    placeholder="" autocomplete="false">
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control name" name="data[1][pin_code]"
-                                                    placeholder="">
+                                                    placeholder="" autocomplete="false">
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control name" name="data[1][city]"
-                                                    placeholder="">
+                                                    placeholder="" autocomplete="false">
                                             </td>
                                             <td>
                                                 <textarea type="text" class="form-control name" name="data[1][address]"
-                                                    placeholder=""></textarea>
+                                                    placeholder="" autocomplete="false"></textarea>
                                             </td>
 
                                             <td>
