@@ -70,7 +70,7 @@ div.relative {
                         <div class="btn-group relative">
                             <button type="button" class="btn btn-warning disableDrs" id="create_edd"
                                 style="font-size: 11px;">
-                                Create ORS
+                                Create SRS
                             </button>
                             <!-- <button type="button" class="btn btn-warning" id="launch_model" data-toggle="modal" data-target="#exampleModal" disabled="disabled" style="font-size: 11px;">
 
@@ -88,7 +88,6 @@ div.relative {
                                 <th>District</th>
                                 <th>City</th>
                                 <th>Pin Code</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -98,7 +97,7 @@ div.relative {
                                     $authuser = Auth::user();  
                                 ?>
                             <tr>
-                                
+
                                 <td><input type="checkbox" name="checked_consign[]" class="chkBoxClass ddd"
                                         value="{{$consignment->id}}" data-trp="" data-vehno="" data-vctype=""
                                         style="width: 30px; height:30px;"></td>

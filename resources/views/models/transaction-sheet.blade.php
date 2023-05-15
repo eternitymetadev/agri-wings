@@ -315,14 +315,12 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>E-Way</th> -->
-                                        <th>EDD</th>
+                                        <th>Spray Date</th>
                                         <th>Order No</th>
                                         <th>Order Date</th>
                                         <th>Farmer Name</th>
                                         <th>city</th>
                                         <th>Pin Code</th>
-
-
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -453,10 +453,10 @@
         </a>
         <ul class="collapse submenu list-unstyled" id="drs" data-parent="#accordionExample">
             <li>
-                <div class="submenuListStyle"></div><a href="{{$prefixurl.'unverified-list'}}"> Create SSS</a>
+                <div class="submenuListStyle"></div><a href="{{$prefixurl.'unverified-list'}}"> Create SRS</a>
             </li>
             <li>
-                <div class="submenuListStyle"></div><a href="{{$prefixurl.'transaction-sheet'}}">SSS List</a>
+                <div class="submenuListStyle"></div><a href="{{$prefixurl.'transaction-sheet'}}">SRS List</a>
             </li>
         </ul>
     </li>

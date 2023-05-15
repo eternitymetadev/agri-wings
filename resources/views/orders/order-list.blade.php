@@ -56,10 +56,12 @@ div.relative {
     box-shadow: 0 0 8px inset;
     color: var(--btnClr);
 }
-.iconButton svg{
+
+.iconButton svg {
     height: 16px;
     width: 16px;
 }
+
 .page-item.active .page-link {
     background-color: #0c8b4d !important;
     color: #000 !important;
@@ -151,11 +153,12 @@ div.relative {
                                         <span>Pending for Verification</span>
                                     </a>
                                 </td>
-                                @endif 
+                                @endif
 
                                 <td>
                                     @if(empty($consignment->noc_upload))
-                                    <a href="{{url($prefix.'/noc-print/'.$consignment->id)}}" class="iconButton swan-tooltip" data-tooltip="Print NOC">
+                                    <a href="{{url($prefix.'/noc-print/'.$consignment->id)}}"
+                                        class="iconButton swan-tooltip" data-tooltip="Print NOC">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"
@@ -167,7 +170,8 @@ div.relative {
                                             <rect x="6" y="14" width="12" height="8"></rect>
                                         </svg>
                                     </a>
-                                    <a href="#" class="iconButton swan-tooltip upload_noc" data-tooltip="Upload NOC" data-orderId="{{$consignment->id}}" style="--btnClr: #208120">
+                                    <a href="#" class="iconButton swan-tooltip upload_noc" data-tooltip="Upload NOC"
+                                        data-orderId="{{$consignment->id}}" style="--btnClr: #208120">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round"
@@ -179,7 +183,9 @@ div.relative {
                                         </svg>
                                     </a>
                                     @else
-                                    <a href="{{$consignment->noc_upload}}" target="_blank" class="iconButton swan-tooltip" data-tooltip="View NOC" style="--btnClr: #6b6b6b; gap: 4px; min-width: 4.5rem">
+                                    <a href="{{$consignment->noc_upload}}" target="_blank"
+                                        class="iconButton swan-tooltip" data-tooltip="View NOC"
+                                        style="--btnClr: #6b6b6b; gap: 4px; min-width: 4.5rem">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
@@ -218,7 +224,7 @@ div.relative {
                 </div>
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <input type="text" class="form-control" name="order_id" id="order_id" />
+                    <input type="hidden" class="form-control" name="order_id" id="order_id" />
 
                     <input type="file" class="form-control" name="noc_upload" placeholder="Remarks" Required />
                 </div>
