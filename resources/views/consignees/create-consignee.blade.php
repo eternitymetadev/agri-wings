@@ -20,12 +20,12 @@
                 <div class="col-lg-12 col-12 layout-spacing">
                     <div class="statbox widget box box-shadow">
                         <form class="general_form" method="POST" action="{{url($prefix.'/consignees')}}"
-                            id="createconsignee" autocomplete="false">
+                            id="createconsignee" autocomplete="off">
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Farmer Name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="farmer_name" placeholder="">
+                                    <input type="text" class="form-control" name="farmer_name" placeholder="" autocomplete="false">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Mobile No.<span
@@ -113,7 +113,7 @@
                                             </td>
                                             <td>
                                                 <textarea type="text" class="form-control name" name="data[1][address]"
-                                                    placeholder="" autocomplete="false"></textarea>
+                                                    placeholder="" autocomplete="new city"></textarea>
                                             </td>
 
                                             <td>

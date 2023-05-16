@@ -70,9 +70,9 @@ div.relat {
                         <?php } ?>
                         <thead>
                             <tr>
-                                <th>Rider Name</th>
-                                <th>Rider Phone</th>
-                                <th>Rider License Number</th>
+                                <th>Pilot Name</th>
+                                <th>Pilot Phone</th>
+                                <th>RPC(Remote  pilot Certificate No.)</th>
                                 <th>Image</th>
                                 <th>Action</th>
                             </tr>

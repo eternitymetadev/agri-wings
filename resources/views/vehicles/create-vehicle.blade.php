@@ -31,7 +31,7 @@
                                     <input type="text" class="form-control" id="regn_no" name="regn_no" placeholder="" maxlength="12">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Manufacturer<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Manufacturing  year<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="mfg" placeholder="Mahindra, Tata, etc.">
                                 </div>
                             </div>

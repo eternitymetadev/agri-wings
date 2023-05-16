@@ -28,17 +28,17 @@
                         <form class="general_form" method="POST" action="{{url($prefix.'/drivers')}}" id="createdriver">    
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Rider Name<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Pilot Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" placeholder="Name">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Rider Phone<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Pilot Phone<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control mbCheckNm" name="phone" placeholder="Phone" maxlength="10">
                                 </div>
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Rider License Number<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">RPC(Remote  pilot Certificate No.)<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="license_number" placeholder="">
                                 </div>
                                 
@@ -46,7 +46,7 @@
                             
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Rider License File(Optional)</label>
+                                    <label for="exampleFormControlInput2">Pilot License File(Optional)</label>
                                     <input type="file" class="form-control license_image" name="license_image" accept="image/*">
                                 </div>
                                 <div class="form-group col-md-6">
