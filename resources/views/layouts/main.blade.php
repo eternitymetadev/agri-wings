@@ -14,6 +14,10 @@
         transition: opacity .15s linear;
         zoom: 110%;
     }
+    .page-item.active .page-link {
+    background-color: #009e50 !important;
+    color: #000 !important;
+}
     </style>
 </head>
 
