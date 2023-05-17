@@ -250,10 +250,11 @@ class TransactionSheetsController extends Controller
                 //            $invoices[] = $orders->invoice_no;
 
                 //    }
-                //    foreach($value->AppMedia as $pod){
-                //     $pod_img[] = array('img' => $pod->pod_img,'type' => $pod->type,'id' => $pod->id
-                //    );
-                // }
+                $pod_img = array();
+                   foreach($value->AppMedia as $pod){
+                    $pod_img[] = array('img' => $pod->pod_img,'type' => $pod->type,'id' => $pod->id
+                   );
+                }
 
                 // $deliverystatus = array();
 
@@ -293,6 +294,7 @@ class TransactionSheetsController extends Controller
                     // 'delivery_notes' => $value->delivery_notes,
                     'order_details' => $order_details,
                     // 'success_time' => @$successtime,
+                    'img' => $pod_img,
                 ];
             }
             if ($consignments) {
@@ -588,10 +590,10 @@ class TransactionSheetsController extends Controller
 
         }
         //update latitudes and longitude
-        $getconsignee_id = ConsignmentNote::where('id', $id)->first();
-        $consignee_id = $getconsignee_id->consignee_id;
+        // $getconsignee_id = ConsignmentNote::where('id', $id)->first();
+        // $consignee_id = $getconsignee_id->consignee_id;
 
-        Consignee::where('id', $consignee_id)->update(['latitude' => $request->latitude, 'longitude' => $request->longitude]);
+        // Consignee::where('id', $consignee_id)->update(['latitude' => $request->latitude, 'longitude' => $request->longitude]);
 
         return response([
             'success' => 'You have successfully upload image.',
@@ -620,7 +622,7 @@ class TransactionSheetsController extends Controller
                 // }
                 //     $order = array();
                 //     $invoices = array();
-                //     $pod_img = array();
+                 $pod_img = array();
 
                 //     $getlast = DB::table('jobs')->where('consignment_id', $value->id)->orderBy('id', 'DESC')->first();
 
@@ -628,11 +630,10 @@ class TransactionSheetsController extends Controller
                 //            $order[] = $orders->order_id;
                 //            $invoices[] = $orders->invoice_no;
                 //    }
-                //    foreach($value->AppMedia as $pod){
-                //     $pod_img[] = array('img' => $pod->pod_img,'type' => $pod->type, 'id' => $pod->id
-                //    );
-                // }
-
+                   foreach($value->AppMedia as $pod){
+                    $pod_img[] = array('img' => $pod->pod_img,'type' => $pod->type, 'id' => $pod->id
+                   );
+                }
                 // $deliverystatus = array();
 
                 // foreach ($value->Jobs as $jobdata) {
@@ -673,6 +674,7 @@ class TransactionSheetsController extends Controller
                     // 'delivery_notes' => $value->delivery_notes,
                     'order_details' => $order_details,
                     // 'success_time' => @$successtime,
+                   'img' => $pod_img,
                 ];
             }
           
