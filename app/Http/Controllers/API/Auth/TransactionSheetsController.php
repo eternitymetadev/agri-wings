@@ -425,9 +425,12 @@ class TransactionSheetsController extends Controller
                 $nocupload = $request->file('noc_upload');
                 $path = Storage::disk('s3')->put('noc', $nocupload);
                 $noc_path = Storage::disk('s3')->url($path);
-                $storeOrderDetails['noc_upload'] = $noc_path;
+                $url_chng = explode(':', $noc_path);
+                $url_chng = $url_chng[0].'s:'.$url_chng[1];
+
+                $storeOrderDetails['noc_upload'] = $url_chng;
             } else {
-                $noc_path = NULL;
+                $url_chng = NULL;
             }
 
             $storeOrderDetails['order_id'] = $id;
@@ -447,7 +450,7 @@ class TransactionSheetsController extends Controller
             $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop' => $request->crop, 'crop_price' => $request->crop_price]);
 
             $update_status = ConsignmentNote::find($id);
-            $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $noc_path]);
+            $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $url_chng]);
 
             // $mytime = Carbon::now('Asia/Kolkata');
             // $currentdate = $mytime->toDateTimeString();
@@ -578,12 +581,16 @@ class TransactionSheetsController extends Controller
             $type = @$save_data['type'];
 
             $path = Storage::disk('s3')->put('pod-image', $images);
+           
 
             $img_path[] = Storage::disk('s3')->url($path);
             $img_path_save = Storage::disk('s3')->url($path);
 
+            $url_chng = explode(':', $img_path_save);
+            $url_chng = $url_chng[0].'s:'.$url_chng[1];
+
             $appmedia['consignment_no'] = $id;
-            $appmedia['pod_img'] = $img_path_save;
+            $appmedia['pod_img'] = $url_chng;
             $appmedia['type'] = $type;
 
             $savedata = AppMedia::create($appmedia);

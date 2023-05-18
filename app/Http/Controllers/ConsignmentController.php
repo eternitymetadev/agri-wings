@@ -5106,11 +5106,13 @@ class ConsignmentController extends Controller
             $nocupload = $request->file('noc_upload');
             $path = Storage::disk('s3')->put('agri-wings/noc', $nocupload);
             $noc_file_name = Storage::disk('s3')->url($path);
+            $url_chng = explode(':', $noc_file_name);
+            $url_chng = $url_chng[0] . 's:' . $url_chng[1];
         } else {
-            $noc_file_name = null;
+            $url_chng = null;
         }
 
-        $uploadNoc = ConsignmentNote::where('id', $request->order_id)->update(['noc_upload' => $noc_file_name]);
+        $uploadNoc = ConsignmentNote::where('id', $request->order_id)->update(['noc_upload' => $url_chng]);
 
         if ($uploadNoc) {
             $response['success'] = true;
