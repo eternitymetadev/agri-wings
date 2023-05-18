@@ -423,7 +423,7 @@ class TransactionSheetsController extends Controller
 
             if (!empty($request->file('noc_upload'))) {
                 $nocupload = $request->file('noc_upload');
-                $path = Storage::disk('s3')->put('agri-wings/noc', $nocupload);
+                $path = Storage::disk('s3')->put('noc', $nocupload);
                 $noc_path = Storage::disk('s3')->url($path);
                 $storeOrderDetails['noc_upload'] = $noc_path;
             } else {
@@ -577,7 +577,7 @@ class TransactionSheetsController extends Controller
             $images = @$save_data['pod_img'];
             $type = @$save_data['type'];
 
-            $path = Storage::disk('s3')->put('images', $images);
+            $path = Storage::disk('s3')->put('pod-image', $images);
 
             $img_path[] = Storage::disk('s3')->url($path);
             $img_path_save = Storage::disk('s3')->url($path);
