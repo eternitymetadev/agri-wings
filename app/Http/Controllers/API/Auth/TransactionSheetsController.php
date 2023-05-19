@@ -450,7 +450,7 @@ class TransactionSheetsController extends Controller
             $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop' => $request->crop, 'crop_price' => $request->crop_price]);
 
             $update_status = ConsignmentNote::find($id);
-            $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $url_chng]);
+            $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $url_chng,'total_acerage' => $request->acerage , 'total_amount' => $request->crop_price]);
 
             // $mytime = Carbon::now('Asia/Kolkata');
             // $currentdate = $mytime->toDateTimeString();
