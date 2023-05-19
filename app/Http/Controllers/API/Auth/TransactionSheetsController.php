@@ -438,6 +438,8 @@ class TransactionSheetsController extends Controller
             $storeOrderDetails['last_acerage'] = $getOrderDetails->acreage;
             $storeOrderDetails['crop'] = $request->crop;
             $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
+            $storeOrderDetails['last_spray_amount'] = $getOrderDetails->crop_price;
+            $storeOrderDetails['total_spray_amount'] = $request->crop_price;
             $storeOrderDetails['checmical_used'] = $request->chemical_used;
             $storeOrderDetails['charging_point'] = $request->charging_point;
             $storeOrderDetails['fresh_water'] = $request->fresh_water;

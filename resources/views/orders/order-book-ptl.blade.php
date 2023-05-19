@@ -678,11 +678,17 @@ tr:hover .dltItemRow {
     box-shadow: 0 6px 20px #838383d1;
 }
 
+#billToInfo{
+    margin-bottom: 8rem;
+}
 
 @media(max-width: 600px) {
     .innerBoxes {
         min-width: 100%;
     }
+    #billToInfo{
+    margin-bottom: 2rem;
+}
 }
 </style>
 

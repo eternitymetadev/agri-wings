@@ -14,6 +14,8 @@ class OrderActivityDetails extends Model
         'acerage',
         'last_crop',
         'crop',
+        'last_spray_amount',
+        'total_spray_amount',
         'checmical_used',
         'charging_point',
         'noc_upload',
