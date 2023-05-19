@@ -711,6 +711,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('/check-farmer-phone', [ConsigneeController::class, 'checkFarmerPhone']);
     Route::any('/create-new-farmer', [ConsigneeController::class, 'createnewFarmer']);
     Route::any('/noc-print/{id}', [ConsignmentController::class, 'nocPrint']);
+    Route::any('/upload-noc', [ConsignmentController::class, 'uploadNoc']);
 
 
 });
