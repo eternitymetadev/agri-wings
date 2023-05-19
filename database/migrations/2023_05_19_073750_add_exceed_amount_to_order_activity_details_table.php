@@ -16,6 +16,7 @@ class AddExceedAmountToOrderActivityDetailsTable extends Migration
         Schema::table('order_activity_details', function (Blueprint $table) {
             $table->string('last_spray_amount')->after('crop')->nullable();
             $table->string('total_spray_amount')->after('last_spray_amount')->nullable();
+            $table->string('exceed_amount')->after('total_spray_amount')->nullable();
         });
     }
 

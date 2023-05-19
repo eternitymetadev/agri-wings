@@ -440,6 +440,7 @@ class TransactionSheetsController extends Controller
             $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
             $storeOrderDetails['last_spray_amount'] = $getOrderDetails->crop_price;
             $storeOrderDetails['total_spray_amount'] = $request->crop_price;
+            $storeOrderDetails['exceed_amount'] = $request->exceed_amount;
             $storeOrderDetails['checmical_used'] = $request->chemical_used;
             $storeOrderDetails['charging_point'] = $request->charging_point;
             $storeOrderDetails['fresh_water'] = $request->fresh_water;
@@ -914,7 +915,7 @@ class TransactionSheetsController extends Controller
                 $data[] = [
                     'order_no' => $value->id,
                     'noc_upload' => $value->noc_upload,
-                    // 'order_details' => $order_details,
+                    'payment_type' => @$value->payment_type,
                     'acerage'  => @$value->Orderactivity->acreage,
                     'crop_name' => @$value->Orderactivity->CropName->crop_name,
                     'crop_id' => @$value->Orderactivity->crop,

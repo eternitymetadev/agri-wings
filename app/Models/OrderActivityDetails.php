@@ -16,6 +16,7 @@ class OrderActivityDetails extends Model
         'crop',
         'last_spray_amount',
         'total_spray_amount',
+        'exceed_amount',
         'checmical_used',
         'charging_point',
         'noc_upload',
