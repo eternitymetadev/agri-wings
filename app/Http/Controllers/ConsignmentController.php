@@ -87,7 +87,7 @@ class ConsignmentController extends Controller
             $regclient = explode(',', $authuser->regionalclient_id);
             $cc = explode(',', $authuser->branch_id);
 
-            $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'Crop', 'fallIn');
+            $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn');
 
             if ($authuser->role_id == 1) {
                 $query;
@@ -161,18 +161,17 @@ class ConsignmentController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'Crop', 'fallIn');
+        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn');
 
         if ($authuser->role_id == 1) {
             $query;
         } elseif ($authuser->role_id == 4) {
             $query = $query->whereIn('regclient_id', $regclient);
         } elseif ($authuser->role_id == 7) {
-            $query = $query->whereIn('regclient_id', $regclient);
+            $query = $query->where('user_id', $authuser->id);
         } else {
-            $query = $query->whereIn('branch_id', $cc)->orWhere(function ($query) use ($cc) {
-                $query->whereIn('fall_in', $cc)->where('status', '!=', 5);
-            });
+
+            $query = $query;
             // $query = $query->whereIn('branch_id', $cc)->orWhereIn('fall_in', $cc);
         }
         $consignments = $query->orderBy('id', 'DESC')->paginate($peritem);
@@ -5016,15 +5015,6 @@ class ConsignmentController extends Controller
                 $query = $query->where('user_id', $authuser->id);
             } else {
                 $query = $query->whereIn('branch_id', $cc);
-                // ->orWhere(function ($query) use ($cc){
-                //     $query->whereIn('fall_in', $cc);
-                // });
-
-                // if(!empty('to_branch_id')){
-                //     $query = $query->whereIn('to_branch_id', $cc);
-                // }else{
-                // $query = $query->whereIn('branch_id', $cc);
-                // }
             }
 
             if (!empty($request->search)) {
