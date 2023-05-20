@@ -2263,6 +2263,14 @@ class OrderController extends Controller
 
             }
 
+            $mytime = Carbon::now('Asia/Kolkata');
+            $currentdate = $mytime->toDateTimeString();
+             // task created
+             $respons = array(['consignment_id' => $saveconsignment->id, 'status' => 'Created', 'create_at' => $currentdate, 'type' => '2']);
+             $respons_data = json_encode($respons);
+             $create = Job::create(['consignment_id' => $saveconsignment->id, 'response_data' => $respons_data, 'status' => 'Created', 'type' => '2']);
+             // ==== end create
+
             $url = $this->prefix . '/orders';
             $response['success'] = true;
             $response['success_message'] = "Order Added successfully";
