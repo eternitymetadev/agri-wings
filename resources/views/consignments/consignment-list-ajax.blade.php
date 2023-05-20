@@ -143,8 +143,8 @@
                     <?php } elseif ($consignment->delivery_status == "Successful") { ?>
                     <span class="badge alert bg-success shadow-sm manual_updateLR"
                         lr-no="{{$consignment->id}}">{{ $consignment->delivery_status ?? '' }}</span>
-                    <?php } elseif ($consignment->delivery_status == "Accepted") { ?>
-                    <span class="badge alert bg-info shadow-sm" lr-no="{{$consignment->id}}">Acknowledged</span>
+                    <?php } elseif ($consignment->delivery_status == "Acknowledge") { ?>
+                    <span class="badge alert bg-info shadow-sm" lr-no="{{$consignment->id}}">Acknowledge</span>
                     <?php }elseif ($consignment->delivery_status == "Cancel") { ?>
                     <span class="badge alert bg-info shadow-sm" lr-no="{{$consignment->id}}">Cancel</span>
                     <?php } else{ ?>
