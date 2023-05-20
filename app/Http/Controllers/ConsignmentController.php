@@ -37,6 +37,7 @@ use Session;
 use Storage;
 use URL;
 use Validator;
+use Carbon\Carbon;
 
 class ConsignmentController extends Controller
 {
@@ -1923,6 +1924,24 @@ class ConsignmentController extends Controller
         // Push to tooken if Team Id & Fleet Id Available
 
         $transaction = DB::table('transaction_sheets')->whereIn('consignment_no', $cc)->where('status', 1)->update(['vehicle_no' => $vehicle_no, 'driver_name' => $driverName, 'driver_no' => $driverPhone, 'delivery_status' => 'Assigned']);
+
+        $mytime = Carbon::now('Asia/Kolkata');
+        $currentdate = $mytime->toDateTimeString();
+
+        foreach ($cc as $c_id) {
+            // =================== task assign
+            $respons2 = array('consignment_id' => $c_id, 'status' => 'Assigned', 'create_at' => $currentdate, 'type' => '2');
+
+            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $c_id)->orderBy('id', 'DESC')->first();
+            if (!empty($lastjob->response_data)) {
+            $st = json_decode($lastjob->response_data);
+            array_push($st, $respons2);
+            $sts = json_encode($st);
+
+            $start = Job::create(['consignment_id' => $c_id, 'response_data' => $sts, 'status' => 'Assigned', 'type' => '2']);
+            // ==== end started
+            }
+        }
 
         $response['success'] = true;
         $response['success_message'] = "Data Imported successfully";

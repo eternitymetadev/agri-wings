@@ -455,16 +455,16 @@ class TransactionSheetsController extends Controller
             $update_status = ConsignmentNote::find($id);
             $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $url_chng,'total_acerage' => $request->acerage , 'total_amount' => $request->crop_price]);
 
-            // $mytime = Carbon::now('Asia/Kolkata');
-            // $currentdate = $mytime->toDateTimeString();
-            // $respons2 = array('consignment_id' => $id, 'status' => 'Started', 'create_at' => $currentdate, 'type' => '2');
+            $mytime = Carbon::now('Asia/Kolkata');
+            $currentdate = $mytime->toDateTimeString();
+            $respons2 = array('consignment_id' => $id, 'status' => 'Started', 'create_at' => $currentdate, 'type' => '2');
 
-            // $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderby('id', 'desc')->first();
-            // $st = json_decode($lastjob->response_data);
-            // array_push($st, $respons2);
-            // $sts = json_encode($st);
+            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderby('id', 'desc')->first();
+            $st = json_decode($lastjob->response_data);
+            array_push($st, $respons2);
+            $sts = json_encode($st);
 
-            // $start = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Started', 'type' => '2']);
+            $start = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Started', 'type' => '2']);
 
             if ($res) {
                 return response([
@@ -495,17 +495,17 @@ class TransactionSheetsController extends Controller
             $update_status = ConsignmentNote::find($id);
             $res = $update_status->update(['delivery_status' => 'Acknowledge']);
 
-            // $mytime = Carbon::now('Asia/Kolkata');
-            // $currentdate = $mytime->toDateTimeString();
-            // // $currentdate = date("d-m-y h:i:sa");
-            // $respons2 = array('consignment_id' => $id, 'status' => 'Acknowledge', 'create_at' => $currentdate, 'type' => '2');
+            $mytime = Carbon::now('Asia/Kolkata');
+            $currentdate = $mytime->toDateTimeString();
+            // $currentdate = date("d-m-y h:i:sa");
+            $respons2 = array('consignment_id' => $id, 'status' => 'Acknowledge', 'create_at' => $currentdate, 'type' => '2');
 
-            // $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id',$id)->orderby('id','desc')->first();
-            // $st = json_decode($lastjob->response_data);
-            // array_push($st, $respons2);
-            // $sts = json_encode($st);
+            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id',$id)->orderby('id','desc')->first();
+            $st = json_decode($lastjob->response_data);
+            array_push($st, $respons2);
+            $sts = json_encode($st);
 
-            // $start = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Acknowledge', 'type' => '2']);
+            $start = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Acknowledge', 'type' => '2']);
 
             if ($res) {
                 return response([
@@ -752,17 +752,17 @@ class TransactionSheetsController extends Controller
 
             $res = $update_status->update(['delivery_status' => 'Successful', 'delivery_date' => date('Y-m-d')]);
 
-            // $mytime = Carbon::now('Asia/Kolkata');
-            // $currentdate = $mytime->toDateTimeString();
-            // // $currentdate = date("d-m-y h:i:sa");
-            // $respons3 = array('consignment_id' => $id, 'status' => 'Successful', 'create_at' => $currentdate, 'type' => '2');
-            // $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderBy('id', 'DESC')->first();
-            // $st = json_decode($lastjob->response_data);
+            $mytime = Carbon::now('Asia/Kolkata');
+            $currentdate = $mytime->toDateTimeString();
+            // $currentdate = date("d-m-y h:i:sa");
+            $respons3 = array('consignment_id' => $id, 'status' => 'Successful', 'create_at' => $currentdate, 'type' => '2');
+            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderBy('id', 'DESC')->first();
+            $st = json_decode($lastjob->response_data);
 
-            // array_push($st, $respons3);
-            // $sts = json_encode($st);
+            array_push($st, $respons3);
+            $sts = json_encode($st);
 
-            // $create = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Successful', 'type' => '2']);
+            $create = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Successful', 'type' => '2']);
 
             if ($res) {
                 return response([

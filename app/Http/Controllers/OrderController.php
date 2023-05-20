@@ -20,6 +20,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
 use App\Models\PaymentTerms;
+use App\Models\Job;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Storage;
 use URL;
 use Validator;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -1442,6 +1444,14 @@ class OrderController extends Controller
                 ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
             }
 
+            $mytime = Carbon::now('Asia/Kolkata');
+            $currentdate = $mytime->toDateTimeString();
+             // task created
+             $respons = array(['consignment_id' => $saveconsignment->id, 'status' => 'Created', 'create_at' => $currentdate, 'type' => '2']);
+             $respons_data = json_encode($respons);
+             $create = Job::create(['consignment_id' => $saveconsignment->id, 'response_data' => $respons_data, 'status' => 'Created', 'type' => '2']);
+             // ==== end create
+
             $url = $this->prefix . '/orders';
             $response['success'] = true;
             $response['success_message'] = "Order Added successfully";
@@ -2094,7 +2104,7 @@ class OrderController extends Controller
         return view('service-booking', ['prefix' => $this->prefix, 'Crops' => $Crops, 'regonal_client' => $regonal_client, 'farmers' => $farmers]);
     }
     public function storeServiceBooking(Request $request)
-    {
+    { 
         // echo '<pre>';
         // print_r($request->all());die;
         try {
