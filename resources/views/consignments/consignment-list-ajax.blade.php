@@ -132,16 +132,16 @@
                 } ?>
                 <td>
                     <?php if ($consignment->delivery_status == "Unassigned") { ?>
-                    <span class="badge alert bg-primary shadow-sm manual_updateLR {{$disable}}"
+                    <span class="badge alert bg-primary shadow-sm {{$disable}}"
                         lr-no="{{$consignment->id}}">{{ $consignment->delivery_status ?? ''}}</span>
                     <?php } elseif ($consignment->delivery_status == "Assigned") { ?>
-                    <span class="badge alert bg-secondary shadow-sm manual_updateLR {{$disable}}"
+                    <span class="badge alert bg-secondary shadow-sm {{$disable}}"
                         lr-no="{{$consignment->id}}">{{ $consignment->delivery_status ?? '' }}</span>
                     <?php } elseif ($consignment->delivery_status == "Started") { ?>
-                    <span class="badge alert bg-warning shadow-sm manual_updateLR {{$disable}}"
+                    <span class="badge alert bg-warning shadow-sm {{$disable}}"
                         lr-no="{{$consignment->id}}">{{ $consignment->delivery_status ?? '' }}</span>
                     <?php } elseif ($consignment->delivery_status == "Successful") { ?>
-                    <span class="badge alert bg-success shadow-sm manual_updateLR"
+                    <span class="badge alert bg-success shadow-sm"
                         lr-no="{{$consignment->id}}">{{ $consignment->delivery_status ?? '' }}</span>
                     <?php } elseif ($consignment->delivery_status == "Acknowledge") { ?>
                     <span class="badge alert bg-info shadow-sm" lr-no="{{$consignment->id}}">Acknowledge</span>

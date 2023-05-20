@@ -5,24 +5,28 @@
     overflow-anchor: none;
     font-weight: bold;
 }
+
 .accepted {
     color: #ffffff !important;
     background: #007bff;
     padding: 3px 5px;
     border-radius: 5px;
 }
+
 .started {
     color: #ffffff !important;
     background: #e2a03f;
     padding: 3px 5px;
     border-radius: 5px;
 }
+
 .successful {
     color: #ffffff !important;
     background: #009688;
     padding: 3px 5px;
     border-radius: 5px;
 }
+
 .cbp_tmtimeline {
     margin: 0;
     padding: 0;
@@ -192,20 +196,24 @@
     .cbp_tmtimeline:before {
         display: none
     }
+
     .cbp_tmtimeline>li .cbp_tmtime {
         width: 100%;
         position: relative;
         padding: 0 0 20px 0
     }
+
     .cbp_tmtimeline>li .cbp_tmtime span {
         text-align: left
     }
+
     .cbp_tmtimeline>li .cbp_tmlabel {
         margin: 0 0 30px 0;
         padding: 1em;
         font-weight: 400;
         font-size: 95%
     }
+
     .cbp_tmtimeline>li .cbp_tmlabel:after {
         right: auto;
         left: 20px;
@@ -213,12 +221,14 @@
         border-bottom-color: #f5f5f6;
         top: -20px
     }
+
     .cbp_tmtimeline>li .cbp_tmicon {
         position: relative;
         float: right;
         left: auto;
         margin: -64px 5px 0 0px
     }
+
     .cbp_tmtimeline>li:nth-child(odd) .cbp_tmlabel:after {
         border-right-color: transparent;
         border-bottom-color: #f5f5f6
@@ -243,9 +253,11 @@
 .bg-info {
     background-color: #2CA8FF !important;
 }
+
 .dt--top-section {
-    margin:none;
+    margin: none;
 }
+
 div.relative {
     position: absolute;
     left: 9px;
@@ -254,6 +266,7 @@ div.relative {
     width: 145px;
     height: 38px;
 }
+
 /* .table > tbody > tr > td {
     color: #4361ee;
 } */
@@ -262,10 +275,13 @@ div.relative {
     height: 38px;
     font-size: 13px;
 }
-.btn-group > .btn, .btn-group .btn {
+
+.btn-group>.btn,
+.btn-group .btn {
     padding: 0px 0px;
     padding: 10px;
 }
+
 .btn {
     font-size: 10px;
 }
@@ -273,57 +289,70 @@ div.relative {
 tr.shown td.dt-control {
     background: url('/assets/img/details_close.png') no-repeat center center !important;
 }
+
 td.dt-control {
     background: url('/assets/img/details_open.png') no-repeat center center !important;
     cursor: pointer;
 }
+
 .theads {
     text-align: center;
     padding: 5px 0;
     color: #279dff;
 }
+
 .ant-timeline {
     box-sizing: border-box;
     font-size: 14px;
     font-variant: tabular-nums;
     line-height: 1.5;
-    font-feature-settings: "tnum","tnum";
+    font-feature-settings: "tnum", "tnum";
     margin: 0;
     padding: 0;
     list-style: none;
 }
+
 .css-b03s4t {
     color: rgb(0, 0, 0);
     padding: 6px 0px 2px;
 }
+
 .css-16pld72 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
 }
+
 .css-16pld73 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
 }
-.ellipse{
-    width:320px;
+
+.ellipse {
+    width: 320px;
 }
-.ellipse2{
-    width:200px;
+
+.ellipse2 {
+    width: 200px;
 }
-.ellipse:hover{
+
+.ellipse:hover {
     overflow: visible;
     white-space: normal;
-    width:100%; /* just added this line */
+    width: 100%;
+    /* just added this line */
 }
-.ellipse2:hover{
+
+.ellipse2:hover {
     overflow: visible;
     white-space: normal;
-    width:100%; /* just added this line */
+    width: 100%;
+    /* just added this line */
 }
+
 .ant-timeline-item-tail {
     position: absolute;
     top: 10px;
@@ -331,6 +360,7 @@ td.dt-control {
     height: calc(100% - 10px);
     border-left: 2px solid #e8e8e8;
 }
+
 .ant-timeline-item-last>.ant-timeline-item-tail {
     display: none;
 }
@@ -339,21 +369,25 @@ td.dt-control {
     background-color: #f5222d;
     border-color: #f5222d;
 }
+
 .ant-timeline-item-head-green {
     background-color: #52c41a;
     border-color: #52c41a;
 }
+
 .ant-timeline-item-content {
     position: relative;
     top: -6px;
     margin: 0 0 0 18px;
     word-break: break-word;
 }
+
 .css-phvyqn {
     color: rgb(0, 0, 0);
     padding: 0px;
     height: 34px !important;
 }
+
 .ant-timeline-item {
     position: relative;
     margin: 0;
@@ -361,30 +395,35 @@ td.dt-control {
     font-size: 14px;
     list-style: none;
 }
+
 .ant-timeline-item-head {
     position: absolute;
     width: 10px;
     height: 10px;
 }
+
 .bg-cust {
     background: #01010314;
     color: #e7515a;
 }
+
 .css-ccw3oz .ant-timeline-item-head {
     padding: 0px;
     border-radius: 0px !important;
 }
-.labels{
-    color:#4361ee;
+
+.labels {
+    color: #4361ee;
 }
+
 a.badge.alert.bg-secondary.shadow-sm {
     color: #fff;
 }
+
 #map {
     height: 400px;
     width: 600px;
 }
-
 </style>
 <div class="layout-px-spacing">
     <div class="row layout-top-spacing">
@@ -427,7 +466,7 @@ a.badge.alert.bg-secondary.shadow-sm {
                                             New</span></a> -->
                                     <a href="javascript:void(0)" class="btn btn-primary btn-cstm reset_filter ml-2"
                                         style="font-size: 15px; padding: 9px;"
-                                        data-action="<?php echo url()->current(); ?>"><span><i 
+                                        data-action="<?php echo url()->current(); ?>"><span><i
                                                 class="fa fa-refresh"></i> Reset Filters</span></a>
                                 </div>
                             </div>
@@ -441,7 +480,7 @@ a.badge.alert.bg-secondary.shadow-sm {
                 </div>
             </div>
 
-            
+
 
         </div>
     </div>
@@ -454,11 +493,8 @@ a.badge.alert.bg-secondary.shadow-sm {
 
 @section('js')
 <script>
-    
-
 // jQuery(document).on("click", ".card-header", function () {
-function row_click(row_id, job_id, url)
-{
+function row_click(row_id, job_id, url) {
     $('.append-modal').empty();
     $('.cbp_tmtimeline').empty();
 
@@ -467,106 +503,39 @@ function row_click(row_id, job_id, url)
     var modal_html1 = '';
 
     var job_id = job_id;
-    var url =url;
+    var lr_id = row_id;
+    var url = url;
     jQuery.ajax({
         url: url,
         type: "get",
         cache: false,
-        data: { job_id: job_id },
+        data: {
+            job_id: job_id,
+            lr_id: lr_id
+        },
         dataType: "json",
         headers: {
             "X-CSRF-TOKEN": jQuery('meta[name="_token"]').attr(
                 "content"
             ),
         },
-        success: function (response) {
-            if (response.success) {
+        success: function(response) {
 
-                var modal_html = '';
-                var trackinglink = '';
+            var trail_array = jQuery.parseJSON(response.app_trail.response_data);
+            //================Manual L TRAIL =================== //
+            var cc = '<ul class="cbp_tmtimeline">';
 
-                console.log(response);
-                // return false;
-                if(response.job_data){
-                    var modal_container = '<div class="container" oncontextmenu="return true;"><div class="row"><div class="col-md-10"><ul class="cbp_tmtimeline">';
-                    $.each(response.job_data, function (index, task) {
-                        var timestamp = task.creation_datetime;
-                        var type = task.type;
-                        var des_data = '';
-                        var result = '';
+            $.each(trail_array, function(index, task) {
+                cc +=
+                    '<li><time class="cbp_tmtime" datetime=' + task.create_at +
+                    '><span class="hidden">' + task.create_at +
+                    '</span></time><div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"> <span><span class="successful" style="--statusColor: #41ca5d">' +
+                    task.status + ' </span></span></div></li>';
+            });
 
-                        if (type == 'image_added') {
-                            var uploaded_by = 'Attachment uploaded by';
-                            var view_text = 'View Attachment';
-                            var title = 'Attachment';
-                            var image = task.description;
-                            // var image = '<img src="'+ task.description +'" width="100%" seamless="">';
-                        }else if (type == 'signature_image_added') {
-                            var uploaded_by = 'Signature Added by';
-                            var view_text = 'View Signatures';
-                            var title = 'Signature';
-                            // var image = '<img src="'+ task.description +'" width="100%" height="298" seamless="" />';
-                            var image = task.description;
-                        }
-
-                        if(type == 'image_added' || type == 'signature_image_added'){
-                            modal_html += '<span style="padding-left:245px; font-size: 12px;">'+uploaded_by+' '+task.fleet_name +'</span><br />';
-                            modal_html += "<a style='margin-left:245px;' href='"+image+"' target='_blank' class='btn btn-warning mt-3'>"+ view_text +"</a>";
-                            // modal_html += '<button type="button" style="margin-left:245px;" class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#mod_'+task.id+'">'+ view_text +'</button>';
-
-                            //  Modal start //
-                            modal_html += '<div class="modal fade" id="mod_'+task.id+'" tabindex="-1" role="dialog">';
-                            modal_html += '<div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header">';
-                            modal_html += '<h5 class="modal-title" id="exampleModalLabel">'+ title +'</h5>';
-                            modal_html += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
-                            modal_html += '<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"> <line x1="18" y1="6" x2="6" y2="18"> </line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-                            modal_html += '</button></div>';
-                            modal_html += '<div class="modal-body">'+ image +'</div>';
-                            modal_html += '<div class="modal-footer"><button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Close</button></div></div></div></div>';
-                        }else{
-                            var text = task.label_description;
-                            var label_text = text.replace("at", " by");
-                            var result = label_text +' '+task.fleet_name;
-                            // var result = task.label_description.replace(/^\s+|\s+$/gm,'at');+ ' by ' + task.fleet_name;
-                            // var str = trim(task.label_description, 'at') + ' by ' + task.fleet_name;
-                            // if (str_contains(str, 'CREATED')) {
-                            //     var deresults_data += "LR Created";
-                            // } else {
-                                // var des_data += str;
-                            // }
-                        }
-                        var text_date = task.creation_datetime;
-                        var creation_datetime = text_date.replace("T", " ");
-                        var creation_datetime = creation_datetime.replace("Z", "");
-                        var creation_datetime = creation_datetime.split('.')[0];
-
-                        modal_html += '<li><time class="cbp_tmtime" datetime="'+ creation_datetime +'"><span class="hidden">'+creation_datetime+'</span></time>';
-                        if(result){
-                        modal_html += '<div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"> <span>'+ result +'</span></div>';
-                        }
-
-                    });
-
-                    modal_container += '</li></ul></div></div></div>';
-
-                    $('.append-modal').append(modal_container);
-                    $('.cbp_tmtimeline').append(modal_html);
-
-                } else{
-                    var modal_html1 = 'No data available';
-                    $('.append-modal').html(modal_html1);
-                }
-                if(( response.job_id != '') && (response.delivery_status != 'Successful')){
-                    var trackinglink = '<iframe id="iGmap-'+row_id+'" width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="'+response.tracking_link+'" ></iframe>';
-                    $("#mapdiv-"+row_id).html(trackinglink);
-                }
-                else{
-                    var trackinglink = '<div id="map-'+row_id+'" style="height: 100%; width: 100%"> </div>';
-                    $("#mapdiv-"+row_id).html(trackinglink);
-                    initMap(response, row_id);
-                }
-
-            }
+            cc += '</ul>';
+            var modal_html1 = cc;
+            $('.append-modal').html(modal_html1);
         }
 
     });
@@ -575,20 +544,25 @@ function row_click(row_id, job_id, url)
 
 
 var map;
-function initMap(response, row_id)
-{
-    var map = new google.maps.Map(document.getElementById('map-'+row_id), {zoom: 8, center: 'Changigarh',});
-    var directionsDisplay = new google.maps.DirectionsRenderer({'draggable': false});
+
+function initMap(response, row_id) {
+    var map = new google.maps.Map(document.getElementById('map-' + row_id), {
+        zoom: 8,
+        center: 'Changigarh',
+    });
+    var directionsDisplay = new google.maps.DirectionsRenderer({
+        'draggable': false
+    });
     var directionsService = new google.maps.DirectionsService();
     var travel_mode = 'DRIVING';
     var origin = response.cnr_pincode;
     var destination = response.cne_pincode;
-    directionsService.route({ 
+    directionsService.route({
         "origin": origin,
         "destination": destination,
         "travelMode": travel_mode,
         "avoidTolls": true,
-    }, function (response, status) {
+    }, function(response, status) {
         if (status === 'OK') {
             directionsDisplay.setMap(map);
             directionsDisplay.setDirections(response);
