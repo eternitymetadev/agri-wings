@@ -424,6 +424,27 @@ a.badge.alert.bg-secondary.shadow-sm {
     height: 400px;
     width: 600px;
 }
+.timelineImagesBlock {
+    flex: 1;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.timelineImagesBlock p {
+    width: 100%;
+}
+
+.timelineImagesBlock img {
+    margin: 4px;
+    width: 100%;
+    height: 100%;
+    max-width: 98px;
+    max-height: 50px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 0 2px #838383fa;
+}
 </style>
 <div class="layout-px-spacing">
     <div class="row layout-top-spacing">
@@ -486,6 +507,19 @@ a.badge.alert.bg-secondary.shadow-sm {
     </div>
 </div>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="#" id="toggledImageView" style="max-height: 90vh; max-width: 90vw" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @include('models.delete-user')
 @include('models.common-confirm')
 @include('models.manual-updatrLR')
@@ -522,20 +556,57 @@ function row_click(row_id, job_id, url) {
         success: function(response) {
 
             var trail_array = jQuery.parseJSON(response.app_trail.response_data);
+                        var trail_reverse = trail_array.reverse();
             //================Manual L TRAIL =================== //
             var cc = '<ul class="cbp_tmtimeline">';
 
-            $.each(trail_array, function(index, task) {
-                cc +=
+            $.each(trail_reverse, function(index, task) {
+                if(task.status == 'Successful'){
+                    cc += '<li><time class="cbp_tmtime" datetime=' + task
+                                            .create_at + '><span class="hidden">' + task.create_at +
+                                            '</span></time><div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"><span><span class="successful" style="--statusColor: #158f2a">'+task.status+' </span></span><div class="append-modal-images d-flex flex-wrap" style="gap: 16px; margin-bottom: 1rem; flex: 1;"></div></div></li>';
+                }else{
+                    cc +=
                     '<li><time class="cbp_tmtime" datetime=' + task.create_at +
                     '><span class="hidden">' + task.create_at +
                     '</span></time><div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"> <span><span class="successful" style="--statusColor: #41ca5d">' +
                     task.status + ' </span></span></div></li>';
+                }
             });
 
             cc += '</ul>';
             var modal_html1 = cc;
             $('.append-modal').html(modal_html1);
+
+            var sssss = ``;
+
+            $.each(response.app_media, function(index, media) {
+
+                if (media.type == 'pod') {
+                    sssss += `<div class="timelineImagesBlock" style="flex: 3">
+                            <p>POD</p>
+                            <img src="` + media.pod_img + `"
+                                class="viewImageInNewTab" data-toggle="modal"
+                                data-target="#exampleModal" style="width: 100%;"/>
+                          </div>`;
+                } else if (media.type == 'sign') {
+                    sssss += `<div class="timelineImagesBlock" style="flex: 1">
+                            <p>Sign</p>
+                            <img src="` + media.pod_img + `"
+                                class="viewImageInNewTab" data-toggle="modal"
+                                data-target="#exampleModal" style="width: 100%;"/>
+
+                        </div>`;
+                } else if (media.type == 'product_images') {
+                    sssss += `<div class="timelineImagesBlock" style="flex: 2">
+                            <p>Material</p>
+                            <img src="` + media.pod_img + `"
+                                class="viewImageInNewTab" data-toggle="modal"
+                                data-target="#exampleModal" style="width: 100%;"/>
+                        </div>`;
+                }
+            });
+            $('.append-modal-images').html(sssss);
         }
 
     });
@@ -574,6 +645,12 @@ function initMap(response, row_id) {
         }
     });
 }
+
+jQuery(document).on('click', '.viewImageInNewTab', function() {
+
+let toggledImage = $(this).attr('src');
+$('#toggledImageView').attr('src', toggledImage);
+});
 </script>
 
 @endsection

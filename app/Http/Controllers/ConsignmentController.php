@@ -23,6 +23,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
+use App\Models\AppMedia;
 use Auth;
 use Config;
 use DateTime;
@@ -4220,7 +4221,9 @@ class ConsignmentController extends Controller
     { 
         $this->prefix = request()->route()->getPrefix();
         $app_trail = Job::where('consignment_id', $request->lr_id)->orderBy('id', 'DESC')->first();
- 
+
+        $app_media = AppMedia::where('consignment_no', $request->lr_id)->get();
+        
         if (!empty($app_trail)) {
 
             $url = URL::to($this->prefix . '/consignments');
@@ -4228,13 +4231,12 @@ class ConsignmentController extends Controller
             $response['success_message'] = "Jobs fetch successfully";
             $response['error'] = false;
             $response['app_trail'] = $app_trail;
+            $response['app_media'] = $app_media;
         } else {
             $url = URL::to($this->prefix . '/consignments');
             $response['success'] = false;
             $response['success_message'] = "Job data not found";
             $response['error'] = true;
-            $response['job_data'] = '';
-            $response['job_id'] = '';
         }
 
         return response()->json($response);
