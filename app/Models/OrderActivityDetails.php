@@ -17,6 +17,7 @@ class OrderActivityDetails extends Model
         'last_spray_amount',
         'total_spray_amount',
         'exceed_amount',
+        'mode',
         'checmical_used',
         'charging_point',
         'noc_upload',
