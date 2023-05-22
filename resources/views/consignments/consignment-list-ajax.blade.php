@@ -38,7 +38,7 @@
 
                         <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Acreage:
                             </span>{{ $consignment->total_acerage ?? "-" }}</div>
-                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">ESTIMATED AMOUNT:
+                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">Total Amount:
                             </span>{{ $consignment->total_amount ?? "-" }}</div>
 
                     </div>
@@ -266,43 +266,31 @@
                                         <table class="table table-striped">
                                             <tbody>
 
-                                                <?php
-                                                if(empty($consignment->order_id)){ 
-                                                    if(!empty($consignment->ConsignmentItems)){
-                                                        $order = array();
-                                                        $invoices = array();
-                                                        foreach($consignment->ConsignmentItems as $orders){ 
-                                                            $order[] = $orders->order_id;
-                                                            $invoices[] = $orders->invoice_no;
-                                                        }
-                                                        $order_item['orders'] = implode(',', $order);
-                                                        $order_item['invoices'] = implode(',', $invoices);
-                                                    ?>
                                                 <tr>
-                                                    <td>Order Number</td>
+                                                    @if(!empty($consignment->OrderactivityDetails))
+                                                    <td>Estimated Amount</td>
                                                     <td><span
-                                                            class="badge bg-info mt-2">{{ $order_item['orders'] ?? "-" }}</span>
+                                                            class="badge bg-info mt-2">{{ $consignment->OrderactivityDetails->last_spray_amount ?? "-" }}</span>
+                                                    </td>
+                                                    @else
+                                                    <td>Estimated Amount</td>
+                                                    <td><span
+                                                            class="badge bg-info mt-2">{{ $consignment->total_amount ?? "-" }}</span>
+                                                    </td>
+                                                    @endif
+                                                </tr>
+                                                <tr>
+                                                    <td>Excced Amount</td>
+                                                    <td><span
+                                                            class="badge bg-info mt-2">{{ $consignment->OrderactivityDetails->exceed_amount ?? "-" }}</span>
                                                     </td>
                                                 </tr>
-                                                <?php }}else{ ?>
                                                 <tr>
-                                                    <td>Order Number</td>
+                                                    <td>Total Amount</td>
                                                     <td><span
-                                                            class="badge bg-info mt-2">{{ $consignment->orders_id ?? "-" }}</span>
+                                                            class="badge bg-info mt-2">{{$consignment->total_amount ?? "-"}}</span>
                                                     </td>
                                                 </tr>
-                                                <?php } ?>
-                                                <?php if(empty($consignment->invoice_no)){ ?>
-                                                <tr>
-                                                    <td>Invoice Number</td>
-                                                    <td>{{ $order_item['invoices'] ?? "-" }}</td>
-                                                </tr>
-                                                <?php }else{ ?>
-                                                <tr>
-                                                    <td>Invoice Number</td>
-                                                    <td>{{ $consignment->invoice_no ?? "-" }}</td>
-                                                </tr>
-                                                <?php } ?>
 
                                             </tbody>
                                         </table>

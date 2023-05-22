@@ -163,7 +163,7 @@ class ConsignmentController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn');
+        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn','OrderactivityDetails');
 
         if ($authuser->role_id == 1) {
             $query;
@@ -4223,7 +4223,7 @@ class ConsignmentController extends Controller
         $app_trail = Job::where('consignment_id', $request->lr_id)->orderBy('id', 'DESC')->first();
 
         $app_media = AppMedia::where('consignment_no', $request->lr_id)->get();
-        
+
         if (!empty($app_trail)) {
 
             $url = URL::to($this->prefix . '/consignments');
