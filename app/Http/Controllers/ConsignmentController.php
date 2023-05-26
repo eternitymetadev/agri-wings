@@ -1944,8 +1944,7 @@ class ConsignmentController extends Controller
             $start = Job::create(['consignment_id' => $c_id, 'response_data' => $sts, 'status' => 'Assigned', 'type' => '2']);
             // ==== end started
             }
-
-            $app_notify = $this->sendNotification($request->driver_id);
+            
 
             // $order_details = ConsignmentNote::with('BillingClient')->where('id', $c_id)->first();
             //  // ----- otp alert msg ----------------- //
