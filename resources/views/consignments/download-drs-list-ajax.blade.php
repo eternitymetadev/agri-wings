@@ -77,13 +77,12 @@ if ($trns->delivery_status == 'Unassigned') {?>
                     <?php if (empty($trns->vehicle_no) || empty($trns->driver_name) || empty($trns->driver_no)) {?>
                     <label class="badge badge-secondary">No Status</label>
                     <?php } else {?>
-                    <a class="drs_cancel btn btn-success" drs-no="{{$trns->drs_no}}" data-text="consignment"
-                        data-status="0"
+                    <a class="btn btn-success" drs-no="{{$trns->drs_no}}" data-text="consignment" data-status="0"
                         data-action="<?php echo URL::current(); ?>"><span>{{ Helper::getdeleveryStatus($trns->drs_no) }}</span></a>
                     <?php }?>
                     <?php }?>
                 </td>
-                <!-- END Delivery Status  -------------  -->
+                <!-- END Delivery Status  --------------->
                 <!-- DRS STATUS --------------->
                 <?php if ($trns->status == 0) {?>
                 <td><label class="badge badge-dark">Cancelled</label></td>

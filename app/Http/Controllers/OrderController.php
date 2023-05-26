@@ -12,23 +12,23 @@ use App\Models\Crop;
 use App\Models\Driver;
 use App\Models\Farm;
 use App\Models\ItemMaster;
+use App\Models\Job;
 use App\Models\Location;
 use App\Models\OrderFarm;
+use App\Models\PaymentTerms;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
-use App\Models\PaymentTerms;
-use App\Models\Job;
 use Auth;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Storage;
 use URL;
 use Validator;
-use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -37,6 +37,7 @@ class OrderController extends Controller
         $this->title = "Order Booking";
         $this->segment = \Request::segment(2);
         $this->apikey = \Config::get('keys.api');
+        $this->sms_link = \Config::get('sms_api.req_sms');
     }
     /**
      * Display a listing of the resource.
@@ -410,7 +411,7 @@ class OrderController extends Controller
         return view('orders.update-order', ['prefix' => $this->prefix, 'getconsignments' => $getconsignments, 'consigners' => $consigners, 'consignees' => $consignees, 'vehicles' => $vehicles, 'vehicletypes' => $vehicletypes, 'drivers' => $drivers, 'regionalclient' => $regionalclient, 'itemlists' => $itemlists, 'branchs' => $branchs, 'farms' => $farms, 'Crops' => $Crops]);
     }
 
-    /** 
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -474,7 +475,6 @@ class OrderController extends Controller
                 $crop_price = array();
                 foreach ($get_data as $key => $save_data) {
 
-                  
                     $acerage[] = $save_data['acerage'];
                     $crop_price[] = $save_data['crop_price'];
 
@@ -485,7 +485,7 @@ class OrderController extends Controller
                     $update_data['crop_price'] = $save_data['crop_price'];
                     $update_data['status'] = 1;
 
-                        $saveconsignmentitems = OrderFarm::where('id',$save_data['order_farm_id'])->update($update_data);
+                    $saveconsignmentitems = OrderFarm::where('id', $save_data['order_farm_id'])->update($update_data);
                 }
 
                 $total_acerage = array_sum($acerage);
@@ -494,7 +494,6 @@ class OrderController extends Controller
                 ConsignmentNote::where('id', $request->consignment_id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
 
             }
-
 
             $url = $this->prefix . '/consignments';
             $response['success'] = true;
@@ -1288,7 +1287,7 @@ class OrderController extends Controller
 
     public function storePtlOrder(Request $request)
     {
-       
+
         try {
             DB::beginTransaction();
 
@@ -1338,11 +1337,11 @@ class OrderController extends Controller
             //         $saveregclients = Farm::create($save_data);
             //     }
             // }
-            if($request->bill_to == 'Farmer'){
- 
+            if ($request->bill_to == 'Farmer') {
+
                 $check_client = RegionalClient::where('farmer_id', $request->farmer_common_id)->first();
-                if(empty($check_client)){
-                    $getfarmerdetails = Consignee::where('id',$request->farmer_common_id)->first();
+                if (empty($check_client)) {
+                    $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
                     $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
                     if (!empty($getpin_transfer->hub_transfer)) {
@@ -1350,13 +1349,13 @@ class OrderController extends Controller
                         $client_assign_branch = $get_branch->id;
                     } else {
                         $get_branch = Location::where('name', 'Karnal')->first();
-                        if(!empty($get_branch->id)){
+                        if (!empty($get_branch->id)) {
                             $client_assign_branch = $get_branch->id;
-                        }else{
+                        } else {
                             $client_assign_branch = '';
                         }
                     }
-    
+
                     $saveclientdetails['name'] = $getfarmerdetails->nick_name;
                     $saveclientdetails['regional_client_nick_name'] = $getfarmerdetails->nick_name;
                     $saveclientdetails['email'] = $getfarmerdetails->email;
@@ -1366,42 +1365,41 @@ class OrderController extends Controller
                     $saveclientdetails['district'] = $getfarmerdetails->district;
                     $saveclientdetails['state'] = $getfarmerdetails->state_id;
                     $saveclientdetails['address'] = $getfarmerdetails->address_line1;
-    
+
                     $saveclientdetails['location_id'] = $client_assign_branch;
                     $saveclientdetails['status'] = 1;
                     $saveclientdetails['verified_by'] = 0;
                     $saveclientdetails['farmer_id'] = $request->farmer_common_id;
-    
+
                     $saveRegional = RegionalClient::create($saveclientdetails);
-                    
-    
+
                     $saveterm['client_id'] = $saveRegional->id;
                     $saveterm['bill_to'] = 'Client';
                     $saveterm['payment_term'] = 'Bill To Client';
                     $saveterm['status'] = 1;
                     PaymentTerms::create($saveterm);
                     $consignmentsave['billing_client'] = $saveRegional->id;
-                }else{
+                } else {
                     $consignmentsave['billing_client'] = $check_client->id;
                 }
-            }else{
+            } else {
                 $consignmentsave['billing_client'] = $request->regclient_id;
             }
 
-            $getfarmerdetails = Consignee::where('id',$request->farmer_common_id)->first();
+            $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
-                    $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
-                    if (!empty($getpin_transfer->hub_transfer)) {
-                        $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
-                        $assign_hub = $get_branch->id;
-                    } else {
-                        $get_branch = Location::where('nick_name', 'Karnal')->first();
-                        if(!empty($get_branch->id)){
-                            $assign_hub = $get_branch->id;
-                        }else{
-                            $assign_hub = NULL;
-                        }
-                    }
+            $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
+            if (!empty($getpin_transfer->hub_transfer)) {
+                $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+                $assign_hub = $get_branch->id;
+            } else {
+                $get_branch = Location::where('nick_name', 'Karnal')->first();
+                if (!empty($get_branch->id)) {
+                    $assign_hub = $get_branch->id;
+                } else {
+                    $assign_hub = null;
+                }
+            }
 
             $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $request->farmer_common_id;
@@ -1414,7 +1412,7 @@ class OrderController extends Controller
             //     $consignmentsave['noc'] = $request->noc;
             // }
             $consignmentsave['status'] = 5;
-             $consignmentsave['branch_id'] = $assign_hub;
+            $consignmentsave['branch_id'] = $assign_hub;
             // $consignmentsave['to_branch_id'] = 29;
             // $consignmentsave['fall_in'] = 29;
             $consignmentsave['user_id'] = $authuser->id;
@@ -1446,11 +1444,19 @@ class OrderController extends Controller
 
             $mytime = Carbon::now('Asia/Kolkata');
             $currentdate = $mytime->toDateTimeString();
-             // task created
-             $respons = array(['consignment_id' => $saveconsignment->id, 'status' => 'Created', 'create_at' => $currentdate, 'type' => '2']);
-             $respons_data = json_encode($respons);
-             $create = Job::create(['consignment_id' => $saveconsignment->id, 'response_data' => $respons_data, 'status' => 'Created', 'type' => '2']);
-             // ==== end create
+            // task created
+            $respons = array(['consignment_id' => $saveconsignment->id, 'status' => 'Created', 'create_at' => $currentdate, 'type' => '2']);
+            $respons_data = json_encode($respons);
+            $create = Job::create(['consignment_id' => $saveconsignment->id, 'response_data' => $respons_data, 'status' => 'Created', 'type' => '2']);
+            // ==== end create
+
+            // ----- otp alert msg ----------------- //
+            // $farmer_details = Consignee::where('id', $request->farmer_common_id)->first();
+            // $phone = $farmer_details->phone;
+            // $text = 'Dear ' . $farmer_details->nick_name . ',Your AgriWings order ' . $saveconsignment->id . ' is received & under process. We will notify you as soon as your order has been allocated.Thanks for choosing AgriWings!';
+
+            // $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($phone) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
+            // $result = $this->SendTSMS($url);
 
             $url = $this->prefix . '/orders';
             $response['success'] = true;
@@ -2093,7 +2099,7 @@ class OrderController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
         $Crops = Crop::get();
-        $query = RegionalClient::query(); 
+        $query = RegionalClient::query();
 
         $regonal_client = $query->with('UserId', 'PaymentTerm')->whereHas('UserId', function ($query) use ($authuser) {
             $query->where('id', '=', $authuser->id);
@@ -2104,7 +2110,7 @@ class OrderController extends Controller
         return view('service-booking', ['prefix' => $this->prefix, 'Crops' => $Crops, 'regonal_client' => $regonal_client, 'farmers' => $farmers]);
     }
     public function storeServiceBooking(Request $request)
-    { 
+    {
         // echo '<pre>';
         // print_r($request->all());die;
         try {
@@ -2157,11 +2163,11 @@ class OrderController extends Controller
             //     }
             // }
 
-            if($request->bill_term == 'Farmer'){
- 
+            if ($request->bill_term == 'Farmer') {
+
                 $check_client = RegionalClient::where('farmer_id', $request->farmer_common_id)->first();
-                if(empty($check_client)){
-                    $getfarmerdetails = Consignee::where('id',$request->farmer_common_id)->first();
+                if (empty($check_client)) {
+                    $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
                     $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
                     if (!empty($getpin_transfer->hub_transfer)) {
@@ -2169,14 +2175,14 @@ class OrderController extends Controller
                         $client_assign_branch = $get_branch->id;
                     } else {
                         $get_branch = Location::where('nick_name', 'Karnal')->first();
-                        if(!empty($get_branch->id)){
+                        if (!empty($get_branch->id)) {
                             $client_assign_branch = $get_branch->id;
-                        }else{
+                        } else {
                             $client_assign_branch = '';
                         }
-                        
+
                     }
-    
+
                     $saveclientdetails['name'] = $getfarmerdetails->nick_name;
                     $saveclientdetails['regional_client_nick_name'] = $getfarmerdetails->nick_name;
                     $saveclientdetails['email'] = $getfarmerdetails->email;
@@ -2186,42 +2192,41 @@ class OrderController extends Controller
                     $saveclientdetails['district'] = $getfarmerdetails->district;
                     $saveclientdetails['state'] = $getfarmerdetails->state_id;
                     $saveclientdetails['address'] = $getfarmerdetails->address_line1;
-    
+
                     $saveclientdetails['location_id'] = $client_assign_branch;
                     $saveclientdetails['status'] = 1;
                     $saveclientdetails['verified_by'] = 0;
                     $saveclientdetails['farmer_id'] = $request->farmer_common_id;
-    
+
                     $saveRegional = RegionalClient::create($saveclientdetails);
-                    
-    
+
                     $saveterm['client_id'] = $saveRegional->id;
                     $saveterm['bill_to'] = 'Client';
                     $saveterm['payment_term'] = 'Bill To Client';
                     $saveterm['status'] = 1;
                     PaymentTerms::create($saveterm);
                     $consignmentsave['billing_client'] = $saveRegional->id;
-                }else{
+                } else {
                     $consignmentsave['billing_client'] = $check_client->id;
                 }
-            }else{
+            } else {
                 $consignmentsave['billing_client'] = $request->regclient_id;
             }
 
-            $getfarmerdetails = Consignee::where('id',$request->farmer_common_id)->first();
+            $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
-                    $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
-                    if (!empty($getpin_transfer->hub_transfer)) {
-                        $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
-                        $assign_hub = $get_branch->id;
-                    } else {
-                        $get_branch = Location::where('nick_name', 'Karnal')->first();
-                        if(!empty($get_branch->id)){
-                            $assign_hub = $get_branch->id;
-                        }else{
-                            $assign_hub = NULL;
-                        }
-                    }
+            $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
+            if (!empty($getpin_transfer->hub_transfer)) {
+                $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+                $assign_hub = $get_branch->id;
+            } else {
+                $get_branch = Location::where('nick_name', 'Karnal')->first();
+                if (!empty($get_branch->id)) {
+                    $assign_hub = $get_branch->id;
+                } else {
+                    $assign_hub = null;
+                }
+            }
 
             $consignmentsave['regclient_id'] = $request->regclient_id;
             $consignmentsave['consignee_id'] = $request->farmer_common_id;
@@ -2265,11 +2270,11 @@ class OrderController extends Controller
 
             $mytime = Carbon::now('Asia/Kolkata');
             $currentdate = $mytime->toDateTimeString();
-             // task created
-             $respons = array(['consignment_id' => $saveconsignment->id, 'status' => 'Created', 'create_at' => $currentdate, 'type' => '2']);
-             $respons_data = json_encode($respons);
-             $create = Job::create(['consignment_id' => $saveconsignment->id, 'response_data' => $respons_data, 'status' => 'Created', 'type' => '2']);
-             // ==== end create
+            // task created
+            $respons = array(['consignment_id' => $saveconsignment->id, 'status' => 'Created', 'create_at' => $currentdate, 'type' => '2']);
+            $respons_data = json_encode($respons);
+            $create = Job::create(['consignment_id' => $saveconsignment->id, 'response_data' => $respons_data, 'status' => 'Created', 'type' => '2']);
+            // ==== end create
 
             $url = $this->prefix . '/orders';
             $response['success'] = true;
@@ -2286,6 +2291,19 @@ class OrderController extends Controller
             $response['redirect_url'] = $url;
         }
         return response()->json($response);
+    }
+
+    public function SendTSMS($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // change to 1 to verify cert
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        $result = curl_exec($ch);
+
     }
 
 }

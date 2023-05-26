@@ -51,6 +51,7 @@ class ConsignmentController extends Controller
         $this->title = "Consignments";
         $this->segment = \Request::segment(2);
         $this->apikey = \Config::get('keys.api');
+        $this->sms_link = \Config::get('sms_api.req_sms');
     }
     /**
      * Display a listing of the resource.
@@ -1929,7 +1930,8 @@ class ConsignmentController extends Controller
         $mytime = Carbon::now('Asia/Kolkata');
         $currentdate = $mytime->toDateTimeString();
 
-        foreach ($cc as $c_id) {
+        foreach ($cc as $c_id) { 
+
             // =================== task assign
             $respons2 = array('consignment_id' => $c_id, 'status' => 'Assigned', 'create_at' => $currentdate, 'type' => '2');
 
@@ -1942,6 +1944,18 @@ class ConsignmentController extends Controller
             $start = Job::create(['consignment_id' => $c_id, 'response_data' => $sts, 'status' => 'Assigned', 'type' => '2']);
             // ==== end started
             }
+
+            $app_notify = $this->sendNotification($request->driver_id);
+
+            // $order_details = ConsignmentNote::with('BillingClient')->where('id', $c_id)->first();
+            //  // ----- otp alert msg ----------------- //
+            // $billingclient = @$order_details->BillingClient->name;
+            // $billingclientphone = @$order_details->BillingClient->phone;
+            // $text = 'Dear '.$billingclient.', 
+            // Your AgriWings order '.$c_id.' is received and has been allocated. Below are the details of the Pilot -Name: '.$driverName.' No.:'.$driverPhone.' Date of Service: '.$order_details->edd.' Thanks for choosing AgriWings!';
+
+            // $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($billingclientphone) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
+            // $result = $this->SendTSMS($url);
         }
 
         $response['success'] = true;
@@ -5164,5 +5178,55 @@ class ConsignmentController extends Controller
         $pdf->setPaper('legal', 'portrait');
         return $pdf->download('Noc.pdf');
 
+    }
+
+    public function SendTSMS($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // change to 1 to verify cert
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        $result = curl_exec($ch);
+
+    }
+    public function sendNotification($request)
+    {
+
+        $firebaseToken = Driver::where('id', $request)->whereNotNull('device_token')->pluck('device_token')->all();
+
+        $SERVER_API_KEY = "AAAAd3UAl0E:APA91bFmxnV3YOAWBLrjOVb8n2CRiybMsXsXqKwDtYdC337SE0IRr1BTFLXWflB5VKD-XUjwFkS4v7I2XlRo9xmEYcgPOqrW0fSq255PzfmEwXurbxzyUVhm_jS37-mtkHFgLL3yRoXh";
+
+        $data_json = ['type' => 'Assigned', 'status' => 1];
+
+        $data = [
+            "registration_ids" => $firebaseToken,
+            "notification" => [
+                "title" => "LR Assigned",
+                "body" => "New LR assigned to you, please check",
+            ],
+            "data" => $data_json,
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        return $response;
     }
 }
