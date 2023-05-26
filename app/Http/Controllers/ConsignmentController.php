@@ -1944,8 +1944,9 @@ class ConsignmentController extends Controller
             $start = Job::create(['consignment_id' => $c_id, 'response_data' => $sts, 'status' => 'Assigned', 'type' => '2']);
             // ==== end started
             }
-            
 
+            $app_notify = $this->sendNotification($request->driver_id);
+            
             // $order_details = ConsignmentNote::with('BillingClient')->where('id', $c_id)->first();
             //  // ----- otp alert msg ----------------- //
             // $billingclient = @$order_details->BillingClient->name;
@@ -5196,7 +5197,7 @@ class ConsignmentController extends Controller
 
         $firebaseToken = Driver::where('id', $request)->whereNotNull('device_token')->pluck('device_token')->all();
 
-        $SERVER_API_KEY = "AAAAd3UAl0E:APA91bFmxnV3YOAWBLrjOVb8n2CRiybMsXsXqKwDtYdC337SE0IRr1BTFLXWflB5VKD-XUjwFkS4v7I2XlRo9xmEYcgPOqrW0fSq255PzfmEwXurbxzyUVhm_jS37-mtkHFgLL3yRoXh";
+        $SERVER_API_KEY = "AAAAfCjqgg4:APA91bFkJDq6mhpjpyW3EW4EdmZt1iFbpqQbn_BVL3sTIKMiXqCcQaE3e4xFyxmwzysz1ZxK-gAGzJQQFJ_woaRRs6y0iePnyGZpIUV5sCngu80DAYjqFs8b1XXFsLj5Z5Ab1oXLywhC";
 
         $data_json = ['type' => 'Assigned', 'status' => 1];
 
