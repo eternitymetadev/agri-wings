@@ -5204,8 +5204,8 @@ class ConsignmentController extends Controller
         $data = [
             "registration_ids" => $firebaseToken,
             "notification" => [
-                "title" => "LR Assigned",
-                "body" => "New LR assigned to you, please check",
+                "title" => "Task Assigned",
+                "body" => "New Task assigned to you, please check",
             ],
             "data" => $data_json,
         ];
