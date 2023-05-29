@@ -46,7 +46,7 @@ div.relative {
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{'clients'}}">Clients</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Regional
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Billing
                                 Client List</a></li>
                     </ol>
                 </nav>
@@ -61,7 +61,7 @@ div.relative {
                     <table id="clienttable" class="table table-hover get-datatable" style="width:100%">
                         <div class="btn-group relat">
                             <a href="{{'create-regional-client'}}" class="btn btn-primary pull-right"
-                                style="margin-left:7px;">Create Regional Client</a>
+                                style="margin-left:7px;">Create Billing Client</a>
                         </div>
                         <thead>
                             <tr>

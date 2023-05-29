@@ -579,7 +579,7 @@ class UserController extends Controller
             Service Delivery - Our team will provide the services as per the schedule.<br />
             Invoicing - Once the services are delivered, we will issue an invoice for the services rendered.<br />
             Payment - Payment is due within 30 days from the invoice date.<br />
-            We hope that this information helps you understand our billing terms and order booking flow chart. If you have any questions or concerns, please do not hesitate to contact us and report/rate us on Page of www.AgriWing.com. We value your feedback and are always looking for ways to improve our services.<br />
+            We hope that this information helps you understand our billing terms and order booking flow chart. If you have any questions or concerns, please do not hesitate to contact us and report/rate us on Page of https://app.agriwings.in/ We value your feedback and are always looking for ways to improve our services.<br />
             Thank you for choosing AgriWings. We look forward to working with you and providing you with the best services possible.<br /><br />
             Sincerely,<br />
             Team AgriWings<br />

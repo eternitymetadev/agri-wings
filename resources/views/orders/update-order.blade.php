@@ -893,7 +893,7 @@ $totalRow = count($row_count);
                                     {{$farm_detail->crop_price}}</span><input type="hidden"
                                         value="{{$farm_detail->crop_price}}" class="SetCropPrice" name="data[{{$i}}][crop_price]" />
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="feather feather-edit-2 onEdit actionIcon">
                                         <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -904,7 +904,7 @@ $totalRow = count($row_count);
                                         stroke-linejoin="round" class="feather feather-check onDone actionIcon"
                                         style="display: none">
                                         <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
+                                    </svg> -->
                                 </td>
 
                             </tr>

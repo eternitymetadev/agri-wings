@@ -713,6 +713,9 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('/noc-print/{id}', [ConsignmentController::class, 'nocPrint']);
     Route::any('/upload-noc', [ConsignmentController::class, 'uploadNoc']);
 
+    Route::any('edit-baseclient/{id}', [ClientController::class, 'editBaseClient']);
+    Route::any('update-base-client', [ClientController::class, 'updateBaseClient']);
+
 
 });
 Route::group(['prefix'=>'branch-user', 'middleware'=>['auth','PermissionCheck']], function()

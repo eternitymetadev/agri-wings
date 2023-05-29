@@ -43,7 +43,7 @@
         choose a strong password that is unique and secure.<br />
         Once you have logged in, you can access your account dashboard, view your invoices, make payments, and manage<br />
         your account details. If you have any questions or concerns regarding your account or our services, please feel<br />
-        free to contact us by email at secure.services@agriwings.com or by phone at [Customer Support Phone Number].<br />
+        free to contact us by email at support@agriwings.in or by phone at [Customer Support Phone Number].<br />
         Our support team will assist you.<br /><br />
 
         Thank you for choosing Agriwings. We look forward to providing you with the best services possible.<br /><br />
