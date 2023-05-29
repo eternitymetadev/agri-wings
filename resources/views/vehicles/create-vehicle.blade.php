@@ -47,7 +47,7 @@
                             </div>
                             <div class="form-row mb-0">     
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Drone Capacity</label>
+                                    <label for="exampleFormControlInput2">Drone Capacity(Ltrs)</label>
                                     <input type="text" class="form-control" id="gross_vehicle_weight" name="gross_vehicle_weight" placeholder="">
                                 </div>
                             </div>
