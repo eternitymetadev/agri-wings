@@ -9,6 +9,7 @@ class Vehicle extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'drone_code',
         'regn_no',
         'mfg',
         'make',

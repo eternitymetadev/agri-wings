@@ -584,6 +584,9 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('pod-export', [ConsignmentController::class, 'exportPodFile']);
     Route::get('get-jobs', [ConsignmentController::class, 'getJob']);
     Route::any('add-crop', [ConsignmentController::class, 'addCrop']);
+    Route::any('update-crop', [ConsignmentController::class, 'updateCrop']);
+    Route::get('battery-list', [ConsignmentController::class, 'batteryList']);
+    Route::any('add-battery', [ConsignmentController::class, 'addBattery']);
 
 
     Route::resource('locations', LocationController::class);

@@ -7,8 +7,8 @@
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Vehicles</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">View Vehicle</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Drone</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">View Drone</a></li>
                     </ol>
                 </nav>
             </div>
@@ -24,27 +24,19 @@
                         <table class="table table-striped">
                             <tbody>
                                 <tr>
-                                    <th scope="row">Registration No.</th>
+                                    <th scope="row">UIN</th>
                                     <td>{{isset($getvehicle->regn_no)?ucfirst($getvehicle->regn_no):'-'}} </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Manufacturer</th>
+                                    <th scope="row">Manufacturing Year</th>
                                     <td>{{isset($getvehicle->mfg)?ucfirst($getvehicle->mfg):'-'}} </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Make</th>
+                                    <th scope="row">Drone Model</th>
                                     <td>
                                         {{isset($getvehicle->make) ? ucfirst($getvehicle->make) : "-" }}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">Engine No.</th>
-                                    <td> 
-                                        {{isset($getvehicle->engine_no) ? ucfirst($getvehicle->engine_no) : "-" }}
-                                    </td>
-                                </tr>
-            
-                               
                                     
                             </tbody>
                         </table>  

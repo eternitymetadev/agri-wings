@@ -14,8 +14,8 @@
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Riders</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Create Rider</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Pilots</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Create Pilot</a></li>
                     </ol>
                 </nav>
             </div>

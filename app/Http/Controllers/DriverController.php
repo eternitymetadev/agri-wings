@@ -128,7 +128,7 @@ class DriverController extends Controller
             $savebankdetails = Bank::create($bankdetails);
 
             $response['success']         = true;
-            $response['success_message'] = "Driver Added successfully";
+            $response['success_message'] = "Pilot Added successfully";
             $response['error']           = false;
             $response['page']            = 'driver-create';
             $response['redirect_url']    = URL::to($this->prefix.'/drivers');

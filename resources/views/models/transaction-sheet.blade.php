@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myExtraLargeModalLabel">Delivery Run Sheet</h5>
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Spray Run Sheet</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" class="btn btn-primary" id="addlr"
-                                style="margin: 0px 0px 12px 12px;">Add LR</button>
+                                style="margin: 0px 0px 12px 12px;">Add SR</button>
                             <div class="table-responsive">
                                 <table id="sheet" class="table table-hover"
                                     style="width:100%; text-align:left; border: 1px solid #c7c7c7;">
@@ -56,7 +56,7 @@
                                     <input type="hidden" class="form-control" id="current_drs" name="" value="">
                                     <button type="button" class="btn btn-warning disableDrs" id="add_unverified_lr"
                                         style="font-size: 11px; margin: 0px 0px 10px 15px;">
-                                        Create DSR
+                                        Create SRS
                                     </button>
                                     <div class="col-sm-12">
                                         <table id="unverifiedlrlist" class="table table-hover"
@@ -67,14 +67,12 @@
                                                         <input type="checkbox" name="" id="ckbCheckAll"
                                                             style="width: 30px; height:30px;">
                                                     </th>
-                                                    <th>LR No</th>
-                                                    <th>Consignment Date</th>
-                                                    <th>Consigner Name</th>
-                                                    <th>Consignee</th>
+                                                    <th>Order No</th>
+                                                    <th>Order Date</th>
+                                                    <th>Farmer Name</th>
                                                     <th>City</th>
                                                     <th>District</th>
                                                     <th>Pin Code</th>
-                                                    <th>Zone</th>
 
                                                 </tr>
                                             </thead>
@@ -295,12 +293,22 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="exampleFormControlInput2">Rider Name</label>
+                            <label for="exampleFormControlInput2">Pilot Name</label>
                             <select class="form-control my-select2" id="driver_id" name="driver_id" tabindex="-1">
-                                <option value="">Select Rider</option>
+                                <option value="">Select Pilot</option>
                                 @foreach($drivers as $driver)
                                 <option value="{{$driver->id}}">{{ucfirst($driver->name) ?? '-'}}-{{$driver->phone ??
                                     '-'}}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="exampleFormControlInput2">Battery</label>
+                            <select class="form-control my-select2" id="battery_id" name="battery_id" tabindex="-1">
+                                <option value="">Select Battery</option>
+                                @foreach($batterytypes as $batterytype)
+                                <option value="{{$batterytype->id}}">{{ucfirst($batterytype->type) ?? '-'}}
                                 </option>
                                 @endforeach
                             </select>

@@ -27,8 +27,8 @@
                         <form class="general_form" method="POST" action="{{url($prefix.'/vehicles')}}" id="createvehicle">
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Drone Name<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="regn_no" name="regn_no" placeholder="" maxlength="12">
+                                    <label for="exampleFormControlInput2">UIN<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="regn_no" name="regn_no" placeholder="">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Manufacturing  year<span class="text-danger">*</span></label>
@@ -37,19 +37,20 @@
                             </div>
                             <div class="form-row mb-0">                          
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlSelect1">Make<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlSelect1">Drone Model<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="make" placeholder="">
                                 </div>
-                                <div class="form-group col-md-6">
+                                <!-- <div class="form-group col-md-6">
                                     <label for="exampleFormControlSelect1">Engine No.<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="engine_no" placeholder="">
-                                </div>
-                            </div>
-                            <div class="form-row mb-0">     
+                                </div> -->
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Drone Capacity(Ltrs)</label>
                                     <input type="text" class="form-control" id="gross_vehicle_weight" name="gross_vehicle_weight" placeholder="">
                                 </div>
+                            </div>
+                            <div class="form-row mb-0">     
+                               
                             </div>
                             
                             <button type="submit" class="mt-4 mb-4 btn btn-primary">Submit</button>

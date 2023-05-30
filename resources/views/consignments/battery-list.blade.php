@@ -56,8 +56,8 @@ div.relative {
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Crop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Crop
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Battery</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Battery
                                 List</a></li>
                     </ol>
                 </nav>
@@ -70,25 +70,24 @@ div.relative {
                         <div class="btn-group relative">
                             <button type="button" class="btn btn-warning disableDrs" data-toggle="modal"
                                 data-target="#exampleModalCenter" style="font-size: 11px;">
-                                Add Crop
+                                Add Battery
                             </button>
                         </div>
                         <thead>
                             <tr>
-                                <th>Sr. No.</th>
-                                <th>Crop Name</th>
-                                <th>Crop Price</th>
-                                <th>Action</th>
+                                <th>Battery Number</th>
+                                <th>Type</th>
+                                <th>Est. Acers</th>
+                                <th>Battery Cycle</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($crops as $crop)
+                            @foreach($batterys as $battery)
                             <tr>
-                                <td>{{$crop->id}}</td>
-                                <td>{{$crop->crop_name}}</td>
-                                <td>{{$crop->crop_price}}</td>
-                                <td><button type="button" class="btn btn-warning edit_crop"
-                                        crop-price="{{$crop->crop_price}}" value="{{$crop->id}}">edit</button></td>
+                                <td>{{$battery->battery_no}}</td>
+                                <td>{{$battery->type}}</td>
+                                <td>{{$battery->est_acers}}</td>
+                                <td>{{$battery->battery_cycle}}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -105,29 +104,35 @@ div.relative {
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add New Crop</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Add New Battery</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="add_crop">
+                <form id="add_battery">
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="inputEmail4">Crop Name</label>
-                            <input type="text" class="form-control" name="crop_name">
+                            <label for="inputEmail4">Battery No</label>
+                            <input type="text" class="form-control" name="battery_no">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="inputEmail4">Price</label>
-                            <input type="number" class="form-control" name="crop_price">
+                            <label for="inputEmail4">Type</label>
+                            <input type="text" class="form-control" name="type">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="inputEmail4">Crop Image</label>
-                            <input type="file" class="form-control" name="crop_image">
+                            <label for="inputEmail4">Est. Acers</label>
+                            <input type="text" class="form-control" name="est_acers">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Battery Cycle</label>
+                            <input type="text" class="form-control" name="battery_cycle">
                         </div>
                     </div>
 
@@ -135,39 +140,6 @@ div.relative {
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary" id="crt_pytm"><span class="indicator-label">Submit</span>
-                    <span class="indicator-progress" style="display: none;">Please wait...
-                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- edit crop model  -->
-<div class="modal fade" id="crop_edit_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update Crop</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="update_crop">
-                    <input type="hidden" class="form-control" name="crop_id" id="crop_id">
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="inputEmail4">Price</label>
-                            <input type="number" class="form-control" name="crop_price" id="crop_price">
-                        </div>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="crt_pytm"><span class="indicator-label">Update</span>
                     <span class="indicator-progress" style="display: none;">Please wait...
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
             </div>
@@ -247,52 +219,12 @@ $('#unverified-table').DataTable({
     // "pageLength": 100,
 
 });
-$('#add_crop').submit(function(e) {
+$('#add_battery').submit(function(e) {
     e.preventDefault();
 
     var formData = new FormData(this);
     $.ajax({
-        url: "add-crop",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: 'POST',
-        data: new FormData(this),
-        processData: false,
-        contentType: false,
-        beforeSend: function() {
-            $(".indicator-progress").show();
-            $(".indicator-label").hide();
-        },
-        success: (data) => {
-            $(".indicator-progress").hide();
-            $(".indicator-label").show();
-            if (data.success == true) {
-                swal('success', data.success_message, 'success');
-                window.location.reload();
-            } else {
-                swal('error', data.error_message, 'error');
-            }
-
-        }
-    });
-});
-$(document).on('click', '.edit_crop', function() {
-
-    var crop_id = $(this).val();
-    var crop_price = $(this).attr('crop-price');
-    $('#crop_edit_model').modal('show');
-
-    $('#crop_id').val(crop_id);
-    $('#crop_price').val(crop_price);
-});
-
-$('#update_crop').submit(function(e) {
-    e.preventDefault();
-
-    var formData = new FormData(this);
-    $.ajax({
-        url: "update-crop",
+        url: "add-battery",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },

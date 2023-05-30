@@ -121,7 +121,16 @@ class VehicleController extends Controller
             $response['errors']      = $errors;
             return response()->json($response);
         }
+ 
+        $drone_code = DB::table('vehicles')->select('drone_code')->latest('drone_code')->first();
+        $dronecode = json_decode(json_encode($drone_code), true);
+        if (empty($dronecode) || $dronecode == null) {
+            $code_new = 101;
+        } else {
+            $code_new = $dronecode['drone_code'] + 1;
+        }
 
+        $vehiclesave['drone_code']     = $code_new;
         $vehiclesave['regn_no']        = $request->regn_no;
         $vehiclesave['mfg']            = $request->mfg;
         $vehiclesave['make']           = $request->make;
@@ -151,7 +160,7 @@ class VehicleController extends Controller
         if($savevehicle)
         {
             $response['success']         = true;
-            $response['success_message'] = "Vehicle Added successfully";
+            $response['success_message'] = "Drone Added successfully";
             $response['error']           = false;
             // $response['resetform']       = true;
             $response['page']            = 'vehicle-create';

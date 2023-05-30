@@ -18,6 +18,7 @@ use App\Models\Job;
 use App\Models\Location;
 use App\Models\RegionalClient;
 use App\Models\Role;
+use App\Models\Battery;
 use App\Models\TransactionSheet;
 use App\Models\User;
 use App\Models\Vehicle;
@@ -1898,7 +1899,7 @@ class ConsignmentController extends Controller
         $purchasePrice = $request->purchase_price;
         $assigndate = date('Y-m-d');
 
-        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'assign_date' => $assigndate, 'delivery_status' => 'Assigned']);
+        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'assign_date' => $assigndate, 'battery_id' => $request->battery_id ,'delivery_status' => 'Assigned']);
 
         $consignees = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_name', 'consignees.phone as phone', 'consignees.email as email', 'vehicles.regn_no as vehicle_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'drivers.name as driver_id', 'drivers.phone as driver_phone', 'drivers.team_id as team_id', 'drivers.fleet_id as fleet_id')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
@@ -1974,6 +1975,7 @@ class ConsignmentController extends Controller
         $vehicles = Vehicle::where('status', '1')->select('id', 'regn_no')->get();
         $drivers = Driver::where('status', '1')->select('id', 'name', 'phone')->get();
         $vehicletypes = VehicleType::where('status', '1')->select('id', 'name')->get();
+        $batterytypes = Battery::where('status', '1')->select('id', 'type')->get();
 
         if ($request->ajax()) {
             if (isset($request->resetfilter)) {
@@ -2054,10 +2056,11 @@ class ConsignmentController extends Controller
             $vehicles = Vehicle::where('status', '1')->select('id', 'regn_no')->get();
             $drivers = Driver::where('status', '1')->select('id', 'name', 'phone')->get();
             $vehicletypes = VehicleType::where('status', '1')->select('id', 'name')->get();
+            $batterytypes = Battery::where('status', '1')->select('id', 'type')->get();
             $transaction = $query->orderBy('id', 'DESC')->paginate($peritem);
             $transaction = $transaction->appends($request->query());
 
-            $html = view('consignments.download-drs-list-ajax', ['peritem' => $peritem, 'prefix' => $this->prefix, 'transaction' => $transaction, 'vehicles' => $vehicles, 'drivers' => $drivers, 'vehicletypes' => $vehicletypes])->render();
+            $html = view('consignments.download-drs-list-ajax', ['peritem' => $peritem, 'prefix' => $this->prefix, 'transaction' => $transaction, 'vehicles' => $vehicles, 'drivers' => $drivers, 'vehicletypes' => $vehicletypes, 'batterytypes' => $batterytypes])->render();
 
             return response()->json(['html' => $html]);
         }
@@ -2096,7 +2099,7 @@ class ConsignmentController extends Controller
         $transaction = $query->orderBy('id', 'DESC')->paginate($peritem);
         $transaction = $transaction->appends($request->query());
 
-        return view('consignments.download-drs-list', ['peritem' => $peritem, 'prefix' => $this->prefix, 'transaction' => $transaction, 'vehicles' => $vehicles, 'drivers' => $drivers, 'vehicletypes' => $vehicletypes]);
+        return view('consignments.download-drs-list', ['peritem' => $peritem, 'prefix' => $this->prefix, 'transaction' => $transaction, 'vehicles' => $vehicles, 'drivers' => $drivers, 'vehicletypes' => $vehicletypes, 'batterytypes' => $batterytypes]);
     }
 
     public function getTransactionDetails(Request $request)
@@ -4978,6 +4981,37 @@ class ConsignmentController extends Controller
         return response()->json($response);
     }
 
+    public function updateCrop(Request $request)
+    {
+
+        try {
+            DB::beginTransaction();
+
+
+            $gstsave = Crop::where('id', $request->crop_id)->update(['crop_price' => $request->crop_price]);
+            if ($gstsave) {
+                $url = $this->prefix . '/settings/branch-address';
+                $response['success'] = true;
+                $response['success_message'] = "Crop Updated successfully";
+                $response['error'] = false;
+                $response['redirect_url'] = $url;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created Vendor please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+    }
+
     public function getCropPrice(Request $request)
     {
         $get_crop = Crop::where('id', $request->crop_id)->first();
@@ -5178,6 +5212,71 @@ class ConsignmentController extends Controller
         $pdf->setPaper('legal', 'portrait');
         return $pdf->download('Noc.pdf');
 
+    }
+
+    public function batteryList(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $baseclient = explode(',', $authuser->baseclient_id);
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+        $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
+
+        $batterys = Battery::where('status', 1)->get();
+        return view('consignments.battery-list', ['prefix' => $this->prefix, 'title' => $this->title, 'batterys' => $batterys]);
+    }
+
+    public function addBattery(Request $request)
+    {
+
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+            $rules = array(
+                // 'crop_name' => 'required|unique:crops',
+            );
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $response['success'] = false;
+                $response['validation'] = false;
+                $response['formErrors'] = true;
+                $response['error_message'] = $errors;
+                return response()->json($response);
+            }
+
+            $batterysave['battery_no'] = $request->battery_no;
+            $batterysave['type'] = $request->type;
+            $batterysave['est_acers'] = $request->est_acers;
+            $batterysave['battery_cycle'] = $request->battery_cycle;
+
+            $gstsave = Battery::create($batterysave);
+
+            if ($gstsave) {
+                $url = $this->prefix . '/settings/branch-address';
+                $response['success'] = true;
+                $response['success_message'] = "Battery Added successfully";
+                $response['error'] = false;
+                $response['redirect_url'] = $url;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created Vendor please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
     }
 
     public function SendTSMS($url)

@@ -7,8 +7,8 @@
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Vehicles</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Update Vehicle</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Drones</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Update Drone</a></li>
                     </ol>
                 </nav>
             </div>

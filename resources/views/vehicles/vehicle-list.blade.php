@@ -51,9 +51,9 @@ div.relat {
                         <?php } ?>
                         <thead>
                             <tr>
-                                <th>Drone Name</th>
-                                <th>Make</th>
-                                <th>Drone Capacity</th>
+                                <th>UIN</th>
+                                <th>Manufacturing Year</th>
+                                <th>Drone Model</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -79,8 +79,8 @@ div.relat {
 
             columns: [
                 {data: 'regn_no', name: 'regn_no'},
+                {data: 'mfg', name: 'mfg'},
                 {data: 'make', name: 'make'},
-                {data: 'tonnage_capacity', name: 'tonnage_capacity'},
                 // {data: 'mfg', name: 'mfg'},
                 // {data: 'rc_image', name: 'rc_image'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
