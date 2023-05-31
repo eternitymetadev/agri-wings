@@ -170,6 +170,9 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth','PermissionCheck']], func
     Route::any('create-lr-form', [ConsignmentController::class, 'createNewLrForm']);
     Route::post('consignments/new-lr-create', [ConsignmentController::class, 'newStoreLr']);
     Route::any('add-crop', [ConsignmentController::class, 'addCrop']);
+    Route::any('update-crop', [ConsignmentController::class, 'updateCrop']);
+    Route::get('battery-list', [ConsignmentController::class, 'batteryList']);
+    Route::any('add-battery', [ConsignmentController::class, 'addBattery']);
 
     Route::resource('locations', LocationController::class);
     Route::post('/locations/update', [LocationController::class, 'updateLocation']);
@@ -587,6 +590,9 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('update-crop', [ConsignmentController::class, 'updateCrop']);
     Route::get('battery-list', [ConsignmentController::class, 'batteryList']);
     Route::any('add-battery', [ConsignmentController::class, 'addBattery']);
+    Route::get('crop-scheme-list', [ConsignmentController::class, 'cropSchemeList']);
+    Route::any('add-crop-scheme', [ConsignmentController::class, 'addCropScheme']);
+    Route::any('check-price-scheme', [ConsignmentController::class, 'checkPriceScheme']);
 
 
     Route::resource('locations', LocationController::class);
@@ -1055,6 +1061,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/order-list-details', [ConsignmentController::class, 'orderList']);
     Route::any('/upload-noc', [ConsignmentController::class, 'uploadNoc']);
     Route::any('/noc-print/{id}', [ConsignmentController::class, 'nocPrint']);
+    Route::any('check-price-scheme', [ConsignmentController::class, 'checkPriceScheme']);
     
     
 

@@ -678,7 +678,7 @@ tr:hover .dltItemRow {
     box-shadow: 0 6px 20px #838383d1;
 }
 
-#billToInfo{
+#billToInfo {
     margin-bottom: 8rem;
 }
 
@@ -686,9 +686,10 @@ tr:hover .dltItemRow {
     .innerBoxes {
         min-width: 100%;
     }
-    #billToInfo{
-    margin-bottom: 2rem;
-}
+
+    #billToInfo {
+        margin-bottom: 2rem;
+    }
 }
 </style>
 
@@ -875,6 +876,8 @@ tr:hover .dltItemRow {
                                 <th>Farm Location</th>
                                 <th>Acreage</th>
                                 <th>Estd. Cost</th>
+                                <th>Discount</th>
+                                <th>Offered Cost</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -1030,39 +1033,76 @@ const onFarmerTypeChange = () => {
 let cropList = [];
 
 let cropIndex = 1;
-
+ 
 const onAddCrop = () => {
-    let listItem = ``;
     let cropName = $('input[name="crop"]:checked').val();
-    let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
-    let farmLocation = $('#farmLocation').find(":selected").val();
-    let farmLocationText = $('#farmLocation').find(":selected").text();
-    let acreage = $('#acreage').val();
-    let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
-    let totalPrice = cropPrice * acreage;
+    $('#themeLoader').css('display', 'flex');
+    $.ajax({
+        url: "check-price-scheme",
+        method: "get",
+        data: {
+            crop_id: cropName
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        dataType: 'json',
+        success: function(response) {
+            $('#themeLoader').css('display', 'none');
 
-    if (farmLocation != '') {
-        $('#sprayTable').show();
-        listItem += `<tr>
+            let listItem = ``;
+
+            let cropNameText = $('input[name="crop"]:checked').attr('data-crop-name');
+            let farmLocation = $('#farmLocation').find(":selected").val();
+            let farmLocationText = $('#farmLocation').find(":selected").text();
+            let acreage = $('#acreage').val();
+            let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
+            let totalPrice = cropPrice * acreage;
+
+            if(response.get_scheme_details){
+            var crop_price = response.get_scheme_details.crop_price;
+            var discount_price = response.get_scheme_details.discount_price;
+            var final_crop_price = crop_price - discount_price;
+            var calculate_offer_price = final_crop_price * acreage;
+            }else{
+                var calculate_offer_price = totalPrice;
+            }
+
+            var discount_price = totalPrice - calculate_offer_price;
+
+
+            if (farmLocation != '') {
+                $('#sprayTable').show();
+                listItem += `<tr> 
                 <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
                 <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
                 <td>${acreage}<input type="hidden" value="` + acreage + `" name="data[` + cropIndex + `][acerage]"/></td>
                 <td class="lastCol">
                     ${totalPrice}<input type="hidden" value="` + totalPrice + `" name="data[` + cropIndex + `][crop_price]"/>
+                </td>
+                <td class="lastCol">
+                    ${discount_price}<input type="hidden" value="` + discount_price + `" name="data[` + cropIndex + `][discount]"/>
+                </td>
+                <td class="lastCol">
+                    ${calculate_offer_price}<input type="hidden" value="` + calculate_offer_price + `" name="data[` + cropIndex + `][offered_cost]"/>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </td>
 
             </tr>`;
-        $('#sprayTable').append(listItem);
+                $('#sprayTable').append(listItem);
 
-        $('#farmLocation').val('').change();
-        $('#acreage').val('1');
-        $('#farmLocationError').hide();
-        cropIndex++;
-        $('#addCropButton').attr('disabled', true);
-        if ($('#sprayTable tr').length < 2) $('#submitButton').attr('disabled', true);
-        else $('#submitButton').attr('disabled', false);
-    } else $('#farmLocationError').show();
+                $('#farmLocation').val('').change();
+                $('#acreage').val('1');
+                $('#farmLocationError').hide();
+                cropIndex++;
+                $('#addCropButton').attr('disabled', true);
+                if ($('#sprayTable tr').length < 2) $('#submitButton').attr('disabled', true);
+                else $('#submitButton').attr('disabled', false);
+            } else $('#farmLocationError').show();
+        }
+    })
+
+
 }
 
 $("#sprayTable").on('click', '.dltItemRow', function() {

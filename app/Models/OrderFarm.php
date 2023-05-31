@@ -14,6 +14,8 @@ class OrderFarm extends Model
         'crop',
         'acreage',
         'crop_price',
+        'discount',
+        'total_price',
         'status',
         'created_at',
         'updated_at'

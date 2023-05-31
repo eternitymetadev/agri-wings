@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\RealtimeMessage;
 use App\Exports\PodExport;
+use App\Models\AppMedia;
+use App\Models\Battery;
 use App\Models\BranchAddress;
 use App\Models\Consignee;
 use App\Models\Consigner;
@@ -11,6 +13,7 @@ use App\Models\ConsignmentItem;
 use App\Models\ConsignmentNote;
 use App\Models\ConsignmentSubItem;
 use App\Models\Crop;
+use App\Models\CropPriceScheme;
 use App\Models\Driver;
 use App\Models\Farm;
 use App\Models\ItemMaster;
@@ -18,14 +21,13 @@ use App\Models\Job;
 use App\Models\Location;
 use App\Models\RegionalClient;
 use App\Models\Role;
-use App\Models\Battery;
 use App\Models\TransactionSheet;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
-use App\Models\AppMedia;
 use Auth;
+use Carbon\Carbon;
 use Config;
 use DateTime;
 use DB;
@@ -39,7 +41,6 @@ use Session;
 use Storage;
 use URL;
 use Validator;
-use Carbon\Carbon;
 
 class ConsignmentController extends Controller
 {
@@ -165,7 +166,7 @@ class ConsignmentController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn','OrderactivityDetails');
+        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn', 'OrderactivityDetails');
 
         if ($authuser->role_id == 1) {
             $query;
@@ -1899,7 +1900,7 @@ class ConsignmentController extends Controller
         $purchasePrice = $request->purchase_price;
         $assigndate = date('Y-m-d');
 
-        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'assign_date' => $assigndate, 'battery_id' => $request->battery_id ,'delivery_status' => 'Assigned']);
+        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'assign_date' => $assigndate, 'battery_id' => $request->battery_id, 'delivery_status' => 'Assigned']);
 
         $consignees = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_name', 'consignees.phone as phone', 'consignees.email as email', 'vehicles.regn_no as vehicle_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'drivers.name as driver_id', 'drivers.phone as driver_phone', 'drivers.team_id as team_id', 'drivers.fleet_id as fleet_id')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
@@ -1931,28 +1932,28 @@ class ConsignmentController extends Controller
         $mytime = Carbon::now('Asia/Kolkata');
         $currentdate = $mytime->toDateTimeString();
 
-        foreach ($cc as $c_id) { 
+        foreach ($cc as $c_id) {
 
             // =================== task assign
             $respons2 = array('consignment_id' => $c_id, 'status' => 'Assigned', 'create_at' => $currentdate, 'type' => '2');
 
             $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $c_id)->orderBy('id', 'DESC')->first();
             if (!empty($lastjob->response_data)) {
-            $st = json_decode($lastjob->response_data);
-            array_push($st, $respons2);
-            $sts = json_encode($st);
+                $st = json_decode($lastjob->response_data);
+                array_push($st, $respons2);
+                $sts = json_encode($st);
 
-            $start = Job::create(['consignment_id' => $c_id, 'response_data' => $sts, 'status' => 'Assigned', 'type' => '2']);
-            // ==== end started
+                $start = Job::create(['consignment_id' => $c_id, 'response_data' => $sts, 'status' => 'Assigned', 'type' => '2']);
+                // ==== end started
             }
 
             $app_notify = $this->sendNotification($request->driver_id);
-            
+
             // $order_details = ConsignmentNote::with('BillingClient')->where('id', $c_id)->first();
             //  // ----- otp alert msg ----------------- //
             // $billingclient = @$order_details->BillingClient->name;
             // $billingclientphone = @$order_details->BillingClient->phone;
-            // $text = 'Dear '.$billingclient.', 
+            // $text = 'Dear '.$billingclient.',
             // Your AgriWings order '.$c_id.' is received and has been allocated. Below are the details of the Pilot -Name: '.$driverName.' No.:'.$driverPhone.' Date of Service: '.$order_details->edd.' Thanks for choosing AgriWings!';
 
             // $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($billingclientphone) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
@@ -4235,7 +4236,7 @@ class ConsignmentController extends Controller
     }
 
     public function getJob(Request $request)
-    { 
+    {
         $this->prefix = request()->route()->getPrefix();
         $app_trail = Job::where('consignment_id', $request->lr_id)->orderBy('id', 'DESC')->first();
 
@@ -4987,7 +4988,6 @@ class ConsignmentController extends Controller
         try {
             DB::beginTransaction();
 
-
             $gstsave = Crop::where('id', $request->crop_id)->update(['crop_price' => $request->crop_price]);
             if ($gstsave) {
                 $url = $this->prefix . '/settings/branch-address';
@@ -5327,5 +5327,87 @@ class ConsignmentController extends Controller
         $response = curl_exec($ch);
 
         return $response;
+    }
+
+    public function cropSchemeList(Request $request)
+    {
+        $this->prefix = request()->route()->getPrefix();
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $baseclient = explode(',', $authuser->baseclient_id);
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+        $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
+
+        $crop_price_schemes = CropPriceScheme::with('Crops')->orderBy('id','desc')->get();
+        $crops = Crop::where('status', 1)->get();
+        return view('consignments.crop-price-scheme', ['prefix' => $this->prefix, 'title' => $this->title, 'crop_price_schemes' => $crop_price_schemes, 'crops' => $crops]);
+    }
+
+    public function addCropScheme(Request $request)
+    {
+
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+            $rules = array(
+                // 'crop_name' => 'required|unique:crops',
+            );
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $response['success'] = false;
+                $response['validation'] = false;
+                $response['formErrors'] = true;
+                $response['error_message'] = $errors;
+                return response()->json($response);
+            }
+
+            $check_old_scheme = CropPriceScheme::where('crop_id', $request->crop_id)->update(['status' => 0]);
+
+            $discountsave['crop_id'] = $request->crop_id;
+            $discountsave['from_date'] = $request->from_date;
+            $discountsave['to_date'] = $request->to_date;
+            $discountsave['crop_price'] = $request->crop_price;
+            $discountsave['discount_price'] = $request->discount_price;
+
+            $gstsave = CropPriceScheme::create($discountsave);
+
+            if ($gstsave) {
+                $url = $this->prefix . '/settings/branch-address';
+                $response['success'] = true;
+                $response['success_message'] = "Crop Price Added successfully";
+                $response['error'] = false;
+                $response['redirect_url'] = $url;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created Vendor please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+    }
+
+    public function checkPriceScheme(Request $request)
+    {
+        $today = date('Y-m-d');
+        $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
+            ->whereDate('from_date', '<=', $today)
+            ->whereDate('to_date', '>=', $today)->where('status',1)->orderBy('id', 'desc')->first();
+
+        $response['success'] = true;
+        $response['get_scheme_details'] = $get_scheme_details;
+        $response['error'] = false;
+        return response()->json($response);
     }
 }

@@ -627,7 +627,7 @@
             $('#check_phone').html('Please enter phone number');
             return false;
         }
-
+        
         $.ajax({
             url: "sent-otp",
             type: "get",

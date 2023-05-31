@@ -1432,7 +1432,10 @@ class OrderController extends Controller
                     $save_data['crop'] = $save_data['crop_name'];
                     $save_data['acreage'] = $save_data['acerage'];
                     $save_data['crop_price'] = $save_data['crop_price'];
+                    $save_data['discount'] = $save_data['discount'];
+                    $save_data['total_price'] = $save_data['offered_cost'];
                     $save_data['status'] = 1;
+                    
                     $saveconsignmentitems = OrderFarm::create($save_data);
                 }
 
@@ -2257,6 +2260,8 @@ class OrderController extends Controller
                     $save_data['crop'] = $save_data['crop_name'];
                     $save_data['acreage'] = $save_data['acerage'];
                     $save_data['crop_price'] = $save_data['crop_price'];
+                    $save_data['discount'] = $save_data['discount'];
+                    $save_data['total_price'] = $save_data['offered_cost'];
                     $save_data['status'] = 1;
                     $saveconsignmentitems = OrderFarm::create($save_data);
                 }
