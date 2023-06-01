@@ -115,19 +115,19 @@ div.relative {
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Crop Name</label>
-                            <input type="text" class="form-control" name="crop_name">
+                            <input type="text" class="form-control" name="crop_name" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Price</label>
-                            <input type="number" class="form-control" name="crop_price">
+                            <input type="number" class="form-control" name="crop_price" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Crop Image</label>
-                            <input type="file" class="form-control" name="crop_image">
+                            <input type="file" class="form-control" name="crop_image" required>
                         </div>
                     </div>
 
