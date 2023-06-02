@@ -786,7 +786,7 @@ class TransactionSheetsController extends Controller
             $st = json_decode($lastjob->response_data);
 
             array_push($st, $respons3);
-            $sts = json_encode($st);
+            $sts = json_encode($st);   
 
             $create = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Successful', 'type' => '2']);
 
