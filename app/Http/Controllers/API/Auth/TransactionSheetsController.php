@@ -12,6 +12,7 @@ use App\Models\Job;
 use App\Models\OrderActivityDetails;
 use App\Models\OrderFarm;
 use App\Models\TransactionSheet;
+use App\Models\CropPriceScheme;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -433,13 +434,17 @@ class TransactionSheetsController extends Controller
                 $url_chng = NULL;
             }
 
+
+           $getOrderDetailsactivity = OrderActivityDetails::where('order_id', $id)->first();
+
+           if(empty($getOrderDetailsactivity)){
             $storeOrderDetails['order_id'] = $id;
-            $storeOrderDetails['acerage'] = $request->acerage;
-            $storeOrderDetails['last_acerage'] = $getOrderDetails->acreage;
+            // $storeOrderDetails['acerage'] = $request->acerage;
+            // $storeOrderDetails['last_acerage'] = $getOrderDetails->acreage;
             $storeOrderDetails['crop'] = $request->crop;
             $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
-            $storeOrderDetails['last_spray_amount'] = $getOrderDetails->crop_price;
-            $storeOrderDetails['total_spray_amount'] = $request->crop_price;
+            // $storeOrderDetails['last_spray_amount'] = $getOrderDetails->crop_price;
+            // $storeOrderDetails['total_spray_amount'] = $request->crop_price;
             $storeOrderDetails['exceed_amount'] = $request->exceed_amount;
             $storeOrderDetails['mode'] = $request->mode;
             $storeOrderDetails['checmical_used'] = $request->chemical_used;
@@ -450,14 +455,31 @@ class TransactionSheetsController extends Controller
             $storeOrderDetails['available_person_phone'] = $request->available_person_phone;
 
             $savedetails = OrderActivityDetails::create($storeOrderDetails);
+           }else{
 
-            $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop' => $request->crop, 'crop_price' => $request->crop_price]);
+            $storeOrderDetails['order_id'] = $id;
+            $storeOrderDetails['crop'] = $request->crop;
+            $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
+            $storeOrderDetails['exceed_amount'] = $request->exceed_amount;
+            $storeOrderDetails['mode'] = $request->mode;
+            $storeOrderDetails['checmical_used'] = $request->chemical_used;
+            $storeOrderDetails['charging_point'] = $request->charging_point;
+            $storeOrderDetails['fresh_water'] = $request->fresh_water;
+            $storeOrderDetails['farmer_available'] = $request->farmer_available;
+            $storeOrderDetails['available_person_name'] = $request->available_person_name;
+            $storeOrderDetails['available_person_phone'] = $request->available_person_phone;
+
+            $savedetails = OrderActivityDetails::where('order_id', $id)->update($storeOrderDetails);
+
+           }
+
+            // $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop' => $request->crop, 'crop_price' => $request->crop_price]);
 
             $update_status = ConsignmentNote::find($id);
             if(empty($update_status->noc_upload)){
-                $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $url_chng,'total_acerage' => $request->acerage , 'total_amount' => $request->crop_price]);
+                $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $url_chng]);
             }else{
-                $res = $update_status->update(['delivery_status' => 'Started' ,'total_acerage' => $request->acerage , 'total_amount' => $request->crop_price]);
+                $res = $update_status->update(['delivery_status' => 'Started']);
             }
            
             $mytime = Carbon::now('Asia/Kolkata');
@@ -467,7 +489,7 @@ class TransactionSheetsController extends Controller
             $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderby('id', 'desc')->first();
             $st = json_decode($lastjob->response_data);
             array_push($st, $respons2);
-            $sts = json_encode($st);
+            $sts = json_encode($st); 
 
             $start = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Started', 'type' => '2']);
 
@@ -935,12 +957,14 @@ class TransactionSheetsController extends Controller
                 ];
             }
             $croplist = DB::table('crops')->select('id', 'crop_name', 'crop_price')->get();
+            $cropScheme = CropPriceScheme::select('crop_id','from_date','to_date','crop_price','discount_price')->where('status', 1)->get();
             if ($consignments) {
                 return response([
                     'status' => 'success',
                     'code' => 1,
                     'data' => $data,
                     'crop_list' => $croplist,
+                    'crop_scheme_list' => $cropScheme,
                 ], 200);
             } else {
                 return response([
@@ -966,5 +990,60 @@ class TransactionSheetsController extends Controller
 
         }
 
+    }
+    public function acerageCalculation(Request $request, $id)
+    {
+        try {
+            
+            $order_details = OrderFarm::where('order_id', $id)->first(); 
+            $getOrderDetails = OrderActivityDetails::where('order_id', $id)->first();
+            $cropSchemes = CropPriceScheme::where('crop_id',$order_details->crop)->where('status', 1)->first();
+
+            $offeredprice = $cropSchemes->crop_price - $cropSchemes->discount_price;
+            $total_spray_amount = $request->acerage * $offeredprice;
+
+            $crop_price = $cropSchemes->crop_price * $request->acerage;
+            $dicount_price = $crop_price - $total_spray_amount;
+
+            if(empty($getOrderDetails)){
+
+                $storeOrderDetails['order_id'] = $id;
+                $storeOrderDetails['acerage'] = $request->acerage;
+                $storeOrderDetails['last_acerage'] = $order_details->acreage;
+                $storeOrderDetails['last_spray_amount'] = $order_details->total_price;
+                $storeOrderDetails['total_spray_amount'] = $total_spray_amount;
+                $savedetails = OrderActivityDetails::create($storeOrderDetails);
+
+                $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $dicount_price ,'total_price' => $total_spray_amount]);
+    
+            }else{
+
+                $storeOrderDetails['acerage'] = $request->acerage;
+                $storeOrderDetails['last_acerage'] = $order_details->acreage;
+                $storeOrderDetails['last_spray_amount'] = $order_details->total_price;
+                $storeOrderDetails['total_spray_amount'] = $total_spray_amount;
+
+                $savedetails = OrderActivityDetails::where('order_id', $id)->update(['acerage'=> $request->acerage, 'last_acerage' => $order_details->acreage]);
+
+                $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $dicount_price ,'total_price' => $total_spray_amount]);
+            }
+
+            $update_status = ConsignmentNote::find($id);
+            $res = $update_status->update(['total_acerage' => $request->acerage , 'total_amount' => $crop_price]);
+
+
+                return response([
+                    'status' => 'success',
+                    'code' => 1,
+                    'message' => 'Acerage Updated Successfully',
+                ], 200);
+    
+        } catch (\Exception $exception) {
+            return response([
+                'status' => 'error',
+                'code' => 0,
+                'message' => "Failed to update transaction_sheets, please try again. {$exception->getMessage()}",
+            ], 500);
+        }
     }
 }

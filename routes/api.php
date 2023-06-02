@@ -38,6 +38,7 @@ Route::group(['middleware' =>  ['jwt.verify'],'prefix' => 'auth'], function ($ro
     Route::post('verified-lr/{id}', 'App\Http\Controllers\Api\Auth\TransactionSheetsController@verifiedLr')->name('api.auth.verifiedLr.transaction_sheets');
     Route::any('img-delete/{id}', 'App\Http\Controllers\Api\Auth\TransactionSheetsController@imgDelete')->name('api.auth.imgDelete.transaction_sheets');
     Route::post('store-coordinates/{id}', 'App\Http\Controllers\Api\Auth\TransactionSheetsController@storeCoordinates')->name('api.auth.verifiedLr.transaction_sheets');
+    Route::post('/price-calculation/{id}', 'App\Http\Controllers\Api\Auth\TransactionSheetsController@acerageCalculation')->name('api.auth.acerageCalculation.transaction_sheets');
     
     });
 
