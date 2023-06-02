@@ -776,7 +776,7 @@ class TransactionSheetsController extends Controller
         try {
             $update_status = ConsignmentNote::find($id);
 
-            $res = $update_status->update(['status'=>2,'delivery_status' => 'Successful', 'delivery_date' => date('Y-m-d')]);
+            $res = $update_status->update(['delivery_status' => 'Successful', 'delivery_date' => date('Y-m-d')]);
 
             $mytime = Carbon::now('Asia/Kolkata');
             $currentdate = $mytime->toDateTimeString();
