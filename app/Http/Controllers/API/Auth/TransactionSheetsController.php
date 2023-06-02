@@ -1165,7 +1165,18 @@ class TransactionSheetsController extends Controller
             $update_status = ConsignmentNote::find($id);
             $res = $update_status->update(['total_acerage' => $request->acerage, 'total_amount' => $crop_price]);
 
+            //////
+            $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails')->where('id', $id)->first();
+
+            $crop_price = @$order_details['Orderactivity']['CropDetail']['crop_price'];
+            $discount_price = @$order_details['Orderactivity']['CropDetail']['discount_price'];
+
+            $offer_price = $crop_price - $discount_price;
+            $total_acres = @$order_details['total_acerage'];
+            $total_payables = $offer_price * $total_acres;
+
             return response([
+                'total_amount' => $total_payables,
                 'status' => 'success',
                 'code' => 1,
                 'message' => 'Acerage Updated Successfully',

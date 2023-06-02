@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Manufacturing  year<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="mfg" placeholder="Mahindra, Tata, etc.">
+                                    <input type="text" class="form-control" name="mfg" placeholder="">
                                 </div>
                             </div>
                             <div class="form-row mb-0">                          

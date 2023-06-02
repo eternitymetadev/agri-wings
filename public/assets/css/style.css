@@ -84,8 +84,7 @@ input[type=number] {
 }
 
 label.error {
-    color: #ff0000;
-    font-weight: normal;
+    color: #ff0000 !important;
 }
 
 .navbar .nav-logo a.navbar-brand img {

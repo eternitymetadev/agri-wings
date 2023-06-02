@@ -51,10 +51,12 @@ div.relat {
                         <?php } ?>
                         <thead>
                             <tr>
+                                <th>AgriWings Code</th>
+                                <th>Dron Model</th>
                                 <th>UIN</th>
                                 <th>Manufacturing Year</th>
-                                <th>Drone Model</th>
-                                <th>Action</th>
+                                <th>Drone Capacity(Ltrs)</th>
+                                <!-- <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -78,12 +80,13 @@ div.relat {
             ajax: "{{ url('vehicles/list') }}",
 
             columns: [
+                {data: 'drone_code', name: 'drone_code'},
+                {data: 'make', name: 'make'},
                 {data: 'regn_no', name: 'regn_no'},
                 {data: 'mfg', name: 'mfg'},
-                {data: 'make', name: 'make'},
-                // {data: 'mfg', name: 'mfg'},
+                {data: 'gross_vehicle_weight', name: 'gross_vehicle_weight'},
                 // {data: 'rc_image', name: 'rc_image'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
+                // {data: 'action', name: 'action', orderable: false, searchable: false}
                 
             ]
         });
