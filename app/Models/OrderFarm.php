@@ -31,4 +31,9 @@ class OrderFarm extends Model
         return $this->hasOne('App\Models\Farm','id','farm_location');
     }
 
+    public function CropDetail()
+    {
+        return $this->hasOne('App\Models\CropPriceScheme','crop_id','crop');
+    }
+
 }

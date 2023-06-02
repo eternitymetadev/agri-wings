@@ -8,15 +8,16 @@ use App\Models\Consignee;
 use App\Models\ConsignmentNote;
 use App\Models\Coordinate;
 use App\Models\Crop;
+use App\Models\CropPriceScheme;
 use App\Models\Job;
 use App\Models\OrderActivityDetails;
 use App\Models\OrderFarm;
 use App\Models\TransactionSheet;
-use App\Models\CropPriceScheme;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Helper;
 
 class TransactionSheetsController extends Controller
 {
@@ -252,9 +253,9 @@ class TransactionSheetsController extends Controller
 
                 //    }
                 $pod_img = array();
-                   foreach($value->AppMedia as $pod){
-                    $pod_img[] = array('img' => $pod->pod_img,'type' => $pod->type,'id' => $pod->id
-                   );
+                foreach ($value->AppMedia as $pod) {
+                    $pod_img[] = array('img' => $pod->pod_img, 'type' => $pod->type, 'id' => $pod->id,
+                    );
                 }
 
                 // $deliverystatus = array();
@@ -427,61 +428,60 @@ class TransactionSheetsController extends Controller
                 $path = Storage::disk('s3')->put('noc', $nocupload);
                 $noc_path = Storage::disk('s3')->url($path);
                 $url_chng = explode(':', $noc_path);
-                $url_chng = $url_chng[0].'s:'.$url_chng[1];
+                $url_chng = $url_chng[0] . 's:' . $url_chng[1];
 
                 $storeOrderDetails['noc_upload'] = $url_chng;
             } else {
-                $url_chng = NULL;
+                $url_chng = null;
             }
 
+            $getOrderDetailsactivity = OrderActivityDetails::where('order_id', $id)->first();
 
-           $getOrderDetailsactivity = OrderActivityDetails::where('order_id', $id)->first();
+            if (empty($getOrderDetailsactivity)) {
+                $storeOrderDetails['order_id'] = $id;
+                // $storeOrderDetails['acerage'] = $request->acerage;
+                // $storeOrderDetails['last_acerage'] = $getOrderDetails->acreage;
+                $storeOrderDetails['crop'] = $request->crop;
+                $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
+                // $storeOrderDetails['last_spray_amount'] = $getOrderDetails->crop_price;
+                // $storeOrderDetails['total_spray_amount'] = $request->crop_price;
+                $storeOrderDetails['exceed_amount'] = $request->exceed_amount;
+                $storeOrderDetails['mode'] = $request->mode;
+                $storeOrderDetails['checmical_used'] = $request->chemical_used;
+                $storeOrderDetails['charging_point'] = $request->charging_point;
+                $storeOrderDetails['fresh_water'] = $request->fresh_water;
+                $storeOrderDetails['farmer_available'] = $request->farmer_available;
+                $storeOrderDetails['available_person_name'] = $request->available_person_name;
+                $storeOrderDetails['available_person_phone'] = $request->available_person_phone;
 
-           if(empty($getOrderDetailsactivity)){
-            $storeOrderDetails['order_id'] = $id;
-            // $storeOrderDetails['acerage'] = $request->acerage;
-            // $storeOrderDetails['last_acerage'] = $getOrderDetails->acreage;
-            $storeOrderDetails['crop'] = $request->crop;
-            $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
-            // $storeOrderDetails['last_spray_amount'] = $getOrderDetails->crop_price;
-            // $storeOrderDetails['total_spray_amount'] = $request->crop_price;
-            $storeOrderDetails['exceed_amount'] = $request->exceed_amount;
-            $storeOrderDetails['mode'] = $request->mode;
-            $storeOrderDetails['checmical_used'] = $request->chemical_used;
-            $storeOrderDetails['charging_point'] = $request->charging_point;
-            $storeOrderDetails['fresh_water'] = $request->fresh_water;
-            $storeOrderDetails['farmer_available'] = $request->farmer_available;
-            $storeOrderDetails['available_person_name'] = $request->available_person_name;
-            $storeOrderDetails['available_person_phone'] = $request->available_person_phone;
+                $savedetails = OrderActivityDetails::create($storeOrderDetails);
+            } else {
 
-            $savedetails = OrderActivityDetails::create($storeOrderDetails);
-           }else{
+                $storeOrderDetails['order_id'] = $id;
+                $storeOrderDetails['crop'] = $request->crop;
+                $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
+                $storeOrderDetails['exceed_amount'] = $request->exceed_amount;
+                $storeOrderDetails['mode'] = $request->mode;
+                $storeOrderDetails['checmical_used'] = $request->chemical_used;
+                $storeOrderDetails['charging_point'] = $request->charging_point;
+                $storeOrderDetails['fresh_water'] = $request->fresh_water;
+                $storeOrderDetails['farmer_available'] = $request->farmer_available;
+                $storeOrderDetails['available_person_name'] = $request->available_person_name;
+                $storeOrderDetails['available_person_phone'] = $request->available_person_phone;
 
-            $storeOrderDetails['order_id'] = $id;
-            $storeOrderDetails['crop'] = $request->crop;
-            $storeOrderDetails['last_crop'] = $getOrderDetails->crop;
-            $storeOrderDetails['exceed_amount'] = $request->exceed_amount;
-            $storeOrderDetails['mode'] = $request->mode;
-            $storeOrderDetails['checmical_used'] = $request->chemical_used;
-            $storeOrderDetails['charging_point'] = $request->charging_point;
-            $storeOrderDetails['fresh_water'] = $request->fresh_water;
-            $storeOrderDetails['farmer_available'] = $request->farmer_available;
-            $storeOrderDetails['available_person_name'] = $request->available_person_name;
-            $storeOrderDetails['available_person_phone'] = $request->available_person_phone;
+                $savedetails = OrderActivityDetails::where('order_id', $id)->update($storeOrderDetails);
 
-            $savedetails = OrderActivityDetails::where('order_id', $id)->update($storeOrderDetails);
-
-           }
+            }
 
             // $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop' => $request->crop, 'crop_price' => $request->crop_price]);
 
             $update_status = ConsignmentNote::find($id);
-            if(empty($update_status->noc_upload)){
+            if (empty($update_status->noc_upload)) {
                 $res = $update_status->update(['delivery_status' => 'Started', 'noc_upload' => $url_chng]);
-            }else{
+            } else {
                 $res = $update_status->update(['delivery_status' => 'Started']);
             }
-           
+
             $mytime = Carbon::now('Asia/Kolkata');
             $currentdate = $mytime->toDateTimeString();
             $respons2 = array('consignment_id' => $id, 'status' => 'Started', 'create_at' => $currentdate, 'type' => '2');
@@ -489,7 +489,7 @@ class TransactionSheetsController extends Controller
             $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderby('id', 'desc')->first();
             $st = json_decode($lastjob->response_data);
             array_push($st, $respons2);
-            $sts = json_encode($st); 
+            $sts = json_encode($st);
 
             $start = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Started', 'type' => '2']);
 
@@ -527,7 +527,7 @@ class TransactionSheetsController extends Controller
             // $currentdate = date("d-m-y h:i:sa");
             $respons2 = array('consignment_id' => $id, 'status' => 'Acknowledge', 'create_at' => $currentdate, 'type' => '2');
 
-            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id',$id)->orderby('id','desc')->first();
+            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderby('id', 'desc')->first();
             $st = json_decode($lastjob->response_data);
             array_push($st, $respons2);
             $sts = json_encode($st);
@@ -611,13 +611,12 @@ class TransactionSheetsController extends Controller
             $type = @$save_data['type'];
 
             $path = Storage::disk('s3')->put('pod-image', $images);
-           
 
             $img_path[] = Storage::disk('s3')->url($path);
             $img_path_save = Storage::disk('s3')->url($path);
 
             $url_chng = explode(':', $img_path_save);
-            $url_chng = $url_chng[0].'s:'.$url_chng[1];
+            $url_chng = $url_chng[0] . 's:' . $url_chng[1];
 
             $appmedia['consignment_no'] = $id;
             $appmedia['pod_img'] = $url_chng;
@@ -659,7 +658,7 @@ class TransactionSheetsController extends Controller
                 // }
                 //     $order = array();
                 //     $invoices = array();
-                 $pod_img = array();
+                $pod_img = array();
 
                 //     $getlast = DB::table('jobs')->where('consignment_id', $value->id)->orderBy('id', 'DESC')->first();
 
@@ -667,9 +666,9 @@ class TransactionSheetsController extends Controller
                 //            $order[] = $orders->order_id;
                 //            $invoices[] = $orders->invoice_no;
                 //    }
-                   foreach($value->AppMedia as $pod){
-                    $pod_img[] = array('img' => $pod->pod_img,'type' => $pod->type, 'id' => $pod->id
-                   );
+                foreach ($value->AppMedia as $pod) {
+                    $pod_img[] = array('img' => $pod->pod_img, 'type' => $pod->type, 'id' => $pod->id,
+                    );
                 }
                 // $deliverystatus = array();
 
@@ -711,10 +710,10 @@ class TransactionSheetsController extends Controller
                     // 'delivery_notes' => $value->delivery_notes,
                     'order_details' => $order_details,
                     // 'success_time' => @$successtime,
-                   'img' => $pod_img,
+                    'img' => $pod_img,
                 ];
             }
-          
+
             if ($consignments) {
                 return response([
                     'status' => 'success',
@@ -777,19 +776,152 @@ class TransactionSheetsController extends Controller
         try {
             $update_status = ConsignmentNote::find($id);
 
-            $res = $update_status->update(['delivery_status' => 'Successful', 'delivery_date' => date('Y-m-d')]);
+            // $res = $update_status->update(['delivery_status' => 'Successful', 'delivery_date' => date('Y-m-d')]);
 
-            $mytime = Carbon::now('Asia/Kolkata');
-            $currentdate = $mytime->toDateTimeString();
-            // $currentdate = date("d-m-y h:i:sa");
-            $respons3 = array('consignment_id' => $id, 'status' => 'Successful', 'create_at' => $currentdate, 'type' => '2');
-            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderBy('id', 'DESC')->first();
-            $st = json_decode($lastjob->response_data);
+            // $mytime = Carbon::now('Asia/Kolkata');
+            // $currentdate = $mytime->toDateTimeString();
+            // // $currentdate = date("d-m-y h:i:sa");
+            // $respons3 = array('consignment_id' => $id, 'status' => 'Successful', 'create_at' => $currentdate, 'type' => '2');
+            // $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderBy('id', 'DESC')->first();
+            // $st = json_decode($lastjob->response_data);
 
-            array_push($st, $respons3);
-            $sts = json_encode($st);
+            // array_push($st, $respons3);
+            // $sts = json_encode($st);
 
-            $create = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Successful', 'type' => '2']);
+            // $create = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Successful', 'type' => '2']);
+
+            // ========= invoice pdf =====================//
+            $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails')->where('id', $id)->first();
+        // echo "<pre>"; print_r($order_details['Orderactivity']['CropDetail']['crop_price']); die;
+            $banner_img = public_path('assets/banner_pdf.png');
+            $footer_img = public_path('assets/footer_pdf.png');
+            // dd($order_details['delivery_date']);
+            $html = '<!doctype html>
+            <html>
+            <head>
+            
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>pdf</title>
+            
+                <style>
+                    *{
+                        margin: 0;
+                        padding: 0;
+                        font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+                    }
+                    .p1{
+                        padding: 0.5rem;
+                    }
+                    .textRight{
+                        text-align: right
+                    }
+                    .textCenter{
+                        text-align: center;
+                    }
+                    .size1{
+                        font-size: 16px;
+                        line-height: 20px;
+                    }
+                    .size2{
+                        font-size: 18px;
+                        line-height: 28px;
+                    }
+                    .size3{
+                        font-size: 22px;
+                        line-height: 38px;
+                    }
+                    .bold{
+                        font-weight: bold;
+                    }
+                </style>
+            </head>
+            <body>
+            <table style="width: 100%">
+                <tr><td><img src="'.$banner_img.'" alt="logo" style="width: 100%; border-radius: 0 0 20px 20px"/></td></tr>
+                <tr><td class="textCenter size2"><p style="margin-top: -3.3rem">'.Helper::ShowFormatDate($order_details['delivery_date']).'</p></td></tr>
+            </table>
+            
+            <table style="width: 100%; margin: 1rem auto">
+                <tr><td class="textCenter size3"><h5 class="size3">'.@$order_details['ConsigneeDetail']['nick_name'].' - Gratitude for selecting AgriWings with Order Id-'.@$order_details['id'].'</h5></td></tr>
+                <tr><td class="textCenter size1">Congratulations! You have saved '.@$order_details['Orderactivity']['CropName']['water_qty'].' ltr fresh water by choosing AgriWings.</td></tr>
+            </table>
+            
+            
+            <table style="width: 80%; margin: 2rem auto">
+                <tr>
+                    <td colspan="2" class="textCenter size2 bold">Crop Details</td>
+                </tr>
+                <tr style="border-top: 2px solid #000">
+                    <td class="size2">Crop Name</td>
+                    <td class="size2 textRight">'.@$order_details['Orderactivity']['CropName']['crop_name'].'</td>
+                </tr>
+            </table>';
+            $crop_price = @$order_details['Orderactivity']['CropDetail']['crop_price'];
+            $discount_price = @$order_details['Orderactivity']['CropDetail']['discount_price'];
+
+            $offer_price = $crop_price - $discount_price;
+            $total_acres = @$order_details['total_acerage'];
+            $total_payables = $offer_price * $total_acres;
+            if($order_details['OrderactivityDetails']['mode'] == null){
+                $payment_mode = 'Advanced';
+            }else{
+                $payment_mode = @$order_details['OrderactivityDetails']['mode'];
+            }
+    
+                $html .='<table style="width: 80%; margin: 2rem auto">
+                <tr>
+                    <td colspan="2" class="textCenter size2 bold">Invoice Details</td>
+                </tr>
+                <tr>
+                    <td class="size2 ">Base Price</td>
+                    <td class="size2 textRight">'.@$crop_price.'</td>
+                </tr>
+                <tr>
+                    <td class="size2 ">Discounted Price</td>
+                    <td class="size2 textRight">'.@$discount_price.'</td>
+                </tr>
+                <tr>
+                    <td class="size2 ">Offer Price</td>
+                    <td class="size2 textRight">'.$offer_price.'</td>
+                </tr>
+                <tr>
+                    <td class="size2 " style="padding-bottom: 1rem">Total Acres</td>
+                    <td class="size2 textRight" style="padding-bottom: 1rem">'.$total_acres.'</td>
+                </tr>
+                <tr style="border-top: 2px solid #000">
+                    <td class="size2 bold" style="border-top: 1px solid #000">Total Payable (Cash)</td>
+                    <td class="size2 textRight bold" style="border-top: 1px solid #000">'.$total_payables.'</td>
+                </tr>
+            </table>
+            
+            <table style="width: 80%; margin: 2rem auto">
+                <tr>
+                    <td colspan="2" class="textCenter size2 bold">Payment</td>
+                </tr>
+                <tr style="border-top: 2px solid #000">
+                    <td class="size2">Paid By '.$payment_mode.'</td>
+                    <td class="size2 textRight">'.$total_payables.'</td>
+                </tr>
+            </table>
+            
+            
+            <img src="'.$footer_img.'" alt="logo" style="width: 100%; position: fixed; bottom: 0;"/>
+            <table style="width: 100%; position: fixed; bottom: 3rem; left: 0">
+                <tr>
+                    <td class="textCenter size1" width="55%">For any support, please contact</td>
+                    <td class="size1" style="padding-left: 50px; color: #fff">+91-9889161313<br/>support@agriwings.in</td>
+                </tr>
+            </table>
+            
+            </body>
+            </html>';
+            
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($html);
+            $pdf->setPaper('legal', 'portrait');
+            return $pdf->download('Noc.pdf');
 
             if ($res) {
                 return response([
@@ -931,20 +1063,19 @@ class TransactionSheetsController extends Controller
 
         try {
 
-            $consignments = ConsignmentNote::with('ConsignerDetail', 'TransactionSheet', 'ConsigneeDetail', 'AppMedia', 'Orderactivity', 'Branch','OrderactivityDetails')->where('id', $id)
+            $consignments = ConsignmentNote::with('ConsignerDetail', 'TransactionSheet', 'ConsigneeDetail', 'AppMedia', 'Orderactivity', 'Branch', 'OrderactivityDetails')->where('id', $id)
                 ->get();
 
             foreach ($consignments as $value) {
 
-                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => @$value->Orderactivity->CropName->crop_name, 'crop_id' => @$value->Orderactivity->crop,'farm' => @$value->Orderactivity->FarmerFarm->field_area, 'acerage' => @$value->Orderactivity->acreage, 'crop_price' => @$value->Orderactivity->crop_price,
-               'total_discount' => @$value->Orderactivity->discount, 'total_price' => @$value->Orderactivity->total_price);
-
+                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => @$value->Orderactivity->CropName->crop_name, 'crop_id' => @$value->Orderactivity->crop, 'farm' => @$value->Orderactivity->FarmerFarm->field_area, 'acerage' => @$value->Orderactivity->acreage, 'crop_price' => @$value->Orderactivity->crop_price,
+                    'total_discount' => @$value->Orderactivity->discount, 'total_price' => @$value->Orderactivity->total_price);
 
                 $data[] = [
                     'order_no' => $value->id,
                     'noc_upload' => $value->noc_upload,
                     'payment_type' => @$value->payment_type,
-                    'acerage'  => @$value->Orderactivity->acreage,
+                    'acerage' => @$value->Orderactivity->acreage,
                     'crop_name' => @$value->Orderactivity->CropName->crop_name,
                     'crop_id' => @$value->Orderactivity->crop,
                     'crop_price' => @$value->Orderactivity->crop_price,
@@ -960,7 +1091,7 @@ class TransactionSheetsController extends Controller
                 ];
             }
             $croplist = DB::table('crops')->select('id', 'crop_name', 'crop_price')->get();
-            $cropScheme = CropPriceScheme::select('crop_id','from_date','to_date','crop_price','discount_price')->where('status', 1)->get();
+            $cropScheme = CropPriceScheme::select('crop_id', 'from_date', 'to_date', 'crop_price', 'discount_price')->where('status', 1)->get();
             if ($consignments) {
                 return response([
                     'status' => 'success',
@@ -997,10 +1128,10 @@ class TransactionSheetsController extends Controller
     public function acerageCalculation(Request $request, $id)
     {
         try {
-            
-            $order_details = OrderFarm::where('order_id', $id)->first(); 
+
+            $order_details = OrderFarm::where('order_id', $id)->first();
             $getOrderDetails = OrderActivityDetails::where('order_id', $id)->first();
-            $cropSchemes = CropPriceScheme::where('crop_id',$order_details->crop)->where('status', 1)->first();
+            $cropSchemes = CropPriceScheme::where('crop_id', $order_details->crop)->where('status', 1)->first();
 
             $offeredprice = $cropSchemes->crop_price - $cropSchemes->discount_price;
             $total_spray_amount = $request->acerage * $offeredprice;
@@ -1008,7 +1139,7 @@ class TransactionSheetsController extends Controller
             $crop_price = $cropSchemes->crop_price * $request->acerage;
             $dicount_price = $crop_price - $total_spray_amount;
 
-            if(empty($getOrderDetails)){
+            if (empty($getOrderDetails)) {
 
                 $storeOrderDetails['order_id'] = $id;
                 $storeOrderDetails['acerage'] = $request->acerage;
@@ -1017,30 +1148,29 @@ class TransactionSheetsController extends Controller
                 $storeOrderDetails['total_spray_amount'] = $total_spray_amount;
                 $savedetails = OrderActivityDetails::create($storeOrderDetails);
 
-                $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $dicount_price ,'total_price' => $total_spray_amount]);
-    
-            }else{
+                $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $dicount_price, 'total_price' => $total_spray_amount]);
+
+            } else {
 
                 $storeOrderDetails['acerage'] = $request->acerage;
                 $storeOrderDetails['last_acerage'] = $order_details->acreage;
                 $storeOrderDetails['last_spray_amount'] = $order_details->total_price;
                 $storeOrderDetails['total_spray_amount'] = $total_spray_amount;
 
-                $savedetails = OrderActivityDetails::where('order_id', $id)->update(['acerage'=> $request->acerage, 'last_acerage' => $order_details->acreage]);
+                $savedetails = OrderActivityDetails::where('order_id', $id)->update(['acerage' => $request->acerage, 'last_acerage' => $order_details->acreage]);
 
-                $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $dicount_price ,'total_price' => $total_spray_amount]);
+                $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $dicount_price, 'total_price' => $total_spray_amount]);
             }
 
             $update_status = ConsignmentNote::find($id);
-            $res = $update_status->update(['total_acerage' => $request->acerage , 'total_amount' => $crop_price]);
+            $res = $update_status->update(['total_acerage' => $request->acerage, 'total_amount' => $crop_price]);
 
+            return response([
+                'status' => 'success',
+                'code' => 1,
+                'message' => 'Acerage Updated Successfully',
+            ], 200);
 
-                return response([
-                    'status' => 'success',
-                    'code' => 1,
-                    'message' => 'Acerage Updated Successfully',
-                ], 200);
-    
         } catch (\Exception $exception) {
             return response([
                 'status' => 'error',
