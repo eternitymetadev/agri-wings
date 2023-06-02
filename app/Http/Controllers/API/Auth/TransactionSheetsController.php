@@ -921,7 +921,7 @@ class TransactionSheetsController extends Controller
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($html);
             $pdf->setPaper('legal', 'portrait');
-            return $pdf->download('Noc.pdf');
+            // return $pdf->download('Noc.pdf');
 
             if ($res) {
                 return response([

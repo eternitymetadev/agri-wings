@@ -352,7 +352,9 @@ class OrderController extends Controller
     {
         $this->prefix = request()->route()->getPrefix();
         $id = decrypt($id);
-        $getconsignments = ConsignmentNote::with('ConsignmentItem.ConsignmentSubItems', 'RegClient')->where('id', $id)->first();
+        // $getconsignments = ConsignmentNote::with('ConsignmentItem.ConsignmentSubItems', 'RegClient')->where('id', $id)->first();
+        $getconsignments = ConsignmentNote::with('ConsignmentItem.ConsignmentSubItems', 'RegClient','Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails')->where('id', $id)->first();
+
         $authuser = Auth::user();
         $role_id = Role::where('id', '=', $authuser->role_id)->first();
         $regclient = explode(',', $authuser->regionalclient_id);
