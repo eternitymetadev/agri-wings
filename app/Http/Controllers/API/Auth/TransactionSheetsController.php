@@ -936,7 +936,8 @@ class TransactionSheetsController extends Controller
 
             foreach ($consignments as $value) {
 
-                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => @$value->Orderactivity->CropName->crop_name, 'crop_id' => @$value->Orderactivity->crop,'farm' => @$value->Orderactivity->FarmerFarm->field_area, 'acerage' => @$value->Orderactivity->acreage, 'crop_price' => @$value->Orderactivity->crop_price);
+                $order_details = array('order_id' => $value->Orderactivity->order_id, 'crop_name' => @$value->Orderactivity->CropName->crop_name, 'crop_id' => @$value->Orderactivity->crop,'farm' => @$value->Orderactivity->FarmerFarm->field_area, 'acerage' => @$value->Orderactivity->acreage, 'crop_price' => @$value->Orderactivity->crop_price,
+               'total_discount' => @$value->Orderactivity->discount, 'total_price' => @$value->Orderactivity->total_price);
 
 
                 $data[] = [
@@ -947,6 +948,8 @@ class TransactionSheetsController extends Controller
                     'crop_name' => @$value->Orderactivity->CropName->crop_name,
                     'crop_id' => @$value->Orderactivity->crop,
                     'crop_price' => @$value->Orderactivity->crop_price,
+                    'total_discount' => @$value->Orderactivity->discount,
+                    'total_price' => @$value->Orderactivity->total_price,
                     'checmical_used' => @$value->OrderactivityDetails->checmical_used,
                     'charging_point' => @$value->OrderactivityDetails->charging_point,
                     'fresh_water' => @$value->OrderactivityDetails->fresh_water,
