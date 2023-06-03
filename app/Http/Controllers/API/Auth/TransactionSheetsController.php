@@ -893,7 +893,7 @@ class TransactionSheetsController extends Controller
             <table style="width: 100%; margin: 1rem auto">
                 <tr><td class="textCenter size3"><h5 class="size3">'.@$order_details['ConsigneeDetail']['nick_name'].' - Gratitude for selecting AgriWings with Order Id-'.@$order_details['id'].'</h5></td></tr>
                 <tr><td class="textCenter size1">Congratulations! You have saved '.@$order_details['Orderactivity']['CropName']['water_qty'].' ltr fresh water by choosing AgriWings.</td></tr>
-            </table>
+            </table>  
             
             
             <table style="width: 80%; margin: 2rem auto">
