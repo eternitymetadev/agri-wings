@@ -45,6 +45,7 @@ Route::group(['middleware' =>  ['jwt.verify'],'prefix' => 'auth'], function ($ro
 Route::get('/drivers', 'App\Http\Controllers\Api\DriversController@index')->name('api.index.drivers');
 
 Route::any('/customer-queries', 'App\Http\Controllers\Api\ReceiveAddressController@customerQueriesmail');
+Route::get('/display-invoice-pdf/{id}', [TransactionSheetsController::class, 'displayInvoicePdf']);
 
 
 Route::group([

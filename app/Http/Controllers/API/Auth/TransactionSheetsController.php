@@ -15,12 +15,19 @@ use App\Models\OrderFarm;
 use App\Models\TransactionSheet;
 use Carbon\Carbon;
 use DB;
+use URL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Helper;
 
 class TransactionSheetsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->segment = \Request::segment(2);
+        $this->sms_link = \Config::get('sms_api.req_sms');
+    }
 
     /**
 
@@ -774,24 +781,64 @@ class TransactionSheetsController extends Controller
     public function taskSuccessful(Request $request, $id)
     {
         try {
-            // $update_status = ConsignmentNote::find($id);
-
+            //     // $update_status = ConsignmentNote::find($id);
             $res = ConsignmentNote::where('id', $id)->update(['delivery_status' => 'Successful', 'delivery_date' => date('Y-m-d')]);
 
-            $mytime = Carbon::now('Asia/Kolkata');
-            $currentdate = $mytime->toDateTimeString();
-            // $currentdate = date("d-m-y h:i:sa");
-            $respons3 = array('consignment_id' => $id, 'status' => 'Successful', 'create_at' => $currentdate, 'type' => '2');
-            $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderBy('id', 'DESC')->first();
-            $st = json_decode($lastjob->response_data);
+            // $mytime = Carbon::now('Asia/Kolkata');
+            // $currentdate = $mytime->toDateTimeString();
+            // // $currentdate = date("d-m-y h:i:sa");
+            // $respons3 = array('consignment_id' => $id, 'status' => 'Successful', 'create_at' => $currentdate, 'type' => '2');
+            // $lastjob = DB::table('jobs')->select('response_data')->where('consignment_id', $id)->orderBy('id', 'DESC')->first();
+            // $st = json_decode($lastjob->response_data);
 
-            array_push($st, $respons3);
-            $sts = json_encode($st);   
+            // array_push($st, $respons3);
+            // $sts = json_encode($st);   
 
-            $create = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Successful', 'type' => '2']);
+            // $create = Job::create(['consignment_id' => $id, 'response_data' => $sts, 'status' => 'Successful', 'type' => '2']);
 
-            // ========= invoice pdf =====================//
-            $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails')->where('id', $id)->first();
+            $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails','DriverDetail')->where('id', $id)->first();
+
+            $data['cnee_name']  = @$order_details['ConsigneeDetail']['nick_name'];
+            $data['order_id']  = @$order_details['id'];
+            $data['driver_name']  = @$order_details['DriverDetail']['name'];
+            // $phone = @$order_details['ConsigneeDetail']['phone'];
+            $phone = 9569096896;
+            $pdf_url = URL::to('api/display-invoice-pdf/'.$order_details['id']);
+
+            $text = 'Dear '.@$data['cnee_name'].',
+            Your AgriWings Order <'.@$data['order_id'].'> has been completed by '.@$data['driver_name'].'. Click <Invoice Number hyperlink> for your Invoice. Rate our service at xxxx 
+            Thanks for choosing AgriWings';
+
+            $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($phone) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
+            $result = $this->SendTSMS($url);
+
+            
+
+            if ($res) {
+                return response([
+                    'status' => 'success',
+                    'code' => 1,
+                    'message' => 'Status Updated Successfully',
+                    'data' => $data,
+                    'url' => $pdf_url,
+                ], 200);
+            }
+            return response([
+                'status' => 'error',
+                'code' => 0,
+                'data' => "Failed to update status",
+            ], 500);
+        } catch (\Exception $exception) {
+            return response([
+                'status' => 'error',
+                'code' => 0,
+                'message' => "Failed to update transaction_sheets, please try again. {$exception->getMessage()}",
+            ], 500);
+        }
+    }
+
+    public function displayInvoicePdf($id){
+        $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails','DriverDetail')->where('id', $id)->first();
         // echo "<pre>"; print_r($order_details['Orderactivity']['CropDetail']['crop_price']); die;
             $banner_img = public_path('assets/banner_pdf.png');
             $footer_img = public_path('assets/footer_pdf.png');
@@ -917,32 +964,12 @@ class TransactionSheetsController extends Controller
             
             </body>
             </html>';
-            
+
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($html);
             $pdf->setPaper('legal', 'portrait');
-            // return $pdf->download('Noc.pdf'); 
+            return $pdf->download('Noc.pdf'); 
 
-            if ($res) {
-                return response([
-                    'status' => 'success',
-                    'code' => 1,
-                    'message' => 'Status Updated Successfully',
-                    // 'data' => $update_status
-                ], 200);
-            }
-            return response([
-                'status' => 'error',
-                'code' => 0,
-                'data' => "Failed to update status",
-            ], 500);
-        } catch (\Exception $exception) {
-            return response([
-                'status' => 'error',
-                'code' => 0,
-                'message' => "Failed to update transaction_sheets, please try again. {$exception->getMessage()}",
-            ], 500);
-        }
     }
 
     public function taskCancel(Request $request, $id)
@@ -1189,5 +1216,19 @@ class TransactionSheetsController extends Controller
                 'message' => "Failed to update transaction_sheets, please try again. {$exception->getMessage()}",
             ], 500);
         }
+    }
+
+
+    public function SendTSMS($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // change to 1 to verify cert
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        $result = curl_exec($ch);
+
     }
 }
