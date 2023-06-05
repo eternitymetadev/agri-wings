@@ -1159,6 +1159,7 @@ class TransactionSheetsController extends Controller
             $cropSchemes = CropPriceScheme::where('crop_id', $order_details->crop)->where('status', 1)->first();
             $crops = Crop::where('id', $order_details->crop)->where('status', 1)->first();
 
+            // ====== check schemes
             if(!empty($cropSchemes)){
                 $offeredprice = $cropSchemes->crop_price - $cropSchemes->discount_price;
                 $total_spray_amount = $request->acerage * $offeredprice;
@@ -1173,7 +1174,7 @@ class TransactionSheetsController extends Controller
                 $dicount_price = $crop_price - $total_spray_amount;
             }
 
-
+            // ========== apply schemes
             if (empty($getOrderDetails)) {
                 $storeOrderDetails['order_id'] = $id;
                 $storeOrderDetails['acerage'] = $request->acerage;
@@ -1197,7 +1198,7 @@ class TransactionSheetsController extends Controller
             }
 
             $update_status = ConsignmentNote::find($id);
-            $res = $update_status->update(['total_acerage' => $request->acerage, 'total_amount' => $crop_price]);
+            $res = $update_status->update(['total_acerage' => $request->acerage, 'total_amount' => $total_spray_amount]);
 
             //////
             $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails')->where('id', $id)->first();
@@ -1210,7 +1211,7 @@ class TransactionSheetsController extends Controller
             $total_payables = $offer_price * $total_acres;
 
             return response([
-                'total_amount' => $total_payables,
+                'total_amount' => $total_spray_amount,
                 'status' => 'success',
                 'code' => 1,
                 'message' => 'Acerage Updated Successfully',
