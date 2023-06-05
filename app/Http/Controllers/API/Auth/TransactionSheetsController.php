@@ -803,9 +803,9 @@ class TransactionSheetsController extends Controller
             $data['driver_name']  = @$order_details['DriverDetail']['name'];
             // $phone = @$order_details['ConsigneeDetail']['phone'];
              $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
-             echo'<pre>'; print_r($data['pdf_url']); die;
+            //  echo'<pre>'; print_r(https://rb.gy/bqvgh); die;
            
-            $data['pdf_url'] = "https://rb.gy/fb93a/".$data['order_id'];
+            // $data['pdf_url'] = "https://rb.gy/bqvgh".$data['order_id'];
             $data['phone']   = 8219791047;
 
             $text = 'Dear '.@$data['cnee_name'].',
