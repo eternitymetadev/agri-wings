@@ -802,7 +802,7 @@ class TransactionSheetsController extends Controller
             $data['order_id']  = @$order_details['id'];
             $data['driver_name']  = @$order_details['DriverDetail']['name'];
             // $phone = @$order_details['ConsigneeDetail']['phone'];
-            // $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
+            $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
             $data['pdf_url'] = "<a href=http://google.com>Download</a>";
             $data['phone'] = 8219791047;
 
@@ -1211,6 +1211,7 @@ class TransactionSheetsController extends Controller
             $total_payables = $offer_price * $total_acres;
 
             return response([
+                'discount_price' => $discount_price,
                 'total_amount' => $total_spray_amount,
                 'status' => 'success',
                 'code' => 1,
