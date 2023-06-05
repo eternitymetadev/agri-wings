@@ -1376,8 +1376,8 @@ class OrderController extends Controller
                     $saveRegional = RegionalClient::create($saveclientdetails);
 
                     $saveterm['client_id'] = $saveRegional->id;
-                    $saveterm['bill_to'] = 'Client';
-                    $saveterm['payment_term'] = 'Bill To Client';
+                    $saveterm['bill_to'] = 'Self';
+                    $saveterm['payment_term'] = 'Bill To Client Advance';
                     $saveterm['status'] = 1;
                     PaymentTerms::create($saveterm);
                     $consignmentsave['billing_client'] = $saveRegional->id;

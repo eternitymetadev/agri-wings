@@ -802,9 +802,11 @@ class TransactionSheetsController extends Controller
             $data['order_id']  = @$order_details['id'];
             $data['driver_name']  = @$order_details['DriverDetail']['name'];
             // $phone = @$order_details['ConsigneeDetail']['phone'];
-            $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
-            $data['pdf_url'] = "<a href=http://google.com>Download</a>";
-            $data['phone'] = 8219791047;
+             $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
+             echo'<pre>'; print_r($data['pdf_url']); die;
+           
+            $data['pdf_url'] = "https://rb.gy/fb93a/".$data['order_id'];
+            $data['phone']   = 8219791047;
 
             $text = 'Dear '.@$data['cnee_name'].',
             Your AgriWings Order <'.@$data['order_id'].'> has been completed by '.@$data['driver_name'].'. Click <Invoice Number hyperlink> for your Invoice. Rate our service at '.$data['pdf_url'].' 
