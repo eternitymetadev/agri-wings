@@ -1210,8 +1210,9 @@ class TransactionSheetsController extends Controller
             $total_acres = @$order_details['total_acerage'];
             $total_payables = $offer_price * $total_acres;
 
+
             return response([
-                'discount_price' => $discount_price,
+                'total_discount' => $dicount_price,
                 'total_amount' => $total_spray_amount,
                 'status' => 'success',
                 'code' => 1,
