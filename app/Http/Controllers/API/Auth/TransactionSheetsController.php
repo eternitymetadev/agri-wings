@@ -1192,7 +1192,7 @@ class TransactionSheetsController extends Controller
                 $storeOrderDetails['last_spray_amount'] = $order_details->total_price;
                 $storeOrderDetails['total_spray_amount'] = $total_spray_amount;
 
-                $savedetails = OrderActivityDetails::where('order_id', $id)->update(['acerage' => $request->acerage, 'last_acerage' => $order_details->acreage]);
+                $savedetails = OrderActivityDetails::where('order_id', $id)->update(['acerage' => $request->acerage, 'last_acerage' => $order_details->acreage, 'last_spray_amount' => $order_details->total_price, 'total_spray_amount' => $total_spray_amount]);
 
                 $updateOrderDetails = OrderFarm::where('order_id', $id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $dicount_price, 'total_price' => $total_spray_amount]);
             }
