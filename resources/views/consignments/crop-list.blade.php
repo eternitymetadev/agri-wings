@@ -130,6 +130,12 @@ div.relative {
                             <input type="file" class="form-control" name="crop_image">
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Save Water(Ltrs)</label>
+                            <input type="text" class="form-control" name="save_water">
+                        </div>
+                    </div>
 
             </div>
             <div class="modal-footer">

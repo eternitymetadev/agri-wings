@@ -802,17 +802,16 @@ class TransactionSheetsController extends Controller
             $data['order_id']  = @$order_details['id'];
             $data['driver_name']  = @$order_details['DriverDetail']['name'];
             // $phone = @$order_details['ConsigneeDetail']['phone'];
-            $phone = 9569096896;
-            $pdf_url = URL::to('api/display-invoice-pdf/'.$order_details['id']);
+            // $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
+            $data['pdf_url'] = "<a href=http://google.com>Download</a>";
+            $data['phone'] = 8219791047;
 
             $text = 'Dear '.@$data['cnee_name'].',
-            Your AgriWings Order <'.@$data['order_id'].'> has been completed by '.@$data['driver_name'].'. Click <Invoice Number hyperlink> for your Invoice. Rate our service at xxxx 
+            Your AgriWings Order <'.@$data['order_id'].'> has been completed by '.@$data['driver_name'].'. Click <Invoice Number hyperlink> for your Invoice. Rate our service at '.$data['pdf_url'].' 
             Thanks for choosing AgriWings';
 
-            $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($phone) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
+            $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($data['phone']) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
             $result = $this->SendTSMS($url);
-
-            
 
             if ($res) {
                 return response([
@@ -820,7 +819,6 @@ class TransactionSheetsController extends Controller
                     'code' => 1,
                     'message' => 'Status Updated Successfully',
                     'data' => $data,
-                    'url' => $pdf_url,
                 ], 200);
             }
             return response([
@@ -1159,15 +1157,24 @@ class TransactionSheetsController extends Controller
             $order_details = OrderFarm::where('order_id', $id)->first();
             $getOrderDetails = OrderActivityDetails::where('order_id', $id)->first();
             $cropSchemes = CropPriceScheme::where('crop_id', $order_details->crop)->where('status', 1)->first();
+            $crops = Crop::where('id', $order_details->crop)->where('status', 1)->first();
 
-            $offeredprice = $cropSchemes->crop_price - $cropSchemes->discount_price;
-            $total_spray_amount = $request->acerage * $offeredprice;
+            if(!empty($cropSchemes)){
+                $offeredprice = $cropSchemes->crop_price - $cropSchemes->discount_price;
+                $total_spray_amount = $request->acerage * $offeredprice;
+    
+                $crop_price = $cropSchemes->crop_price * $request->acerage;
+                $dicount_price = $crop_price - $total_spray_amount;
+            }else{
+                $offeredprice = $crops->crop_price;
+                $total_spray_amount = $request->acerage * $offeredprice;
 
-            $crop_price = $cropSchemes->crop_price * $request->acerage;
-            $dicount_price = $crop_price - $total_spray_amount;
+                $crop_price = $crops->crop_price * $request->acerage;
+                $dicount_price = $crop_price - $total_spray_amount;
+            }
+
 
             if (empty($getOrderDetails)) {
-
                 $storeOrderDetails['order_id'] = $id;
                 $storeOrderDetails['acerage'] = $request->acerage;
                 $storeOrderDetails['last_acerage'] = $order_details->acreage;

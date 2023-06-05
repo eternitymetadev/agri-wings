@@ -866,6 +866,8 @@ $status = empty($getconsignments->ConsigneeDetail->postal_code)
                                 <th>Farm Location</th>
                                 <th>Acreage</th>
                                 <th>Estd. Cost</th>
+                                <th>Discount</th>
+                                <th>Offered Cost</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -906,7 +908,16 @@ $totalRow = count($row_count);
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg> -->
                                 </td>
-
+                                <td class="lastCol">
+                                    <span class="calcPrice">
+                                    {{$farm_detail->discount}}</span><input type="hidden"
+                                        value="{{$farm_detail->discount}}" class="SetCropPrice" name="data[{{$i}}][discount]" />
+                                </td>
+                                <td class="lastCol">
+                                    <span class="calcPrice">
+                                    {{$farm_detail->total_price}}</span><input type="hidden"
+                                        value="{{$farm_detail->total_price}}" class="SetCropPrice" name="data[{{$i}}][total_price]" />
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

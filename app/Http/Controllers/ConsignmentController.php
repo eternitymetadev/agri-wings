@@ -4955,6 +4955,7 @@ class ConsignmentController extends Controller
             $gstsave['crop_name'] = $request->crop_name;
             $gstsave['crop_price'] = $request->crop_price;
             $gstsave['crop_image'] = $crop_img_path_save;
+            $gstsave['water_qty'] = $request->save_water;
             $gstsave['status'] = 1;
 
             $gstsave = Crop::create($gstsave);

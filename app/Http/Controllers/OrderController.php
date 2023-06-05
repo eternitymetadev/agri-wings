@@ -477,23 +477,23 @@ class OrderController extends Controller
                 $crop_price = array();
                 foreach ($get_data as $key => $save_data) {
 
-                    $acerage[] = $save_data['acerage'];
-                    $crop_price[] = $save_data['crop_price'];
+                    // $acerage[] = $save_data['acerage'];
+                    // $crop_price[] = $save_data['crop_price'];
 
-                    $update_data['order_id'] = $request->consignment_id;
+                    // $update_data['order_id'] = $request->consignment_id;
                     // $update_data['farm_location'] = $save_data['farm_location'];
                     // $update_data['crop'] = $save_data['crop_name'];
-                    $update_data['acreage'] = $save_data['acerage'];
-                    $update_data['crop_price'] = $save_data['crop_price'];
-                    $update_data['status'] = 1;
+                    // $update_data['acreage'] = $save_data['acerage'];
+                    // $update_data['crop_price'] = $save_data['crop_price'];
+                    // $update_data['status'] = 1;
 
-                    $saveconsignmentitems = OrderFarm::where('id', $save_data['order_farm_id'])->update($update_data);
+                    // $saveconsignmentitems = OrderFarm::where('id', $save_data['order_farm_id'])->update($update_data);
                 }
 
-                $total_acerage = array_sum($acerage);
-                $total_crop_price = array_sum($crop_price);
+                // $total_acerage = array_sum($acerage);
+                // $total_crop_price = array_sum($crop_price);
 
-                ConsignmentNote::where('id', $request->consignment_id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
+                // ConsignmentNote::where('id', $request->consignment_id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
 
             }
 
@@ -1428,6 +1428,7 @@ class OrderController extends Controller
                 foreach ($get_data as $key => $save_data) {
                     $acerage[] = $save_data['acerage'];
                     $crop_price[] = $save_data['crop_price'];
+                    $offered_price[] = $save_data['offered_cost'];
 
                     $save_data['order_id'] = $saveconsignment->id;
                     $save_data['farm_location'] = $save_data['farm_location'];
@@ -1443,8 +1444,9 @@ class OrderController extends Controller
 
                 $total_acerage = array_sum($acerage);
                 $total_crop_price = array_sum($crop_price);
+                $total_offered_price = array_sum($offered_price);
 
-                ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
+                ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_offered_price]);
             }
 
             $mytime = Carbon::now('Asia/Kolkata');
