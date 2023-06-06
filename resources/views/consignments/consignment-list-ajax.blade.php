@@ -180,7 +180,7 @@
                     <?php } ?>
                 </td>
                 @if($consignment->bill_to == 'Self')
-                <td>Pre-Paid</td>
+                <td>Pre-Paid</td>  
                 @else 
                 <td>Post-Paid</td>
                 @endif
