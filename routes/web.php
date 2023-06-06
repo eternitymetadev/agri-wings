@@ -1106,6 +1106,9 @@ Route::any('/client-verification/{id}', [UserController::class, 'clientVerificat
 Route::any('/get-address-by-postcode', [ConsignerController::class, 'getPostalAddress']);
 Route::any('/check-user-phone', [UserController::class, 'userPhoneCheck']);
 Route::any('/sent-otp', [UserController::class, 'sendOtp']);
+Route::any('/rating/{id}', [ConsignmentController::class, 'rating']);
+Route::any('/add-feedback/form', [ConsignmentController::class, 'addFeedback']);
+Route::any('/check-feedback', [ConsignmentController::class, 'checkFeedback']);
 
 
 

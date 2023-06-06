@@ -26,6 +26,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
+use App\Models\Feedback;
 use Auth;
 use Carbon\Carbon;
 use Config;
@@ -5411,4 +5412,64 @@ class ConsignmentController extends Controller
         $response['error'] = false;
         return response()->json($response);
     }
+
+    public function rating(Request $request, $id)
+    {
+        $check_feedback = Feedback::where('order_id', $id)->first();
+        if(empty($check_feedback)){
+        return view('rating',['order_id' => $id]);
+        }else{
+        return view('already-feedback',['order_id' => $id]);
+        }
+
+    }
+
+    public function addFeedback(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+            $rules = array(
+                // 'crop_name' => 'required|unique:crops',
+            );
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $response['success'] = false;
+                $response['validation'] = false;
+                $response['formErrors'] = true;
+                $response['error_message'] = $errors;
+                return response()->json($response);
+            }
+
+
+            $feedbacksave['feedback'] = $request->feedback;
+            $feedbacksave['stars'] = $request->stars;
+            $feedbacksave['order_id'] =  $request->order_id;
+
+            $savefeedback = Feedback::create($feedbacksave);
+
+            if ($savefeedback) {
+                $response['success'] = true;
+                $response['success_message'] = "Feedback Added successfully";
+                $response['error'] = false;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created Vendor please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+    }
+
 }

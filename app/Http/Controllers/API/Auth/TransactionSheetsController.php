@@ -806,9 +806,11 @@ class TransactionSheetsController extends Controller
             //  $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
             $data['pdf_url'] = Bitly::getUrl(URL::to("api/display-invoice-pdf/".$data['order_id']));
             $data['phone']   = 8219791047;
+            $data['rating'] = Bitly::getUrl(URL::to("rating/".$data['order_id']));
+            
 
             $text = 'Dear '.@$data['cnee_name'].',
-            Your AgriWings Order '.@$data['order_id'].' has been completed by '.@$data['driver_name'].'. Click '.$data['pdf_url'].' for your Invoice. Rate our service at '.@$data['order_id'].' 
+            Your AgriWings Order '.@$data['order_id'].' has been completed by '.@$data['driver_name'].'. Click '.$data['pdf_url'].' for your Invoice. Rate our service at '.@$data['rating'].' 
             Thanks for choosing AgriWings';
 
             $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($data['phone']) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';

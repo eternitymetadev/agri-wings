@@ -846,7 +846,7 @@ jQuery(document).ready(function(){
             regn_no: {
                 required: true,
                 // AlphabetandNumbers: true,
-                minlength: 8,
+                // minlength: 8,
             },
             mfg: {
                 required: true
@@ -861,9 +861,9 @@ jQuery(document).ready(function(){
         },
         messages: {
             regn_no: {
-                required: "Enter number",
-                AlphabetandNumbers: "Enter only alphabets and numbers",
-                minlength: "Enter at least 8 digits",
+                required: "Enter UNID",
+                // AlphabetandNumbers: "Enter only alphabets and numbers",
+                // minlength: "Enter at least 8 digits",
             },
             mfg: {
                 required: "Enter manufacturer",
