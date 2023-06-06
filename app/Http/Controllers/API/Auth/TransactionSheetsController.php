@@ -808,7 +808,7 @@ class TransactionSheetsController extends Controller
             $data['phone']   = 8219791047;
 
             $text = 'Dear '.@$data['cnee_name'].',
-            Your AgriWings Order Id '.@$data['order_id'].' has been completed by '.@$data['driver_name'].'. Click '.$data['pdf_url'].' for your Invoice. Rate our service at <xxxxxx> 
+            Your AgriWings Order '.@$data['order_id'].' has been completed by '.@$data['driver_name'].'. Click '.$data['pdf_url'].' for your Invoice. Rate our service at '.@$data['order_id'].' 
             Thanks for choosing AgriWings';
 
             $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($data['phone']) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
