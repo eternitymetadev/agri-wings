@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: *');
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\API\Auth\TransactionSheetsController;
+use App\Http\Controllers\Api\Auth\TransactionSheetsController;
 
 /*
 |--------------------------------------------------------------------------
