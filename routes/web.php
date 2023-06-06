@@ -26,7 +26,7 @@ use App\Http\Controllers\TechnicalMasterController;
 use App\Http\Controllers\PickupRunSheetController;
 use App\Http\Controllers\HubtoHubController;
 use App\Http\Controllers\FtlPtlController;
-use App\Http\Controllers\API\Auth\TransactionSheetsController;
+use App\Http\Controllers\Api\Auth\TransactionSheetsController;
 
 /*
 |--------------------------------------------------------------------------
