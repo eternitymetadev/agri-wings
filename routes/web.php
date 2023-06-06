@@ -26,6 +26,7 @@ use App\Http\Controllers\TechnicalMasterController;
 use App\Http\Controllers\PickupRunSheetController;
 use App\Http\Controllers\HubtoHubController;
 use App\Http\Controllers\FtlPtlController;
+use App\Http\Controllers\API\Auth\TransactionSheetsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -593,6 +594,8 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::get('crop-scheme-list', [ConsignmentController::class, 'cropSchemeList']);
     Route::any('add-crop-scheme', [ConsignmentController::class, 'addCropScheme']);
     Route::any('check-price-scheme', [ConsignmentController::class, 'checkPriceScheme']);
+
+    Route::get('/display-invoice-pdf/{id}', [TransactionSheetsController::class, 'displayInvoicePdf']);
 
 
     Route::resource('locations', LocationController::class);

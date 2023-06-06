@@ -4989,7 +4989,7 @@ class ConsignmentController extends Controller
         try {
             DB::beginTransaction();
 
-            $gstsave = Crop::where('id', $request->crop_id)->update(['crop_price' => $request->crop_price]);
+            $gstsave = Crop::where('id', $request->crop_id)->update(['crop_price' => $request->crop_price, 'water_qty' => $request->save_water]);
             if ($gstsave) {
                 $url = $this->prefix . '/settings/branch-address';
                 $response['success'] = true;

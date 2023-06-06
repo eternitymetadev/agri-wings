@@ -88,7 +88,7 @@ div.relative {
                                 <td>{{$crop->crop_name}}</td>
                                 <td>{{$crop->crop_price}}</td>
                                 <td><button type="button" class="btn btn-warning edit_crop"
-                                        crop-price="{{$crop->crop_price}}" value="{{$crop->id}}">edit</button></td>
+                                        crop-price="{{$crop->crop_price}}" water-qty="{{$crop->water_qty}}" value="{{$crop->id}}">edit</button></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -133,7 +133,7 @@ div.relative {
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Save Water(Ltrs)</label>
-                            <input type="text" class="form-control" name="save_water" required>
+                            <input type="number" class="form-control" name="save_water" required>
                         </div>
                     </div>
 
@@ -167,6 +167,12 @@ div.relative {
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Price</label>
                             <input type="number" class="form-control" name="crop_price" id="crop_price">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Save Water(Ltrs)</label>
+                            <input type="number" class="form-control" name="save_water" id="save_water" required>
                         </div>
                     </div>
 
@@ -287,10 +293,12 @@ $(document).on('click', '.edit_crop', function() {
 
     var crop_id = $(this).val();
     var crop_price = $(this).attr('crop-price');
+    var save_water = $(this).attr('water-qty');
     $('#crop_edit_model').modal('show');
 
     $('#crop_id').val(crop_id);
     $('#crop_price').val(crop_price);
+    $('#save_water').val(save_water);
 });
 
 $('#update_crop').submit(function(e) {

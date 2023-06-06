@@ -17,6 +17,7 @@
                 <th>Spray Status</th>
                 <th>Order Status</th>
                 <th>Payment Status</th>
+                <th>Invoice Status</th>
             </tr>
         </thead>
         <tbody id="accordion" class="accordion">
@@ -179,10 +180,14 @@
                     <?php } ?>
                 </td>
                 @if($consignment->bill_to == 'Self')
-
                 <td>Pre-Paid</td>
-                @else
+                @else 
                 <td>Post-Paid</td>
+                @endif
+                @if($consignment->delivery_status == 'Successful')
+                <td><a href="{{url($prefix.'/display-invoice-pdf/'.$consignment->id)}}">Download Invoice</a></td>
+                @else
+                <td>-</td>
                 @endif
 
             </tr>

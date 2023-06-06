@@ -842,6 +842,7 @@ class TransactionSheetsController extends Controller
         // echo "<pre>"; print_r($order_details['Orderactivity']['CropDetail']['crop_price']); die;
             $banner_img = public_path('assets/banner_pdf.png');
             $footer_img = public_path('assets/footer_pdf.png');
+            $save_water = @$order_details['Orderactivity']['CropName']['water_qty'] * @$order_details['total_acerage'] ;
             // dd($order_details['delivery_date']);
             $html = '<!doctype html>
             <html>
@@ -892,7 +893,7 @@ class TransactionSheetsController extends Controller
             
             <table style="width: 100%; margin: 1rem auto">
                 <tr><td class="textCenter size3"><h5 class="size3">'.@$order_details['ConsigneeDetail']['nick_name'].' - Gratitude for selecting AgriWings with Order Id-'.@$order_details['id'].'</h5></td></tr>
-                <tr><td class="textCenter size1">Congratulations! You have saved '.@$order_details['Orderactivity']['CropName']['water_qty'].' ltr fresh water by choosing AgriWings.</td></tr>
+                <tr><td class="textCenter size1">Congratulations! You have saved '.@$save_water.' ltr fresh water by choosing AgriWings.</td></tr>
             </table>  
             
             
@@ -968,7 +969,7 @@ class TransactionSheetsController extends Controller
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($html);
             $pdf->setPaper('legal', 'portrait');
-            return $pdf->download('Noc.pdf'); 
+            return $pdf->download('Inovice.pdf'); 
 
     }
 
