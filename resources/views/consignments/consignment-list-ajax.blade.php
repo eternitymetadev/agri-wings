@@ -166,7 +166,7 @@
                             if($consignment->delivery_status == 'Successful'){ ?>
                     <a class="alert activestatus btn btn-success disable_n" data-id="{{$consignment->id}}"
                         data-text="consignment" data-status="0"><span><i class="fa fa-check-circle-o"></i>
-                            Active</span></a>
+                            Done</span></a>
                     <?php }else{ ?>
                     <a class="alert activestatus btn btn-success {{$disable}}" data-id="{{$consignment->id}}"
                         data-text="consignment" data-status="0"><span><i class="fa fa-check-circle-o"></i>
