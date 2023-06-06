@@ -35,8 +35,7 @@
                                     <th scope="row">Pilot License Number</th>
                                     <td>{{isset($getdriver->license_number)?ucfirst($getdriver->license_number):'-'}}</td>
                                 </tr>
-                               
-                                                                        
+                                                            
                             </tbody>
                         </table>  
                         <a href="{{url($prefix.'/drivers/'.Crypt::encrypt($getdriver->id).'/edit')}}" class="btn btn-primary my-3" style="background:#fff;" title="Edit Driver"><i class="fa fa-edit m-0"></i> Edit</a>

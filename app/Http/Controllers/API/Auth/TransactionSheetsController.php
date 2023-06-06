@@ -19,6 +19,7 @@ use URL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Helper;
+use Bitly;
 
 class TransactionSheetsController extends Controller
 {
@@ -802,14 +803,12 @@ class TransactionSheetsController extends Controller
             $data['order_id']  = @$order_details['id'];
             $data['driver_name']  = @$order_details['DriverDetail']['name'];
             // $phone = @$order_details['ConsigneeDetail']['phone'];
-             $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
-            //  echo'<pre>'; print_r(https://rb.gy/bqvgh); die;
-           
-            // $data['pdf_url'] = "https://rb.gy/bqvgh".$data['order_id'];
+            //  $data['pdf_url'] = "<a href=".URL::to("api/display-invoice-pdf/".$data['order_id']).">Download Invoice</a>";
+            $data['pdf_url'] = Bitly::getUrl(URL::to("api/display-invoice-pdf/".$data['order_id']));
             $data['phone']   = 8219791047;
 
             $text = 'Dear '.@$data['cnee_name'].',
-            Your AgriWings Order <'.@$data['order_id'].'> has been completed by '.@$data['driver_name'].'. Click <Invoice Number hyperlink> for your Invoice. Rate our service at '.$data['pdf_url'].' 
+            Your AgriWings Order Id '.@$data['order_id'].' has been completed by '.@$data['driver_name'].'. Click '.$data['pdf_url'].' for your Invoice. Rate our service at <xxxxxx> 
             Thanks for choosing AgriWings';
 
             $url = 'http://sms.innuvissolutions.com/api/mt/SendSMS?APIkey=' . $this->sms_link . '&senderid=AGRWNG&channel=Trans&DCS=0&flashsms=0&number=' . urlencode($data['phone']) . '&text=' . urlencode($text) . '&route=2&peid=1701168155524038890';
