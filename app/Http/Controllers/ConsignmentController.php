@@ -5472,4 +5472,11 @@ class ConsignmentController extends Controller
         return response()->json($response);
     }
 
+    public function downloadApp()
+    {
+       
+        return view('app-download');
+
+    }
+
 }

@@ -1,6 +1,59 @@
 @extends('layouts.main')
 @section('content')
+<style>
+.row.layout-top-spacing {
+    width: 80%;
+    margin: auto;
 
+}
+
+.imageInput {
+    position: relative;
+    max-width: 300px;
+    height: 150px;
+    border-radius: 12px;
+    overflow: hidden;
+    outline: 1px solid;
+    cursor: pointer;
+}
+
+.imageInput img {
+    width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+}
+
+.imageInput input {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.imageInput svg {
+    transition: all 300ms ease-in-out;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffffa8;
+    height: 60px;
+    width: 60px;
+    color: #208120;
+    padding: 12px;
+    border-radius: 50vh;
+    cursor: pointer;
+    box-shadow: 0 0 12px inset;
+    opacity: 0;
+    z-index: 0;
+}
+
+.imageInput:hover svg {
+    opacity: 1;
+}
+</style>
 
 <div class="layout-px-spacing">
     <div class="row layout-top-spacing">
@@ -195,6 +248,42 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label for="exampleFormControlInput2">Upload Gst</label>
+                                    <div class="imageInput">
+                                        <input type="file" name="upload_gst" accept="image/png, image/jpeg, image/jpg"
+                                            class="imgInput"
+                                            value="{{old('upload_gst', isset($regclient_name->upload_gst) ? $regclient_name->upload_gst : '')}}">
+                                        <img src="{{old('upload_gst', isset($regclient_name->upload_gst) ? $regclient_name->upload_gst : '')}}"
+                                            class="imagePreview" alt="" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="exampleFormControlInput2">Upload Pan</label>
+                                    <div class="imageInput">
+                                        <input type="file" name="upload_pan" accept="image/png, image/jpeg, image/jpg"
+                                            class="imgInput"
+                                            value="{{old('upload_pan', isset($regclient_name->upload_pan) ? $regclient_name->upload_pan : '')}}">
+                                        <img src="{{old('upload_pan', isset($regclient_name->upload_pan) ? $regclient_name->upload_pan : '')}}"
+                                            class="imagePreview" alt="" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
                     <div class="btn-section mt-60">
                         <button type="submit" class="btn-primary btn-cstm btn mr-4"><span>Save</span></button>
 
@@ -240,5 +329,14 @@ $("#branch_id").change(function() {
     });
 
 });
+
+$('.imgInput').change(function() {
+    const file = this.files[0]
+    console.log('sss', file)
+    if (file) {
+        console.log('img', $(this).siblings('.imagePreview'))
+        $(this).siblings('.imagePreview').attr('src', URL.createObjectURL(file))
+    }
+})
 </script>
 @endsection

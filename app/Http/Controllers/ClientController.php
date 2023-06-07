@@ -430,6 +430,7 @@ class ClientController extends Controller
 
     public function updateRegclientdetail(Request $request)
     {
+      
         try {
             DB::beginTransaction();
 
@@ -466,6 +467,36 @@ class ClientController extends Controller
             // $regionalupdate['status']       = $request->status;
 
             RegionalClient::where('id', $request->regclientdetail_id)->update($regionalupdate);
+
+            foreach($request->payment_term as $payment){
+                
+                $term_name = array();
+                $get_terms = PaymentTerms::where('client_id', $request->regclientdetail_id)->get();
+                foreach($get_terms as $val){
+                    $term_name[] = $val->payment_term;
+
+                }
+
+                $result= array_diff($term_name,$request->payment_term);
+                if(!empty($result)){
+                    foreach($result as $val){
+                  PaymentTerms::where('client_id',$request->regclientdetail_id)->where('payment_term',$val)->delete();
+                    }
+                }
+
+                $add_new= array_diff($request->payment_term,$term_name);
+                if(!empty($add_new)){
+                    foreach($add_new as $val){
+                        $savepayment['client_id'] = $request->regclientdetail_id;
+                        $savepayment['bill_to'] = 'Self';
+                        $savepayment['payment_term'] = $val;
+                        $savepayment['status'] = 1;
+                        PaymentTerms::create($savepayment);
+                    }
+                }
+                
+            }
+          
             $url = URL::to($this->prefix . '/reginal-clients');
 
             $response['success'] = true;

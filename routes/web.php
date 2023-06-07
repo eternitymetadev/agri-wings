@@ -1109,6 +1109,7 @@ Route::any('/sent-otp', [UserController::class, 'sendOtp']);
 Route::any('/rating/{id}', [ConsignmentController::class, 'rating']);
 Route::any('/add-feedback/form', [ConsignmentController::class, 'addFeedback']);
 Route::any('/check-feedback', [ConsignmentController::class, 'checkFeedback']);
+Route::any('/download-app', [ConsignmentController::class, 'downloadApp']);
 
 
 
