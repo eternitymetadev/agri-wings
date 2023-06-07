@@ -60,8 +60,7 @@
 <body>
     <div class="main">
         <h1>Download the App<br />for ease of access</h1>
-        <p>Digitizing the Logistics World and specializing in rural logistics, Ship Rider enables access to real time
-            tracking and visibility of shipment.</p>
+        <p></p>
         <a href="https://a4.files.diawi.com/app-file/bOhMiFky3p3fur7Q0ekO.apk">
             Download App
         </a>
