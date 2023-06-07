@@ -148,9 +148,13 @@
                                     </label>
                                 </div>
                             </div>
-                        </div> -->
+                        </div> --> 
                         <?php 
-                          $payment_term = explode(',',$regclient_name->payment_term);
+                         $getpayment = DB::table('payment_terms')->where('client_id',$regclient_name->id)->where('status', 1)->get();
+                         $payment_term = array();
+                         foreach($getpayment as $bill_term){
+                             $payment_term[] = $bill_term->payment_term;
+                         }
                          ?>
                         <div class="form-group col-md-6">
                             <label for="exampleFormControlInput2">Select Payment Terms<span
