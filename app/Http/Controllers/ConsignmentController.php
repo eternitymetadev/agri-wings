@@ -5479,4 +5479,14 @@ class ConsignmentController extends Controller
 
     }
 
+    public function downloadAppFile()
+    {
+        $path = public_path('assets/agri-app.apk');
+        return response()->file($path ,[
+            'Content-Type'=>'application/vnd.android.package-archive',
+            'Content-Disposition'=> 'attachment; filename="android.apk"',
+        ]) ;
+
+    }
+
 }

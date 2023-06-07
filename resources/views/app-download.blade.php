@@ -61,7 +61,7 @@
     <div class="main">
         <h1>Download the App<br />for ease of access</h1>
         <p></p>
-        <a href="https://a4.files.diawi.com/app-file/bOhMiFky3p3fur7Q0ekO.apk">
+        <a href="{{url('download')}}">
             Download App
         </a>
     </div>
