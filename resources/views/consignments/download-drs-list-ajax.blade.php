@@ -12,7 +12,7 @@
                 <th>Action</th>
                 <th>Delivery Status</th>
                 <th>SRS Status</th>
-                <th>Payment Status</th>
+                <!-- <th>Payment Status</th> -->
             </tr>
         </thead>
         <tbody id="accordion" class="accordion">
@@ -86,12 +86,17 @@ if ($trns->delivery_status == 'Unassigned') {?>
                 <!-- DRS STATUS --------------->
                 <?php if ($trns->status == 0) {?>
                 <td><label class="badge badge-dark">Cancelled</label></td>
-                <?php } else {?>
-                <td><a class="active_drs btn btn-success" drs-no="{{$trns->drs_no}}"><span><i
+                <?php } else {
+                    if(Helper::getdeleveryStatus($trns->drs_no) == 'Successful'){
+                    ?>
+                <td><a class="btn btn-success" drs-no="{{$trns->drs_no}}"><span><i
+                                class="fa fa-check-circle-o"></i> Done</span></a></td>
+                   <?php } else { ?>
+                    <td><a class="active_drs btn btn-success" drs-no="{{$trns->drs_no}}"><span><i
                                 class="fa fa-check-circle-o"></i> Active</span></a></td>
-                <?php }?>
+                <?php } }?>
                 <!-- ------- payment status -->
-                <?php if ($trns->payment_status == 0) {
+                <!-- <?php if ($trns->payment_status == 0) {
               ?>
                 <td><label class="badge badge-dark">Unpaid</label></td>
                 <?php } else if ($trns->payment_status == 1) {?>
@@ -102,7 +107,7 @@ if ($trns->delivery_status == 'Unassigned') {?>
                 <td><label class="badge badge-primary">Partial Paid</label></td>
                 <?php } else {?>
                 <td><label class="badge badge-dark">unknown</label></td>
-                <?php }?>
+                <?php }?> -->
 
                 <!-- end payment status -->
 

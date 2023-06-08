@@ -5489,4 +5489,11 @@ class ConsignmentController extends Controller
 
     }
 
+    public function downloadPPTFile()
+    {
+        $path = public_path('assets/cso-ppt.pptx');
+        return response()->download($path);
+
+    }
+
 }

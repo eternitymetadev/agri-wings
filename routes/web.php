@@ -1111,6 +1111,7 @@ Route::any('/add-feedback/form', [ConsignmentController::class, 'addFeedback']);
 Route::any('/check-feedback', [ConsignmentController::class, 'checkFeedback']);
 Route::any('/download-app', [ConsignmentController::class, 'downloadApp']);
 Route::any('/download', [ConsignmentController::class, 'downloadAppFile']);
+Route::any('/download-ppt', [ConsignmentController::class, 'downloadPPTFile']);
 
 
 

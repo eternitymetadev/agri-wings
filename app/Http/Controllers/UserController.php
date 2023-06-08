@@ -572,7 +572,7 @@ class UserController extends Controller
             We are delighted to welcome you to our AgriWings family. We appreciate your business and look forward to providing you with our exceptional services.<br />
             In order to ensure a smooth and hassle-free process for you, we would like to take this opportunity to explain our billing terms and order booking flow chart.<br />
             Billing Terms: Our billing terms will remain “Bill to Client Advance”. We accept various payment methods, including Cash, UPI, bank transfers.<br />
-            Order Booking Flow Chart:<br />
+            Order Booking Flow :<br />
             Consultation - We start by discussing your needs and providing you with a consultation to understand your requirements.<br />
             Quote - After the consultation, we will provide you with a detailed quote for the services you require.<br />
             Booking - If you agree to the quote, we will proceed with booking the order and scheduling the services.<br />

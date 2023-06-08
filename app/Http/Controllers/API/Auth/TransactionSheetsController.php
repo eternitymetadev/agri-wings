@@ -838,6 +838,7 @@ class TransactionSheetsController extends Controller
     }
 
     public function displayInvoicePdf($id){
+
         $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails','DriverDetail')->where('id', $id)->first();
         // echo "<pre>"; print_r($order_details['Orderactivity']['CropDetail']['crop_price']); die;
             $banner_img = public_path('assets/banner_pdf.png');
@@ -906,8 +907,8 @@ class TransactionSheetsController extends Controller
                     <td class="size2 textRight">'.@$order_details['Orderactivity']['CropName']['crop_name'].'</td>
                 </tr>
             </table>';
-            $crop_price = @$order_details['Orderactivity']['CropDetail']['crop_price'];
-            $discount_price = @$order_details['Orderactivity']['CropDetail']['discount_price'];
+            $crop_price = @$order_details['Orderactivity']['base_price'];
+            $discount_price = @$order_details['Orderactivity']['discount_price'];
 
             $offer_price = $crop_price - $discount_price;
             $total_acres = @$order_details['total_acerage'];

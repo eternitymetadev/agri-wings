@@ -60,7 +60,10 @@
 <body>
     <div class="main">
         <h1>Download the App<br />for ease of access</h1>
-        <p></p>
+        <p>Boost your aerial spraying efficiency!
+            Download our Drone Spray Services app now for seamless flight planning.
+            Enhance your operations and stay informed.
+            Fly high with us!</p>
         <a href="{{url('download')}}">
             Download App
         </a>

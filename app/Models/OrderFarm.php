@@ -11,6 +11,8 @@ class OrderFarm extends Model
     protected $fillable = [
         'order_id',
         'farm_location',
+        'base_price',
+        'discount_price',
         'crop',
         'acreage',
         'crop_price',
