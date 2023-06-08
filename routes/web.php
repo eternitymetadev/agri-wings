@@ -728,6 +728,8 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('edit-baseclient/{id}', [ClientController::class, 'editBaseClient']);
     Route::any('update-base-client', [ClientController::class, 'updateBaseClient']);
 
+    Route::any('order-list-export', [OrderController::class, 'orderListExport']);
+
 
 });
 Route::group(['prefix'=>'branch-user', 'middleware'=>['auth','PermissionCheck']], function()

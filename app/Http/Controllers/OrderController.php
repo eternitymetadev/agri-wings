@@ -22,6 +22,7 @@ use App\Models\Role;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
+use App\Exports\OrderListDetails;
 use Auth;
 use Carbon\Carbon;
 use DB;
@@ -2328,6 +2329,11 @@ class OrderController extends Controller
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         $result = curl_exec($ch);
 
+    }
+
+    public function orderListExport()
+    {
+        return Excel::download(new OrderListDetails(), 'order_list.xlsx');
     }
 
 }

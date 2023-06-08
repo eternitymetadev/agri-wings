@@ -424,6 +424,7 @@ a.badge.alert.bg-secondary.shadow-sm {
     height: 400px;
     width: 600px;
 }
+
 .timelineImagesBlock {
     flex: 1;
     display: flex;
@@ -489,6 +490,16 @@ a.badge.alert.bg-secondary.shadow-sm {
                                         style="font-size: 15px; padding: 9px;"
                                         data-action="<?php echo url()->current(); ?>"><span><i
                                                 class="fa fa-refresh"></i> Reset Filters</span></a>
+                                    <?php 
+                                   $authuser = Auth::user();
+                                   ?>
+                                   @if($authuser->role_id == 3)
+                                   
+                                    <a href=" <?php echo URL::to($prefix.'/order-list-export'); ?>"
+                                        class="btn btn-primary btn-cstm ml-2"
+                                        style="font-size: 15px; padding: 9px;"
+                                        ><span>Export</span></a>
+                                        @endif
                                 </div>
                             </div>
                         </div>
@@ -556,21 +567,23 @@ function row_click(row_id, job_id, url) {
         success: function(response) {
 
             var trail_array = jQuery.parseJSON(response.app_trail.response_data);
-                        var trail_reverse = trail_array.reverse();
+            var trail_reverse = trail_array.reverse();
             //================Manual L TRAIL =================== //
             var cc = '<ul class="cbp_tmtimeline">';
 
             $.each(trail_reverse, function(index, task) {
-                if(task.status == 'Successful'){
+                if (task.status == 'Successful') {
                     cc += '<li><time class="cbp_tmtime" datetime=' + task
-                                            .create_at + '><span class="hidden">' + task.create_at +
-                                            '</span></time><div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"><span><span class="successful" style="--statusColor: #158f2a">'+task.status+' </span></span><div class="append-modal-images d-flex flex-wrap" style="gap: 16px; margin-bottom: 1rem; flex: 1;"></div></div></li>';
-                }else{
+                        .create_at + '><span class="hidden">' + task.create_at +
+                        '</span></time><div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"><span><span class="successful" style="--statusColor: #158f2a">' +
+                        task.status +
+                        ' </span></span><div class="append-modal-images d-flex flex-wrap" style="gap: 16px; margin-bottom: 1rem; flex: 1;"></div></div></li>';
+                } else {
                     cc +=
-                    '<li><time class="cbp_tmtime" datetime=' + task.create_at +
-                    '><span class="hidden">' + task.create_at +
-                    '</span></time><div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"> <span><span class="successful" style="--statusColor: #41ca5d">' +
-                    task.status + ' </span></span></div></li>';
+                        '<li><time class="cbp_tmtime" datetime=' + task.create_at +
+                        '><span class="hidden">' + task.create_at +
+                        '</span></time><div class="cbp_tmicon"><i class="zmdi zmdi-account"></i></div><div class="cbp_tmlabel empty"> <span><span class="successful" style="--statusColor: #41ca5d">' +
+                        task.status + ' </span></span></div></li>';
                 }
             });
 
@@ -648,8 +661,8 @@ function initMap(response, row_id) {
 
 jQuery(document).on('click', '.viewImageInNewTab', function() {
 
-let toggledImage = $(this).attr('src');
-$('#toggledImageView').attr('src', toggledImage);
+    let toggledImage = $(this).attr('src');
+    $('#toggledImageView').attr('src', toggledImage);
 });
 </script>
 
