@@ -478,13 +478,11 @@ class UserController extends Controller
             We are delighted to welcome you to our AgriWings family. We appreciate your business and look forward to providing you with our exceptional services.<br />
             In order to ensure a smooth and hassle-free process for you, we would like to take this opportunity to explain our billing terms and order booking flow chart.<br />
             Billing Terms: Our billing terms will remain “Bill to Client Advance”. We accept various payment methods, including Cash, UPI, bank transfers.<br />
-            Order Booking Flow Chart:<br />
-            Consultation - We start by discussing your needs and providing you with a consultation to understand your requirements.<br />
-            Quote - After the consultation, we will provide you with a detailed quote for the services you require.<br />
-            Booking - If you agree to the quote, we will proceed with booking the order and scheduling the services.<br />
-            Service Delivery - Our team will provide the services as per the schedule.<br />
-            Invoicing - Once the services are delivered, we will issue an invoice for the services rendered.<br />
-            Payment - Payment is due within 30 days from the invoice date.<br />
+            Order Booking Flow:<br />
+            <a href="https://app.agriwings.in/download-ppt">
+            Download PPT
+        </a>
+            <br />
             We hope that this information helps you understand our billing terms and order booking flow chart. If you have any questions or concerns, please do not hesitate to contact us and report/rate us on Page of www.AgriWing.com. We value your feedback and are always looking for ways to improve our services.<br />
             Thank you for choosing AgriWings. We look forward to working with you and providing you with the best services possible.<br /><br />
             Sincerely,<br />
