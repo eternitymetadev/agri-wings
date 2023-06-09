@@ -480,7 +480,7 @@ class UserController extends Controller
             Billing Terms: Our billing terms will remain “Bill to Client Advance”. We accept various payment methods, including Cash, UPI, bank transfers.<br />
             Order Booking Flow:<br />
             <a href="https://app.agriwings.in/download-ppt">
-            Download PPT
+            Download 
         </a>
             <br />
             We hope that this information helps you understand our billing terms and order booking flow chart. If you have any questions or concerns, please do not hesitate to contact us and report/rate us on Page of www.AgriWing.com. We value your feedback and are always looking for ways to improve our services.<br />

@@ -5491,7 +5491,7 @@ class ConsignmentController extends Controller
 
     public function downloadPPTFile()
     {
-        $path = public_path('assets/cso-ppt.pptx');
+        $path = public_path('assets/CSO-Policy.pdf');
         return response()->download($path);
 
     }
