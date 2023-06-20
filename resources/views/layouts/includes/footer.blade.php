@@ -46,6 +46,7 @@ video {
 <script src="{{asset('plugins/select2/custom-select2.js')}}"></script>
 
 <script src="{{asset('assets/js/jquery.sumoselect.js')}}"></script>
+<script src="{{asset('assets/js/dashboard-widget.js')}}"></script>
 
 <script>
 var APP_URL = {!!json_encode(url('/')) !!};

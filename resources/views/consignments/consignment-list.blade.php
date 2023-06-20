@@ -493,13 +493,12 @@ a.badge.alert.bg-secondary.shadow-sm {
                                     <?php 
                                    $authuser = Auth::user();
                                    ?>
-                                   @if($authuser->role_id == 3)
+                                 
                                    
                                     <a href=" <?php echo URL::to($prefix.'/order-list-export'); ?>"
                                         class="btn btn-primary btn-cstm ml-2"
                                         style="font-size: 15px; padding: 9px;"
                                         ><span>Export</span></a>
-                                        @endif
                                 </div>
                             </div>
                         </div>

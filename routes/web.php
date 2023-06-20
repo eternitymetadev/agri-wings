@@ -1067,9 +1067,12 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('/upload-noc', [ConsignmentController::class, 'uploadNoc']);
     Route::any('/noc-print/{id}', [ConsignmentController::class, 'nocPrint']);
     Route::any('check-price-scheme', [ConsignmentController::class, 'checkPriceScheme']);
-    
-    
 
+    Route::any('unprosessed-order', [HomeController::class, 'orderAnalystic']);
+    Route::any('order-list-export', [OrderController::class, 'orderListExport']);
+
+    
+    
 });
 
 Route::middleware(['auth'])->group(function () {

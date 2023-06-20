@@ -36,10 +36,13 @@ class OrderListDetails implements FromCollection, WithHeadings, ShouldQueue
             'DrsDetail:consignment_no,drs_no,created_at',
             'RegClient'
         ); 
-
+        if($authuser->role_id == 7){
+            $order_details = $query->where('user_id', $authuser->id)->orderBy('id','ASC')->get();
+        }else{
             $order_details = $query->orderBy('id','ASC')->get();
-        
+        }
 
+        
         if($order_details->count() > 0){
             foreach ($order_details as $key => $order_detail){
 
