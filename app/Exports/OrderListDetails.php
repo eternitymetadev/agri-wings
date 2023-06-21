@@ -33,6 +33,7 @@ class OrderListDetails implements FromCollection, WithHeadings, ShouldQueue
             'ConsigneeDetail',
             'VehicleDetail:id,regn_no',
             'DriverDetail:id,name,fleet_id,phone',
+            'VehicleDetail:id,reg_no',
             'DrsDetail:consignment_no,drs_no,created_at',
             'RegClient'
         ); 
