@@ -33,7 +33,6 @@ class OrderListDetails implements FromCollection, WithHeadings, ShouldQueue
             'ConsigneeDetail',
             'VehicleDetail:id,regn_no',
             'DriverDetail:id,name,fleet_id,phone',
-            'VehicleDetail:id,reg_no',
             'DrsDetail:consignment_no,drs_no,created_at',
             'RegClient'
         ); 
@@ -60,7 +59,7 @@ class OrderListDetails implements FromCollection, WithHeadings, ShouldQueue
                     'district'   =>   @$order_detail->ConsigneeDetail->district,
                     'state'   =>   @$order_detail->ConsigneeDetail->state_id,
                     'pincode'   =>   @$order_detail->ConsigneeDetail->postal_code,
-                    'drone'   =>   @$order_detail->VehicleDetail->reg_no,
+                    'drone'   =>   @$order_detail->VehicleDetail->regn_no,
                     'pilot_name'   =>   @$order_detail->DriverDetail->name,
                     'pilot_number'   =>   @$order_detail->DriverDetail->phone,
                      'crop'          => @$order_detail->Orderactivity->CropName->crop_name,
