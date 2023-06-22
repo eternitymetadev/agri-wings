@@ -18,7 +18,11 @@
                 <th>Order Status</th>
                 <th>Payment Status</th>
                 <th>Invoice Status</th>
-                <th>Action</th>
+                <?php if($authuser->role_id == 3){
+                    ?>
+                     <th>Action</th>
+                <?php } ?>
+               
             </tr>
         </thead>
         <tbody id="accordion" class="accordion">
@@ -192,12 +196,14 @@
                 @else
                 <td>-</td>
                 @endif
+                @if($authuser->role_id == 3)
                 @if($consignment->delivery_status != 'Successful')
                 <td><button type="button" class="btn btn-warning edit_crop" value="{{$consignment->id}}"
                         field-acerage="{{$consignment->total_acerage}}">edit</button></td>
                         @else
                         <td>-</td>
                         @endif
+                @endif
 
 
             </tr>
