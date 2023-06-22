@@ -295,7 +295,7 @@ class DriverController extends Controller
     //download excel/csv
     public function exportExcel()
     {
-        return Excel::download(new DriverExport, 'drivers.csv');
+        return Excel::download(new DriverExport, 'Pilots.csv');
     }
 
 }

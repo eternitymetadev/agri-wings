@@ -501,7 +501,7 @@ a.badge.alert.bg-secondary.shadow-sm {
                                         ><span>Export</span></a>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
 
                     @csrf
@@ -529,6 +529,47 @@ a.badge.alert.bg-secondary.shadow-sm {
         </div>
     </div>
 </div>
+
+<!--  -->
+<!-- edit crop model  -->
+<div class="modal fade" id="crop_edit_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Acerage</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit_order_acerage">
+                    <input type="hidden" class="form-control" name="order_id" id="order_id">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Acerage</label>
+                            <input type="number" class="form-control" name="acerage" id="acerage">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Remarks</label>
+                            <input type="text" class="form-control" name="remarks" id="remarks" required>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="crt_pytm"><span class="indicator-label">Update</span>
+                    <span class="indicator-progress" style="display: none;">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 @include('models.delete-user')
 @include('models.common-confirm')
@@ -662,6 +703,47 @@ jQuery(document).on('click', '.viewImageInNewTab', function() {
 
     let toggledImage = $(this).attr('src');
     $('#toggledImageView').attr('src', toggledImage);
+});
+
+$(document).on('click', '.edit_crop', function() {
+
+var order_id = $(this).val();
+var acerage = $(this).attr('field-acerage');
+$('#crop_edit_model').modal('show');
+
+$('#order_id').val(order_id);
+$('#acerage').val(acerage);
+});
+
+$('#edit_order_acerage').submit(function(e) {
+    e.preventDefault();
+
+    var formData = new FormData(this);
+    $.ajax({
+        url: "order-edit-acerage",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        beforeSend: function() {
+            $(".indicator-progress").show();
+            $(".indicator-label").hide();
+        },
+        success: (data) => {
+            $(".indicator-progress").hide();
+            $(".indicator-label").show();
+            if (data.success == true) {
+                swal('success', data.success_message, 'success');
+                window.location.reload();
+            } else {
+                swal('error', data.error_message, 'error');
+            }
+
+        }
+    });
 });
 </script>
 

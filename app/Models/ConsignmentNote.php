@@ -56,6 +56,7 @@ class ConsignmentNote extends Model
         'edd',
         'order_id',
         'status',
+        'acerage_reason',
         'booked_drs',
         'prs_id',
         'prsitem_status',

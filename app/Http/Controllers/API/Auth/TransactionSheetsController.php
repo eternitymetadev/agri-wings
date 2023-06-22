@@ -913,7 +913,7 @@ class TransactionSheetsController extends Controller
             $offer_price = $crop_price - $discount_price;
             $total_acres = @$order_details['total_acerage'];
             $total_payables = $offer_price * $total_acres;
-            if($order_details['OrderactivityDetails']['mode'] == null){
+            if(@$order_details['OrderactivityDetails']['mode'] == null){
                 $payment_mode = 'Advanced';
             }else{
                 $payment_mode = @$order_details['OrderactivityDetails']['mode'];

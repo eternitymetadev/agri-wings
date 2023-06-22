@@ -28,9 +28,9 @@ class DriverExport implements FromCollection, WithHeadings,ShouldQueue
             foreach ($driver as $key => $value){  
                           
                 $arr[] = [
+                    'name' => $value->name,
                     'phone' => $value->phone,
-                    'license_number' => $value->license_number,
-                    'license_image' => $value->license_image,
+                    'license_number' => $value->license_number
                 ];
             }
         }                 
@@ -39,9 +39,9 @@ class DriverExport implements FromCollection, WithHeadings,ShouldQueue
     public function headings(): array
     {
         return [
-            'phone',
-            'license_number',
-            'license_image',
+            'Pilot Name',
+            'Phone',
+            'License Number'
         ];
     }
 }

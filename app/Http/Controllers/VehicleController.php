@@ -323,7 +323,7 @@ class VehicleController extends Controller
     //download excel/csv
     public function exportExcel()
     {
-        return Excel::download(new VehicleExport, 'vehicles.csv');
+        return Excel::download(new VehicleExport, 'Drones.csv');
     }
 
     // not use yet
