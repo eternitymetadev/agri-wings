@@ -18,6 +18,11 @@
                 <th>Order Status</th>
                 <th>Payment Status</th>
                 <th>Invoice Status</th>
+                <?php if($authuser->role_id == 3){
+                    ?>
+                     <th>Action</th>
+                <?php } ?>
+               
             </tr>
         </thead>
         <tbody id="accordion" class="accordion">
@@ -87,7 +92,8 @@
                         </li>
                     </ul> -->
                     <div class="">
-                        <div class=""><span style="color:#4361ee;">BOOKING PARTNER: </span>{{ $consignment->RegClient->name ?? "-" }}
+                        <div class=""><span style="color:#4361ee;">BOOKING PARTNER:
+                            </span>{{ $consignment->RegClient->name ?? "-" }}
                         </div>
                         <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">BILLING CLIENT:
                             </span>{{ $consignment->BillingClient->name ?? "-" }}</div>
@@ -96,7 +102,8 @@
                 </td>
                 <td>
                     <div class="">
-                        <div class=""><span style="color:#4361ee;">Service Receiver: </span>{{$consignment->ConsigneeDetail->nick_name ?? "-"}} 
+                        <div class=""><span style="color:#4361ee;">Service Receiver:
+                            </span>{{$consignment->ConsigneeDetail->nick_name ?? "-"}}
                         </div>
                         <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">District:
                             </span>{{ $consignment->ConsigneeDetail->district ?? "-"}}</div>
@@ -180,8 +187,8 @@
                     <?php } ?>
                 </td>
                 @if($consignment->bill_to == 'Self')
-                <td>Pre-Paid</td>  
-                @else 
+                <td>Pre-Paid</td>
+                @else
                 <td>Post-Paid</td>
                 @endif
                 @if($consignment->delivery_status == 'Successful')
@@ -189,6 +196,15 @@
                 @else
                 <td>-</td>
                 @endif
+                @if($authuser->role_id == 3)
+                @if($consignment->delivery_status != 'Successful')
+                <td><button type="button" class="btn btn-warning edit_crop" value="{{$consignment->id}}"
+                        field-acerage="{{$consignment->total_acerage}}">edit</button></td>
+                        @else
+                        <td>-</td>
+                        @endif
+                @endif
+
 
             </tr>
             <tr id="collapse-{{$consignment->id}}" class="card-body collapse" data-parent="#accordion">

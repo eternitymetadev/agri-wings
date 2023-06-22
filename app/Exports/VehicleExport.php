@@ -36,23 +36,11 @@ class VehicleExport implements FromCollection, WithHeadings,ShouldQueue
                     $state = '';
                 }
                 $arr[] = [
-                    'id' => $value->id,
+                    
                     'regn_no' => $value->regn_no,
                     'mfg' => $value->mfg,
                     'make' => $value->make,
-                    'engine_no' => $value->engine_no,
-                    'chassis_no' => $value->chassis_no,
                     'gross_vehicle_weight' => $value->gross_vehicle_weight,
-                    'unladen_weight' => $value->unladen_weight,
-                    'tonnage_capacity' => $value->tonnage_capacity,
-                    'body_type' => $value->body_type,
-                    'state_id' => $state,
-                    'regndate' => $value->regndate,
-                    'hypothecation' => $value->hypothecation,
-                    'ownership' => $value->ownership,
-                    'owner_name' => $value->owner_name,
-                    'owner_phone' => $value->owner_phone,
-                    'rc_image' => $value->rc_image,
                 ];
             }
         }                 
@@ -61,23 +49,10 @@ class VehicleExport implements FromCollection, WithHeadings,ShouldQueue
     public function headings(): array
     {
         return [
-            'id',
-            'regn_no',
-            'mfg',
-            'make',
-            'engine_no',
-            'chassis_no',
-            'gross_vehicle_weight',
-            'unladen_weight',
-            'tonnage_capacity',
-            'body_type',
-            'state_id',
-            'regndate',
-            'hypothecation',
-            'ownership',
-            'owner_name',
-            'owner_phone',
-            'rc_image',
+            'UIN',
+            'Manufacturing year',
+            'Drone Model',
+            'Drone Capicity'
         ];
     }
 }

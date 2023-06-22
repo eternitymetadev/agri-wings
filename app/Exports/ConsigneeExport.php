@@ -34,19 +34,19 @@ class ConsigneeExport implements FromCollection, WithHeadings,ShouldQueue
         // ->join('consigners', 'consigners.id', '=', 'consignees.consigner_id')
         // ->join('zones', 'zones.postal_code', '=', 'consignees.postal_code');
 
-        if($authuser->role_id == 1){
-            $query = $query;
-        }
-        else if($authuser->role_id == 2 || $authuser->role_id == 3){
-            $query = $query->whereHas('Consigner', function($query) use($cc){
-                $query->whereIn('branch_id', $cc);
-            });
-        }
-        else{
-            $query = $query->whereHas('Consigner', function($query) use($regclient){
-                $query->whereIn('regionalclient_id', $regclient);
-            });
-        }
+        // if($authuser->role_id == 1){
+        //     $query = $query;
+        // }
+        // else if($authuser->role_id == 2 || $authuser->role_id == 3){
+        //     $query = $query->whereHas('Consigner', function($query) use($cc){
+        //         $query->whereIn('branch_id', $cc);
+        //     });
+        // }
+        // else{
+        //     $query = $query->whereHas('Consigner', function($query) use($regclient){
+        //         $query->whereIn('regionalclient_id', $regclient);
+        //     });
+        // }
 
         $consignee = $query->orderby('created_at','DESC')->get();
 
@@ -72,23 +72,13 @@ class ConsigneeExport implements FromCollection, WithHeadings,ShouldQueue
                 }
 
                 $arr[] = [
-                    'nick_name'     => $value->nick_name,
-                    'legal_name'    => $value->legal_name,
-                    'consigner_id'  => $value->consigner_id,
-                    'contact_name'  => $value->contact_name,
-                    'email'         => $value->email,
-                    'dealer_type'   => $dealer_type,
-                    'gst_number'    => $value->gst_number,
-                    'phone'         => $value->phone,
-                    'postal_code'   => @$value->postal_code,
-                    'city'          => @$value->city,
-                    'district'      => @$value->Zone->district,
-                    'state_id'      => @$value->Zone->state,
-                    'zone_id'       => @$zone,
+                    'farmer_name'     => $value->nick_name,
+                    'contact_no'  => $value->phone,
                     'address_line1' => $value->address_line1,
-                    'address_line2' => $value->address_line2,
-                    'address_line3' => $value->address_line3,
-                    'address_line4' => $value->address_line4,
+                    'city' => $value->city,
+                    'district' => $value->district,
+                    'postal_code' => $value->postal_code,
+                    'state' => $value->state_id,
 
                 ];
             }
@@ -98,23 +88,13 @@ class ConsigneeExport implements FromCollection, WithHeadings,ShouldQueue
     public function headings(): array
     {
         return [
-            'Consignee Nick Name',
-            'Consignee Legal Name',
-            'Consigner',
-            'Contact Person Name',
-            'Email',
-            'Type Of Dealer',
-            'GST Number',
-            'Mobile No.',
-            'PIN Code',
-            'City',
-            'District',
-            'State',
-            'Primary Zone',
-            'Address Line 1',
-            'Address Line 2',
-            'Address Line 3',
-            'Address Line 4',
+            'Farmer Name',
+            'Farmer Contact',
+            'Address',
+            'city',
+            'District Name  ',
+            'Postal Coder',
+            'State id',
         ];
     }
 }

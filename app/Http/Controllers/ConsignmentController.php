@@ -16,6 +16,7 @@ use App\Models\Crop;
 use App\Models\CropPriceScheme;
 use App\Models\Driver;
 use App\Models\Farm;
+use App\Models\Feedback;
 use App\Models\ItemMaster;
 use App\Models\Job;
 use App\Models\Location;
@@ -26,7 +27,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
-use App\Models\Feedback;
+use App\Models\OrderFarm;
 use Auth;
 use Carbon\Carbon;
 use Config;
@@ -5341,7 +5342,7 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
 
-        $crop_price_schemes = CropPriceScheme::with('Crops')->orderBy('id','desc')->get();
+        $crop_price_schemes = CropPriceScheme::with('Crops')->orderBy('id', 'desc')->get();
         $crops = Crop::where('status', 1)->get();
         return view('consignments.crop-price-scheme', ['prefix' => $this->prefix, 'title' => $this->title, 'crop_price_schemes' => $crop_price_schemes, 'crops' => $crops]);
     }
@@ -5405,7 +5406,7 @@ class ConsignmentController extends Controller
         $today = date('Y-m-d');
         $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
             ->whereDate('from_date', '<=', $today)
-            ->whereDate('to_date', '>=', $today)->where('status',1)->orderBy('id', 'desc')->first();
+            ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
 
         $response['success'] = true;
         $response['get_scheme_details'] = $get_scheme_details;
@@ -5416,10 +5417,10 @@ class ConsignmentController extends Controller
     public function rating(Request $request, $id)
     {
         $check_feedback = Feedback::where('order_id', $id)->first();
-        if(empty($check_feedback)){
-        return view('rating',['order_id' => $id]);
-        }else{
-        return view('already-feedback',['order_id' => $id]);
+        if (empty($check_feedback)) {
+            return view('rating', ['order_id' => $id]);
+        } else {
+            return view('already-feedback', ['order_id' => $id]);
         }
 
     }
@@ -5444,10 +5445,9 @@ class ConsignmentController extends Controller
                 return response()->json($response);
             }
 
-
             $feedbacksave['feedback'] = $request->feedback;
             $feedbacksave['stars'] = $request->stars;
-            $feedbacksave['order_id'] =  $request->order_id;
+            $feedbacksave['order_id'] = $request->order_id;
 
             $savefeedback = Feedback::create($feedbacksave);
 
@@ -5474,7 +5474,7 @@ class ConsignmentController extends Controller
 
     public function downloadApp()
     {
-       
+
         return view('app-download');
 
     }
@@ -5482,10 +5482,10 @@ class ConsignmentController extends Controller
     public function downloadAppFile()
     {
         $path = public_path('assets/agri-app.apk');
-        return response()->file($path ,[
-            'Content-Type'=>'application/vnd.android.package-archive',
-            'Content-Disposition'=> 'attachment; filename="android.apk"',
-        ]) ;
+        return response()->file($path, [
+            'Content-Type' => 'application/vnd.android.package-archive',
+            'Content-Disposition' => 'attachment; filename="android.apk"',
+        ]);
 
     }
 
@@ -5493,6 +5493,43 @@ class ConsignmentController extends Controller
     {
         $path = public_path('assets/CSO-Policy.pdf');
         return response()->download($path);
+
+    }
+
+    public function orderEditacerage(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $order_details = ConsignmentNote::with('Orderactivity')->where('id', $request->order_id)->first();
+            $crop_price = $order_details->Orderactivity->base_price * $request->acerage;
+            $discount_price = $order_details->Orderactivity->discount_price * $request->acerage;
+            $cropPriceWithDiscount = $order_details->Orderactivity->base_price - $order_details->Orderactivity->discount_price;
+            $totalPrice = $crop_price - $discount_price;
+
+            $updateOrderFarm = OrderFarm::where('order_id', $request->order_id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $discount_price, 'total_price' => $totalPrice]);
+
+            if ($updateOrderFarm) {
+
+                ConsignmentNote::where('id', $request->order_id)->update(['total_amount' => $totalPrice, 'total_acerage'=> $request->acerage,'acerage_reason' => $request->remarks]);
+                $response['success'] = true;
+                $response['success_message'] = "Acerage Updated successfully";
+                $response['error'] = false;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created Vendor please try again";
+                $response['error'] = true;
+            }
+
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
 
     }
 

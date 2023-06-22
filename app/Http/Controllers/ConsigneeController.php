@@ -350,7 +350,7 @@ class ConsigneeController extends Controller
     //download excel/csv
     public function exportExcel()
     {
-        return Excel::download(new ConsigneeExport, 'consignees.csv');
+        return Excel::download(new ConsigneeExport, 'Farmers.csv');
     }
 
     // get address detail from postal code api
