@@ -94,7 +94,7 @@ class ConsignmentController extends Controller
             $regclient = explode(',', $authuser->regionalclient_id);
             $cc = explode(',', $authuser->branch_id);
 
-            $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn');
+            $query = $query->whereNotIn('status', [5,7])->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn');
 
             if ($authuser->role_id == 1) {
                 $query;
@@ -168,7 +168,7 @@ class ConsignmentController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->where('status', '!=', 5)->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn', 'OrderactivityDetails');
+        $query = $query->whereNotIn('status', [5,7])->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn', 'OrderactivityDetails');
 
         if ($authuser->role_id == 1) {
             $query;
