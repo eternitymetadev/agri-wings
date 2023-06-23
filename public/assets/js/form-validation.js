@@ -1301,9 +1301,6 @@ jQuery(document).ready(function(){
             nick_name: {
                 required: "Nick name is required"
             },
-            team_id: {
-                required: "Team id is required"
-            },
             consignment_no: {
                 required: "Consignment no is required"
             },

@@ -60,7 +60,6 @@ class LocationController extends Controller
         $this->prefix = request()->route()->getPrefix();
         $rules = array(
             'name'    => 'required|unique:locations',
-            'team_id' => 'required', 
             // 'consignment_no' => 'required|unique:locations',
             'email'  => 'required',
             'phone'  => 'required',
@@ -94,8 +93,8 @@ class LocationController extends Controller
         if(!empty($request->phone)){
             $addlocation['phone'] = $request->phone;
         }
-        $addlocation['with_vehicle_no'] = $request->with_vehicle_no;
-        $addlocation['is_hub'] = $request->isHub;
+        $addlocation['with_vehicle_no'] = 0;
+        $addlocation['is_hub'] = 0;
         $addlocation['status'] = 1;
 
         $savelocation = Location::create($addlocation);
