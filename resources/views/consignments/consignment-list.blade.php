@@ -541,14 +541,14 @@ a.badge.alert.bg-secondary.shadow-sm {
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
+            </div> 
             <div class="modal-body">
                 <form id="edit_order_acerage">
                     <input type="hidden" class="form-control" name="order_id" id="order_id">
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Acerage</label>
-                            <input type="number" class="form-control" name="acerage" id="acerage">
+                            <input type="number" step="any" class="form-control" name="acerage" id="acerage">
                         </div>
                     </div>
                     <div class="form-row">

@@ -188,7 +188,7 @@
                 </td>
                 @if($consignment->bill_to == 'Self')
                 <td>Pre-Paid</td>
-                @else
+                @else 
                 <td>Post-Paid</td>
                 @endif
                 @if($consignment->delivery_status == 'Successful')
