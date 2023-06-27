@@ -36,7 +36,7 @@
                 }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
                     $message = "Token is Expired";
                     $status = false;
-                    $errorCode = 401;
+                    $errorCode = 401; 
                 }else{
                     $message = "Authorization Token not found";
                     $status = false;

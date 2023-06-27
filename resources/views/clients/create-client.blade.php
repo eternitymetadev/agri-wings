@@ -37,20 +37,17 @@
                                     <input type="text" class="form-control" name="client_name" placeholder="">
                                 </div>
                                 <div class="form-group col-md-6">
-                                <label for="exampleFormControlInput2">GST Number<span
-                                            class="text-danger">*</span></label>
+                                <label for="exampleFormControlInput2">GST Number</label>
                                     <input type="text" class="form-control" name="gst_no" placeholder="">
                                 </div>
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">PAN<span
-                                            class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">PAN</label>
                                     <input type="text" class="form-control" name="pan" placeholder="">
                                 </div>
                                 <div class="form-group col-md-6">
-                                <label for="exampleFormControlInput2">TAN<span
-                                            class="text-danger">*</span></label>
+                                <label for="exampleFormControlInput2">TAN</label>
                                     <input type="text" class="form-control" name="tan" placeholder="">
                                 </div>
                             </div>

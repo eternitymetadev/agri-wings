@@ -595,6 +595,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('add-crop-scheme', [ConsignmentController::class, 'addCropScheme']);
     Route::any('check-price-scheme', [ConsignmentController::class, 'checkPriceScheme']);
     Route::any('order-edit-acerage', [ConsignmentController::class, 'orderEditacerage']);
+    Route::any('deactivate-scheme', [ConsignmentController::class, 'deactivateScheme']);
 
     Route::get('/display-invoice-pdf/{id}', [TransactionSheetsController::class, 'displayInvoicePdf']);
 

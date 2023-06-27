@@ -80,6 +80,8 @@ div.relative {
                                 <th>To Date</th>
                                 <th>Crop Price</th>
                                 <th>Discount Price</th>
+                                <th>Min Acerage</th>
+                                <th>Max Acerage</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -91,12 +93,15 @@ div.relative {
                                 <td>{{$crop_price->to_date}}</td>
                                 <td>{{$crop_price->crop_price}}</td>
                                 <td>{{$crop_price->discount_price}}</td>
+                                <td>{{$crop_price->min_acerage}}</td>
+                                <td>{{$crop_price->max_acerage}}</td>
                                 @if($crop_price->status == 1)
-                                <td>Active</td>
+                                <td><button type="button" class="btn btn-success deactive_crop"
+                                        value="{{$crop_price->id}}">Active</button></td>
                                 @else
-                                <td>Deactive</td>
+                                <td><button type="button" class="btn btn-danger">Deactive</button></td>
                                 @endif
-                                
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -156,6 +161,18 @@ div.relative {
                             <input type="number" class="form-control" name="discount_price">
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Min Acerage</label>
+                            <input type="number" class="form-control" id="min" name="min">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Max Acerage</label>
+                            <input type="number" class="form-control" name="max" id="max">
+                        </div>
+                    </div>
 
             </div>
             <div class="modal-footer">
@@ -169,6 +186,33 @@ div.relative {
     </div>
 </div>
 
+<!-- --------- -->
+<!-- edit crop model  -->
+<div class="modal fade" id="deactive_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Crop</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" name="crop_id" id="crop_scheme_id">
+                Are You Sure to deactive this scheme ?
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="deactivate_scheme_btn"><span
+                        class="indicator-label">Update</span>
+                    <span class="indicator-progress" style="display: none;">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 @section('js')
@@ -312,9 +356,59 @@ $('#update_crop').submit(function(e) {
     });
 });
 
-$("#crop_change").change(function (e) {
-       var crop_price = $('option:selected', this).attr('crop-price');
-       $('#check_crop_price').val(crop_price);
+$("#crop_change").change(function(e) {
+    var crop_price = $('option:selected', this).attr('crop-price');
+    $('#check_crop_price').val(crop_price);
+});
+
+$(document).on('click', '.deactive_crop', function() {
+    var crop_id = $(this).val();
+    $('#deactive_model').modal('show');
+    $('#crop_scheme_id').val(crop_id);
+});
+
+$(document).on('click', '#deactivate_scheme_btn', function() {
+    var crop_id = $('#crop_scheme_id').val();
+
+    $.ajax({
+        url: "deactivate-scheme",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'POST',
+        data: {
+            crop_id: crop_id
+        },
+
+        beforeSend: function() {
+            $(".indicator-progress").show();
+            $(".indicator-label").hide();
+        },
+        success: (data) => {
+            $(".indicator-progress").hide();
+            $(".indicator-label").show();
+            if (data.success == true) {
+                swal('success', data.success_message, 'success');
+                window.location.reload();
+            } else {
+                swal('error', data.error_message, 'error');
+            }
+
+        }
     });
+
+});
+
+$("#max").keyup(function() {
+
+    var firstInput = document.getElementById("min").value;
+    var secondInput = document.getElementById("max").value;
+
+    if (parseInt(firstInput) > parseInt(secondInput)) {
+        $('#max').val('');
+        swal('error', 'max cannot be less than min', 'error')
+    }
+
+});
 </script>
 @endsection

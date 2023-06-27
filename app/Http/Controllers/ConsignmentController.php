@@ -20,6 +20,7 @@ use App\Models\Feedback;
 use App\Models\ItemMaster;
 use App\Models\Job;
 use App\Models\Location;
+use App\Models\OrderFarm;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\TransactionSheet;
@@ -27,7 +28,6 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
-use App\Models\OrderFarm;
 use Auth;
 use Carbon\Carbon;
 use Config;
@@ -94,7 +94,7 @@ class ConsignmentController extends Controller
             $regclient = explode(',', $authuser->regionalclient_id);
             $cc = explode(',', $authuser->branch_id);
 
-            $query = $query->whereNotIn('status', [5,7])->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn');
+            $query = $query->whereNotIn('status', [5, 7])->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn');
 
             if ($authuser->role_id == 1) {
                 $query;
@@ -168,7 +168,7 @@ class ConsignmentController extends Controller
         $regclient = explode(',', $authuser->regionalclient_id);
         $cc = explode(',', $authuser->branch_id);
 
-        $query = $query->whereNotIn('status', [5,7])->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn', 'OrderactivityDetails');
+        $query = $query->whereNotIn('status', [5, 7])->with('ConsignmentItems', 'ConsignerDetail', 'ConsigneeDetail', 'VehicleDetail', 'DriverDetail', 'JobDetail', 'fallIn', 'OrderactivityDetails');
 
         if ($authuser->role_id == 1) {
             $query;
@@ -5368,13 +5368,60 @@ class ConsignmentController extends Controller
                 return response()->json($response);
             }
 
-            $check_old_scheme = CropPriceScheme::where('crop_id', $request->crop_id)->update(['status' => 0]);
+            // $check_old_scheme = CropPriceScheme::where('crop_id', $request->crop_id)->update(['status' => 0]);
 
             $discountsave['crop_id'] = $request->crop_id;
             $discountsave['from_date'] = $request->from_date;
             $discountsave['to_date'] = $request->to_date;
             $discountsave['crop_price'] = $request->crop_price;
             $discountsave['discount_price'] = $request->discount_price;
+            $discountsave['min_acerage'] = $request->min;
+            $discountsave['max_acerage'] = $request->max;
+
+            // $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
+            //     ->whereDate('from_date', '<=', $request->from_date)
+            //     ->whereDate('to_date', '>=', $request->to_date)
+            //     ->where('status', 1)->orderBy('id', 'desc')->get();
+
+            //     for ($i = 0; $i < sizeof($get_scheme_details); $i++) {
+            //         if ($request->min >= $get_scheme_details[$i]->min_acerage && $request->max <= $get_scheme_details[$i]->max_acerage || $request->min <= $get_scheme_details[$i]->max_acerage ) {
+
+            //             $response['success'] = false;
+            //             $response['error_message'] = "Scheme Already Exist For This Range";
+            //             $response['error'] = true;
+            //             return response()->json($response);
+
+            //         }
+            //     }
+
+            $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
+                ->where(function ($query) use ($request) {
+                    $query->whereDate('from_date', '<=', $request->from_date)
+                        ->whereDate('to_date', '>=', $request->from_date)
+                        ->orWhereDate('from_date', '<=', $request->to_date)
+                        ->whereDate('to_date', '>=', $request->to_date);
+                })
+                ->where('status', 1)
+                ->orderBy('id', 'desc')
+                ->get();
+
+                foreach ($get_scheme_details as $scheme) {
+                    if (($request->from_date >= $scheme->from_date && $request->from_date <= $scheme->to_date) ||
+                        ($request->to_date >= $scheme->from_date && $request->to_date <= $scheme->to_date) ||
+                        ($request->from_date <= $scheme->from_date && $request->to_date >= $scheme->to_date)
+                    ) {
+                        if (($request->min >= $scheme->min_acerage && $request->min <= $scheme->max_acerage) ||
+                            ($request->max >= $scheme->min_acerage && $request->max <= $scheme->max_acerage) ||
+                            ($request->min <= $scheme->min_acerage && $request->max >= $scheme->min_acerage)
+                        ) {
+                            $response['success'] = false;
+                            $response['error_message'] = "Scheme Already Exists for this Range";
+                            $response['error'] = true;
+                            return response()->json($response);
+                        }
+                    }
+                }
+
 
             $gstsave = CropPriceScheme::create($discountsave);
 
@@ -5403,15 +5450,34 @@ class ConsignmentController extends Controller
 
     public function checkPriceScheme(Request $request)
     {
+
+        $acerage = $request->acerage;
         $today = date('Y-m-d');
         $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
             ->whereDate('from_date', '<=', $today)
-            ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
+            ->whereDate('to_date', '>=', $today)
+            ->where('status', 1)->orderBy('id', 'desc')->get();
+        $crop_scheme = array();
+        for ($i = 0; $i < sizeof($get_scheme_details); $i++) {
+            if ($acerage >= $get_scheme_details[$i]->min_acerage) {
 
-        $response['success'] = true;
-        $response['get_scheme_details'] = $get_scheme_details;
-        $response['error'] = false;
-        return response()->json($response);
+                if ($acerage <= $get_scheme_details[$i]->max_acerage) {
+                    $crop_scheme = $get_scheme_details[$i];
+
+                    $response['success'] = true;
+                    $response['get_scheme_details'] = $crop_scheme;
+                    $response['error'] = false;
+                    return response()->json($response);
+                } else {
+
+                    $response['success'] = true;
+                    $response['get_scheme_details'] = '';
+                    $response['error'] = false;
+                    return response()->json($response);
+                }
+            }
+        }
+
     }
 
     public function rating(Request $request, $id)
@@ -5510,7 +5576,7 @@ class ConsignmentController extends Controller
 
             if ($updateOrderFarm) {
 
-                ConsignmentNote::where('id', $request->order_id)->update(['total_amount' => $totalPrice, 'total_acerage'=> $request->acerage,'acerage_reason' => $request->remarks]);
+                ConsignmentNote::where('id', $request->order_id)->update(['total_amount' => $totalPrice, 'total_acerage' => $request->acerage, 'acerage_reason' => $request->remarks]);
                 $response['success'] = true;
                 $response['success_message'] = "Acerage Updated successfully";
                 $response['error'] = false;
@@ -5531,6 +5597,36 @@ class ConsignmentController extends Controller
         }
         return response()->json($response);
 
+    }
+
+    public function deactivateScheme(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+
+            $deactivate_scheme = CropPriceScheme::where('id', $request->crop_id)->update(['status' => 0]);
+
+            if ($deactivate_scheme) {
+                $response['success'] = true;
+                $response['success_message'] = "Scheme Deactivated";
+                $response['error'] = false;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
     }
 
 }
