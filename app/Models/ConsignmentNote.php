@@ -14,6 +14,7 @@ class ConsignmentNote extends Model
         'bill_to',
         'billing_client',
         'noc_upload',
+        'order_type',
         'assign_date',
         'noc',
         'lr_type',

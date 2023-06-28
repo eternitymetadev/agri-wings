@@ -5369,8 +5369,18 @@ class ConsignmentController extends Controller
             }
 
             // $check_old_scheme = CropPriceScheme::where('crop_id', $request->crop_id)->update(['status' => 0]);
+            $crop_scheme = DB::table('crop_price_schemes')->select('scheme_no')->latest('scheme_no')->first();
+            $crop_scheme_no = json_decode(json_encode($crop_scheme), true);
+           
+            if (empty($crop_scheme_no['scheme_no']) || $crop_scheme_no['scheme_no'] == null) {
+                $scheme_no = 101;
+            } else {
+                $scheme_no = $crop_scheme_no['scheme_no'] + 1;
+            }
+
 
             $discountsave['crop_id'] = $request->crop_id;
+            $discountsave['scheme_no'] = $scheme_no;
             $discountsave['from_date'] = $request->from_date;
             $discountsave['to_date'] = $request->to_date;
             $discountsave['crop_price'] = $request->crop_price;
@@ -5378,21 +5388,6 @@ class ConsignmentController extends Controller
             $discountsave['min_acerage'] = $request->min;
             $discountsave['max_acerage'] = $request->max;
 
-            // $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
-            //     ->whereDate('from_date', '<=', $request->from_date)
-            //     ->whereDate('to_date', '>=', $request->to_date)
-            //     ->where('status', 1)->orderBy('id', 'desc')->get();
-
-            //     for ($i = 0; $i < sizeof($get_scheme_details); $i++) {
-            //         if ($request->min >= $get_scheme_details[$i]->min_acerage && $request->max <= $get_scheme_details[$i]->max_acerage || $request->min <= $get_scheme_details[$i]->max_acerage ) {
-
-            //             $response['success'] = false;
-            //             $response['error_message'] = "Scheme Already Exist For This Range";
-            //             $response['error'] = true;
-            //             return response()->json($response);
-
-            //         }
-            //     }
 
             $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
                 ->where(function ($query) use ($request) {

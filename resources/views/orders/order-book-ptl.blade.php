@@ -865,6 +865,22 @@ tr:hover .dltItemRow {
                             </div>
                         </div>
 
+                        <div class="d-flex flex-wrap col-12 align-items-center">
+                            <div class="form-check" style="display: flex;
+    align-items: center;
+    min-height: 20px;
+    gap: 8px;">
+                                <input class="form-check-input" type="checkbox" name="apply_scheme" id="applyScheme"
+                                    checked="true" value="1" style="width: 16px; height: 16px">
+                                <label class="form-check-label" for="applyScheme" style="margin-left: 8px;
+    line-height: 14px;
+    font-size: 14px !important; cursor: pointer">
+                                    Apply Scheme
+                                </label>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -882,6 +898,22 @@ tr:hover .dltItemRow {
                         </thead>
                         <tbody></tbody>
                     </table>
+
+                    <div id="promotionalOrder" class="flex-wrap col-12 align-items-center" style="display: none">
+                        <div class="form-check" style="display: flex;
+    align-items: center;
+    min-height: 20px;
+    gap: 8px;">
+                            <input class="form-check-input" type="checkbox" name="promotional"
+                                onchange="giveFullDiscount()" id="promotional" value="1"
+                                style="width: 16px; height: 16px" name="promotional">
+                            <label class="form-check-label" for="promotional" style="margin-left: 8px;
+    line-height: 14px;
+    font-size: 14px !important; cursor: pointer">
+                                Promotional Order
+                            </label>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -1033,19 +1065,20 @@ const onFarmerTypeChange = () => {
 let cropList = [];
 
 let cropIndex = 1;
- 
+
 const onAddCrop = () => {
     let cropName = $('input[name="crop"]:checked').val();
     let acerage = $('#acreage').val();
+    let apply_scheme = $('input[name="apply_scheme"]:checked').val();
 
-    let  = $('input[name="crop"]:checked').val();
+    let = $('input[name="crop"]:checked').val();
     $('#themeLoader').css('display', 'flex');
     $.ajax({
         url: "check-price-scheme",
         method: "get",
         data: {
             crop_id: cropName,
-            acerage:acerage
+            acerage: acerage
         },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1053,6 +1086,7 @@ const onAddCrop = () => {
         dataType: 'json',
         success: function(response) {
             $('#themeLoader').css('display', 'none');
+            $('#applyScheme').attr('disabled', true);
 
             let listItem = ``;
 
@@ -1063,12 +1097,16 @@ const onAddCrop = () => {
             let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
             let totalPrice = cropPrice * acreage;
 
-            if(response.get_scheme_details){
-            var crop_price = response.get_scheme_details.crop_price;
-            var discount_price = response.get_scheme_details.discount_price;
-            var final_crop_price = crop_price - discount_price;
-            var calculate_offer_price = final_crop_price * acreage;
-            }else{
+            if (apply_scheme == 1) {
+                if (response.get_scheme_details) {
+                    var crop_price = response.get_scheme_details.crop_price;
+                    var discount_price = response.get_scheme_details.discount_price;
+                    var final_crop_price = crop_price - discount_price;
+                    var calculate_offer_price = final_crop_price * acreage;
+                } else {
+                    var calculate_offer_price = totalPrice;
+                }
+            } else {
                 var calculate_offer_price = totalPrice;
             }
 
@@ -1077,6 +1115,8 @@ const onAddCrop = () => {
 
             if (farmLocation != '') {
                 $('#sprayTable').show();
+                $('#promotionalOrder').show();
+
                 listItem += `<tr> 
                 <td>${cropNameText}<input type="hidden" value="` + cropName + `" name="data[` + cropIndex + `][crop_name]"/></td>
                 <td>${farmLocationText}<input type="hidden" value="` + farmLocation + `" name="data[` + cropIndex + `][farm_location]"/></td>
@@ -1088,7 +1128,8 @@ const onAddCrop = () => {
                     ${discount_price}<input type="hidden" value="` + discount_price + `" name="data[` + cropIndex + `][discount]"/>
                 </td>
                 <td class="lastCol">
-                    ${calculate_offer_price}<input type="hidden" value="` + calculate_offer_price + `" name="data[` + cropIndex + `][offered_cost]"/>
+                    ${calculate_offer_price}<input type="hidden" value="` + calculate_offer_price + `" name="data[` +
+                    cropIndex + `][offered_cost]"/>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash dltItemRow"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </td>
 
@@ -1109,12 +1150,20 @@ const onAddCrop = () => {
 
 }
 
+
+const giveFullDiscount = ()=> {
+}
+
+
 $("#sprayTable").on('click', '.dltItemRow', function() {
     $(this).closest('tr').remove();
     $('#addCropButton').removeAttr('disabled');
+    $('#applyScheme').removeAttr('disabled');
+
 
     if ($('#sprayTable tr').length < 2) {
         $('#sprayTable').hide();
+        $('#promotionalOrder').hide();
         $('#submitButton').attr('disabled', true);
     }
 })

@@ -14,6 +14,7 @@ class AddMaxMinToCropPriceSchemesTable extends Migration
     public function up()
     {
         Schema::table('crop_price_schemes', function (Blueprint $table) {
+            $table->string('scheme_no')->after('id')->nullable();
             $table->string('min_acerage')->after('discount_price')->nullable();
             $table->string('max_acerage')->after('min_acerage')->nullable();
         });

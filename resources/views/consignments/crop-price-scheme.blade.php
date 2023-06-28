@@ -75,6 +75,7 @@ div.relative {
                         </div>
                         <thead>
                             <tr>
+                                <th>Scheme No</th>
                                 <th>Crop Name</th>
                                 <th>From Date</th>
                                 <th>To Date</th>
@@ -88,6 +89,7 @@ div.relative {
                         <tbody>
                             @foreach($crop_price_schemes as $crop_price)
                             <tr>
+                                <td>{{$crop_price->Crops->crop_name}}{{$crop_price->scheme_no}}</td>
                                 <td>{{$crop_price->Crops->crop_name}}</td>
                                 <td>{{$crop_price->from_date}}</td>
                                 <td>{{$crop_price->to_date}}</td>
