@@ -730,6 +730,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('update-base-client', [ClientController::class, 'updateBaseClient']);
 
     Route::any('order-list-export', [OrderController::class, 'orderListExport']);
+  
 
 
 });
@@ -1071,6 +1072,7 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
 
     Route::any('unprosessed-order', [HomeController::class, 'orderAnalystic']);
     Route::any('order-list-export', [OrderController::class, 'orderListExport']);
+    Route::get('/display-invoice-pdf/{id}', [TransactionSheetsController::class, 'displayInvoicePdf']);
 
     
     

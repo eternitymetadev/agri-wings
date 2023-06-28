@@ -2275,6 +2275,17 @@ class OrderController extends Controller
                     $acerage[] = $save_data['acerage'];
                     $crop_price[] = $save_data['crop_price'];
 
+                    $today = date('Y-m-d');
+                    $get_Crop_price = Crop::where('id', $save_data['crop_name'])->first();
+                    $get_scheme_details = CropPriceScheme::where('crop_id', $save_data['crop_name'])
+                        ->whereDate('from_date', '<=', $today)
+                        ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
+                    if(!empty($get_scheme_details)){
+                        $discount_price = $get_scheme_details->discount_price;
+                    }else{
+                        $discount_price = 0 ;
+                    }
+
                     $save_data['order_id'] = $saveconsignment->id;
                     $save_data['farm_location'] = $save_data['farm_location'];
                     $save_data['crop'] = $save_data['crop_name'];
@@ -2282,6 +2293,8 @@ class OrderController extends Controller
                     $save_data['crop_price'] = $save_data['crop_price'];
                     $save_data['discount'] = $save_data['discount'];
                     $save_data['total_price'] = $save_data['offered_cost'];
+                    $save_data['base_price'] = $get_Crop_price->crop_price;
+                    $save_data['discount_price'] = $discount_price;
                     $save_data['status'] = 1;
                     $saveconsignmentitems = OrderFarm::create($save_data);
                 }
