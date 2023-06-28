@@ -2270,10 +2270,12 @@ class OrderController extends Controller
 
                 $acerage = array();
                 $crop_price = array();
+                $offered_price = array();
                 foreach ($get_data as $key => $save_data) {
 
                     $acerage[] = $save_data['acerage'];
                     $crop_price[] = $save_data['crop_price'];
+                    $offered_price[] = $save_data['offered_cost'];
 
                     $today = date('Y-m-d');
                     $get_Crop_price = Crop::where('id', $save_data['crop_name'])->first();
@@ -2301,8 +2303,9 @@ class OrderController extends Controller
 
                 $total_acerage = array_sum($acerage);
                 $total_crop_price = array_sum($crop_price);
+                $total_offered_price = array_sum($offered_price);
 
-                ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_crop_price]);
+                ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_offered_price]);
 
             }
 
