@@ -2043,7 +2043,7 @@ class OrderController extends Controller
             $consignment_id = $request->consignment_id;
             //===================== Create DRS in LR ================================= //
             if ($request->booked_drs == 0) {
-                if (!empty($request->vehicle_id)) {
+                if (!empty($request->vehicle_id)) { 
                     $consignmentdrs = DB::table('consignment_notes')->select('consignment_notes.*', 'consigners.nick_name as consigner_name', 'consignees.nick_name as consignee_name', 'consignees.city as city', 'consignees.postal_code as pincode', 'vehicles.regn_no as regn_no', 'drivers.name as driver_name', 'drivers.phone as driver_phone')
                         ->join('consigners', 'consigners.id', '=', 'consignment_notes.consigner_id')
                         ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')

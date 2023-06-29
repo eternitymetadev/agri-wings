@@ -866,15 +866,10 @@ tr:hover .dltItemRow {
                         </div>
 
                         <div class="d-flex flex-wrap col-12 align-items-center">
-                            <div class="form-check" style="display: flex;
-    align-items: center;
-    min-height: 20px;
-    gap: 8px;">
+                            <div class="form-check" style="display: flex; align-items: center; min-height: 20px; gap: 8px;">
                                 <input class="form-check-input" type="checkbox" name="apply_scheme" id="applyScheme"
                                     checked="true" value="1" style="width: 16px; height: 16px">
-                                <label class="form-check-label" for="applyScheme" style="margin-left: 8px;
-    line-height: 14px;
-    font-size: 14px !important; cursor: pointer">
+                                <label class="form-check-label" for="applyScheme" style="margin-left: 8px; line-height: 14px; font-size: 14px !important; cursor: pointer">
                                     Apply Scheme
                                 </label>
                             </div>
@@ -1151,8 +1146,7 @@ const onAddCrop = () => {
 }
 
 
-const giveFullDiscount = ()=> {
-}
+const giveFullDiscount = () => {}
 
 
 $("#sprayTable").on('click', '.dltItemRow', function() {

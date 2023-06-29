@@ -14,7 +14,7 @@
 }
 
 h4 {
-    font-size: 18px;
+    font-size: 18px; 
 
 }
 
@@ -866,6 +866,15 @@ tr:hover .dltItemRow {
                                     id="addCropButton">Add</button>
                             </div>
                         </div>
+                        <div class="d-flex flex-wrap col-12 align-items-center">
+                            <div class="form-check" style="display: flex; align-items: center; min-height: 20px; gap: 8px;">
+                                <input class="form-check-input" type="checkbox" name="apply_scheme" id="applyScheme"
+                                    checked="true" value="1" style="width: 16px; height: 16px">
+                                <label class="form-check-label" for="applyScheme" style="margin-left: 8px; line-height: 14px; font-size: 14px !important; cursor: pointer">
+                                    Apply Scheme
+                                </label>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -1037,12 +1046,15 @@ let cropIndex = 1;
 
 const onAddCrop = () => {
     let cropName = $('input[name="crop"]:checked').val();
+    let apply_scheme = $('input[name="apply_scheme"]:checked').val();
+    let acerage = $('#acreage').val();
     $('#themeLoader').css('display', 'flex');
     $.ajax({
         url: "check-price-scheme",
         method: "get",
         data: {
-            crop_id: cropName
+            crop_id: cropName,
+            acerage: acerage
         },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1060,6 +1072,7 @@ const onAddCrop = () => {
             let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
             let totalPrice = cropPrice * acreage;
 
+            if (apply_scheme == 1) {
             if(response.get_scheme_details){
             var crop_price = response.get_scheme_details.crop_price;
             var discount_price = response.get_scheme_details.discount_price;
@@ -1068,6 +1081,9 @@ const onAddCrop = () => {
             }else{
                 var calculate_offer_price = totalPrice;
             }
+        }else{
+            var calculate_offer_price = totalPrice;
+        }
 
             var discount_price = totalPrice - calculate_offer_price;
 
