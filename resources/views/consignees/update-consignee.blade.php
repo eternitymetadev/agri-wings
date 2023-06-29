@@ -98,22 +98,22 @@
                                             <input type="hidden" name="data[{{$i}}][hidden_id]"
                                                 value="{!! $farm->id !!}">
                                             <td>
-                                                <input type="text" class="form-control name"
+                                                <input type="text" class="form-control name reuiredInput"
                                                     name="data[{{$i}}][field_area]" placeholder=""
                                                     value="{{old('field_area',isset($farm->field_area)?$farm->field_area:'')}}">
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control name"
+                                                <input type="text" class="form-control name reuiredInput"
                                                     name="data[{{$i}}][pin_code]" placeholder=""
-                                                    value="{{old('pin_code',isset($farm->pin_code)?$farm->pin_code:'')}}">
+                                                    value="{{old('pin_code',isset($farm->pin_code)?$farm->pin_code:'')}}" required>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control name" name="data[{{$i}}][city]"
+                                                <input type="text" class="form-control name reuiredInput" name="data[{{$i}}][city]"
                                                     placeholder=""
                                                     value="{{old('city',isset($farm->city)?$farm->city:'')}}">
                                             </td>
                                             <td>
-                                                <textarea type="text" class="form-control name"
+                                                <textarea type="text" class="form-control name reuiredInput"
                                                     name="data[{{$i}}][address]"
                                                     placeholder="">{{$farm->address}}</textarea>
                                             </td>

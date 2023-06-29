@@ -45,6 +45,12 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
+                                    <label for="exampleFormControlSelect1">Billing Client Name<span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="regional_client_name" name="name"
+                                        placeholder="">
+                                </div>
+                                <!-- <div class="form-group col-md-6">
                                     <label for="exampleFormControlSelect1">Branch Location</label>
                                     <select class="form-control  my-select2" id="branch_id" name="branch_id"
                                         tabindex="-1">
@@ -53,20 +59,16 @@
                                         <option value="{{ $location->id }}">{{ucwords($location->name)}}</option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-row mb-0">
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlSelect1">Billing Client Name</label>
-                                    <input type="text" class="form-control" id="regional_client_name" name="name"
-                                        placeholder="" readonly>
-                                </div>
-                                <div class="form-group col-md-6">
+                               
+                                <!-- <div class="form-group col-md-6">
                                     <label for="exampleFormControlInput2">Billing Client Nick Name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="regional_client_nick_name"
                                         placeholder="">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
@@ -312,29 +314,29 @@ $("#base_client_id").change(function() {
 
 });
 
-$("#branch_id").change(function() {
-    var base_client = $('#base_client_id').val();
-    var branch_id = $(this).val();
-    $.ajax({
-        url: "generate-regional",
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        type: "POST",
-        data: {
-            base_client: base_client,
-            branch_id: branch_id
-        },
+// $("#branch_id").change(function() {
+//     var base_client = $('#base_client_id').val();
+//     var branch_id = $(this).val();
+//     $.ajax({
+//         url: "generate-regional",
+//         headers: {
+//             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+//         },
+//         type: "POST",
+//         data: {
+//             base_client: base_client,
+//             branch_id: branch_id
+//         },
 
-        beforeSend: function() {
+//         beforeSend: function() {
 
-        },
-        success: (data) => {
-            $('#regional_client_name').val(data.generate_regional);
+//         },
+//         success: (data) => {
+//             $('#regional_client_name').val(data.generate_regional);
 
-        },
-    });
+//         },
+//     });
 
-});
+// });
 </script>
 @endsection

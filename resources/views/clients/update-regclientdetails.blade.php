@@ -86,6 +86,11 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
+                            <label for="exampleFormControlSelect1">Regional Client Name</label>
+                            <input type="text" class="form-control" id="regional_client_name" name="name" placeholder=""
+                                value="{{old('name',isset($regclient_name->name)?$regclient_name->name:'')}}">
+                        </div>
+                        <!-- <div class="form-group col-md-6">
                             <label for="exampleFormControlSelect1">Branch Location</label>
                             <select class="form-control  my-select2" id="branch_id" name="branch_id" tabindex="-1">
                                 <option selected disabled>select..</option>
@@ -95,20 +100,16 @@
                                     {{$location->name}}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-row mb-0">
-                        <div class="form-group col-md-6">
-                            <label for="exampleFormControlSelect1">Regional Client Name</label>
-                            <input type="text" class="form-control" id="regional_client_name" name="name" placeholder=""
-                                value="{{old('name',isset($regclient_name->name)?$regclient_name->name:'')}}" readonly>
-                        </div>
-                        <div class="form-group col-md-6">
+                     
+                        <!-- <div class="form-group col-md-6">
                             <label for="exampleFormControlInput2">Regional Client Nick Name<span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="regional_client_nick_name" placeholder=""
                                 value="{{old('regional_client_nick_name',isset($regclient_name->regional_client_nick_name)?$regclient_name->regional_client_nick_name:'')}}">
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-row mb-0">
                         <div class="form-group col-md-6">

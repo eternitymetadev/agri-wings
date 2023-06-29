@@ -313,6 +313,11 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label for="exampleFormControlInput2">No. of Battery</label>
+                            <Input type="number" class="form-control" id="battery_id" name="no_of_battery" >
+                               
+                        </div>
 
                     </div>
 

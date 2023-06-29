@@ -452,7 +452,7 @@ class ClientController extends Controller
 
             $regionalupdate['baseclient_id'] = $request->base_client_id;
             $regionalupdate['name'] = $request->name;
-            $regionalupdate['regional_client_nick_name'] = $request->regional_client_nick_name;
+            $regionalupdate['regional_client_nick_name'] = $request->name;
             $regionalupdate['email'] = $request->email;
             $regionalupdate['phone'] = $request->phone;
             $regionalupdate['gst_no'] = $request->gst_no;
@@ -770,7 +770,7 @@ class ClientController extends Controller
 
             $client['baseclient_id'] = $request->base_client_id;
             $client['name'] = $request->name;
-            $client['regional_client_nick_name'] = $request->regional_client_nick_name;
+            $client['regional_client_nick_name'] = $request->name;
             $client['email'] = $request->email;
             $client['phone'] = $request->phone;
             $client['gst_no'] = $request->gst_no;
@@ -785,7 +785,10 @@ class ClientController extends Controller
                 $client['notification'] = $request->notification;
             }
 
-            $client['location_id'] = $request->branch_id;
+            if(!empty($request->branch_id)){
+                $client['location_id'] = $request->branch_id;
+            }
+         
             
             
             $client['payment_term'] = $payment_term;

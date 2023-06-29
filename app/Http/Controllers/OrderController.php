@@ -2301,11 +2301,16 @@ class OrderController extends Controller
                     $get_scheme_details = CropPriceScheme::where('crop_id', $save_data['crop_name'])
                         ->whereDate('from_date', '<=', $today)
                         ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
-                    if(!empty($get_scheme_details)){
-                        $discount_price = $get_scheme_details->discount_price;
-                    }else{
-                        $discount_price = 0 ;
-                    }
+                        
+                        if($save_data['discount'] < 1){
+                            $discount_price = 0 ;
+                        }else{
+                            if(!empty($get_scheme_details)){
+                                $discount_price = $get_scheme_details->discount_price;
+                            }else{
+                                $discount_price = 0 ;
+                            }
+                        }
 
                     $save_data['order_id'] = $saveconsignment->id;
                     $save_data['farm_location'] = $save_data['farm_location'];

@@ -84,10 +84,11 @@ div.relative {
                                 </th>
                                 <th>Order Number</th>
                                 <th>Order Date</th>
-                                <th>farmer name</th>
-                                <th>District</th>
-                                <th>City</th>
-                                <th>Pin Code</th>
+                                <th>Farmer name</th>
+                               <th>Farmer Address</th>
+                               <th>Farm Address</th>
+                               <th>Acerage</th>
+                               <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -104,9 +105,10 @@ div.relative {
                                 <td>{{ $consignment->id ?? "-" }}</td>
                                 <td>{{ $consignment->consignment_date}}</td>
                                 <td>{{ $consignment->consignee_id}}</td>
-                                <td>{{ $consignment->consignee_district ?? "-" }}</td>
-                                <td>{{ $consignment->city ?? "-" }}</td>
-                                <td>{{ $consignment->pincode ?? "-" }}</td>
+                                <td>{{ $consignment->farmer_address ?? "-" }}</td>
+                                <td>{{ $consignment->farm_address ?? "-" }}</td>
+                                <td>{{ $consignment->total_acerage ?? "-" }}</td>
+                                <td>{{ $consignment->total_amount ?? "-" }}</td>
                             </tr>
 
                             <?php  $i++; } ?>
@@ -133,7 +135,7 @@ $(document).ready(function() {
                 this.checked = true;
             });
         } else {
-            jQuery('.chkBoxClass').each(function() {
+            jQuery('.chkBoxClass').each(function() { 
                 this.checked = false;
             });
             jQuery('#create_edd').prop('disabled', true);
