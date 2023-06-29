@@ -1062,6 +1062,7 @@ const onAddCrop = () => {
         dataType: 'json',
         success: function(response) {
             $('#themeLoader').css('display', 'none');
+            $('#applyScheme').attr('disabled', true);
 
             let listItem = ``;
 
@@ -1123,6 +1124,7 @@ const onAddCrop = () => {
 $("#sprayTable").on('click', '.dltItemRow', function() {
     $(this).closest('tr').remove();
     $('#addCropButton').removeAttr('disabled');
+    $('#applyScheme').removeAttr('disabled');
     if ($('#sprayTable tr').length < 2) {
         $('#sprayTable').hide();
         $('#submitButton').attr('disabled', true);
