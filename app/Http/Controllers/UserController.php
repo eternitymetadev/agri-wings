@@ -56,7 +56,7 @@ class UserController extends Controller
     {
         $this->prefix = request()->route()->getPrefix();
         $this->pagetitle = "Create";
-        $getpermissions = Permission::all();
+        $getpermissions = Permission::where('status', 1)->get();
         $getroles = Role::all();
         $branches = Helper::getLocations();
         $baseclients = BaseClient::all();
@@ -188,7 +188,7 @@ class UserController extends Controller
         $this->pagetitle = "Update";
         $id = decrypt($user);
         $getroles = Role::all();
-        $getpermissions = Permission::all();
+        $getpermissions = Permission::where('status', 1)->get();
 
         $allpermissioncount = Permission::all()->count();
         $getuserpermissions = UserPermission::where('user_id', $id)->get();

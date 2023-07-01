@@ -55,7 +55,7 @@
                                 </select>
                             </div>
 
-                            <div class="form-group mb-4">
+                            <!-- <div class="form-group mb-4">
                                 <label for="exampleFormControlSelect1">RM Assign</label>
                                 <select name="rm_id" class="form-control" id="rm_id">
                                     <option value="">Select</option>
@@ -69,7 +69,7 @@
                                 }
                                 ?>                            
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="form-group mb-4 singleLocation">
                                 <label for="exampleFormControlSelect1">Select Location</label>
                                 <select class="form-control" id="branch_id" name="branch_id[]">
@@ -121,7 +121,7 @@
                                     ?>
                                 </select>
                             </div>
-                            <div class="form-group mb-4">
+                            <!-- <div class="form-group mb-4">
                                 <hr class="brown-border">
                                 <h4 class="mt-3 mb-3">Permissions</h4>
                                 <div class="permis checkbox selectAll"> 
@@ -152,7 +152,7 @@
                                         ?>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <button type="submit" name="" class="mt-4 mb-4 btn btn-primary">Submit</button>
                             <a class="btn btn-primary" href="{{url($prefix.'/users') }}"> Back</a>
                         </form>

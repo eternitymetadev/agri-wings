@@ -61,7 +61,7 @@
                                 ?>                            
                                 </select>
                             </div>
-                            <div class="form-group mb-4 rm_assign">
+                            <!-- <div class="form-group mb-4 rm_assign">
                                 <label for="exampleFormControlSelect1">RM Assign</label>
                                 <select name="rm_id" class="form-control" id="rm_id">
                                     <option value="">Select</option>
@@ -75,7 +75,7 @@
                                 }
                                 ?>                            
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="form-group mb-4 baseclient" style="display: none;">
                                 <label for="exampleFormControlSelect1">Select Base Client</label>
                                 <select class="form-control" id="baseclient_id" name="baseclient_id">

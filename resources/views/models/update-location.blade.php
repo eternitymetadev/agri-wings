@@ -36,10 +36,10 @@
                             </div>
                         </div>
                         <div class="form-row mb-0">
-                            <div class="form-group col-md-6">
+                            <!-- <div class="form-group col-md-6">
                                 <label for="location_name">Team ID</label>
                                 <input class="form-control" id="team_idup" name="team_id" value="">
-                            </div>
+                            </div> -->
                             <!-- <div class="form-group col-md-6">
                                 <label for="location_name">Consignment No.</label>
                                 <input class="form-control" id="consignment_noup" name="consignment_no" value="" maxlength="4">
@@ -49,25 +49,25 @@
                             <label for="location_name">&nbsp;</label>
                                 <div class="check-box d-flex align-content-center align-items-center ml-2" style="gap: 8px; height: 42px">
                                 <!-- <span style="color: #000"><strong>Is HUB?</strong></span> -->
-                                    <div class="checkbox radio">
+                                    <!-- <div class="checkbox radio">
                                         <label class="check-label">
                                             <input type="radio" class="is_hub_yes" value='1' name="is_hub"/>
-                                            <!-- <span class="checkmark"></span> -->
+                                            <span class="checkmark"></span>
                                             HUB
                                         </label>
-                                    </div>
-                                    <div class="checkbox radio">
+                                    </div> -->
+                                    <!-- <div class="checkbox radio">
                                         <label class="check-label">
                                             <input type="radio" name="is_hub" value='0' class="is_hub_no"/>
-                                            <!-- <span class="checkmark"></span> -->
+                                            <span class="checkmark"></span>
                                             Not a HUB
                                         </label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="form-row mb-0">
+                        <!-- <div class="form-row mb-0">
                             <span style="color: #000"><strong>Allow LR without vehicle no. :</strong></span>
                             <div class="check-box d-flex align-content-center ml-2" style="gap: 8px">
                                 <div class="checkbox radio">
@@ -86,7 +86,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">

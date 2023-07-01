@@ -904,10 +904,10 @@
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/bulk-import')}}"> Import Data </a>
             </li> -->
             <?php if($authuser->role_id == 1){ ?>
-            <li>
+            <!-- <li>
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/settings/branch-address')}}">Company Setup
                 </a>
-            </li>
+            </li> -->
             <li>
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/users')}}">All Users</a>
             </li>
@@ -915,12 +915,12 @@
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/locations')}}">Service Hub </a>
             </li>
             <?php } if($authuser->role_id == 1 || $authuser->role_id == 3){ ?>
-            <li>
+            <!-- <li>
                 <div class="submenuListStyle"></div><a href="{{$prefixurl.'clients'}}"> Base Clients </a>
             </li>
             <li>
                 <div class="submenuListStyle"></div><a href="{{$prefixurl.'reginal-clients'}}"> Regional Client </a>
-            </li>
+            </li> -->
             <?php } ?>
 
         </ul>

@@ -1331,12 +1331,12 @@ jQuery(document).ready(function(){
             nick_name: {
                 required: true,
             },
-            team_id: {
-                required: true,
-            },
-            consignment_no: {
-                required: true,
-            },
+            // team_id: {
+            //     required: true,
+            // },
+            // consignment_no: {
+            //     required: true,
+            // },
             email: {
                 required: true,
                 email: true,
@@ -1355,12 +1355,12 @@ jQuery(document).ready(function(){
             nick_name: {
                 required: "Nick name is required"
             },
-            team_id: {
-                required: "Team id is required"
-            },
-            consignment_no: {
-                required: "Consignment no is required"
-            },
+            // team_id: {
+            //     required: "Team id is required"
+            // },
+            // consignment_no: {
+            //     required: "Consignment no is required"
+            // },
             email: {
                 required: "Email is required",
                 email: "Enter valid email",

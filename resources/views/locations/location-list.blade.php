@@ -62,8 +62,8 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>City</th>
-                        <th>Team Id</th>
-                        <th>Series No</th>
+                        <!-- <th>Team Id</th>
+                        <th>Series No</th> -->
                         <th>Email Id</th>
                         <th>Phone</th>
                         <th style="text-align: center">Action</th>
@@ -77,8 +77,8 @@
                                 <td>{{ $value->id ?? '-' }}</td>
                                 <td>{{ ucwords($value->name ?? '-') }}</td>
                                 <td>{{ ucwords($value->nick_name ?? '-') }}</td>
-                                <td>{{ $value->team_id ?? '-' }}</td>
-                                <td>{{ $value->consignment_no ?? '-' }}</td>
+                                <!-- <td>{{ $value->team_id ?? '-' }}</td>
+                                <td>{{ $value->consignment_no ?? '-' }}</td> -->
                                 <td>{{ $value->email ?? '-' }}</td>
                                 <td>{{ $value->phone ?? '-' }}</td>
                                 <td>
