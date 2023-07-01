@@ -268,7 +268,7 @@ if ($countbranch > 1) {?>
                     <input type="hidden" id="ifsc_code" name="ifsc" value="" />
                     <input type="hidden" id="bank_name" name="bank_name" value="" />
                     <input type="hidden" id="email" name="email" value="" />
-                    <input type="hidden" id="pan" name="pan" value="" /> 
+                    <input type="hidden" id="pan" name="pan" value="" />
                     <input type="hidden" id="total_clam_amt" name="claimed_amount" value="" />
                     <input type="hidden" id="tds_deduct_balance" name="amt_deducted" value="" />
                     <input type="hidden" id="final_payable_amount" name="final_payable_amount" value="" />
@@ -279,22 +279,26 @@ if ($countbranch > 1) {?>
                     <input type="hidden" id="advance" name="payable_amount" value="" />
 
                     <div class="form-group form-group-sm d-flex align-items-center" style="gap: 6px;">
-                        <input type="radio" id="pushSelected" name="hrsAction" value="1" checked onchange="toggleHrsAction()" />
+                        <input type="radio" id="pushSelected" name="hrsAction" value="1" checked
+                            onchange="toggleHrsAction()" />
                         <label for="pushSelected">Push</label>
 
-                        <input type="radio" id="rejectedSelected" name="hrsAction" value="0" style="margin-left:16px" onchange="toggleHrsAction()"/>
+                        <input type="radio" id="rejectedSelected" name="hrsAction" value="0" style="margin-left:16px"
+                            onchange="toggleHrsAction()" />
                         <label for="rejectedSelected">Reject</label>
                     </div>
- 
+
 
                     <p class='text-center'> Transaction ID: #<strong class="req_trans_id"></strong></p>
                     <p class='text-center' style="padding: 0.5rem 2rem">Are you sure to pay ₹<strong
                             class='req_amt'></strong> to <strong class="req_vendor"></strong>?</p>
 
 
-                    <div class="form-group form-group-sm" style="width: 300px; margin-inline: auto; display: none;" id="rejectedRemarksBox" >
+                    <div class="form-group form-group-sm" style="width: 300px; margin-inline: auto; display: none;"
+                        id="rejectedRemarksBox">
                         <label for="rejectedRemarks">Remarks</label>
-                        <input class="form-control form-control-sm" id="rejectedRemarks" name="rejectedRemarks" value="" />
+                        <input class="form-control form-control-sm" id="rejectedRemarks" name="rejectedRemarks"
+                            value="" />
                     </div>
 
 
@@ -350,31 +354,6 @@ if ($countbranch > 1) {?>
                     <input type="hidden" id="pan_1" name="pan" value="" />
 
                     <div class="form-row mb-0">
-                        <div class="form-group form-group-sm col-md-4">
-                            <label for="exampleFormControlSelect1">Branch Location</label>
-                            <select class="form-control" id="branch_id_1" name="branch_id" tabindex="-1">
-                                <?php $countbranch = count($branchs);
-if ($countbranch > 1) {?>
-                                <option selected disabled>select location</option>
-                                <?php }?>
-                                @foreach($branchs as $branch)
-                                <option value="{{ $branch->id }}">{{ucwords($branch->name)}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group form-group-sm col-md-6">
-                            <label for="location_name">Vendor</label>
-                            <select class="form-control my-select2" id="vendor_id_1" name="vendor_name" tabindex="-1">
-                                <option value="" selected disabled>Select Vendor</option>
-                                @foreach($vendors as $vendor)
-                                <?php
-$bank_details = json_decode($vendor->bank_details, true);
-?>
-                                <option value="{{$vendor->id}}">{{$vendor->name}}-{{$bank_details['account_no']}}
-                                    -{{$vendor->Branch->name ?? '-'}}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="form-group form-group-sm col-md-2">
                             <label for="location_name">Tds rate</label>
                             <input type="text" class="form-control" id="tds_rate_1" name="tds_rate" value="" readonly>

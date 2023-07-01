@@ -596,6 +596,8 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('check-price-scheme', [ConsignmentController::class, 'checkPriceScheme']);
     Route::any('order-edit-acerage', [ConsignmentController::class, 'orderEditacerage']);
     Route::any('deactivate-scheme', [ConsignmentController::class, 'deactivateScheme']);
+    Route::any('payment-settlement', [ConsignmentController::class, 'paymentSettlement']);
+    Route::any('settlement-request', [ConsignmentController::class, 'createSettlement']);
 
     Route::get('/display-invoice-pdf/{id}', [TransactionSheetsController::class, 'displayInvoicePdf']);
 
@@ -1032,7 +1034,9 @@ Route::group(['prefix'=>'account-manager', 'middleware'=>['auth','PermissionChec
     Route::any('/get-payment-term', [ClientController::class, 'getRegionalPaymentTerm']);
     Route::any('/get-farmer-list', [ConsigneeController::class, 'farmerList']);
 
-
+    Route::any('payment-settlement', [ConsignmentController::class, 'paymentSettlement']);
+    Route::any('payment-settled', [ConsignmentController::class, 'paymentSettled']);
+    Route::any('verified-payment', [ConsignmentController::class, 'verifiePayment']);
 });
 Route::group(['prefix'=>'client-account', 'middleware'=>['auth','PermissionCheck']], function()
 {
@@ -1075,7 +1079,9 @@ Route::group(['prefix'=>'client-user', 'middleware'=>['auth','PermissionCheck']]
     Route::any('order-list-export', [OrderController::class, 'orderListExport']);
     Route::get('/display-invoice-pdf/{id}', [TransactionSheetsController::class, 'displayInvoicePdf']);
 
-    
+    Route::any('payment-settlement', [ConsignmentController::class, 'paymentSettlement']);
+    Route::any('settlement-request', [ConsignmentController::class, 'createSettlement']);
+
     
 });
 
