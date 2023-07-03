@@ -370,6 +370,7 @@
             </div>
         </a>
     </li>
+    <?php if($authuser->role_id != 7){ ?>
     <li class="menu">
         <a href="{{$prefixurl.'payment-settled'}}"
             data-active="<?php if($segment == 'payment-settled'){?>true<?php }?>" class="dropdown-toggle">
@@ -386,6 +387,7 @@
             </div>
         </a>
     </li>
+    <?php } ?>
     <!-- <li class="menu">
         <a href="{{$prefixurl.'unverified-client-list'}}" data-active="<?php if($segment == 'unverified-client-list'){?>true<?php }?>"
             class="dropdown-toggle">
