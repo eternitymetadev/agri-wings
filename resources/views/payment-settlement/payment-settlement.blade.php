@@ -209,7 +209,7 @@ div.relative {
             </div>
             <div class="modal-body px-4">
                 <form id="verify_form">
-                    <input type="text" id="verify_order_no" name="verify_order_no" value="" />
+                    <input type="hidden" id="verify_order_no" name="verify_order_no" value="" />
                     <p><b>Total Amount :</b><span id="total_amount_verify"></span></p>
                     <div class="form-row mb-0">
                         <div class="form-group form-group-sm col-md-4">

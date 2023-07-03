@@ -5284,6 +5284,39 @@ class ConsignmentController extends Controller
         return response()->json($response);
     }
 
+    public function updateBattery(Request $request)
+    {
+
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+
+            $gstsave = Battery::where('id', $request->battery_id)->update(['battery_no' => $request->battery_no, 'type' => $request->type, 'est_acers' => $request->est_acers, 'battery_cycle' => $request->battery_cycle]);
+
+            if ($gstsave) {
+                $url = $this->prefix . '/settings/branch-address';
+                $response['success'] = true;
+                $response['success_message'] = "Battery Updated successfully";
+                $response['error'] = false;
+                $response['redirect_url'] = $url;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created Vendor please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+    }
+
     public function SendTSMS($url)
     {
         $ch = curl_init();
