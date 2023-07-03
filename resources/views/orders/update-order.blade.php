@@ -885,7 +885,7 @@ $totalRow = count($row_count);
                                         type="hidden" value="{{$farm_detail->crop}}"
                                         name="data[{{$i}}][crop_name]" />
                                 </td>
-                                <td>{{$farm_detail->FarmerFarm->field_area}}<input type="hidden"
+                                <td>{{@$farm_detail->FarmerFarm->field_area}}<input type="hidden"
                                         value="{{$farm_detail->farm_location}}" name="data[{{$i}}][farm_location]" />
                                 </td>
                                 <td><input class="acreageValue" value="{{$farm_detail->acreage}}"
