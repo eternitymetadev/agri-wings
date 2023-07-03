@@ -52,7 +52,7 @@ div.relat {
                         <thead>
                             <tr>
                                 <th>AgriWings Code</th>
-                                <th>Dron Model</th>
+                                <th>Drone Model</th>
                                 <th>UIN</th>
                                 <th>Manufacturing Year</th>
                                 <th>Drone Capacity(Ltrs)</th>

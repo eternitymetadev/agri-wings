@@ -58,6 +58,7 @@ class ConsignmentNote extends Model
         'edd',
         'order_id',
         'status',
+        'payment_settlement',
         'acerage_reason',
         'booked_drs',
         'prs_id',
@@ -175,6 +176,10 @@ class ConsignmentNote extends Model
     public function OrderactivityDetails()
     {
         return $this->hasOne('App\Models\OrderActivityDetails','order_id','id');
+    }
+    public function PaymentSettle()
+    {
+        return $this->hasOne('App\Models\PaymentSettlement','order_id','id');
     }
 
 }

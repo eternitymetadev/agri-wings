@@ -21,6 +21,7 @@ use App\Models\ItemMaster;
 use App\Models\Job;
 use App\Models\Location;
 use App\Models\OrderFarm;
+use App\Models\PaymentSettlement;
 use App\Models\RegionalClient;
 use App\Models\Role;
 use App\Models\TransactionSheet;
@@ -1862,7 +1863,7 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
 
-        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_id', 'consignees.address_line1 as farmer_address','consignees.city as city', 'consignees.postal_code as pincode', 'consignees.district as consignee_district', 'zones.primary_zone as zone', 'order_farms.farm_location as farm_id','farms.address as farm_address')
+        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_id', 'consignees.address_line1 as farmer_address', 'consignees.city as city', 'consignees.postal_code as pincode', 'consignees.district as consignee_district', 'zones.primary_zone as zone', 'order_farms.farm_location as farm_id', 'farms.address as farm_address')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
             ->leftjoin('order_farms', 'order_farms.order_id', '=', 'consignment_notes.id')
             ->leftjoin('farms', 'farms.id', '=', 'order_farms.farm_location')
@@ -1874,7 +1875,7 @@ class ConsignmentController extends Controller
         } elseif ($authuser->role_id == 4) {
             $data = $data->whereIn('consignment_notes.regclient_id', $regclient);
         } elseif ($authuser->role_id == 6) {
-            $data = $data->whereIn('base_clients.id', $baseclient); 
+            $data = $data->whereIn('base_clients.id', $baseclient);
         } elseif ($authuser->role_id == 7) {
             $data = $data->whereIn('regional_clients.id', $regclient);
         } else {
@@ -1903,7 +1904,7 @@ class ConsignmentController extends Controller
         $purchasePrice = $request->purchase_price;
         $assigndate = date('Y-m-d');
 
-        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'assign_date' => $assigndate, 'battery_id' => $request->battery_id, 'no_of_battery' => $request->no_of_battery , 'delivery_status' => 'Assigned']);
+        $consigner = DB::table('consignment_notes')->whereIn('id', $cc)->update(['vehicle_id' => $addvechileNo, 'driver_id' => $adddriverId, 'transporter_name' => $transporterName, 'vehicle_type' => $vehicleType, 'purchase_price' => $purchasePrice, 'assign_date' => $assigndate, 'battery_id' => $request->battery_id, 'no_of_battery' => $request->no_of_battery, 'delivery_status' => 'Assigned']);
 
         $consignees = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_name', 'consignees.phone as phone', 'consignees.email as email', 'vehicles.regn_no as vehicle_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'drivers.name as driver_id', 'drivers.phone as driver_phone', 'drivers.team_id as team_id', 'drivers.fleet_id as fleet_id')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
@@ -5283,6 +5284,39 @@ class ConsignmentController extends Controller
         return response()->json($response);
     }
 
+    public function updateBattery(Request $request)
+    {
+
+        try {
+            DB::beginTransaction();
+
+            $this->prefix = request()->route()->getPrefix();
+
+            $gstsave = Battery::where('id', $request->battery_id)->update(['battery_no' => $request->battery_no, 'type' => $request->type, 'est_acers' => $request->est_acers, 'battery_cycle' => $request->battery_cycle]);
+
+            if ($gstsave) {
+                $url = $this->prefix . '/settings/branch-address';
+                $response['success'] = true;
+                $response['success_message'] = "Battery Updated successfully";
+                $response['error'] = false;
+                $response['redirect_url'] = $url;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not created Vendor please try again";
+                $response['error'] = true;
+            }
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+    }
+
     public function SendTSMS($url)
     {
         $ch = curl_init();
@@ -5372,13 +5406,12 @@ class ConsignmentController extends Controller
             // $check_old_scheme = CropPriceScheme::where('crop_id', $request->crop_id)->update(['status' => 0]);
             $crop_scheme = DB::table('crop_price_schemes')->select('scheme_no')->latest('scheme_no')->first();
             $crop_scheme_no = json_decode(json_encode($crop_scheme), true);
-           
+
             if (empty($crop_scheme_no['scheme_no']) || $crop_scheme_no['scheme_no'] == null) {
                 $scheme_no = 101;
             } else {
                 $scheme_no = $crop_scheme_no['scheme_no'] + 1;
             }
-
 
             $discountsave['crop_id'] = $request->crop_id;
             $discountsave['scheme_no'] = $scheme_no;
@@ -5388,7 +5421,6 @@ class ConsignmentController extends Controller
             $discountsave['discount_price'] = $request->discount_price;
             $discountsave['min_acerage'] = $request->min;
             $discountsave['max_acerage'] = $request->max;
-
 
             $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
                 ->where(function ($query) use ($request) {
@@ -5401,23 +5433,22 @@ class ConsignmentController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
 
-                foreach ($get_scheme_details as $scheme) {
-                    if (($request->from_date >= $scheme->from_date && $request->from_date <= $scheme->to_date) ||
-                        ($request->to_date >= $scheme->from_date && $request->to_date <= $scheme->to_date) ||
-                        ($request->from_date <= $scheme->from_date && $request->to_date >= $scheme->to_date)
+            foreach ($get_scheme_details as $scheme) {
+                if (($request->from_date >= $scheme->from_date && $request->from_date <= $scheme->to_date) ||
+                    ($request->to_date >= $scheme->from_date && $request->to_date <= $scheme->to_date) ||
+                    ($request->from_date <= $scheme->from_date && $request->to_date >= $scheme->to_date)
+                ) {
+                    if (($request->min >= $scheme->min_acerage && $request->min <= $scheme->max_acerage) ||
+                        ($request->max >= $scheme->min_acerage && $request->max <= $scheme->max_acerage) ||
+                        ($request->min <= $scheme->min_acerage && $request->max >= $scheme->min_acerage)
                     ) {
-                        if (($request->min >= $scheme->min_acerage && $request->min <= $scheme->max_acerage) ||
-                            ($request->max >= $scheme->min_acerage && $request->max <= $scheme->max_acerage) ||
-                            ($request->min <= $scheme->min_acerage && $request->max >= $scheme->min_acerage)
-                        ) {
-                            $response['success'] = false;
-                            $response['error_message'] = "Scheme Already Exists for this Range";
-                            $response['error'] = true;
-                            return response()->json($response);
-                        }
+                        $response['success'] = false;
+                        $response['error_message'] = "Scheme Already Exists for this Range";
+                        $response['error'] = true;
+                        return response()->json($response);
                     }
                 }
-
+            }
 
             $gstsave = CropPriceScheme::create($discountsave);
 
@@ -5623,6 +5654,283 @@ class ConsignmentController extends Controller
             $response['redirect_url'] = $url;
         }
         return response()->json($response);
+    }
+
+    // ================================ Payment Settlement Function ============================== //
+
+    public function paymentSettlement(Request $request)
+    {
+
+        $this->prefix = request()->route()->getPrefix();
+        $sessionperitem = Session::get('peritem');
+        if (!empty($sessionperitem)) {
+            $peritem = $sessionperitem;
+        } else {
+            $peritem = Config::get('variable.PER_PAGE');
+        }
+
+        $query = ConsignmentNote::query();
+
+        if ($request->ajax()) {
+            $searchids = [];
+
+            if (isset($request->resetfilter)) {
+                Session::forget('searchvehicle');
+                Session::forget('peritem');
+                $url = URL::to($this->prefix . '/' . $this->segment);
+                return response()->json(['success' => true, 'redirect_url' => $url]);
+            }
+
+            $authuser = Auth::user();
+            $role_id = Role::where('id', '=', $authuser->role_id)->first();
+            $regclient = explode(',', $authuser->regionalclient_id);
+            $cc = explode(',', $authuser->branch_id);
+
+            $query = $query->with('DriverDetail')->where('status', 1)->whereIn('payment_settlement' ,[0,1]);
+            $query = $query->whereIn('branch_id', $cc);
+
+            if (!empty($request->search)) {
+                $search = $request->search;
+                $searchT = str_replace("'", "", $search);
+                $query->where(function ($query) use ($search, $searchT) {
+                    $query->where('vehicle_no', 'like', '%' . $search . '%')
+                        ->orWhere('drs_no', 'like', '%' . $search . '%');
+
+                });
+            }
+
+            /// search with vehicle no
+
+            if ($request->searchvehicle) {
+                Session::put('searchvehicle', $request->searchvehicle);
+            }
+            $searchvehicle = Session::get('searchvehicle');
+            if (isset($searchvehicle)) {
+                $query = $query->whereIn('vehicle_no', $searchvehicle);
+            }
+
+            if ($request->peritem) {
+                Session::put('peritem', $request->peritem);
+            }
+
+            $peritem = Session::get('peritem');
+            if (!empty($peritem)) {
+                $peritem = $peritem;
+            } else {
+                $peritem = Config::get('variable.PER_PAGE');
+            }
+
+            $vehicles = TransactionSheet::select('vehicle_no')->distinct()->get();
+
+            $paymentlist = $query->orderby('id', 'DESC')->paginate($peritem);
+
+            $html = view('payment-settlement.payment-settlement-ajax', ['prefix' => $this->prefix, 'paymentlist' => $paymentlist, 'peritem' => $peritem, 'vehicles' => $vehicles])->render();
+            $paymentlist = $paymentlist->appends($request->query());
+
+            return response()->json(['html' => $html]);
+        }
+
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+        $branchs = Location::select('id', 'name')->whereIn('id', $cc)->get();
+
+        $query = $query->with('DriverDetail')->where('status', 1)->whereIn('payment_settlement' ,[0,1]);
+        if($authuser->role_id == 7){
+            $query = $query->where('user_id', $authuser->id);
+        }elseif($authuser->role_id == 3){
+            $query = $query->whereIn('branch_id', $cc);
+        }else{
+            $query = $query;
+        }
+     
+        $vehicles = TransactionSheet::select('vehicle_no')->distinct()->get();
+
+        $paymentlist = $query->orderBy('id', 'DESC')->paginate($peritem);
+        $paymentlist = $paymentlist->appends($request->query());
+        // $vehicles    = Vehicle::select('id', 'regn_no')->get();
+        $vehicletype = VehicleType::select('id', 'name')->get();
+
+        return view('payment-settlement.payment-settlement', ['prefix' => $this->prefix, 'paymentlist' => $paymentlist, 'peritem' => $peritem, 'vehicles' => $vehicles, 'vehicletype' => $vehicletype, 'branchs' => $branchs]);
+    }
+
+    public function createSettlement(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $authuser = Auth::user();
+
+            $order_id = explode(',', $request->order_no);
+
+            foreach ($order_id as $order) {
+
+                $paymentdetails['order_id'] = $order;
+                $paymentdetails['date_of_deposite'] = $request->date_of_deposite;
+                $paymentdetails['bank_name'] = $request->bank_name;
+                $paymentdetails['branch_location'] = $request->branch_location;
+                $paymentdetails['amount_deposite'] = $request->amount_deposite;
+                $paymentdetails['user_id'] = $authuser->id;
+                $paymentdetails['payment_settlement'] = 1;
+
+                $savefeedback = PaymentSettlement::create($paymentdetails);
+
+            }
+            $settled = ConsignmentNote::whereIn('id',$order_id)->update(['payment_settlement' => 1]);
+
+            if ($settled) {
+                $response['success'] = true;
+                $response['success_message'] = "Payment Settled";
+                $response['error'] = false;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not please try again";
+                $response['error'] = true;
+            }
+
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+
+    }
+
+    public function paymentSettled(Request $request)
+    {
+
+        $this->prefix = request()->route()->getPrefix();
+        $sessionperitem = Session::get('peritem');
+        if (!empty($sessionperitem)) {
+            $peritem = $sessionperitem;
+        } else {
+            $peritem = Config::get('variable.PER_PAGE');
+        }
+
+        $query = ConsignmentNote::query();
+
+        if ($request->ajax()) {
+            $searchids = [];
+
+            if (isset($request->resetfilter)) {
+                Session::forget('searchvehicle');
+                Session::forget('peritem');
+                $url = URL::to($this->prefix . '/' . $this->segment);
+                return response()->json(['success' => true, 'redirect_url' => $url]);
+            }
+
+            $authuser = Auth::user();
+            $role_id = Role::where('id', '=', $authuser->role_id)->first();
+            $regclient = explode(',', $authuser->regionalclient_id);
+            $cc = explode(',', $authuser->branch_id);
+
+            $query = $query->with('DriverDetail')->where('status', 1)->where('payment_settlement', 2);
+            $query = $query->whereIn('branch_id', $cc);
+
+            if (!empty($request->search)) {
+                $search = $request->search;
+                $searchT = str_replace("'", "", $search);
+                $query->where(function ($query) use ($search, $searchT) {
+                    $query->where('vehicle_no', 'like', '%' . $search . '%')
+                        ->orWhere('drs_no', 'like', '%' . $search . '%');
+
+                });
+            }
+
+            /// search with vehicle no
+
+            if ($request->searchvehicle) {
+                Session::put('searchvehicle', $request->searchvehicle);
+            }
+            $searchvehicle = Session::get('searchvehicle');
+            if (isset($searchvehicle)) {
+                $query = $query->whereIn('vehicle_no', $searchvehicle);
+            }
+
+            if ($request->peritem) {
+                Session::put('peritem', $request->peritem);
+            }
+
+            $peritem = Session::get('peritem');
+            if (!empty($peritem)) {
+                $peritem = $peritem;
+            } else {
+                $peritem = Config::get('variable.PER_PAGE');
+            }
+
+            $vehicles = TransactionSheet::select('vehicle_no')->distinct()->get();
+
+            $paymentlist = $query->orderby('id', 'DESC')->paginate($peritem);
+
+            $html = view('payment-settlement.payment-settled-ajax', ['prefix' => $this->prefix, 'paymentlist' => $paymentlist, 'peritem' => $peritem, 'vehicles' => $vehicles])->render();
+            $paymentlist = $paymentlist->appends($request->query());
+
+            return response()->json(['html' => $html]);
+        }
+
+        $authuser = Auth::user();
+        $role_id = Role::where('id', '=', $authuser->role_id)->first();
+        $regclient = explode(',', $authuser->regionalclient_id);
+        $cc = explode(',', $authuser->branch_id);
+        $branchs = Location::select('id', 'name')->whereIn('id', $cc)->get();
+
+        $query = $query->with('DriverDetail')->where('status', 1)->where('payment_settlement', 2);
+        if($authuser->role_id == 7){
+            $query = $query->where('user_id', $authuser->id);
+        }elseif($authuser->role_id == 3){
+            $query = $query->whereIn('branch_id', $cc);
+        }else{
+            $query = $query;
+        }
+     
+        $vehicles = TransactionSheet::select('vehicle_no')->distinct()->get();
+
+        $paymentlist = $query->orderBy('id', 'DESC')->paginate($peritem);
+        $paymentlist = $paymentlist->appends($request->query());
+        // $vehicles    = Vehicle::select('id', 'regn_no')->get();
+        $vehicletype = VehicleType::select('id', 'name')->get();
+
+        return view('payment-settlement.payment-settled', ['prefix' => $this->prefix, 'paymentlist' => $paymentlist, 'peritem' => $peritem, 'vehicles' => $vehicles, 'vehicletype' => $vehicletype, 'branchs' => $branchs]);
+    }
+
+    public function verifiePayment(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $authuser = Auth::user();
+
+            $order_id = explode(',', $request->verify_order_no);
+
+            $pymt_settle = ConsignmentNote::whereIn('id', $order_id)->update(['payment_settlement' => 2]);
+
+            $settled = PaymentSettlement::whereIn('order_id',$order_id)->update(['verify_date' => $request->verify_date]);
+
+            if ($settled) {
+                $response['success'] = true;
+                $response['success_message'] = "Payment Verified";
+                $response['error'] = false;
+
+            } else {
+                $response['success'] = false;
+                $response['error_message'] = "Can not please try again";
+                $response['error'] = true;
+            }
+
+            DB::commit();
+
+        } catch (Exception $e) {
+            $response['error'] = false;
+            $response['error_message'] = $e;
+            $response['success'] = false;
+            $response['redirect_url'] = $url;
+        }
+        return response()->json($response);
+
     }
 
 }

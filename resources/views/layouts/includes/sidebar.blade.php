@@ -353,6 +353,39 @@
             </div>
         </a>
     </li>
+
+    <li class="menu">
+        <a href="{{$prefixurl.'payment-settlement'}}"
+            data-active="<?php if($segment == 'payment-settlement'){?>true<?php }?>" class="dropdown-toggle">
+            <div class="@if(str_contains($currentURL, 'payment-settlement')) active @endif">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-users">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Payment Pending</span>
+            </div>
+        </a>
+    </li>
+    <li class="menu">
+        <a href="{{$prefixurl.'payment-settled'}}"
+            data-active="<?php if($segment == 'payment-settled'){?>true<?php }?>" class="dropdown-toggle">
+            <div class="@if(str_contains($currentURL, 'payment-settled')) active @endif">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-users">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Payment Settled</span>
+            </div>
+        </a>
+    </li>
     <!-- <li class="menu">
         <a href="{{$prefixurl.'unverified-client-list'}}" data-active="<?php if($segment == 'unverified-client-list'){?>true<?php }?>"
             class="dropdown-toggle">
@@ -871,10 +904,10 @@
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/bulk-import')}}"> Import Data </a>
             </li> -->
             <?php if($authuser->role_id == 1){ ?>
-            <li>
+            <!-- <li>
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/settings/branch-address')}}">Company Setup
                 </a>
-            </li>
+            </li> -->
             <li>
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/users')}}">All Users</a>
             </li>
@@ -882,12 +915,12 @@
                 <div class="submenuListStyle"></div><a href="{{url($prefix.'/locations')}}">Service Hub </a>
             </li>
             <?php } if($authuser->role_id == 1 || $authuser->role_id == 3){ ?>
-            <li>
+            <!-- <li>
                 <div class="submenuListStyle"></div><a href="{{$prefixurl.'clients'}}"> Base Clients </a>
             </li>
             <li>
                 <div class="submenuListStyle"></div><a href="{{$prefixurl.'reginal-clients'}}"> Regional Client </a>
-            </li>
+            </li> -->
             <?php } ?>
 
         </ul>

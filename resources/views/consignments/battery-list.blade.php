@@ -79,6 +79,7 @@ div.relative {
                                 <th>Type</th>
                                 <th>Est. Acers</th>
                                 <th>Battery Cycle</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,6 +89,22 @@ div.relative {
                                 <td>{{$battery->type}}</td>
                                 <td>{{$battery->est_acers}}</td>
                                 <td>{{$battery->battery_cycle}}</td>
+                                <td>
+                                    <div class="d-flex align-content-center justify-content-center" style="gap: 6px">
+                                        <button class="editIcon editbattery" type="button"
+                                            value="{{ $battery->id }}" data-type="{{$battery->type}}" data-acers="{{$battery->est_acers}}" data-battery-cycle="{{$battery->battery_cycle}}" data-battery-no="{{$battery->battery_no}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-edit">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
+                                                </path>
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -126,13 +143,13 @@ div.relative {
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Est. Acers</label>
-                            <input type="text" class="form-control" name="est_acers">
+                            <input type="number" class="form-control" name="est_acers">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail4">Battery Cycle</label>
-                            <input type="text" class="form-control" name="battery_cycle">
+                            <input type="number" class="form-control" name="battery_cycle">
                         </div>
                     </div>
 
@@ -148,6 +165,57 @@ div.relative {
     </div>
 </div>
 
+<!-- ----------- -->
+
+<div class="modal fade" id="edit_battery_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Battery</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit_battery">
+                    <input type="hidden" name="battery_id" id="battery_id">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Battery No</label>
+                            <input type="text" class="form-control" name="battery_no" id="battery_no">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Type</label>
+                            <input type="text" class="form-control" name="type" id="battery_type">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Est. Acers</label>
+                            <input type="number" class="form-control" name="est_acers" id="est_acers">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputEmail4">Battery Cycle</label>
+                            <input type="number" class="form-control" name="battery_cycle" id="battery_cycle">
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="crt_pytm"><span class="indicator-label">Update</span>
+                    <span class="indicator-progress" style="display: none;">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -225,6 +293,53 @@ $('#add_battery').submit(function(e) {
     var formData = new FormData(this);
     $.ajax({
         url: "add-battery",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        beforeSend: function() {
+            $(".indicator-progress").show();
+            $(".indicator-label").hide();
+        },
+        success: (data) => {
+            $(".indicator-progress").hide();
+            $(".indicator-label").show();
+            if (data.success == true) {
+                swal('success', data.success_message, 'success');
+                window.location.reload();
+            } else {
+                swal('error', data.error_message, 'error');
+            }
+
+        }
+    });
+});
+
+$(document).on('click', '.editbattery', function() {
+
+var battery_id = $(this).val();
+var battery_type = $(this).attr('data-type');
+var est_acers = $(this).attr('data-acers');
+var battery_cycle = $(this).attr('data-battery-cycle');
+var battery_no = $(this).attr('data-battery-no');
+$('#edit_battery_model').modal('show');
+
+$('#battery_id').val(battery_id);
+$('#battery_type').val(battery_type);
+$('#est_acers').val(est_acers);
+$('#battery_cycle').val(battery_cycle);
+$('#battery_no').val(battery_no);
+});
+
+$('#edit_battery').submit(function(e) {
+    e.preventDefault();
+
+    var formData = new FormData(this);
+    $.ajax({
+        url: "update-battery",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
