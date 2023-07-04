@@ -132,7 +132,11 @@ div.relative {
                                 <td>{{ $consignment->id ?? "-" }}</td>
                                 <td>{{ $consignment->consignment_date ?? "NA" }}</td>
                                 <td>{{ $consignment->RegClient->name ?? "-" }}</td>
-                                <td>{{ $consignment->BillingClient->name ?? "-" }}</td>
+                                @if($consignment->bill_to == 'Self')
+                                <td>{{ $consignment->RegClient->name ?? "-" }}</td>
+                                @else
+                                <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
+                                @endif
                                 <td>{{ $consignment->ConsigneeDetail->nick_name ?? "-"}}</td>
                                 <td>{{ $consignment->ConsigneeDetail->district ?? "-"}} </td>
                                 <td>{{ $consignment->ConsigneeDetail->state_id ?? "-"}}</td>

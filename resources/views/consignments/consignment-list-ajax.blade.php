@@ -20,9 +20,9 @@
                 <th>Invoice Status</th>
                 <?php if($authuser->role_id == 3){
                     ?>
-                     <th>Action</th>
+                <th>Action</th>
                 <?php } ?>
-               
+
             </tr>
         </thead>
         <tbody id="accordion" class="accordion">
@@ -95,8 +95,14 @@
                         <div class=""><span style="color:#4361ee;">BOOKING PARTNER:
                             </span>{{ $consignment->RegClient->name ?? "-" }}
                         </div>
+                        @if($consignment->bill_to == 'Self')
                         <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">BILLING CLIENT:
-                            </span>{{ $consignment->BillingClient->name ?? "-" }}</div>
+                            </span>{{ $consignment->RegClient->name ?? "-" }}</div>
+                        @else
+                        <div class="css-16pld73 ellipse2"><span style="color:#4361ee;">BILLING CLIENT:
+                            </span>{{$consignment->ConsigneeDetail->nick_name ?? "-"}}</div>
+                        @endif
+                       
 
                     </div>
                 </td>
@@ -188,7 +194,7 @@
                 </td>
                 @if($consignment->bill_to == 'Self')
                 <td>Pre-Paid</td>
-                @else 
+                @else
                 <td>Post-Paid</td>
                 @endif
                 @if($consignment->delivery_status == 'Successful')
@@ -200,9 +206,9 @@
                 @if($consignment->delivery_status != 'Successful')
                 <td><button type="button" class="btn btn-warning edit_crop" value="{{$consignment->id}}"
                         field-acerage="{{$consignment->total_acerage}}">edit</button></td>
-                        @else
-                        <td>-</td>
-                        @endif
+                @else
+                <td>-</td>
+                @endif
                 @endif
 
 

@@ -22,6 +22,7 @@ use App\Models\Role;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
+use App\Models\BillingCustomer;
 use App\Exports\OrderListDetails;
 use Auth;
 use Carbon\Carbon;
@@ -1340,54 +1341,68 @@ class OrderController extends Controller
             //         $saveregclients = Farm::create($save_data);
             //     }
             // }
-            if ($request->bill_to == 'Farmer') {
 
-                $check_client = RegionalClient::where('farmer_id', $request->farmer_common_id)->first();
-                if (empty($check_client)) {
-                    $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
-                    $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
-                    if (!empty($getpin_transfer->hub_transfer)) {
-                        $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
-                        $client_assign_branch = $get_branch->id;
-                    } else {
-                        $get_branch = Location::where('name', 'Karnal')->first();
-                        if (!empty($get_branch->id)) {
-                            $client_assign_branch = $get_branch->id;
-                        } else {
-                            $client_assign_branch = '';
-                        }
-                    }
+            // if ($request->bill_to == 'Farmer') {
 
-                    $saveclientdetails['name'] = $getfarmerdetails->nick_name;
-                    $saveclientdetails['regional_client_nick_name'] = $getfarmerdetails->nick_name;
-                    $saveclientdetails['email'] = $getfarmerdetails->email;
-                    $saveclientdetails['phone'] = $getfarmerdetails->phone;
-                    $saveclientdetails['pin'] = $getfarmerdetails->postal_code;
-                    $saveclientdetails['city'] = $getfarmerdetails->city;
-                    $saveclientdetails['district'] = $getfarmerdetails->district;
-                    $saveclientdetails['state'] = $getfarmerdetails->state_id;
-                    $saveclientdetails['address'] = $getfarmerdetails->address_line1;
+            //     $check_client = RegionalClient::where('farmer_id', $request->farmer_common_id)->first();
+            //     if (empty($check_client)) {
+            //         $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
-                    $saveclientdetails['location_id'] = $client_assign_branch;
-                    $saveclientdetails['status'] = 1;
-                    $saveclientdetails['verified_by'] = 0;
-                    $saveclientdetails['farmer_id'] = $request->farmer_common_id;
+            //         $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
+            //         if (!empty($getpin_transfer->hub_transfer)) {
+            //             $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+            //             $client_assign_branch = $get_branch->id;
+            //         } else {
+            //             $get_branch = Location::where('name', 'Karnal')->first();
+            //             if (!empty($get_branch->id)) {
+            //                 $client_assign_branch = $get_branch->id;
+            //             } else {
+            //                 $client_assign_branch = '';
+            //             }
+            //         }
 
-                    $saveRegional = RegionalClient::create($saveclientdetails);
+            //         $saveclientdetails['name'] = $getfarmerdetails->nick_name;
+            //         $saveclientdetails['regional_client_nick_name'] = $getfarmerdetails->nick_name;
+            //         $saveclientdetails['email'] = $getfarmerdetails->email;
+            //         $saveclientdetails['phone'] = $getfarmerdetails->phone;
+            //         $saveclientdetails['pin'] = $getfarmerdetails->postal_code;
+            //         $saveclientdetails['city'] = $getfarmerdetails->city;
+            //         $saveclientdetails['district'] = $getfarmerdetails->district;
+            //         $saveclientdetails['state'] = $getfarmerdetails->state_id;
+            //         $saveclientdetails['address'] = $getfarmerdetails->address_line1;
 
-                    $saveterm['client_id'] = $saveRegional->id;
-                    $saveterm['bill_to'] = 'Self';
-                    $saveterm['payment_term'] = 'Bill To Client Advance';
-                    $saveterm['status'] = 1;
-                    PaymentTerms::create($saveterm);
-                    $consignmentsave['billing_client'] = $saveRegional->id;
-                } else {
-                    $consignmentsave['billing_client'] = $check_client->id;
-                }
-            } else {
-                $consignmentsave['billing_client'] = $request->regclient_id;
+            //         $saveclientdetails['location_id'] = $client_assign_branch;
+            //         $saveclientdetails['status'] = 1;
+            //         $saveclientdetails['verified_by'] = 0;
+            //         $saveclientdetails['farmer_id'] = $request->farmer_common_id;
+
+            //         $saveRegional = RegionalClient::create($saveclientdetails);
+
+            //         $saveterm['client_id'] = $saveRegional->id;
+            //         $saveterm['bill_to'] = 'Self';
+            //         $saveterm['payment_term'] = 'Bill To Client Advance';
+            //         $saveterm['status'] = 1;
+            //         PaymentTerms::create($saveterm);
+            //         $consignmentsave['billing_client'] = $saveRegional->id;
+            //     } else {
+            //         $consignmentsave['billing_client'] = $check_client->id;
+            //     }
+            // } else {
+            //     $consignmentsave['billing_client'] = $request->regclient_id;
+            // }
+
+            // billing customer------------------
+            if ($request->bill_to == 'Farmer') {    
+            $check_billing_customer = BillingCustomer::where('customer_id',$request->farmer_common_id)->where('client_id',$request->regclient_id)->first();
+            if(empty($check_billing_customer)){
+                $billingcustomer['customer_id'] = $request->farmer_common_id;
+                $billingcustomer['client_id'] = $request->regclient_id;
+                BillingCustomer::create($billingcustomer);
+
             }
+        }
+
 
             $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
@@ -2205,56 +2220,69 @@ class OrderController extends Controller
             //     }
             // }
 
-            if ($request->bill_term == 'Farmer') {
+            // ----------
+            // if ($request->bill_term == 'Farmer') {
 
-                $check_client = RegionalClient::where('farmer_id', $request->farmer_common_id)->first();
-                if (empty($check_client)) {
-                    $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
+            //     $check_client = RegionalClient::where('farmer_id', $request->farmer_common_id)->first();
+            //     if (empty($check_client)) {
+            //         $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
-                    $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
-                    if (!empty($getpin_transfer->hub_transfer)) {
-                        $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
-                        $client_assign_branch = $get_branch->id;
-                    } else {
-                        $get_branch = Location::where('nick_name', 'Karnal')->first();
-                        if (!empty($get_branch->id)) {
-                            $client_assign_branch = $get_branch->id;
-                        } else {
-                            $client_assign_branch = '';
-                        }
+            //         $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
+            //         if (!empty($getpin_transfer->hub_transfer)) {
+            //             $get_branch = Location::where('name', $getpin_transfer->hub_transfer)->first();
+            //             $client_assign_branch = $get_branch->id;
+            //         } else {
+            //             $get_branch = Location::where('nick_name', 'Karnal')->first();
+            //             if (!empty($get_branch->id)) {
+            //                 $client_assign_branch = $get_branch->id;
+            //             } else {
+            //                 $client_assign_branch = '';
+            //             }
 
-                    }
+            //         }
 
-                    $saveclientdetails['name'] = $getfarmerdetails->nick_name;
-                    $saveclientdetails['regional_client_nick_name'] = $getfarmerdetails->nick_name;
-                    $saveclientdetails['email'] = $getfarmerdetails->email;
-                    $saveclientdetails['phone'] = $getfarmerdetails->phone;
-                    $saveclientdetails['pin'] = $getfarmerdetails->postal_code;
-                    $saveclientdetails['city'] = $getfarmerdetails->city;
-                    $saveclientdetails['district'] = $getfarmerdetails->district;
-                    $saveclientdetails['state'] = $getfarmerdetails->state_id;
-                    $saveclientdetails['address'] = $getfarmerdetails->address_line1;
+            //         $saveclientdetails['name'] = $getfarmerdetails->nick_name;
+            //         $saveclientdetails['regional_client_nick_name'] = $getfarmerdetails->nick_name;
+            //         $saveclientdetails['email'] = $getfarmerdetails->email;
+            //         $saveclientdetails['phone'] = $getfarmerdetails->phone;
+            //         $saveclientdetails['pin'] = $getfarmerdetails->postal_code;
+            //         $saveclientdetails['city'] = $getfarmerdetails->city;
+            //         $saveclientdetails['district'] = $getfarmerdetails->district;
+            //         $saveclientdetails['state'] = $getfarmerdetails->state_id;
+            //         $saveclientdetails['address'] = $getfarmerdetails->address_line1;
 
-                    $saveclientdetails['location_id'] = $client_assign_branch;
-                    $saveclientdetails['status'] = 1;
-                    $saveclientdetails['verified_by'] = 0;
-                    $saveclientdetails['farmer_id'] = $request->farmer_common_id;
+            //         $saveclientdetails['location_id'] = $client_assign_branch;
+            //         $saveclientdetails['status'] = 1;
+            //         $saveclientdetails['verified_by'] = 0;
+            //         $saveclientdetails['farmer_id'] = $request->farmer_common_id;
 
-                    $saveRegional = RegionalClient::create($saveclientdetails);
+            //         $saveRegional = RegionalClient::create($saveclientdetails);
 
-                    $saveterm['client_id'] = $saveRegional->id;
-                    $saveterm['bill_to'] = 'Client';
-                    $saveterm['payment_term'] = 'Bill To Client';
-                    $saveterm['status'] = 1;
-                    PaymentTerms::create($saveterm);
-                    $consignmentsave['billing_client'] = $saveRegional->id;
-                } else {
-                    $consignmentsave['billing_client'] = $check_client->id;
+            //         $saveterm['client_id'] = $saveRegional->id;
+            //         $saveterm['bill_to'] = 'Client';
+            //         $saveterm['payment_term'] = 'Bill To Client';
+            //         $saveterm['status'] = 1;
+            //         PaymentTerms::create($saveterm);
+            //         $consignmentsave['billing_client'] = $saveRegional->id;
+            //     } else {
+            //         $consignmentsave['billing_client'] = $check_client->id;
+            //     }
+            // } else {
+            //     $consignmentsave['billing_client'] = $request->regclient_id;
+            // }
+
+            // billing customer------------------
+            if ($request->bill_to == 'Farmer') {    
+                $check_billing_customer = BillingCustomer::where('customer_id',$request->farmer_common_id)->where('client_id',$request->regclient_id)->first();
+                if(empty($check_billing_customer)){
+                    $billingcustomer['customer_id'] = $request->farmer_common_id;
+                    $billingcustomer['client_id'] = $request->regclient_id;
+                    BillingCustomer::create($billingcustomer);
+    
                 }
-            } else {
-                $consignmentsave['billing_client'] = $request->regclient_id;
             }
 
+            
             $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
             $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();

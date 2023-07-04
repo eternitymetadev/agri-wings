@@ -732,7 +732,7 @@ Route::group(['prefix'=>'regional-manager', 'middleware'=>['auth','PermissionChe
     Route::any('/upload-noc', [ConsignmentController::class, 'uploadNoc']);
 
     Route::any('edit-baseclient/{id}', [ClientController::class, 'editBaseClient']);
-    Route::any('update-base-client', [ClientController::class, 'updateBaseClient']);
+    Route::any('billing-customer-list', [ClientController::class, 'billingCustomerList']);
 
     Route::any('order-list-export', [OrderController::class, 'orderListExport']);
   

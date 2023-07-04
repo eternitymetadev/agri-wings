@@ -959,6 +959,9 @@
             <li>
                 <div class="submenuListStyle"></div><a href="{{$prefixurl.'verified-client-list'}}">Verified Client </a>
             </li>
+            <li>
+                <div class="submenuListStyle"></div><a href="{{$prefixurl.'billing-customer-list'}}">Billing Customer</a>
+            </li>
 
         </ul>
     </li>

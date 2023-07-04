@@ -67,12 +67,13 @@
                                                         <input type="checkbox" name="" id="ckbCheckAll"
                                                             style="width: 30px; height:30px;">
                                                     </th>
-                                                    <th>Order No</th>
+                                                    <th>Order Number</th>
                                                     <th>Order Date</th>
-                                                    <th>Farmer Name</th>
-                                                    <th>City</th>
-                                                    <th>District</th>
-                                                    <th>Pin Code</th>
+                                                    <th>Farmer name</th>
+                                                    <th>Farmer Address</th>
+                                                    <th>Farm Address</th>
+                                                    <th>Acerage</th>
+                                                    <th>Amount</th>
 
                                                 </tr>
                                             </thead>
@@ -315,8 +316,8 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="exampleFormControlInput2">No. of Battery</label>
-                            <Input type="number" class="form-control" id="battery_id" name="no_of_battery" >
-                               
+                            <Input type="number" class="form-control" id="battery_id" name="no_of_battery">
+
                         </div>
 
                     </div>

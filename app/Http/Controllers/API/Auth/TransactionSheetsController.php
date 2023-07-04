@@ -280,6 +280,11 @@ class TransactionSheetsController extends Controller
                 // }
                 // $order_item['orders'] = implode(',', $order);
                 // $order_item['invoices'] = implode(',', $invoices);
+                if($value->bill_to == 'Self'){
+                    $payment_type = 'Pre-Paid';
+                }else{
+                    $payment_type = 'Post-Paid';
+                }
 
                 $data[] = [
                     'order_no' => $value->id,
@@ -296,6 +301,7 @@ class TransactionSheetsController extends Controller
                     'farmer_address' => $value->ConsigneeDetail->address_line1,
                     'farmer_pincode' => $value->ConsigneeDetail->postal_code,
                     'noc_upload' => $value->noc_upload,
+                    'payment_type' => $payment_type,
                     // 'latitude' => $value->ConsigneeDetail->latitude,
                     // 'longitude' => $value->ConsigneeDetail->longitude,
                     // 'order_id' => $order_item['orders'],
@@ -694,6 +700,11 @@ class TransactionSheetsController extends Controller
 
                 // $order_item['orders'] = implode(',', $order);
                 // $order_item['invoices'] = implode(',', $invoices);
+                if($value->bill_to == 'Self'){
+                    $payment_type = 'Pre-Paid';
+                }else{
+                    $payment_type = 'Post-Paid';
+                }
 
                 $data[] = [
                     'order_no' => $value->id,
@@ -710,6 +721,7 @@ class TransactionSheetsController extends Controller
                     'farmer_address' => $value->ConsigneeDetail->address_line1,
                     'farmer_pincode' => $value->ConsigneeDetail->postal_code,
                     'noc_upload' => $value->noc_upload,
+                    'payment_type' => $payment_type,
                     // 'latitude' => $value->ConsigneeDetail->latitude,
                     // 'longitude' => $value->ConsigneeDetail->longitude,
                     // 'order_id' => $order_item['orders'],

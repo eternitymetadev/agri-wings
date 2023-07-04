@@ -14,6 +14,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\VerificationPending;
 use App\Models\Zone;
+use App\Models\BillingCustomer;
 use Auth;
 use Config;
 use DB;
@@ -1314,6 +1315,16 @@ class ClientController extends Controller
         $response['error'] = false;
         return response()->json($response);
 
+    }
+
+    public function billingCustomerList(Request $request)
+    {
+
+        $this->prefix = request()->route()->getPrefix();
+        $billing_customers = BillingCustomer::with('GetFarmer')->where('status',1)
+        ->groupBy('customer_id')
+        ->get();
+        return view('clients.billing-customer', ['prefix' => $this->prefix,'billing_customers'=> $billing_customers]);
     }
 
 }

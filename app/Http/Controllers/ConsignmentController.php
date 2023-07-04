@@ -1854,7 +1854,7 @@ class ConsignmentController extends Controller
     }
 
     public function unverifiedList(Request $request)
-    {
+    {  
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
         $role_id = Role::where('id', '=', $authuser->role_id)->first();
@@ -4121,12 +4121,12 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
 
-        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*', 'consigners.nick_name as consigner_id', 'consignees.nick_name as consignee_id', 'consignees.city as city', 'consignees.postal_code as pincode', 'consignees.city as consignee_city', 'consignees.district as consignee_district', 'zones.primary_zone as zone')
-            ->join('consigners', 'consigners.id', '=', 'consignment_notes.consigner_id')
+        $data = $consignments = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_id', 'consignees.address_line1 as farmer_address', 'consignees.city as city', 'consignees.postal_code as pincode', 'consignees.district as consignee_district', 'zones.primary_zone as zone', 'order_farms.farm_location as farm_id', 'farms.address as farm_address')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
+            ->leftjoin('order_farms', 'order_farms.order_id', '=', 'consignment_notes.id')
+            ->leftjoin('farms', 'farms.id', '=', 'order_farms.farm_location')
             ->leftjoin('zones', 'zones.id', '=', 'consignees.zone_id')
-            ->where('consignment_notes.status', '=', '2')
-            ->where('consignment_notes.status', '!=', 5);
+            ->whereIn('consignment_notes.status', ['2', '5', '6']);
 
         if ($authuser->role_id == 1) {
             $data;
@@ -4137,7 +4137,7 @@ class ConsignmentController extends Controller
         } elseif ($authuser->role_id == 7) {
             $data = $data->whereIn('regional_clients.id', $regclient);
         } else {
-            $data = $data->whereIn('consignment_notes.branch_id', $cc);
+            $data = $data->whereIn('consignment_notes.status', ['2', '6']);
         }
         $data = $data->orderBy('id', 'DESC');
         $consignments = $data->get();
@@ -4155,14 +4155,14 @@ class ConsignmentController extends Controller
 
     public function addunverifiedLr(Request $request)
     {
+        
         $drs_no = $_POST['drs_no'];
         $consignmentId = $_POST['consignmentID'];
         $authuser = Auth::user();
         $cc = $authuser->branch_id;
 
         $consigner = DB::table('consignment_notes')->whereIn('id', $consignmentId)->update(['status' => '1']);
-        $consignment = DB::table('consignment_notes')->select('consignment_notes.*', 'consigners.nick_name as consigner_id', 'consignees.nick_name as consignee_id', 'consignees.city as city', 'consignees.postal_code as pincode')
-            ->join('consigners', 'consigners.id', '=', 'consignment_notes.consigner_id')
+        $consignment = DB::table('consignment_notes')->select('consignment_notes.*', 'consignees.nick_name as consignee_id', 'consignees.city as city', 'consignees.postal_code as pincode')
             ->join('consignees', 'consignees.id', '=', 'consignment_notes.consignee_id')
             ->whereIn('consignment_notes.id', $consignmentId)
             ->get(['consignees.city']);

@@ -520,7 +520,7 @@ $(document).on('click', '#addlr', function() {
     $.ajax({
         type: "post",
         url: "get-add-lr",
-        data: {
+        data: {  
             add_drs: 'add_drs'
         },
         headers: {
@@ -536,11 +536,11 @@ $(document).on('click', '#addlr', function() {
                 $('#unverifiedlrlist tbody').append(
                     "<tr><td><input type='checkbox' name='checked_consign[]' class='chkBoxClass ddd' value=" +
                     value.id + " style='width: 30px; height:30px;'></td><td>" + value
-                    .id + "</td><td>" + value.consignment_date + "</td><td>" + value
-                    .consigner_id + "</td><td>" + value.consignee_id + "</td><td>" +
-                    value.consignee_city + "</td><td>" +
-                    value.consignee_district + "</td><td>" + value.pincode +
-                    "</td><td>" + value.zone + "</td></tr>");
+                    .id + "</td><td>" + value.consignment_date + "</td><td>" +
+                    value.consignee_id + "</td><td>" + value.farmer_address + "</td><td>" +
+                    value.farm_address + "</td><td>" +
+                    value.total_acerage + "</td><td>" + value.total_amount +
+                    "</td></tr>");
             });
         }
     });
