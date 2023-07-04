@@ -401,7 +401,7 @@ $(document).on('click', '#deactivate_scheme_btn', function() {
 
 });
 
-$("#max").keyup(function() {
+$("#max").blur(function() {
 
     var firstInput = document.getElementById("min").value;
     var secondInput = document.getElementById("max").value;

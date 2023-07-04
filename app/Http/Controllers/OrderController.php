@@ -1403,7 +1403,6 @@ class OrderController extends Controller
             }
         }
 
-
             $getfarmerdetails = Consignee::where('id', $request->farmer_common_id)->first();
 
             $getpin_transfer = Zone::where('postal_code', $getfarmerdetails->postal_code)->first();
