@@ -1025,6 +1025,8 @@ Route::group(['prefix'=>'account-manager', 'middleware'=>['auth','PermissionChec
     Route::get('/reginal-clients/view-regclient-detail/{id}', [ClientController::class, 'viewRegclientdetail']);
     Route::get('/regclient-detail/{id}/edit', [ClientController::class, 'editRegClientDetail']);
     Route::post('/save-regclient-detail', [ClientController::class, 'storeRegclientdetail']);
+    Route::any('edit-baseclient/{id}', [ClientController::class, 'editBaseClient']);
+    Route::any('update-base-client', [ClientController::class, 'updateBaseClient']);
 
     Route::any('unverified-client-list', [ClientController::class, 'unverifiedClient']);
     Route::get('/unverified-client-list/{id}/edit', [ClientController::class, 'editverificationRegional']);

@@ -57,9 +57,9 @@ div.relat {
             <div class="page-header">
                 <nav class="breadcrumb-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Clients</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Client
-                                List</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Billing Client Module</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Base Client</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);">Base Client List</a></li>
                     </ol>
                 </nav>
             </div>
@@ -74,7 +74,7 @@ div.relat {
                         <div class="btn-group relat">
                             <a href="{{'clients/create'}}" class="btn btn-primary pull-right">Create Client</a>
                             <a href="{{'reginal-clients'}}" class="btn btn-primary pull-right"
-                                style="margin-left:7px;">Regional Client List</a>
+                                style="margin-left:7px;">Billing Client</a>
                         </div>
                         <thead>
                             <tr>
