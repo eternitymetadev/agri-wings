@@ -56,7 +56,7 @@ div.relat {
                                 <th>UIN</th>
                                 <th>Manufacturing Year</th>
                                 <th>Drone Capacity(Ltrs)</th>
-                                <!-- <th>Action</th> -->
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,7 +86,7 @@ div.relat {
                 {data: 'mfg', name: 'mfg'},
                 {data: 'gross_vehicle_weight', name: 'gross_vehicle_weight'},
                 // {data: 'rc_image', name: 'rc_image'},
-                // {data: 'action', name: 'action', orderable: false, searchable: false}
+                 {data: 'action', name: 'action', orderable: false, searchable: false}
                 
             ]
         });

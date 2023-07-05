@@ -24,29 +24,26 @@
 
                             <div class="form-row mb-0">
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Drone Name<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">UIN<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="regn_no" name="regn_no" value="{{old('regn_no',isset($getvehicle->regn_no)?$getvehicle->regn_no:'')}}" placeholder="" maxlength="12">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Manufacturer<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlInput2">Manufacturing year<span  class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="mfg" value="{{old('mfg',isset($getvehicle->mfg)?$getvehicle->mfg:'')}}" placeholder="Mahindra, Tata, etc.">
                                 </div>
                             </div>
                             <div class="form-row mb-0">                          
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlSelect1">Make<span class="text-danger">*</span></label>
+                                    <label for="exampleFormControlSelect1">Drone Model<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="make" value="{{old('make',isset($getvehicle->make)?$getvehicle->make:'')}}" placeholder="407, Supro Maxi, Truck, Pickup, Ace, etc.">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="exampleFormControlSelect1">Engine No.<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="engine_no" value="{{old('engine_no',isset($getvehicle->engine_no)?$getvehicle->engine_no:'')}}" placeholder="">
+                                    <label for="exampleFormControlInput2">Drone Capacity(Ltrs)</label>
+                                    <input type="text" class="form-control" id="gross_vehicle_weight" name="gross_vehicle_weight" value="{{old('gross_vehicle_weight',isset($getvehicle->gross_vehicle_weight)?$getvehicle->gross_vehicle_weight:'')}}" placeholder="">
                                 </div>
                             </div>
                             <div class="form-row mb-0">     
-                                <div class="form-group col-md-6">
-                                    <label for="exampleFormControlInput2">Drone Capacity</label>
-                                    <input type="text" class="form-control" id="gross_vehicle_weight" name="gross_vehicle_weight" value="{{old('gross_vehicle_weight',isset($getvehicle->gross_vehicle_weight)?$getvehicle->gross_vehicle_weight:'')}}" placeholder="">
-                                </div>
+                               
                             </div>
                        
                             
