@@ -1064,16 +1064,18 @@ let cropIndex = 1;
 const onAddCrop = () => {
     let cropName = $('input[name="crop"]:checked').val();
     let acerage = $('#acreage').val();
+    let client_id = $('#regional_id').val();
     let apply_scheme = $('input[name="apply_scheme"]:checked').val();
 
     let = $('input[name="crop"]:checked').val();
     $('#themeLoader').css('display', 'flex');
-    $.ajax({
+    $.ajax({ 
         url: "check-price-scheme",
         method: "get",
         data: {
             crop_id: cropName,
-            acerage: acerage
+            acerage: acerage,
+            client_id:client_id
         },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

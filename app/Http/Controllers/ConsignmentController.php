@@ -29,6 +29,7 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
+use App\Models\BaseClient;
 use Auth;
 use Carbon\Carbon;
 use Config;
@@ -5377,9 +5378,10 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
 
-        $crop_price_schemes = CropPriceScheme::with('Crops')->orderBy('id', 'desc')->get();
+        $crop_price_schemes = CropPriceScheme::with('Crops','BaseClient')->orderBy('id', 'desc')->get();
         $crops = Crop::where('status', 1)->get();
-        return view('consignments.crop-price-scheme', ['prefix' => $this->prefix, 'title' => $this->title, 'crop_price_schemes' => $crop_price_schemes, 'crops' => $crops]);
+        $base_clients = BaseClient::where('status', 1)->get();
+        return view('consignments.crop-price-scheme', ['prefix' => $this->prefix, 'title' => $this->title, 'crop_price_schemes' => $crop_price_schemes, 'crops' => $crops, 'base_clients' => $base_clients]);
     }
 
     public function addCropScheme(Request $request)
@@ -5421,8 +5423,13 @@ class ConsignmentController extends Controller
             $discountsave['discount_price'] = $request->discount_price;
             $discountsave['min_acerage'] = $request->min;
             $discountsave['max_acerage'] = $request->max;
+            $discountsave['type'] = $request->scheme_type;
+            $discountsave['name'] = $request->scheme_name;
+            $discountsave['client'] = $request->client_id;
 
             $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
+            ->where('type',$request->scheme_type)
+            ->where('client',$request->client_id)
                 ->where(function ($query) use ($request) {
                     $query->whereDate('from_date', '<=', $request->from_date)
                         ->whereDate('to_date', '>=', $request->from_date)
@@ -5455,7 +5462,7 @@ class ConsignmentController extends Controller
             if ($gstsave) {
                 $url = $this->prefix . '/settings/branch-address';
                 $response['success'] = true;
-                $response['success_message'] = "Crop Price Added successfully";
+                $response['success_message'] = "Crop Scheme Added successfully";
                 $response['error'] = false;
                 $response['redirect_url'] = $url;
 
@@ -5474,13 +5481,20 @@ class ConsignmentController extends Controller
         }
         return response()->json($response);
     }
-
+ 
     public function checkPriceScheme(Request $request)
     {
 
+        $get_client_id = RegionalClient::where('id', $request->client_id)->first();
+        
+        $get_client = BaseClient::where('id',$get_client_id->baseclient_id)->first();
+
         $acerage = $request->acerage;
         $today = date('Y-m-d');
+
         $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
+            ->whereIn('type', ['Crop Specific','Client Specific','Subvention'])
+            ->where('client', $get_client->id)
             ->whereDate('from_date', '<=', $today)
             ->whereDate('to_date', '>=', $today)
             ->where('status', 1)->orderBy('id', 'desc')->get();
@@ -5491,10 +5505,14 @@ class ConsignmentController extends Controller
                 if ($acerage <= $get_scheme_details[$i]->max_acerage) {
                     $crop_scheme = $get_scheme_details[$i];
 
-                    $response['success'] = true;
-                    $response['get_scheme_details'] = $crop_scheme;
-                    $response['error'] = false;
-                    return response()->json($response);
+                    echo'<pre>'; print_r(json_decode($crop_scheme)); 
+
+
+
+                    // $response['success'] = true;
+                    // $response['get_scheme_details'] = $crop_scheme;
+                    // $response['error'] = false;
+                    // return response()->json($response);
                 } else {
 
                     $response['success'] = true;
@@ -5504,6 +5522,7 @@ class ConsignmentController extends Controller
                 }
             }
         }
+        die;
 
     }
 

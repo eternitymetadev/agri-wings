@@ -76,6 +76,8 @@ div.relative {
                         <thead>
                             <tr>
                                 <th>Scheme No</th>
+                                <th>Type</th>
+                                <th>Name</th>
                                 <th>Crop Name</th>
                                 <th>From Date</th>
                                 <th>To Date</th>
@@ -83,6 +85,7 @@ div.relative {
                                 <th>Discount Price</th>
                                 <th>Min Acerage</th>
                                 <th>Max Acerage</th>
+                                <th>Client</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -90,6 +93,8 @@ div.relative {
                             @foreach($crop_price_schemes as $crop_price)
                             <tr>
                                 <td>{{$crop_price->Crops->crop_name}}{{$crop_price->scheme_no}}</td>
+                                <td>{{$crop_price->type}}</td>
+                                <td>{{$crop_price->name}}</td>
                                 <td>{{$crop_price->Crops->crop_name}}</td>
                                 <td>{{$crop_price->from_date}}</td>
                                 <td>{{$crop_price->to_date}}</td>
@@ -97,6 +102,7 @@ div.relative {
                                 <td>{{$crop_price->discount_price}}</td>
                                 <td>{{$crop_price->min_acerage}}</td>
                                 <td>{{$crop_price->max_acerage}}</td>
+                                <td>{{$crop_price->BaseClient->client_name ?? 'All Client'}}</td>
                                 @if($crop_price->status == 1)
                                 <td><button type="button" class="btn btn-success deactive_crop"
                                         value="{{$crop_price->id}}">Active</button></td>
@@ -117,7 +123,7 @@ div.relative {
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 767px;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Add New Crop</h5>
@@ -128,7 +134,31 @@ div.relative {
             <div class="modal-body">
                 <form id="add_crop_scheme">
                     <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Scheme Type</label>
+                            <select class="form-control my-select2" id="scheme_type" name="scheme_type" tabindex="-1" required >
+                                <option value="" disabled selected>--Select--</option>
+                                <option value="Crop Specific">Crop Specific</option>
+                                <option value="Client Specific">Client Specific</option>
+                                <option value="Subvention">Subvention</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Scheme Name</label>
+                            <input type="text" class="form-control" name="scheme_name" required>
+                        </div>
+                        <div class="form-group col-md-6 base_div" style="display:none;">
+                            <label for="inputEmail4">Base Client</label>
+                            <select class="form-control my-select2" id="client_id" name="client_id" tabindex="-1">
+                                <option value="">--Select--</option>
+                                @foreach($base_clients as $base_client)
+                                <option value="{{$base_client->id}}">{{$base_client->client_name}}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
                             <label for="inputEmail4">Crop Name</label>
                             <select class="form-control my-select2" id="crop_change" name="crop_id" tabindex="-1">
                                 <option value="">--Select--</option>
@@ -138,41 +168,35 @@ div.relative {
                                 @endforeach
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
+
+                        <div class="form-group col-md-6">
                             <label for="inputEmail4">From Date</label>
-                            <input type="date" class="form-control" name="from_date">
+                            <input type="date" class="form-control" name="from_date" required>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
+
+                        <div class="form-group col-md-6">
                             <label for="inputEmail4">To Date</label>
-                            <input type="date" class="form-control" name="to_date">
+                            <input type="date" class="form-control" name="to_date" required>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
+
+                        <div class="form-group col-md-6">
                             <label for="inputEmail4">Crop Price</label>
                             <input type="number" class="form-control" id="check_crop_price" name="crop_price" readonly>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
+
+                        <div class="form-group col-md-6">
                             <label for="inputEmail4">Discount Price</label>
-                            <input type="number" class="form-control" name="discount_price">
+                            <input type="number" class="form-control" name="discount_price" required >
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
+
+                        <div class="form-group col-md-6">
                             <label for="inputEmail4">Min Acerage</label>
-                            <input type="number" class="form-control" id="min" name="min">
+                            <input type="number" class="form-control" id="min" name="min" required >
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
+
+                        <div class="form-group col-md-6">
                             <label for="inputEmail4">Max Acerage</label>
-                            <input type="number" class="form-control" name="max" id="max">
+                            <input type="number" class="form-control" name="max" id="max" required >
                         </div>
                     </div>
 
@@ -411,6 +435,14 @@ $("#max").blur(function() {
         swal('error', 'max cannot be less than min', 'error')
     }
 
+});
+$('#scheme_type').change(function() {
+    var scheme = $(this).val();
+    if (scheme == 'Client Specific' || scheme == 'Subvention') {
+        $('.base_div').show();
+    } else {
+        $('.base_div').hide();
+    }
 });
 </script>
 @endsection
