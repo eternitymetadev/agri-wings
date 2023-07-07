@@ -1083,7 +1083,7 @@ class TransactionSheetsController extends Controller
             $coordinatesave['latitude'] = $request->latitude;
             $coordinatesave['longitude'] = $request->longitude;
             $coordinatesave['type'] = $request->type;
-            $coordinatesave['status'] = $request->status;
+            $coordinatesave['status'] = 1;
             $res = Coordinate::create($coordinatesave);
 
             if ($res) {
