@@ -13,6 +13,8 @@ class OrderFarm extends Model
         'farm_location',
         'base_price',
         'discount_price',
+        'client_specific',
+        'subvention',
         'crop',
         'acreage',
         'crop_price',

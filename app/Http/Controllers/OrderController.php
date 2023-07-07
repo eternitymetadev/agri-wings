@@ -1448,20 +1448,25 @@ class OrderController extends Controller
                     // $crop_price[] = $save_data['crop_price'];
                     // $offered_price[] = $save_data['offered_cost'];
 
-                    $today = date('Y-m-d');
-                    $get_Crop_price = Crop::where('id', $save_data['crop_name'])->first();
-                    $get_scheme_details = CropPriceScheme::where('crop_id', $save_data['crop_name'])
-                        ->whereDate('from_date', '<=', $today)
-                        ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
+                    // $today = date('Y-m-d');
+                     $get_Crop_price = Crop::where('id', $save_data['crop_name'])->first();
+                    // $get_scheme_details = CropPriceScheme::where('crop_id', $save_data['crop_name'])
+                    //     ->whereDate('from_date', '<=', $today)
+                    //     ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
 
-                    if($save_data['discount'] < 1){
-                        $discount_price = 0 ;
+                    // if($save_data['discount'] < 1){
+                    //     $discount_price = 0 ;
+                    // }else{
+                    //     if(!empty($get_scheme_details)){
+                    //         $discount_price = $get_scheme_details->discount_price;
+                    //     }else{
+                    //         $discount_price = 0 ;
+                    //     }
+                    // }
+                    if($request->crop_specific < 1){
+                        $discount_price = 0;
                     }else{
-                        if(!empty($get_scheme_details)){
-                            $discount_price = $get_scheme_details->discount_price;
-                        }else{
-                            $discount_price = 0 ;
-                        }
+                        $discount_price = $request->crop_specific;
                     }
 
                     if($request->promotional == 1){
@@ -1469,11 +1474,15 @@ class OrderController extends Controller
                     $crop_price = $get_Crop_price->crop_price * $save_data['acerage'];
                     $discount = $discount_price * $save_data['acerage'];
                     $total_price = 0;
+                    $client_specific = 0;
+                    $subvention = 0;
                     }else{
                         $discount_price = $discount_price;
                         $crop_price = $save_data['crop_price'];
                         $discount = $save_data['discount'];
                         $total_price = $save_data['offered_cost'];
+                        $client_specific = $request->client_specific;
+                        $subvention = $request->subvention;
                     }
 
                     
@@ -1486,6 +1495,8 @@ class OrderController extends Controller
                     $save_data['total_price'] = $total_price;
                     $save_data['base_price'] = $get_Crop_price->crop_price;
                     $save_data['discount_price'] = $discount_price;
+                    $save_data['client_specific'] = $client_specific;
+                    $save_data['subvention'] = $subvention;
                     $save_data['status'] = 1;
 
                     $saveconsignmentitems = OrderFarm::create($save_data);

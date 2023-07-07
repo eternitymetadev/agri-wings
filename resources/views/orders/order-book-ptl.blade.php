@@ -866,10 +866,12 @@ tr:hover .dltItemRow {
                         </div>
 
                         <div class="d-flex flex-wrap col-12 align-items-center">
-                            <div class="form-check" style="display: flex; align-items: center; min-height: 20px; gap: 8px;">
+                            <div class="form-check"
+                                style="display: flex; align-items: center; min-height: 20px; gap: 8px;">
                                 <input class="form-check-input" type="checkbox" name="apply_scheme" id="applyScheme"
                                     checked="true" value="1" style="width: 16px; height: 16px">
-                                <label class="form-check-label" for="applyScheme" style="margin-left: 8px; line-height: 14px; font-size: 14px !important; cursor: pointer">
+                                <label class="form-check-label" for="applyScheme"
+                                    style="margin-left: 8px; line-height: 14px; font-size: 14px !important; cursor: pointer">
                                     Apply Scheme
                                 </label>
                             </div>
@@ -896,19 +898,23 @@ tr:hover .dltItemRow {
 
                     <div id="promotionalOrder" class="flex-wrap col-12 align-items-center" style="display: none">
                         <div class="form-check" style="display: flex;
-    align-items: center;
-    min-height: 20px;
-    gap: 8px;">
+                            align-items: center;
+                            min-height: 20px;
+                            gap: 8px;">
                             <input class="form-check-input" type="checkbox" name="promotional"
                                 onchange="giveFullDiscount()" id="promotional" value="1"
                                 style="width: 16px; height: 16px" name="promotional">
                             <label class="form-check-label" for="promotional" style="margin-left: 8px;
-    line-height: 14px;
-    font-size: 14px !important; cursor: pointer">
+                                line-height: 14px;
+                                font-size: 14px !important; cursor: pointer">
                                 Promotional Order
                             </label>
                         </div>
                     </div>
+                    <Input type="hidden" class="form-control" id="client_specific" name="client_specific" >
+                    <Input type="hidden" class="form-control" id="subvention" name="subvention">
+                    <Input type="hidden" class="form-control" id="crop_specific" name="crop_specific">
+
 
                 </div>
             </div>
@@ -1069,13 +1075,13 @@ const onAddCrop = () => {
 
     let = $('input[name="crop"]:checked').val();
     $('#themeLoader').css('display', 'flex');
-    $.ajax({ 
+    $.ajax({
         url: "check-price-scheme",
         method: "get",
         data: {
             crop_id: cropName,
             acerage: acerage,
-            client_id:client_id
+            client_id: client_id
         },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1094,21 +1100,39 @@ const onAddCrop = () => {
             let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
             let totalPrice = cropPrice * acreage;
 
+            var discount_crop_price = 0;
+            var discount_client_specific = 0;
+            var discount_subvention = 0;
             if (apply_scheme == 1) {
                 if (response.get_scheme_details) {
-                    var crop_price = response.get_scheme_details.crop_price;
-                    var discount_price = response.get_scheme_details.discount_price;
-                    var final_crop_price = crop_price - discount_price;
-                    var calculate_offer_price = final_crop_price * acreage;
+                    $.each(response.get_scheme_details, function(index, value) {
+
+                        if (value.type == 'Crop Specific') {
+                            discount_crop_price = value.discount_price;
+                        } else if (value.type == 'Client Specific') {
+                            discount_client_specific = value.discount_price;
+                        } else if (value.type == 'Subvention') {
+                            discount_subvention = value.discount_price;
+                        }
+
+                    });
                 } else {
                     var calculate_offer_price = totalPrice;
                 }
             } else {
                 var calculate_offer_price = totalPrice;
             }
+          
+            var all_scheme_discount = parseInt(discount_crop_price) + parseInt(discount_client_specific) + parseInt(discount_subvention);
+            var total_discount_crop = cropPrice - all_scheme_discount;
 
-            var discount_price = totalPrice - calculate_offer_price;
+            var discount_price = all_scheme_discount * acreage;
+            var calculate_offer_price = total_discount_crop * acreage;
 
+
+           $('#client_specific').val(discount_client_specific);
+           $('#subvention').val(discount_subvention);
+           $('#crop_specific').val(discount_crop_price);
 
             if (farmLocation != '') {
                 $('#sprayTable').show();
@@ -1141,6 +1165,8 @@ const onAddCrop = () => {
                 if ($('#sprayTable tr').length < 2) $('#submitButton').attr('disabled', true);
                 else $('#submitButton').attr('disabled', false);
             } else $('#farmLocationError').show();
+
+            
         }
     })
 

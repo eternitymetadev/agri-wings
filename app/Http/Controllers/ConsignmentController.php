@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\RealtimeMessage;
 use App\Exports\PodExport;
 use App\Models\AppMedia;
+use App\Models\BaseClient;
 use App\Models\Battery;
 use App\Models\BranchAddress;
 use App\Models\Consignee;
@@ -29,7 +30,6 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Models\Zone;
-use App\Models\BaseClient;
 use Auth;
 use Carbon\Carbon;
 use Config;
@@ -1855,7 +1855,7 @@ class ConsignmentController extends Controller
     }
 
     public function unverifiedList(Request $request)
-    {  
+    {
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
         $role_id = Role::where('id', '=', $authuser->role_id)->first();
@@ -4156,7 +4156,7 @@ class ConsignmentController extends Controller
 
     public function addunverifiedLr(Request $request)
     {
-        
+
         $drs_no = $_POST['drs_no'];
         $consignmentId = $_POST['consignmentID'];
         $authuser = Auth::user();
@@ -5378,7 +5378,7 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $user = User::where('branch_id', $authuser->branch_id)->where('role_id', 2)->first();
 
-        $crop_price_schemes = CropPriceScheme::with('Crops','BaseClient')->orderBy('id', 'desc')->get();
+        $crop_price_schemes = CropPriceScheme::with('Crops', 'BaseClient')->orderBy('id', 'desc')->get();
         $crops = Crop::where('status', 1)->get();
         $base_clients = BaseClient::where('status', 1)->get();
         return view('consignments.crop-price-scheme', ['prefix' => $this->prefix, 'title' => $this->title, 'crop_price_schemes' => $crop_price_schemes, 'crops' => $crops, 'base_clients' => $base_clients]);
@@ -5428,8 +5428,8 @@ class ConsignmentController extends Controller
             $discountsave['client'] = $request->client_id;
 
             $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
-            ->where('type',$request->scheme_type)
-            ->where('client',$request->client_id)
+                ->where('type', $request->scheme_type)
+                ->where('client', $request->client_id)
                 ->where(function ($query) use ($request) {
                     $query->whereDate('from_date', '<=', $request->from_date)
                         ->whereDate('to_date', '>=', $request->from_date)
@@ -5481,20 +5481,18 @@ class ConsignmentController extends Controller
         }
         return response()->json($response);
     }
- 
+
     public function checkPriceScheme(Request $request)
     {
 
         $get_client_id = RegionalClient::where('id', $request->client_id)->first();
-        
-        $get_client = BaseClient::where('id',$get_client_id->baseclient_id)->first();
+        $get_client = BaseClient::where('id', $get_client_id->baseclient_id)->first();
 
         $acerage = $request->acerage;
         $today = date('Y-m-d');
 
         $get_scheme_details = CropPriceScheme::where('crop_id', $request->crop_id)
-            ->whereIn('type', ['Crop Specific','Client Specific','Subvention'])
-            ->where('client', $get_client->id)
+            ->where('type', 'Crop Specific')
             ->whereDate('from_date', '<=', $today)
             ->whereDate('to_date', '>=', $today)
             ->where('status', 1)->orderBy('id', 'desc')->get();
@@ -5505,24 +5503,69 @@ class ConsignmentController extends Controller
                 if ($acerage <= $get_scheme_details[$i]->max_acerage) {
                     $crop_scheme = $get_scheme_details[$i];
 
-                    echo'<pre>'; print_r(json_decode($crop_scheme)); 
-
-
-
-                    // $response['success'] = true;
-                    // $response['get_scheme_details'] = $crop_scheme;
-                    // $response['error'] = false;
-                    // return response()->json($response);
-                } else {
-
-                    $response['success'] = true;
-                    $response['get_scheme_details'] = '';
-                    $response['error'] = false;
-                    return response()->json($response);
                 }
             }
         }
-        die;
+        
+
+        if (!empty($crop_scheme)) {
+
+            $get_scheme_client = CropPriceScheme::where('crop_id', $request->crop_id)
+                ->whereIn('type', ['Client Specific', 'Subvention'])
+                ->where('client', $get_client->id)
+                ->whereDate('from_date', '<=', $today)
+                ->whereDate('to_date', '>=', $today)
+                ->where('status', 1)->orderBy('id', 'desc')->get();
+            $client_specific = array();
+            for ($i = 0; $i < sizeof($get_scheme_client); $i++) {
+                if ($acerage >= $get_scheme_client[$i]->min_acerage) {
+
+                    if ($acerage <= $get_scheme_client[$i]->max_acerage) {
+                        $client_specific[] = json_decode($get_scheme_client[$i]);
+
+                    }
+                }
+            }
+
+            $all_scheme = array_push($client_specific, json_decode($crop_scheme));
+
+            $response['success'] = true;
+            $response['get_scheme_details'] = $client_specific;
+            $response['error'] = false;
+            return response()->json($response);
+        } else {
+
+            $get_scheme_client = CropPriceScheme::where('crop_id', $request->crop_id)
+                ->whereIn('type', ['Client Specific', 'Subvention'])
+                ->where('client', $get_client->id)
+                ->whereDate('from_date', '<=', $today)
+                ->whereDate('to_date', '>=', $today)
+                ->where('status', 1)->orderBy('id', 'desc')->get();
+            $client_specific = array();
+            for ($i = 0; $i < sizeof($get_scheme_client); $i++) {
+                if ($acerage >= $get_scheme_client[$i]->min_acerage) {
+
+                    if ($acerage <= $get_scheme_client[$i]->max_acerage) {
+                        $client_specific[] = json_decode($get_scheme_client[$i]);
+
+                    }
+                }
+            }
+            if(!empty($client_specific)){
+
+                array_push($client_specific, $crop_scheme);
+
+                $response['success'] = true;
+                $response['get_scheme_details'] = $client_specific;
+                $response['error'] = false;
+                return response()->json($response);
+            }
+            
+            $response['success'] = true;
+            $response['get_scheme_details'] = '';
+            $response['error'] = false;
+            return response()->json($response);
+        }
 
     }
 
@@ -5614,8 +5657,11 @@ class ConsignmentController extends Controller
             DB::beginTransaction();
             $order_details = ConsignmentNote::with('Orderactivity')->where('id', $request->order_id)->first();
             $crop_price = $order_details->Orderactivity->base_price * $request->acerage;
-            $discount_price = $order_details->Orderactivity->discount_price * $request->acerage;
-            $cropPriceWithDiscount = $order_details->Orderactivity->base_price - $order_details->Orderactivity->discount_price;
+
+            $all_discount_type = $order_details->Orderactivity->discount_price + $order_details->Orderactivity->client_specific + $order_details->Orderactivity->subvention;
+
+            $discount_price = $all_discount_type * $request->acerage;
+            $cropPriceWithDiscount = $order_details->Orderactivity->base_price - $all_discount_type;
             $totalPrice = $crop_price - $discount_price;
 
             $updateOrderFarm = OrderFarm::where('order_id', $request->order_id)->update(['acreage' => $request->acerage, 'crop_price' => $crop_price, 'discount' => $discount_price, 'total_price' => $totalPrice]);
@@ -5705,7 +5751,7 @@ class ConsignmentController extends Controller
             $regclient = explode(',', $authuser->regionalclient_id);
             $cc = explode(',', $authuser->branch_id);
 
-            $query = $query->with('DriverDetail')->where('status', 1)->whereIn('payment_settlement' ,[0,1]);
+            $query = $query->with('DriverDetail')->where('status', 1)->whereIn('payment_settlement', [0, 1]);
             $query = $query->whereIn('branch_id', $cc);
 
             if (!empty($request->search)) {
@@ -5755,15 +5801,15 @@ class ConsignmentController extends Controller
         $cc = explode(',', $authuser->branch_id);
         $branchs = Location::select('id', 'name')->whereIn('id', $cc)->get();
 
-        $query = $query->with('DriverDetail')->where('status', 1)->whereIn('payment_settlement' ,[0,1]);
-        if($authuser->role_id == 7){
+        $query = $query->with('DriverDetail')->where('status', 1)->whereIn('payment_settlement', [0, 1]);
+        if ($authuser->role_id == 7) {
             $query = $query->where('user_id', $authuser->id);
-        }elseif($authuser->role_id == 3){
+        } elseif ($authuser->role_id == 3) {
             $query = $query->whereIn('branch_id', $cc);
-        }else{
+        } else {
             $query = $query;
         }
-     
+
         $vehicles = TransactionSheet::select('vehicle_no')->distinct()->get();
 
         $paymentlist = $query->orderBy('id', 'DESC')->paginate($peritem);
@@ -5795,7 +5841,7 @@ class ConsignmentController extends Controller
                 $savefeedback = PaymentSettlement::create($paymentdetails);
 
             }
-            $settled = ConsignmentNote::whereIn('id',$order_id)->update(['payment_settlement' => 1]);
+            $settled = ConsignmentNote::whereIn('id', $order_id)->update(['payment_settlement' => 1]);
 
             if ($settled) {
                 $response['success'] = true;
@@ -5899,14 +5945,14 @@ class ConsignmentController extends Controller
         $branchs = Location::select('id', 'name')->whereIn('id', $cc)->get();
 
         $query = $query->with('DriverDetail')->where('status', 1)->where('payment_settlement', 2);
-        if($authuser->role_id == 7){
+        if ($authuser->role_id == 7) {
             $query = $query->where('user_id', $authuser->id);
-        }elseif($authuser->role_id == 3){
+        } elseif ($authuser->role_id == 3) {
             $query = $query->whereIn('branch_id', $cc);
-        }else{
+        } else {
             $query = $query;
         }
-     
+
         $vehicles = TransactionSheet::select('vehicle_no')->distinct()->get();
 
         $paymentlist = $query->orderBy('id', 'DESC')->paginate($peritem);
@@ -5927,7 +5973,7 @@ class ConsignmentController extends Controller
 
             $pymt_settle = ConsignmentNote::whereIn('id', $order_id)->update(['payment_settlement' => 2]);
 
-            $settled = PaymentSettlement::whereIn('order_id',$order_id)->update(['verify_date' => $request->verify_date]);
+            $settled = PaymentSettlement::whereIn('order_id', $order_id)->update(['verify_date' => $request->verify_date]);
 
             if ($settled) {
                 $response['success'] = true;
