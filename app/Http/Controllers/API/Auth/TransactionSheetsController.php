@@ -1077,11 +1077,13 @@ class TransactionSheetsController extends Controller
 
     public function storeCoordinates(Request $request, $id)
     {
-
         try {
-            $coordinatesave['consignment_id'] = $id;
+            $coordinatesave['order_id'] = $id;
+            $coordinatesave['pilot'] = $request->pilot;
             $coordinatesave['latitude'] = $request->latitude;
             $coordinatesave['longitude'] = $request->longitude;
+            $coordinatesave['type'] = $request->type;
+            $coordinatesave['status'] = $request->status;
             $res = Coordinate::create($coordinatesave);
 
             if ($res) {
