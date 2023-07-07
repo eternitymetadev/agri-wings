@@ -35,7 +35,7 @@ class OrderListDetails implements FromCollection, WithHeadings, ShouldQueue
             'DriverDetail:id,name,fleet_id,phone',
             'DrsDetail:consignment_no,drs_no,created_at',
             'RegClient'
-        ); 
+        )->wherNot('status', 7); 
         if($authuser->role_id == 7){
             $order_details = $query->where('user_id', $authuser->id)->orderBy('id','ASC')->get();
         }else{
