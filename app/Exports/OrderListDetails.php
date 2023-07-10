@@ -80,7 +80,7 @@ class OrderListDetails implements FromCollection, WithHeadings, ShouldQueue
         return [
             'Order No',
             'Order Date',
-            'Total Acerage',
+            'Total Acreage',
             'Total Amount',
             'Discount Price',
             'Booking Partner',
