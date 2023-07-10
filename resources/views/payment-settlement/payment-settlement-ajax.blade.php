@@ -30,9 +30,7 @@
         </thead>
         <tbody>
             @foreach($paymentlist as $payment)
-            <?php
             
-            ?>
             <tr>
                 <!----- checkbox check role ----->
                 @if($authuser->role_id == 5)
@@ -88,17 +86,39 @@
                 </td>
                 <td>
                     <p class="mb-0">
-                        <span style="color: #000"></span>
+                        @if($payment->Orderactivity->subvention > 0)
+                        <span style="color: #000">Yes</span>
+                        @else
+                        <span style="color: #000">No</span>
+                        @endif
+                    </p>
+                </td>
+                <td>
+                <?php
+                $subvention_scheme = $payment->Orderactivity->subvention * $payment->Orderactivity->acreage;
+                $crop_price = $payment->Orderactivity->base_price - $payment->Orderactivity->discount_price ;
+                $crop_price_withdiscount = $crop_price * $payment->Orderactivity->acreage;
+                $client_discount = $payment->Orderactivity->client_specific * $payment->Orderactivity->acreage;
+                $farmer_invoice_amt = $crop_price_withdiscount - $client_discount;
+
+                $subvention = $payment->Orderactivity->subvention * $payment->Orderactivity->acreage;
+            
+                 ?>
+                    <p class="mb-0">
+                    @if($payment->Orderactivity->subvention > 0)
+                        <span style="color: #000">{{@$farmer_invoice_amt}}</span>
+                        @else
+                        <span style="color: #000">{{$payment->total_amount}}</span>
+                        @endif
                     </p>
                 </td>
                 <td>
                     <p class="mb-0">
-                        <span style="color: #000"></span>
-                    </p>
-                </td>
-                <td>
-                    <p class="mb-0">
-                        <span style="color: #000"></span>
+                    @if($payment->Orderactivity->subvention > 0)
+                        <span style="color: #000">{{$subvention}}</span>
+                        @else
+                        <span style="color: #000">{{$payment->Orderactivity->subvention}}</span>
+                        @endif
                     </p>
                 </td>
                 @if($authuser->role_id == 5)
