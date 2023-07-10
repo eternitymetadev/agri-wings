@@ -23,17 +23,17 @@ class OrderListDetails implements FromCollection, WithHeadings, ShouldQueue
         $authuser = Auth::user();
 
         $query = $query
-            ->with(
-                'ConsigneeDetail',
-                'VehicleDetail:id,regn_no',
-                'DriverDetail:id,name,fleet_id,phone',
-                'DrsDetail:consignment_no,drs_no,created_at',
-                'RegClient'
-            );
-        if ($authuser->role_id == 7) {
-            $order_details = $query->where('user_id', $authuser->id)->orderBy('id', 'ASC')->get();
-        } else {
-            $order_details = $query->orderBy('id', 'ASC')->get();
+        ->with(
+            'ConsigneeDetail',
+            'VehicleDetail:id,regn_no',
+            'DriverDetail:id,name,fleet_id,phone',
+            'DrsDetail:consignment_no,drs_no,created_at',
+            'RegClient'
+        )->where('status','!=','7'); 
+        if($authuser->role_id == 7){
+            $order_details = $query->where('user_id', $authuser->id)->orderBy('id','ASC')->get();
+        }else{
+            $order_details = $query->orderBy('id','ASC')->get();
         }
 
         if ($order_details->count() > 0) {

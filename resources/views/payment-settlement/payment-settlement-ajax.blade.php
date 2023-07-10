@@ -13,6 +13,9 @@
                 <th>Received By </th>
                 <th>Spray Status</th>
                 <th>Invoice Amount</th>
+                <th>Subvention Scheme</th>
+                <th>Invoice Farmer</th>
+                <th>Invoice Client</th>
                 <?php 
                 $authuser = Auth::user();
                 if($authuser->role_id == 5){ ?>
@@ -67,7 +70,7 @@
                 <td>
                     <p class="mb-0">
                         <span style="color: #000">{{@$payment->DriverDetail->name}}</span><br />
-                        Received Date: 20/09/2000
+                        Received Date: {{$payment->delivery_date ?? '-'}}
                     </p>
                 </td>
                 <td>
@@ -81,6 +84,21 @@
                 <td>
                     <p class="mb-0">
                         <span style="color: #000">{{$payment->total_amount}}</span>
+                    </p>
+                </td>
+                <td>
+                    <p class="mb-0">
+                        <span style="color: #000"></span>
+                    </p>
+                </td>
+                <td>
+                    <p class="mb-0">
+                        <span style="color: #000"></span>
+                    </p>
+                </td>
+                <td>
+                    <p class="mb-0">
+                        <span style="color: #000"></span>
                     </p>
                 </td>
                 @if($authuser->role_id == 5)
