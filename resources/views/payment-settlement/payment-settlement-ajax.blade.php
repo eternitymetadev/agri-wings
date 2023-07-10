@@ -30,23 +30,23 @@
         </thead>
         <tbody>
             @foreach($paymentlist as $payment)
-            
+
             <tr>
                 <!----- checkbox check role ----->
                 @if($authuser->role_id == 5)
                 @if($payment->payment_settlement == 1)
                 <td><input type="checkbox" name="checked_drs[]" class="chkBoxClass" value="{{$payment->id}}"
                         data-price="{{$payment->total_amount}}" style="width: 16px; height:16px;"></td>
-                        @else
-                        <td>-</td>
-                        @endif
+                @else
+                <td>-</td>
+                @endif
                 @else
                 @if($payment->payment_settlement == 0)
                 <td><input type="checkbox" name="checked_drs[]" class="chkBoxClass" value="{{$payment->id}}"
                         data-price="{{$payment->total_amount}}" style="width: 16px; height:16px;"></td>
-                        @else
-                        <td>-</td>
-                        @endif
+                @else
+                <td>-</td>
+                @endif
                 @endif
                 <!-- end check -->
                 <td>
@@ -80,11 +80,25 @@
                     </p>
                 </td>
                 <td>
+                    <?php
+                $subvention_scheme = $payment->Orderactivity->subvention * $payment->Orderactivity->acreage;
+                $crop_price = $payment->Orderactivity->base_price - $payment->Orderactivity->discount_price ;
+                $crop_price_withdiscount = $crop_price * $payment->Orderactivity->acreage;
+                $client_discount = $payment->Orderactivity->client_specific * $payment->Orderactivity->acreage;
+                $invoice_amt = $crop_price_withdiscount - $client_discount;
+                $subvention = $payment->Orderactivity->subvention * $payment->Orderactivity->acreage;
+            
+                 ?>
                     <p class="mb-0">
+                        @if($payment->Orderactivity->subvention > 0)
+                        <span style="color: #000">{{$invoice_amt}}</span>
+                        @else
                         <span style="color: #000">{{$payment->total_amount}}</span>
+                        @endif
                     </p>
                 </td>
                 <td>
+
                     <p class="mb-0">
                         @if($payment->Orderactivity->subvention > 0)
                         <span style="color: #000">Yes</span>
@@ -94,19 +108,10 @@
                     </p>
                 </td>
                 <td>
-                <?php
-                $subvention_scheme = $payment->Orderactivity->subvention * $payment->Orderactivity->acreage;
-                $crop_price = $payment->Orderactivity->base_price - $payment->Orderactivity->discount_price ;
-                $crop_price_withdiscount = $crop_price * $payment->Orderactivity->acreage;
-                $client_discount = $payment->Orderactivity->client_specific * $payment->Orderactivity->acreage;
-                $farmer_invoice_amt = $crop_price_withdiscount - $client_discount;
 
-                $subvention = $payment->Orderactivity->subvention * $payment->Orderactivity->acreage;
-            
-                 ?>
                     <p class="mb-0">
-                    @if($payment->Orderactivity->subvention > 0)
-                        <span style="color: #000">{{@$farmer_invoice_amt}}</span>
+                        @if($payment->Orderactivity->subvention > 0)
+                        <span style="color: #000">{{$payment->total_amount}}</span>
                         @else
                         <span style="color: #000">{{$payment->total_amount}}</span>
                         @endif
@@ -114,25 +119,28 @@
                 </td>
                 <td>
                     <p class="mb-0">
-                    @if($payment->Orderactivity->subvention > 0)
+                        @if($payment->Orderactivity->subvention > 0)
                         <span style="color: #000">{{$subvention}}</span>
                         @else
-                        <span style="color: #000">{{$payment->Orderactivity->subvention}}</span>
+                        <span style="color: #000">{{$payment->Orderactivity->subvention ?? '0'}}</span>
                         @endif
                     </p>
                 </td>
                 @if($authuser->role_id == 5)
-                <td><p class="mb-0">
-                        <span style="color: #000">{{$payment->PaymentSettle->GetUser->UserRole->name ?? '-'}}</span>
-                    </p></td>
                 <td>
-                <p class="mb-0">
+                    <p class="mb-0">
+                        <span style="color: #000">{{$payment->PaymentSettle->GetUser->UserRole->name ?? '-'}}</span>
+                    </p>
+                </td>
+                <td>
+                    <p class="mb-0">
                         <span style="color: #000">{{$payment->PaymentSettle->GetUser->name ?? '-'}}</span>
                     </p>
                 </td>
                 <td>
-                <p class="mb-0">
-                        <span style="color: #000">{{$payment->total_amount ?? '-'}}/{{$payment->PaymentSettle->amount_deposite ?? '0'}}</span>
+                    <p class="mb-0">
+                        <span
+                            style="color: #000">{{$payment->total_amount ?? '-'}}/{{$payment->PaymentSettle->amount_deposite ?? '0'}}</span>
                     </p>
                 </td>
                 @endif
@@ -151,7 +159,7 @@
                     </p>
                     @endif
                 </td>
-               
+
                 @if(!empty($payment->PaymentSettle))
                 <td>
                     <p class="mb-0">
