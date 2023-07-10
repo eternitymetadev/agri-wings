@@ -296,6 +296,10 @@ class TransactionSheetsController extends Controller
                     'sss_no' => @$value->TransactionSheet->drs_no,
                     'hub_name' => @$value->Branch->name,
                     'hub_code' => '0001',
+                    'hub_contact' => '1234567890',
+                    'hub_pin' => '175033',
+                    'hub_district' => 'Jalandher',
+                    'hub_address' => 'Jalandher',
                     'farmer_name' => $value->ConsigneeDetail->nick_name,
                     'farmer_mobile' => $value->ConsigneeDetail->phone,
                     'farmer_address' => $value->ConsigneeDetail->address_line1,
@@ -716,6 +720,10 @@ class TransactionSheetsController extends Controller
                     'sss_no' => @$value->TransactionSheet->drs_no,
                     'hub_name' => @$value->Branch->name,
                     'hub_code' => '0001',
+                    'hub_contact' => '1234567890',
+                    'hub_pin' => '175033',
+                    'hub_district' => 'Jalandher',
+                    'hub_address' => 'Jalandher',
                     'farmer_name' => $value->ConsigneeDetail->nick_name,
                     'farmer_mobile' => $value->ConsigneeDetail->phone,
                     'farmer_address' => $value->ConsigneeDetail->address_line1,
@@ -1071,11 +1079,13 @@ class TransactionSheetsController extends Controller
 
     public function storeCoordinates(Request $request, $id)
     {
-
         try {
-            $coordinatesave['consignment_id'] = $id;
+            $coordinatesave['order_id'] = $id;
+            $coordinatesave['pilot'] = $request->pilot;
             $coordinatesave['latitude'] = $request->latitude;
             $coordinatesave['longitude'] = $request->longitude;
+            $coordinatesave['type'] = $request->type;
+            $coordinatesave['status'] = 1;
             $res = Coordinate::create($coordinatesave);
 
             if ($res) {
