@@ -177,6 +177,7 @@ class ConsigneeController extends Controller
             if (!empty($request->data)) {
                 $get_data = $request->data;
                 foreach ($get_data as $key => $save_data) {
+                    echo'<pre>'; print_r($save_data); die;
                     $save_data['farmer_id'] = $saveconsignee->id;
                     $save_data['field_area'] = $save_data['field_area'];
                     $save_data['address'] = $save_data['address'];

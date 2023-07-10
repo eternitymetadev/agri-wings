@@ -166,5 +166,31 @@ function setErrorState() {
         }
     })
 }
+function addrow() {
+    var i = $('.rowcls').length;
+    i = i + 1;
+    var rows = '';
+    rows += '<tr class="rowcls">';
+    rows += '<td>';
+    rows += '<input type="text" class="form-control name" name="data[' + i + '][field_area]" placeholder="">';
+    rows += '</td>';
+    rows += '<td>';
+    rows += '<input type="text" class="form-control name" name="data[' + i +
+        '][pin_code]" placeholder="">';
+    rows += '</td>';
+    rows += '<td>';
+    rows += '<input type="text" class="form-control name" name="data[' + i +
+        '][city]" placeholder="">';
+    rows += '</td>';
+    rows += '<td>';
+    rows += '<textarea type="text" class="form-control name" name="data[' + i +
+        '][address]" placeholder=""></textarea>';
+    rows += '</td>';
+    rows += '<td>';
+    rows += '<button type="button" class="btn btn-danger removeRow"><i class="fa fa-minus-circle"></i></button>';
+    rows += '</td>';
+    rows += '</tr>';
+    $('#myTable tbody').append(rows);
+}
 </script>
 @endsection
