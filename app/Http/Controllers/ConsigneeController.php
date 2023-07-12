@@ -146,7 +146,7 @@ class ConsigneeController extends Controller
         $this->prefix = request()->route()->getPrefix();
         $authuser = Auth::user();
         $rules = array(
-             'phone' => 'required|unique:consignees',
+            'phone' => 'required|unique:consignees',
         );
         $validator = Validator::make($request->all(), $rules);
 
@@ -177,7 +177,8 @@ class ConsigneeController extends Controller
             if (!empty($request->data)) {
                 $get_data = $request->data;
                 foreach ($get_data as $key => $save_data) {
-                    echo'<pre>'; print_r($save_data); die;
+                    echo '<pre>';
+                    print_r($save_data);die;
                     $save_data['farmer_id'] = $saveconsignee->id;
                     $save_data['field_area'] = $save_data['field_area'];
                     $save_data['address'] = $save_data['address'];
@@ -298,6 +299,7 @@ class ConsigneeController extends Controller
                 $get_data = $request->data;
 
                 foreach ($get_data as $key => $save_data) {
+                    if (!empty($save_data['hidden_id'])) {
                     $update['field_area'] = $save_data['field_area'];
                     $update['address'] = $save_data['address'];
                     $update['pin_code'] = $save_data['pin_code'];
@@ -305,8 +307,17 @@ class ConsigneeController extends Controller
                     $hidden_id = $save_data['hidden_id'];
                     $updatefarmer = Farm::where('id', $hidden_id)->update($update);
                     //$saveregclients = Farm::create($save_data);
-                }
+                
+            } else {
+                $insertdata['field_area'] = $save_data['field_area'];
+                $insertdata['address'] = $save_data['address'];
+                $insertdata['pin_code'] = $save_data['pin_code'];
+                $insertdata['city'] = $save_data['city'];
+                $insertdata['farmer_id'] = $request->consignee_id;
+                $saveclientPriceDeatil = Farm::create($insertdata);
             }
+        }
+    }
 
             $prev = url()->previous();
             $uri_parts = explode('/', $prev);

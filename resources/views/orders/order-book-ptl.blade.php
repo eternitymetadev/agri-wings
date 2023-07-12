@@ -915,6 +915,10 @@ tr:hover .dltItemRow {
                     <Input type="hidden" class="form-control" id="subvention" name="subvention">
                     <Input type="hidden" class="form-control" id="crop_specific" name="crop_specific">
 
+                    <Input type="hidden" class="form-control" id="client_specific_id" name="client_specific_id" >
+                    <Input type="hidden" class="form-control" id="subvention_id" name="subvention_id">
+                    <Input type="hidden" class="form-control" id="crop_specific_id" name="crop_specific_id">
+
 
                 </div>
             </div>
@@ -1089,7 +1093,7 @@ const onAddCrop = () => {
         dataType: 'json',
         success: function(response) {
             $('#themeLoader').css('display', 'none');
-            $('#applyScheme').attr('disabled', true);
+            $('#applyScheme').attr('disabled', true); 
 
             let listItem = ``;
 
@@ -1109,10 +1113,13 @@ const onAddCrop = () => {
 
                         if (value.type == 'Crop Specific') {
                             discount_crop_price = value.discount_price;
+                            $('#crop_specific_id').val(value.id)
                         } else if (value.type == 'Client Specific') {
                             discount_client_specific = value.discount_price;
+                            $('#client_specific_id').val(value.id)
                         } else if (value.type == 'Subvention') {
                             discount_subvention = value.discount_price;
+                            $('#subvention_id').val(value.id)
                         }
 
                     });
@@ -1131,7 +1138,7 @@ const onAddCrop = () => {
 
 
            $('#client_specific').val(discount_client_specific);
-           $('#subvention').val(discount_subvention);
+           $('#subvention').val(discount_subvention); 
            $('#crop_specific').val(discount_crop_price);
 
             if (farmLocation != '') {

@@ -5512,7 +5512,7 @@ class ConsignmentController extends Controller
 
             $get_scheme_client = CropPriceScheme::where('crop_id', $request->crop_id)
                 ->whereIn('type', ['Client Specific', 'Subvention'])
-                ->where('client', $get_client->id)
+                ->where('client', @$get_client->id)
                 ->whereDate('from_date', '<=', $today)
                 ->whereDate('to_date', '>=', $today)
                 ->where('status', 1)->orderBy('id', 'desc')->get();

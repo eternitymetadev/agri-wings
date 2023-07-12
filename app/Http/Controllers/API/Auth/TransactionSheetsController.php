@@ -859,7 +859,7 @@ class TransactionSheetsController extends Controller
 
     public function displayInvoicePdf($id){
 
-        $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails','DriverDetail')->where('id', $id)->first();
+        $order_details = ConsignmentNote::with('Orderactivity','ConsigneeDetail','Orderactivity.CropName','Orderactivity.CropDetail','OrderactivityDetails','DriverDetail','Orderactivity.CropSpecific')->where('id', $id)->first();
         // echo "<pre>"; print_r($order_details['Orderactivity']['CropDetail']['crop_price']); die;
             $banner_img = public_path('assets/banner_pdf.png');
             $footer_img = public_path('assets/footer_pdf.png');
@@ -930,9 +930,15 @@ class TransactionSheetsController extends Controller
             $crop_price = @$order_details['Orderactivity']['base_price'];
             $discount_price = @$order_details['Orderactivity']['discount_price'];
 
-            $offer_price = $crop_price - $discount_price;
+
+            $all_discount = $order_details['Orderactivity']['discount_price'] + $order_details['Orderactivity']['client_specific'] + $order_details['Orderactivity']['subvention'] ;
+
+            $offer_price = $crop_price - $all_discount;
+
             $total_acres = @$order_details['total_acerage'];
             $total_payables = $offer_price * $total_acres;
+
+
             if(@$order_details['OrderactivityDetails']['mode'] == null){
                 $payment_mode = 'Advanced';
             }else{
@@ -945,15 +951,30 @@ class TransactionSheetsController extends Controller
                 </tr>
                 <tr>
                     <td class="size2 ">Base Price</td>
-                    <td class="size2 textRight">'.@$crop_price.'</td>
-                </tr>
-                <tr>
-                    <td class="size2 ">Discounted Price</td>
-                    <td class="size2 textRight">'.@$discount_price.'</td>
-                </tr>
-                <tr>
+                    <td class="size2 textRight"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.@$crop_price.'</td>
+                </tr>';
+                if($discount_price > 0){
+                   
+                    $html .=' <tr>
+                    <td class="size2 ">'.@$order_details['Orderactivity']['CropSpecific']['name'].'</td>
+                    <td class="size2 textRight"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.@$discount_price.'</td>
+                </tr>';
+                }
+                if($order_details['Orderactivity']['client_specific'] > 0) {
+                    $html .=' <tr>
+                    <td class="size2 ">'.@$order_details['Orderactivity']['ClientSpecific']['name'].'</td>
+                    <td class="size2 textRight"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.@$order_details['Orderactivity']['client_specific'].'</td>
+                </tr>';
+                }
+                if($order_details['Orderactivity']['subvention'] > 0) {
+                    $html .='<tr>
+                    <td class="size2 ">'.@$order_details['Orderactivity']['Subvention']['name'].'</td>
+                    <td class="size2 textRight"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.@$order_details['Orderactivity']['subvention'].'</td>
+                </tr>';
+                }
+                $html .=' <tr>
                     <td class="size2 ">Offer Price</td>
-                    <td class="size2 textRight">'.$offer_price.'</td>
+                    <td class="size2 textRight"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$offer_price.'</td>
                 </tr>
                 <tr>
                     <td class="size2 " style="padding-bottom: 1rem">Total Acres</td>
@@ -961,7 +982,7 @@ class TransactionSheetsController extends Controller
                 </tr>
                 <tr style="border-top: 2px solid #000">
                     <td class="size2 bold" style="border-top: 1px solid #000">Total Payable (Cash)</td>
-                    <td class="size2 textRight bold" style="border-top: 1px solid #000">'.$total_payables.'</td>
+                    <td class="size2 textRight bold" style="border-top: 1px solid #000"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$total_payables.'</td>
                 </tr>
             </table>
             
@@ -971,7 +992,7 @@ class TransactionSheetsController extends Controller
                 </tr>
                 <tr style="border-top: 2px solid #000">
                     <td class="size2">Paid By '.$payment_mode.'</td>
-                    <td class="size2 textRight">'.$total_payables.'</td>
+                    <td class="size2 textRight"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$total_payables.'</td>
                 </tr>
             </table>
             

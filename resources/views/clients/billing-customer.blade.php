@@ -78,6 +78,7 @@ div.relat {
                         <thead>
                             <tr>
                                 <th>Customer Name</th>
+                                <th>Customer Mobile</th>
                                 <th>No of Client Linked</th>
                                 <th>No of Orders</th>
                                 <th>Pin Code</th>
@@ -89,6 +90,7 @@ div.relat {
                             @foreach($billing_customers as $billing_customer)
                            <tr>
                             <td>{{$billing_customer->GetFarmer->nick_name}}</td>
+                            <td>{{$billing_customer->GetFarmer->phone}}</td>
                             <?php
                                 $client_count = App\Models\BillingCustomer::where('customer_id', $billing_customer->customer_id)->count();
 

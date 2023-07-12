@@ -16,8 +16,7 @@
 h4 {
     font-size: 18px; 
 
-}
-
+} 
 
 .checkbox-round {
     width: 2.3em;
@@ -896,6 +895,13 @@ tr:hover .dltItemRow {
 
                 </div>
             </div>
+            <Input type="hidden" class="form-control" id="client_specific" name="client_specific" >
+            <Input type="hidden" class="form-control" id="subvention" name="subvention">
+            <Input type="hidden" class="form-control" id="crop_specific" name="crop_specific">
+
+            <Input type="hidden" class="form-control" id="client_specific_id" name="client_specific_id" >
+                    <Input type="hidden" class="form-control" id="subvention_id" name="subvention_id">
+                    <Input type="hidden" class="form-control" id="crop_specific_id" name="crop_specific_id">
 
             <input type="hidden" class="form-seteing date-picker" id="consignDate" name="consignment_date"
                 placeholder="" value="<?php echo date('d-m-Y'); ?>" />
@@ -1048,13 +1054,15 @@ const onAddCrop = () => {
     let cropName = $('input[name="crop"]:checked').val();
     let apply_scheme = $('input[name="apply_scheme"]:checked').val();
     let acerage = $('#acreage').val();
+    let client_id = $('#regclient_id').val();
     $('#themeLoader').css('display', 'flex');
     $.ajax({
         url: "check-price-scheme",
         method: "get",
         data: {
             crop_id: cropName,
-            acerage: acerage
+            acerage: acerage,
+            client_id:client_id
         },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1073,20 +1081,42 @@ const onAddCrop = () => {
             let cropPrice = $('input[name="crop"]:checked').attr('data-crop-price');
             let totalPrice = cropPrice * acreage;
 
+            var discount_crop_price = 0;
+            var discount_client_specific = 0;
+            var discount_subvention = 0;
             if (apply_scheme == 1) {
-            if(response.get_scheme_details){
-            var crop_price = response.get_scheme_details.crop_price;
-            var discount_price = response.get_scheme_details.discount_price;
-            var final_crop_price = crop_price - discount_price;
-            var calculate_offer_price = final_crop_price * acreage;
-            }else{
+                if (response.get_scheme_details) {
+                    $.each(response.get_scheme_details, function(index, value) {
+
+                        if (value.type == 'Crop Specific') {
+                            discount_crop_price = value.discount_price;
+                            $('#crop_specific_id').val(value.id)
+                        } else if (value.type == 'Client Specific') {
+                            discount_client_specific = value.discount_price;
+                            $('#client_specific_id').val(value.id)
+                        } else if (value.type == 'Subvention') {
+                            discount_subvention = value.discount_price;
+                            $('#subvention_id').val(value.id)
+                        }
+
+                    });
+                } else {
+                    var calculate_offer_price = totalPrice;
+                }
+            } else {
                 var calculate_offer_price = totalPrice;
             }
-        }else{
-            var calculate_offer_price = totalPrice;
-        }
+          
+            var all_scheme_discount = parseInt(discount_crop_price) + parseInt(discount_client_specific) + parseInt(discount_subvention);
+            var total_discount_crop = cropPrice - all_scheme_discount;
 
-            var discount_price = totalPrice - calculate_offer_price;
+            var discount_price = all_scheme_discount * acreage;
+            var calculate_offer_price = total_discount_crop * acreage;
+
+
+           $('#client_specific').val(discount_client_specific);
+           $('#subvention').val(discount_subvention); 
+           $('#crop_specific').val(discount_crop_price);
 
 
             if (farmLocation != '') {

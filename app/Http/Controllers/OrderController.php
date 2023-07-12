@@ -1497,6 +1497,9 @@ class OrderController extends Controller
                     $save_data['discount_price'] = $discount_price;
                     $save_data['client_specific'] = $client_specific;
                     $save_data['subvention'] = $subvention;
+                    $save_data['crop_specific_id'] = $request->crop_specific_id;
+                    $save_data['client_specific_id'] = $request->client_specific_id;
+                    $save_data['subvention_id'] = $request->subvention_id;
                     $save_data['status'] = 1;
 
                     $saveconsignmentitems = OrderFarm::create($save_data);
@@ -2330,25 +2333,30 @@ class OrderController extends Controller
                 $offered_price = array();
                 foreach ($get_data as $key => $save_data) {
 
-                    $acerage[] = $save_data['acerage'];
-                    $crop_price[] = $save_data['crop_price'];
-                    $offered_price[] = $save_data['offered_cost'];
+                    // $acerage[] = $save_data['acerage'];
+                    // $crop_price[] = $save_data['crop_price'];
+                    // $offered_price[] = $save_data['offered_cost'];
 
-                    $today = date('Y-m-d');
+                    // $today = date('Y-m-d');
                     $get_Crop_price = Crop::where('id', $save_data['crop_name'])->first();
-                    $get_scheme_details = CropPriceScheme::where('crop_id', $save_data['crop_name'])
-                        ->whereDate('from_date', '<=', $today)
-                        ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
+                    // $get_scheme_details = CropPriceScheme::where('crop_id', $save_data['crop_name'])
+                    //     ->whereDate('from_date', '<=', $today)
+                    //     ->whereDate('to_date', '>=', $today)->where('status', 1)->orderBy('id', 'desc')->first();
                         
-                        if($save_data['discount'] < 1){
-                            $discount_price = 0 ;
-                        }else{
-                            if(!empty($get_scheme_details)){
-                                $discount_price = $get_scheme_details->discount_price;
-                            }else{
-                                $discount_price = 0 ;
-                            }
-                        }
+                    //     if($save_data['discount'] < 1){
+                    //         $discount_price = 0 ;
+                    //     }else{
+                    //         if(!empty($get_scheme_details)){
+                    //             $discount_price = $get_scheme_details->discount_price;
+                    //         }else{
+                    //             $discount_price = 0 ;
+                    //         }
+                    //     }
+                    if($request->crop_specific < 1){
+                        $discount_price = 0;
+                    }else{
+                        $discount_price = $request->crop_specific;
+                    }
 
                     $save_data['order_id'] = $saveconsignment->id;
                     $save_data['farm_location'] = $save_data['farm_location'];
@@ -2359,15 +2367,20 @@ class OrderController extends Controller
                     $save_data['total_price'] = $save_data['offered_cost'];
                     $save_data['base_price'] = $get_Crop_price->crop_price;
                     $save_data['discount_price'] = $discount_price;
+                    $save_data['client_specific'] = $request->client_specific;
+                    $save_data['subvention'] = $request->subvention;
+                    $save_data['crop_specific_id'] = $request->crop_specific_id;
+                    $save_data['client_specific_id'] = $request->client_specific_id;
+                    $save_data['subvention_id'] = $request->subvention_id;
                     $save_data['status'] = 1;
                     $saveconsignmentitems = OrderFarm::create($save_data);
                 }
 
-                $total_acerage = array_sum($acerage);
-                $total_crop_price = array_sum($crop_price);
-                $total_offered_price = array_sum($offered_price);
+                // $total_acerage = array_sum($acerage);
+                // $total_crop_price = array_sum($crop_price);
+                // $total_offered_price = array_sum($offered_price);
 
-                ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $total_acerage, 'total_amount' => $total_offered_price]);
+                ConsignmentNote::where('id', $saveconsignment->id)->update(['total_acerage' => $save_data['acerage'], 'total_amount' => $save_data['offered_cost']]);
 
             }
 
